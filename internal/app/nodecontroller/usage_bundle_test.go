@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/nodeclient"
-	nodev1 "github.com/rebeccapanel/rebecca/internal/proto/node/v1"
+	"github.com/norapanel/nora/internal/app/nodeclient"
+	nodev1 "github.com/norapanel/nora/internal/proto/node/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

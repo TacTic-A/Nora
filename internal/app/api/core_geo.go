@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/nodecontroller"
+	"github.com/norapanel/nora/internal/app/nodecontroller"
 )
 
 var (
@@ -83,7 +83,7 @@ func requestXrayCoreReleaseTags(ctx context.Context, limit int) ([]string, error
 		return nil, err
 	}
 	request.Header.Set("Accept", "application/vnd.github+json")
-	request.Header.Set("User-Agent", "Rebecca")
+	request.Header.Set("User-Agent", "Nora")
 	response, err := xrayCoreReleasesHTTPClient.Do(request)
 	if err != nil {
 		return nil, err

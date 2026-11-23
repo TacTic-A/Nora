@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
 )
 
 func TestNodeMutationHandlersCreateUpdateResetRegenerateDelete(t *testing.T) {

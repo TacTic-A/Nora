@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	platformdb "github.com/rebeccapanel/rebecca/internal/platform/db"
+	platformdb "github.com/norapanel/nora/internal/platform/db"
 )
 
 func TestMigration60PreservesDataSQLite(t *testing.T) {
@@ -16,9 +16,9 @@ func TestMigration60PreservesDataSQLite(t *testing.T) {
 }
 
 func TestMigration60PreservesDataExternalDatabase(t *testing.T) {
-	url := strings.TrimSpace(os.Getenv("REBECCA_MIGRATION60_DATABASE_URL"))
+	url := strings.TrimSpace(os.Getenv("NORA_MIGRATION60_DATABASE_URL"))
 	if url == "" {
-		t.Skip("REBECCA_MIGRATION60_DATABASE_URL is not set; it must point to an empty database")
+		t.Skip("NORA_MIGRATION60_DATABASE_URL is not set; it must point to an empty database")
 	}
 	pool, err := platformdb.Open(url)
 	if err != nil {

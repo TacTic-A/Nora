@@ -21,13 +21,13 @@ describe("usePersistedColumnVisibility", () => {
 	afterEach(() => vi.unstubAllGlobals());
 
 	it("restores the saved columns of that table only", () => {
-		stubStorage({ "rebecca-columns-admins": '{"status":false}' });
+		stubStorage({ "nora-columns-admins": '{"status":false}' });
 		expect(renderToStaticMarkup(<Probe name="admins" />)).toBe('{"status":false}'.replace(/"/g, "&quot;"));
 		expect(renderToStaticMarkup(<Probe name="users" />)).toBe("{}");
 	});
 
 	it("ignores corrupt stored values", () => {
-		stubStorage({ "rebecca-columns-admins": "not json" });
+		stubStorage({ "nora-columns-admins": "not json" });
 		expect(renderToStaticMarkup(<Probe name="admins" />)).toBe("{}");
 	});
 });

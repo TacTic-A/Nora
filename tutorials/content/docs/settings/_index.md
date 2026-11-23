@@ -34,7 +34,7 @@ This chooses the link shown by default in the dashboard. It does not invalidate 
 
 | Option | What it changes | Trade-off |
 | --- | --- | --- |
-| **Dashboard path** | Changes the path served by the Rebecca binary, such as `/dashboard/`. | Update the reverse proxy and bookmarks at the same time or the dashboard may appear unavailable. |
+| **Dashboard path** | Changes the path served by the Nora binary, such as `/dashboard/`. | Update the reverse proxy and bookmarks at the same time or the dashboard may appear unavailable. |
 | **Subscription read-only mode** | Serves subscriptions without updating their last-used metadata. | Useful behind external caches, monitors, or probes; last-use information will no longer reflect every fetch. |
 | **Record node usage** | Stores node traffic history used by the Usage page. | Enables historical node reports and adds database writes and storage. |
 | **Record user usage samples** | Stores per-user, admin, and service usage samples. | Enables more detailed history and adds more frequent database writes. |
@@ -46,7 +46,7 @@ Leave both usage-recording options enabled when you need historical charts. If d
 
 ### phpMyAdmin
 
-The phpMyAdmin section is available for MySQL and MariaDB installations. It can install or enable phpMyAdmin, open it inside the panel, choose its route, and use either Rebecca's database account or custom credentials. Keep the route private and do not expose database credentials to other admins.
+The phpMyAdmin section is available for MySQL and MariaDB installations. It can install or enable phpMyAdmin, open it inside the panel, choose its route, and use either Nora's database account or custom credentials. Keep the route private and do not expose database credentials to other admins.
 
 ## Dashboard maintenance and backup {#dashboard-maintenance}
 
@@ -64,14 +64,14 @@ The panel version, **Restart panel**, **Backup**, and **Update panel** controls 
 
 ### Backup
 
-Rebecca exports a portable `.rbbackup` file that can be restored across SQLite, MySQL, and MariaDB installations.
+Nora exports a portable `.rbbackup` file that can be restored across SQLite, MySQL, and MariaDB installations.
 
 | Scope | Included data |
 | --- | --- |
-| **Database only** | Rebecca database records. Server files are left untouched. |
-| **Database + Rebecca files** | Database plus Rebecca configuration and data directories, including `/etc/rebecca` and `/var/lib/rebecca`. |
+| **Database only** | Nora database records. Server files are left untouched. |
+| **Database + Nora files** | Database plus Nora configuration and data directories, including `/etc/nora` and `/var/lib/nora`. |
 
-Open **Backup** beside **Restart panel**, then choose **Export backup** or **Import backup**. Export asks for the backup scope. Import does not ask for a scope: Rebecca inspects the uploaded archive, always restores its database, and restores Rebecca files only when the archive contains them. Import replaces current data, so verify the file and keep a separate known-good backup. Export and import are available only in binary mode.
+Open **Backup** beside **Restart panel**, then choose **Export backup** or **Import backup**. Export asks for the backup scope. Import does not ask for a scope: Nora inspects the uploaded archive, always restores its database, and restores Nora files only when the archive contains them. Import replaces current data, so verify the file and keep a separate known-good backup. Export and import are available only in binary mode.
 
 ## Telegram tab {#telegram-tab}
 
@@ -105,7 +105,7 @@ Global subscription settings apply to every admin unless that admin has an overr
 - Client template fields choose the files used for the subscription page, home page, Clash, V2Ray, Happ, Incy, Sing-box, and Mux outputs.
 - **Subscription alias URLs** adds compatible route aliases, one per line.
 - **Subscription ports** adds extra ports to generated subscription URLs.
-- Client JSON switches choose whether Rebecca uses custom JSON behavior for supported clients.
+- Client JSON switches choose whether Nora uses custom JSON behavior for supported clients.
 
 Admin overrides should be the exception. Keep common values global, override only the admin that needs a different domain or template, and use **Reset overrides** to return it to global defaults.
 

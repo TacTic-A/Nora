@@ -1,6 +1,6 @@
 package system
 
-import dashboardapp "github.com/rebeccapanel/rebecca/internal/app/dashboard"
+import dashboardapp "github.com/norapanel/nora/internal/app/dashboard"
 
 const DefaultVersion = "1.8.0"
 

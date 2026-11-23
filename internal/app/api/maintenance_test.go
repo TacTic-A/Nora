@@ -9,8 +9,8 @@ import (
 	"sync"
 	"testing"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	systemapp "github.com/rebeccapanel/rebecca/internal/app/system"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	systemapp "github.com/norapanel/nora/internal/app/system"
 )
 
 type fakeRuntimeDetector struct {
@@ -77,8 +77,8 @@ func (s *recordingScheduler) ScheduleWithProgress(args []string, onOutput func(s
 		return err
 	}
 	if onOutput != nil {
-		onOutput("Downloading Rebecca binary 42%")
-		onOutput("Restarting Rebecca service")
+		onOutput("Downloading Nora binary 42%")
+		onOutput("Restarting Nora service")
 	}
 	return nil
 }
@@ -102,8 +102,8 @@ func TestMaintenanceInfoBinaryAndDockerMock(t *testing.T) {
 		fakeRuntimeDetector{info: systemapp.RuntimeInfo{
 			Mode:        "binary",
 			InstallMode: "binary",
-			Service:     "rebecca",
-			Image:       "rebecca-server (binary)",
+			Service:     "nora",
+			Image:       "nora-server (binary)",
 			Tag:         &tag,
 			Channel:     "dev",
 			Binary:      map[string]any{"tag": tag, "install_mode": "binary"},
@@ -134,8 +134,8 @@ func TestMaintenanceInfoBinaryAndDockerMock(t *testing.T) {
 	}
 	if info.Panel.Mode != "binary" ||
 		info.Panel.InstallMode != "binary" ||
-		info.Panel.Service != "rebecca" ||
-		info.Panel.Image != "rebecca-server (binary)" ||
+		info.Panel.Service != "nora" ||
+		info.Panel.Image != "nora-server (binary)" ||
 		info.Panel.Tag == nil ||
 		*info.Panel.Tag != tag ||
 		info.Panel.Channel != "dev" ||
@@ -143,7 +143,7 @@ func TestMaintenanceInfoBinaryAndDockerMock(t *testing.T) {
 		info.Panel.Update.Target == nil ||
 		*info.Panel.Update.Target != "dev-abcdef0" ||
 		info.Node != nil ||
-		info.NodeUpdate.Repo != "rebeccapanel/Rebecca-node" {
+		info.NodeUpdate.Repo != "norapanel/Nora-node" {
 		t.Fatalf("unexpected maintenance info: %#v", info)
 	}
 	rec = adminJSONRequest(t, server, http.MethodGet, "/api/maintenance/builds?target=node", token, "")
@@ -162,8 +162,8 @@ func TestMaintenanceInfoBinaryAndDockerMock(t *testing.T) {
 		fakeRuntimeDetector{info: systemapp.RuntimeInfo{
 			Mode:        "docker",
 			InstallMode: "docker",
-			Service:     "rebecca",
-			Image:       "rebeccapanel/rebecca",
+			Service:     "nora",
+			Image:       "norapanel/nora",
 			Channel:     "unknown",
 			Binary:      map[string]any{},
 		}},

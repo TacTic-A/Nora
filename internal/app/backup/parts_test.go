@@ -17,7 +17,7 @@ func writeTestParts(t *testing.T, payload []byte, size int) []PartFile {
 	for index := 1; index <= total; index++ {
 		start := (index - 1) * size
 		end := min(start+size, len(payload))
-		name := fmt.Sprintf("rebecca-database-20261019.part%02d-of-%02d.rbbackup", index, total)
+		name := fmt.Sprintf("nora-database-20261019.part%02d-of-%02d.rbbackup", index, total)
 		path := filepath.Join(dir, name)
 		if err := os.WriteFile(path, payload[start:end], 0o600); err != nil {
 			t.Fatal(err)
@@ -28,7 +28,7 @@ func writeTestParts(t *testing.T, payload []byte, size int) []PartFile {
 }
 
 func TestAssemblePartFilesRebuildsArchiveInPartOrder(t *testing.T) {
-	payload := bytes.Repeat([]byte("rebecca"), 300)
+	payload := bytes.Repeat([]byte("nora"), 300)
 	files := writeTestParts(t, payload, 1000)
 	reversed := make([]PartFile, len(files))
 	for i, file := range files {
@@ -48,7 +48,7 @@ func TestAssemblePartFilesRebuildsArchiveInPartOrder(t *testing.T) {
 }
 
 func TestAssemblePartFilesRejectsMissingAndDamagedParts(t *testing.T) {
-	payload := bytes.Repeat([]byte("rebecca"), 300)
+	payload := bytes.Repeat([]byte("nora"), 600)
 	files := writeTestParts(t, payload, 1000)
 	destination := filepath.Join(t.TempDir(), "assembled.rbbackup")
 

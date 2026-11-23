@@ -11,7 +11,7 @@ import (
 
 	_ "modernc.org/sqlite"
 
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
 )
 
 func TestStoredHostClientSettingsReachSubscription(t *testing.T) {
@@ -886,7 +886,7 @@ func newSubscriptionClientTestService(t *testing.T) (Service, string) {
 			subscription_update_interval, subscription_path, subscription_ports,
 			client_routing_rules
 		) VALUES (
-			1, 'https://panel.example', 'Subscription', 'https://t.me/rebecca', '12', 'sub', '[]', '[]'
+			1, 'https://panel.example', 'Subscription', 'https://t.me/nora', '12', 'sub', '[]', '[]'
 		)`,
 		`INSERT INTO admins (id, username, subscription_domain, subscription_settings) VALUES (1, 'owner', NULL, '{}')`,
 		`INSERT INTO services (id, name) VALUES (1, 'All protocols')`,

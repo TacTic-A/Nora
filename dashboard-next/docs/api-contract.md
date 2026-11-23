@@ -1,4 +1,4 @@
-# Rebecca HTTP API contract (for dashboard-next)
+# Nora HTTP API contract (for dashboard-next)
 
 Read directly from the Go source. Nothing here is inferred from the old dashboard unless stated.
 Base prefix: `/api`. Production: same origin as the panel. Dev: Vite proxies `/api` (see [Frontend implications](#frontend-implications)).
@@ -67,7 +67,7 @@ Login state machine (`admin_session.go:69-78`, `admin_auth.go:168-177`):
 
 | Property | Value |
 |---|---|
-| Cookie name | `rebecca_session` (`admin_session.go:20`) |
+| Cookie name | `nora_session` (`admin_session.go:20`) |
 | Value | opaque 32-byte token, base64url; server stores only its SHA-256 |
 | Path | `/` |
 | HttpOnly | `true` — **not readable from JS** |
@@ -707,7 +707,7 @@ Sibling `GET /api/nodes/metrics` (`live_metrics.go:33-58,87-172`, sudo): frames 
 10. **User detail has no `id`.** Keep the username as the route key; only list items and the mutation fallback expose `id`.
 11. **Create requires a service**: `service_id` (or inbounds the server can map to one). Manual inbound selection and the singular `next_plan` are rejected — send `next_plans`.
 12. **Bulk actions**: send `days`/`gigabytes`/`target_service_id` as required per action; the response is `{detail, count}` (no per-user results), and `dry_run` is only valid for `delete_users`.
-13. **Optional header** `X-Rebecca-Action-Batch` (≤64 chars, `[A-Za-z0-9_-]`) is accepted and attached to the request context for recent-action batching; harmless if omitted (`middleware.go:39-58`).
+13. **Optional header** `X-Nora-Action-Batch` (≤64 chars, `[A-Za-z0-9_-]`) is accepted and attached to the request context for recent-action batching; harmless if omitted (`middleware.go:39-58`).
 
 ### 7.5 Not confirmed / ambiguous
 

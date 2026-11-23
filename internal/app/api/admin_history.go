@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
 )
 
 type adminHistoryItem struct {

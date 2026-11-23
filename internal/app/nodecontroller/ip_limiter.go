@@ -10,12 +10,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/logging"
-	nodev1 "github.com/rebeccapanel/rebecca/internal/proto/node/v1"
+	"github.com/norapanel/nora/internal/app/logging"
+	nodev1 "github.com/norapanel/nora/internal/proto/node/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/rebeccapanel/rebecca/internal/app/online"
+	"github.com/norapanel/nora/internal/app/online"
 )
 
 const (
@@ -23,7 +23,7 @@ const (
 	onlineIPWriteBatchSize = 500
 )
 
-// ponytail: Rebecca runs one master writer; split this into a dedicated DB
+// ponytail: Nora runs one master writer; split this into a dedicated DB
 // writer only if multiple master processes become supported.
 var onlineIPWriteMu sync.Mutex
 

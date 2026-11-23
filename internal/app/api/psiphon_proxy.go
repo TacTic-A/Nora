@@ -9,7 +9,7 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/rebeccapanel/rebecca/internal/app/nodecontroller"
+	"github.com/norapanel/nora/internal/app/nodecontroller"
 )
 
 const psiphonProxyBatchLimit = 20
@@ -206,8 +206,8 @@ func duplicatePsiphonOutboundTag(config map[string]any, profiles []psiphonProxyP
 func psiphonOutbound(profile psiphonProxyProfile) map[string]any {
 	return map[string]any{
 		"tag":                    profile.Tag,
-		"rebecca_proxy":          "psiphon",
-		"rebecca_proxy_location": profile.Location,
+		"nora_proxy":          "psiphon",
+		"nora_proxy_location": profile.Location,
 		"protocol":               "socks",
 		"settings": map[string]any{
 			"servers": []map[string]any{{

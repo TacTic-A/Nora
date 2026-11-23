@@ -21,7 +21,7 @@ import (
 
 const phpMyAdminSQLiteDetail = "phpMyAdmin is available only for MySQL or MariaDB installations."
 const phpMyAdminEmbedPath = "/api/settings/phpmyadmin/embed/"
-const phpMyAdminEmbedCookie = "rebecca_pma_embed"
+const phpMyAdminEmbedCookie = "nora_pma_embed"
 const phpMyAdminEmbedTTL = 6 * time.Hour
 
 var phpMyAdminEmbedSigner = struct {
@@ -137,7 +137,7 @@ func (s *Server) handlePHPMyAdminEnable(w http.ResponseWriter, r *http.Request) 
 	}
 	port := normalizePHPMyAdminPort(payload.Port)
 	path := normalizePHPMyAdminPath(payload.Path)
-	output, err := runRebeccaPHPMyAdminCommand(r.Context(), "enable-phpmyadmin", "--path", path)
+	output, err := runNoraPHPMyAdminCommand(r.Context(), "enable-phpmyadmin", "--path", path)
 	if err != nil {
 		writeError(w, http.StatusBadGateway, strings.TrimSpace(output+"\n"+err.Error()))
 		return
@@ -160,7 +160,7 @@ func (s *Server) handlePHPMyAdminDisable(w http.ResponseWriter, r *http.Request)
 		writeError(w, http.StatusConflict, err.Error())
 		return
 	}
-	output, err := runRebeccaPHPMyAdminCommand(r.Context(), "disable-phpmyadmin")
+	output, err := runNoraPHPMyAdminCommand(r.Context(), "disable-phpmyadmin")
 	if err != nil {
 		writeError(w, http.StatusBadGateway, strings.TrimSpace(output+"\n"+err.Error()))
 		return
@@ -395,7 +395,7 @@ func normalizePHPMyAdminLoginMode(value string) string {
 	case "custom":
 		return "custom"
 	default:
-		return "rebecca"
+		return "nora"
 	}
 }
 
@@ -437,10 +437,10 @@ func ensurePHPMyAdminRuntimeConfig(credentials phpMyAdminCredentials, theme stri
 		"$cfg['AllowArbitraryServer'] = false;\n" +
 		"$cfg['ExecTimeLimit'] = 0;\n" +
 		themeLine
-	if err := os.WriteFile("/etc/phpmyadmin/conf.d/rebecca.php", []byte(config), 0o644); err != nil {
+	if err := os.WriteFile("/etc/phpmyadmin/conf.d/nora.php", []byte(config), 0o644); err != nil {
 		return fmt.Errorf("write phpMyAdmin runtime config: %w", err)
 	}
-	if err := os.Chmod("/etc/phpmyadmin/conf.d/rebecca.php", 0o644); err != nil {
+	if err := os.Chmod("/etc/phpmyadmin/conf.d/nora.php", 0o644); err != nil {
 		return fmt.Errorf("set phpMyAdmin runtime config permissions: %w", err)
 	}
 	return nil
@@ -456,12 +456,12 @@ func phpString(value string) string {
 	return "'" + replacer.Replace(value) + "'"
 }
 
-func runRebeccaPHPMyAdminCommand(parent context.Context, args ...string) (string, error) {
+func runNoraPHPMyAdminCommand(parent context.Context, args ...string) (string, error) {
 	ctx, cancel := context.WithTimeout(parent, 10*time.Minute)
 	defer cancel()
-	binary := "rebecca"
-	if _, err := os.Stat("/usr/local/bin/rebecca"); err == nil {
-		binary = "/usr/local/bin/rebecca"
+	binary := "nora"
+	if _, err := os.Stat("/usr/local/bin/nora"); err == nil {
+		binary = "/usr/local/bin/nora"
 	}
 	cmd := exec.CommandContext(ctx, binary, args...)
 	output, err := cmd.CombinedOutput()
@@ -497,11 +497,11 @@ iframe{display:block;width:100%;height:100%;border:0;background:#fff}
 </style>
 </head>
 <body>
-<div class="loading" id="loading"><div class="panel"><strong>Opening phpMyAdmin...</strong><p class="muted">Rebecca is signing in with the configured database account for this full-access session.</p></div></div>
-<iframe id="pma-frame" src="` + escapedLoginURL + `" title="phpMyAdmin" onload="rebeccaRevealPHPMyAdmin()"></iframe>
+<div class="loading" id="loading"><div class="panel"><strong>Opening phpMyAdmin...</strong><p class="muted">Nora is signing in with the configured database account for this full-access session.</p></div></div>
+<iframe id="pma-frame" src="` + escapedLoginURL + `" title="phpMyAdmin" onload="noraRevealPHPMyAdmin()"></iframe>
 <script>
 ` + themeCookieScript + `
-function rebeccaRevealPHPMyAdmin(){
+function noraRevealPHPMyAdmin(){
   document.getElementById('loading').style.display='none';
   var frame=document.getElementById('pma-frame');
   try {
@@ -516,11 +516,11 @@ function rebeccaRevealPHPMyAdmin(){
     if (doc.body) doc.body.style.visibility='visible';
   } catch (_) {}
 }
-var rebeccaPMARevealAttempts=0;
-var rebeccaPMARevealTimer=setInterval(function(){
-  rebeccaRevealPHPMyAdmin();
-  rebeccaPMARevealAttempts++;
-  if (rebeccaPMARevealAttempts > 40) clearInterval(rebeccaPMARevealTimer);
+var noraPMARevealAttempts=0;
+var noraPMARevealTimer=setInterval(function(){
+  noraRevealPHPMyAdmin();
+  noraPMARevealAttempts++;
+  if (noraPMARevealAttempts > 40) clearInterval(noraPMARevealTimer);
 }, 250);
 </script>
 </body>
@@ -532,7 +532,7 @@ func newPHPMyAdminEmbedSecret() []byte {
 	if _, err := rand.Read(secret); err == nil {
 		return secret
 	}
-	return []byte(fmt.Sprintf("rebecca-pma-%d", time.Now().UnixNano()))
+	return []byte(fmt.Sprintf("nora-pma-%d", time.Now().UnixNano()))
 }
 
 func signPHPMyAdminEmbedSession(username string, status phpMyAdminResponse, expires time.Time) string {

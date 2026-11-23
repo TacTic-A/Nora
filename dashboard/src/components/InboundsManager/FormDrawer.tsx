@@ -2649,7 +2649,7 @@ export const InboundFormModal: FC<Props> = ({
 															"inbounds.openvpn.accounting",
 															"Enable accounting",
 															"inbounds.openvpn.help.accounting",
-															"Record OpenVPN session traffic and report it to the same Rebecca user quota/accounting pipeline.",
+															"Record OpenVPN session traffic and report it to the same Nora user quota/accounting pipeline.",
 															{ className: "mb-0" },
 														)}
 														<Controller control={control} name={"ovAccountingEnabled"} render={({ field }) => <Switch checked={Boolean(field.value)} onCheckedChange={field.onChange} />} />
@@ -2988,7 +2988,7 @@ export const InboundFormModal: FC<Props> = ({
 															"inbounds.wireguard.accounting",
 															"Enable accounting",
 															"inbounds.wireguard.help.accounting",
-															"Record WireGuard peer traffic and report it to the same Rebecca user quota/accounting pipeline.",
+															"Record WireGuard peer traffic and report it to the same Nora user quota/accounting pipeline.",
 															{ className: "mb-0" },
 														)}
 														<Controller control={control} name={"wgAccountingEnabled"} render={({ field }) => <Switch checked={Boolean(field.value)} onCheckedChange={field.onChange} />} />
@@ -3308,7 +3308,7 @@ export const InboundFormModal: FC<Props> = ({
 															"inbounds.remoteAccess.accounting",
 															"Enable accounting",
 															"inbounds.remoteAccess.help.accounting",
-															"Report live usage to Rebecca quota accounting.",
+															"Report live usage to Nora quota accounting.",
 															{ className: "mb-0" },
 														)}
 														<Controller control={control} name={"raAccountingEnabled"} render={({ field }) => <Switch checked={Boolean(field.value)} onCheckedChange={field.onChange} />} />
@@ -4295,7 +4295,7 @@ export const InboundFormModal: FC<Props> = ({
 															"inbounds.l2tp.accounting",
 															"Enable accounting",
 															"inbounds.l2tp.help.accounting",
-															"Record L2TP session traffic and report it to the same Rebecca user quota/accounting pipeline.",
+															"Record L2TP session traffic and report it to the same Nora user quota/accounting pipeline.",
 															{ className: "mb-0" },
 														)}
 														<Controller control={control} name={"l2tpAccountingEnabled"} render={({ field }) => <Switch checked={Boolean(field.value)} onCheckedChange={field.onChange} />} />

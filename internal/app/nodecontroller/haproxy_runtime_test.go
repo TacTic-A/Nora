@@ -36,7 +36,7 @@ func TestRenderHAProxyConfigSupportsMultipleListenersAndWebsite(t *testing.T) {
 	for _, expected := range []string{
 		"bind 0.0.0.0:443", "bind 0.0.0.0:550", "path_beg /edge",
 		"req.ssl_sni -i edge.example.com", "use_backend site_0_0 if site_0_0_http",
-		"req.ssl_sni -i site.example.com", "server target unix@/tmp/rebecca-haproxy-12-0-1.sock",
+		"req.ssl_sni -i site.example.com", "server target unix@/tmp/nora-haproxy-12-0-1.sock",
 	} {
 		if !strings.Contains(text, expected) {
 			t.Fatalf("generated config is missing %q:\n%s", expected, text)
@@ -59,8 +59,8 @@ func TestDefaultWebsiteHandlesUnmatchedHTTPAndTLS(t *testing.T) {
 		"use_backend backend_0_0 if match_0_0",
 		"use_backend site_0_0 if { req.proto_http }",
 		"use_backend site_tls_0_0 if { req_ssl_hello_type 1 }",
-		"server target unix@/tmp/rebecca-haproxy-21-0-0.sock",
-		"server target unix@/tmp/rebecca-haproxy-21-0-0-tls.sock",
+		"server target unix@/tmp/nora-haproxy-21-0-0.sock",
+		"server target unix@/tmp/nora-haproxy-21-0-0-tls.sock",
 	} {
 		if !strings.Contains(text, expected) {
 			t.Fatalf("generated config is missing %q:\n%s", expected, text)

@@ -17,9 +17,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
-	outboundsubapp "github.com/rebeccapanel/rebecca/internal/app/outboundsub"
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
+	outboundsubapp "github.com/norapanel/nora/internal/app/outboundsub"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
 )
 
 const defaultShadowsocksMethod = "chacha20-ietf-poly1305"
@@ -1588,7 +1588,7 @@ func hysteriaShareLink(remark string, address string, inbound ResolvedInbound, s
 		return "", fmt.Errorf("Hysteria Gecko packet size %q cannot be represented safely in the standard Hysteria 2 URI", geckoPacketSize)
 	}
 	params := make([]queryParam, 0, 12)
-	// fp, alpn, vcn and pcs are Rebecca/Xray TLS extensions, not native
+	// fp, alpn, vcn and pcs are Nora/Xray TLS extensions, not native
 	// Hysteria 2 URI parameters. Keep them for Xray-aware consumers only.
 	if fp := jsonvalue.String(inbound["fp"]); fp != "" {
 		params = append(params, queryParam{"fp", fp})

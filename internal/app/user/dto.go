@@ -3,7 +3,7 @@ package user
 import (
 	"encoding/json"
 
-	"github.com/rebeccapanel/rebecca/internal/app/labels"
+	"github.com/norapanel/nora/internal/app/labels"
 )
 
 type AdminContext struct {

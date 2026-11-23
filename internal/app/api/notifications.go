@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	"github.com/rebeccapanel/rebecca/internal/app/logging"
-	"github.com/rebeccapanel/rebecca/internal/app/notifications"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	"github.com/norapanel/nora/internal/app/logging"
+	"github.com/norapanel/nora/internal/app/notifications"
 )
 
 const (

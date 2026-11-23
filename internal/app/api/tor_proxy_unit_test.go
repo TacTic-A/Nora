@@ -27,7 +27,7 @@ func TestManagedProxyConflictAllowsSameTagReplacement(t *testing.T) {
 
 func TestManagedProxyLocationConflict(t *testing.T) {
 	config := map[string]any{"outbounds": []any{map[string]any{
-		"tag": "custom", "rebecca_proxy": "tor", "rebecca_proxy_location": "de",
+		"tag": "custom", "nora_proxy": "tor", "nora_proxy_location": "de",
 	}}}
 	if tag, conflict := managedProxyLocationConflict(config, "tor", "de", "other"); !conflict || tag != "custom" {
 		t.Fatalf("expected location conflict, got %q/%v", tag, conflict)

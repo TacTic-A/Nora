@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"testing"
 
-	userread "github.com/rebeccapanel/rebecca/internal/app/user"
+	userread "github.com/norapanel/nora/internal/app/user"
 )
 
 func TestInboundRuntimeUserEmailPreservesLegacyUIDAndEncodesTag(t *testing.T) {

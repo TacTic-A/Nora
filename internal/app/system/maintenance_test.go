@@ -15,13 +15,13 @@ func TestGitHubUpdateCheckerCachesSuccessfulStatus(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		atomic.AddInt32(&requests, 1)
 		switch r.URL.Path {
-		case "/repos/rebeccapanel/Rebecca/releases/latest":
+		case "/repos/norapanel/Nora/releases/latest":
 			_ = json.NewEncoder(w).Encode(map[string]any{
 				"tag_name":     "v0.2.0",
 				"name":         "v0.2.0",
 				"published_at": "2026-06-24T00:00:00Z",
 			})
-		case "/rebeccapanel/Rebecca/dev-build-manifest/dev-builds.json":
+		case "/norapanel/Nora/dev-build-manifest/dev-builds.json":
 			_ = json.NewEncoder(w).Encode(map[string]any{
 				"latest": map[string]any{
 					"build_tag":    "dev-abcdef0",
@@ -29,7 +29,7 @@ func TestGitHubUpdateCheckerCachesSuccessfulStatus(t *testing.T) {
 					"run_id":       "123",
 					"generated_at": "2026-06-24T00:00:00Z",
 					"assets": []string{
-						"rebecca-linux-amd64-dev-abcdef0.tar.gz",
+						"nora-linux-amd64-dev-abcdef0.tar.gz",
 					},
 				},
 			})
@@ -52,8 +52,8 @@ func TestGitHubUpdateCheckerCachesSuccessfulStatus(t *testing.T) {
 	}
 	current := "dev-0000000"
 
-	first := checker.Status(context.Background(), "rebeccapanel/Rebecca", &current, "dev")
-	second := checker.Status(context.Background(), "rebeccapanel/Rebecca", &current, "dev")
+	first := checker.Status(context.Background(), "norapanel/Nora", &current, "dev")
+	second := checker.Status(context.Background(), "norapanel/Nora", &current, "dev")
 
 	if first.Error != "" || second.Error != "" {
 		t.Fatalf("unexpected errors: first=%q second=%q", first.Error, second.Error)
@@ -69,11 +69,11 @@ func TestGitHubUpdateCheckerCachesSuccessfulStatus(t *testing.T) {
 func TestGitHubUpdateCheckerFindsDevBuildThroughWorkflowEndpoint(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case "/repos/rebeccapanel/Rebecca/releases/latest":
+		case "/repos/norapanel/Nora/releases/latest":
 			_ = json.NewEncoder(w).Encode(map[string]any{"tag_name": "v0.2.0"})
-		case "/rebeccapanel/Rebecca/dev-build-manifest/dev-builds.json":
+		case "/norapanel/Nora/dev-build-manifest/dev-builds.json":
 			http.NotFound(w, r)
-		case "/repos/rebeccapanel/Rebecca/actions/workflows/binary-build.yml/runs":
+		case "/repos/norapanel/Nora/actions/workflows/binary-build.yml/runs":
 			query := r.URL.Query()
 			if query.Get("branch") != "dev" || query.Get("event") != "push" || query.Get("status") != "success" {
 				t.Fatalf("unexpected workflow query: %s", r.URL.RawQuery)
@@ -103,7 +103,7 @@ func TestGitHubUpdateCheckerFindsDevBuildThroughWorkflowEndpoint(t *testing.T) {
 		ManifestPath:   "dev-builds.json",
 	}
 	current := "dev-0000000"
-	status := checker.Status(context.Background(), "rebeccapanel/Rebecca", &current, "dev")
+	status := checker.Status(context.Background(), "norapanel/Nora", &current, "dev")
 
 	if status.Error != "" {
 		t.Fatalf("unexpected update error: %q", status.Error)
@@ -116,9 +116,9 @@ func TestGitHubUpdateCheckerFindsDevBuildThroughWorkflowEndpoint(t *testing.T) {
 func TestGitHubUpdateCheckerUsesDownloadableNodeDevBinary(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case "/repos/rebeccapanel/Rebecca-node/releases/latest":
+		case "/repos/norapanel/Nora-node/releases/latest":
 			_ = json.NewEncoder(w).Encode(map[string]any{"tag_name": "v1.5.0"})
-		case "/repos/rebeccapanel/Rebecca-node/releases/tags/dev-binaries":
+		case "/repos/norapanel/Nora-node/releases/tags/dev-binaries":
 			_ = json.NewEncoder(w).Encode(map[string]any{
 				"target_commitish": "4b5467fc25ac58441dd45a8a619e6ffb3315e98f",
 				"published_at":     "2026-09-23T10:00:00Z",
@@ -131,7 +131,7 @@ func TestGitHubUpdateCheckerUsesDownloadableNodeDevBinary(t *testing.T) {
 
 	checker := &GitHubUpdateChecker{APIBase: server.URL, RawBase: server.URL, HTTPClient: server.Client()}
 	current := "dev-4b5467f"
-	status := checker.Status(context.Background(), "rebeccapanel/Rebecca-node", &current, "dev")
+	status := checker.Status(context.Background(), "norapanel/Nora-node", &current, "dev")
 	if status.Error != "" || status.Target == nil || *status.Target != current || status.Available {
 		t.Fatalf("unexpected node update status: %#v", status)
 	}
@@ -155,14 +155,14 @@ func TestSelectManifestBuildUsesLatestTag(t *testing.T) {
 func TestGitHubUpdateCheckerListsBuildsFromSwitchFloor(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case "/repos/rebeccapanel/Rebecca/releases":
+		case "/repos/norapanel/Nora/releases":
 			_ = json.NewEncoder(w).Encode([]map[string]any{
 				{"tag_name": "v1.2.0"},
 				{"tag_name": "v1.4.0", "published_at": "2026-06-24T00:00:00Z"},
 				{"tag_name": "v1.4.0", "prerelease": true},
 				{"tag_name": "v1.6.0", "published_at": "2026-10-12T00:00:00Z"},
 			})
-		case "/rebeccapanel/Rebecca/dev-build-manifest/dev-builds.json":
+		case "/norapanel/Nora/dev-build-manifest/dev-builds.json":
 			_ = json.NewEncoder(w).Encode(map[string]any{
 				"builds": []map[string]any{
 					{"tag": "dev-0123456", "sha": "0123456789abcdef", "run_id": "11", "created_at": "2026-10-10T00:00:00Z"},
@@ -183,7 +183,7 @@ func TestGitHubUpdateCheckerListsBuildsFromSwitchFloor(t *testing.T) {
 		ManifestBranch: "dev-build-manifest",
 		ManifestPath:   "dev-builds.json",
 	}
-	catalog, err := checker.Builds(context.Background(), "rebeccapanel/Rebecca")
+	catalog, err := checker.Builds(context.Background(), "norapanel/Nora")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -195,11 +195,11 @@ func TestGitHubUpdateCheckerListsBuildsFromSwitchFloor(t *testing.T) {
 func TestGitHubUpdateCheckerListsDevBuildsFromWorkflowWhenManifestIsMissing(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case "/repos/rebeccapanel/Rebecca-node/releases":
+		case "/repos/norapanel/Nora-node/releases":
 			_ = json.NewEncoder(w).Encode([]map[string]any{})
-		case "/rebeccapanel/Rebecca-node/dev-build-manifest/dev-builds.json":
+		case "/norapanel/Nora-node/dev-build-manifest/dev-builds.json":
 			http.NotFound(w, r)
-		case "/repos/rebeccapanel/Rebecca-node/actions/workflows/binary-build.yml/runs":
+		case "/repos/norapanel/Nora-node/actions/workflows/binary-build.yml/runs":
 			_ = json.NewEncoder(w).Encode(map[string]any{"workflow_runs": []map[string]any{{
 				"head_branch": "dev", "conclusion": "success", "head_sha": "1234567890abcdef",
 			}}})
@@ -209,7 +209,7 @@ func TestGitHubUpdateCheckerListsDevBuildsFromWorkflowWhenManifestIsMissing(t *t
 	}))
 	defer server.Close()
 	checker := &GitHubUpdateChecker{APIBase: server.URL, RawBase: server.URL, HTTPClient: server.Client()}
-	catalog, err := checker.Builds(context.Background(), "rebeccapanel/Rebecca-node")
+	catalog, err := checker.Builds(context.Background(), "norapanel/Nora-node")
 	if err != nil || len(catalog.Dev) != 1 || catalog.Dev[0].Version != "dev-1234567" {
 		t.Fatalf("unexpected workflow build catalog: %#v, error=%v", catalog, err)
 	}
@@ -233,8 +233,8 @@ func TestGitHubUpdateCheckerCachesErrors(t *testing.T) {
 		ErrorTTL:   time.Hour,
 	}
 
-	first := checker.Status(context.Background(), "rebeccapanel/Rebecca", nil, "latest")
-	second := checker.Status(context.Background(), "rebeccapanel/Rebecca", nil, "latest")
+	first := checker.Status(context.Background(), "norapanel/Nora", nil, "latest")
+	second := checker.Status(context.Background(), "norapanel/Nora", nil, "latest")
 
 	if first.Error == "" || second.Error == "" {
 		t.Fatalf("expected cached error, got first=%q second=%q", first.Error, second.Error)

@@ -48,7 +48,7 @@ export function LoginPage() {
         <div className="flex items-center justify-between p-4 md:p-6">
           <div className="flex items-center gap-2.5">
             <BrandMark className="size-8" />
-            <span className="text-[0.9375rem] font-semibold tracking-tight">Rebecca</span>
+            <span className="text-[0.9375rem] font-semibold tracking-tight">Nora</span>
           </div>
           <div className="flex items-center gap-1">
             <LanguageSwitcher />

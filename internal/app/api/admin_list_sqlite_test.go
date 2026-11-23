@@ -9,9 +9,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	"github.com/rebeccapanel/rebecca/internal/app/labels"
-	"github.com/rebeccapanel/rebecca/internal/app/migrations"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	"github.com/norapanel/nora/internal/app/labels"
+	"github.com/norapanel/nora/internal/app/migrations"
 )
 
 func TestAdminsListSortAndFilterRunOnSQLite(t *testing.T) {

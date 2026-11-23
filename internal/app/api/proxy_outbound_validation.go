@@ -27,14 +27,14 @@ func managedProxyLocationConflict(config map[string]any, kind, location, tag str
 		return "", false
 	}
 	for _, outbound := range outboundMaps(config["outbounds"]) {
-		if strings.ToLower(strings.TrimSpace(stringFromAny(outbound["rebecca_proxy"]))) != kind {
+		if strings.ToLower(strings.TrimSpace(stringFromAny(outbound["nora_proxy"]))) != kind {
 			continue
 		}
 		existingTag := strings.TrimSpace(stringFromAny(outbound["tag"]))
 		if tag != "" && existingTag == tag {
 			continue
 		}
-		existingLocation := strings.ToLower(strings.TrimSpace(stringFromAny(outbound["rebecca_proxy_location"])))
+		existingLocation := strings.ToLower(strings.TrimSpace(stringFromAny(outbound["nora_proxy_location"])))
 		if existingLocation == "" {
 			existingLocation = managedProxyLocationFromTag(kind, existingTag)
 		}
@@ -56,7 +56,7 @@ func managedProxyLocationFromTag(kind, tag string) string {
 func managedProxySingletonConflict(config map[string]any, kind, tag string) (string, bool) {
 	kind = strings.ToLower(strings.TrimSpace(kind))
 	for _, outbound := range outboundMaps(config["outbounds"]) {
-		if strings.ToLower(strings.TrimSpace(stringFromAny(outbound["rebecca_proxy"]))) != kind {
+		if strings.ToLower(strings.TrimSpace(stringFromAny(outbound["nora_proxy"]))) != kind {
 			continue
 		}
 		existingTag := strings.TrimSpace(stringFromAny(outbound["tag"]))

@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/rebeccapanel/rebecca/internal/app/nodecontroller"
-	userapp "github.com/rebeccapanel/rebecca/internal/app/user"
+	"github.com/norapanel/nora/internal/app/nodecontroller"
+	userapp "github.com/norapanel/nora/internal/app/user"
 )
 
 type liveUserSpeed struct {
@@ -174,7 +174,7 @@ func (s *Server) applyTopSpeedUserFilter(ctx context.Context, principal adminPri
 		}
 	}
 	if bestUsername == "" {
-		bestUsername = "__rebecca_no_top_speed_user__"
+		bestUsername = "__nora_no_top_speed_user__"
 	}
 	req.Usernames = []string{bestUsername}
 	return req, nil

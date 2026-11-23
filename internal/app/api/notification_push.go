@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/rebeccapanel/rebecca/internal/app/notifications"
+	"github.com/norapanel/nora/internal/app/notifications"
 )
 
 type notificationPushRequest struct {

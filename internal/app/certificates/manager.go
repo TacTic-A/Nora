@@ -28,7 +28,7 @@ import (
 )
 
 const (
-	DefaultBaseDir          = "/var/lib/rebecca/certificates"
+	DefaultBaseDir          = "/var/lib/nora/certificates"
 	managedDirectoryName    = ".managed"
 	zeroSSLDirectoryURL     = "https://acme.zerossl.com/v2/DV90"
 	letsEncryptDirectoryURL = "https://acme-v02.api.letsencrypt.org/directory"
@@ -275,7 +275,7 @@ func (m *Manager) Issue(ctx context.Context, request IssueRequest) (Record, erro
 		}
 	}
 
-	certName := "rebecca-" + domains[0]
+	certName := "nora-" + domains[0]
 	args := []string{
 		"certonly", "--standalone", "--non-interactive", "--agree-tos",
 		"--preferred-challenges", "http", "--http-01-port", "80",
@@ -843,12 +843,12 @@ func (m *Manager) certbot() (string, error) {
 	if m.certbotBinary != "" {
 		return m.certbotBinary, nil
 	}
-	for _, candidate := range []string{"/opt/rebecca/certbot-venv/bin/certbot", "certbot"} {
+	for _, candidate := range []string{"/opt/nora/certbot-venv/bin/certbot", "certbot"} {
 		if path, err := exec.LookPath(candidate); err == nil {
 			return path, nil
 		}
 	}
-	return "", fmt.Errorf("certbot is not installed; update Rebecca or install certbot first")
+	return "", fmt.Errorf("certbot is not installed; update Nora or install certbot first")
 }
 
 func (m *Manager) certbotDirs(provider string) (string, string, string) {

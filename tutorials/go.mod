@@ -1,4 +1,4 @@
-module github.com/rebeccapanel/rebecca/tutorials
+module github.com/norapanel/nora/tutorials
 
 go 1.21
 

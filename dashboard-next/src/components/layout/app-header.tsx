@@ -45,10 +45,10 @@ export function AppHeader() {
       <Separator orientation="vertical" className="me-0.5 hidden h-5 sm:block" />
 
       <div className="flex min-w-0 items-center gap-1.5 text-[0.8125rem]">
-        <span className="hidden truncate text-muted-foreground sm:inline">Rebecca</span>
+        <span className="hidden truncate text-muted-foreground sm:inline">Nora</span>
         <span className="hidden text-muted-foreground/40 sm:inline">/</span>
         <span className="truncate font-medium text-foreground/90">
-          {titleKey?.titleKey ? t(titleKey.titleKey) : "Rebecca"}
+          {titleKey?.titleKey ? t(titleKey.titleKey) : "Nora"}
         </span>
       </div>
 

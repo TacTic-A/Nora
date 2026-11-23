@@ -13,8 +13,8 @@ import (
 	"testing"
 	"time"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	"github.com/rebeccapanel/rebecca/internal/app/migrations"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	"github.com/norapanel/nora/internal/app/migrations"
 	_ "modernc.org/sqlite"
 )
 

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/nodecontroller"
+	"github.com/norapanel/nora/internal/app/nodecontroller"
 )
 
 var windscribeTagPattern = regexp.MustCompile(`^[a-zA-Z0-9_.-]+$`)
@@ -120,8 +120,8 @@ func (s *Server) handleWindscribeSetup(w http.ResponseWriter, r *http.Request) {
 	}
 	outbound := map[string]any{
 		"tag":                    tag,
-		"rebecca_proxy":          "windscribe",
-		"rebecca_proxy_location": location,
+		"nora_proxy":          "windscribe",
+		"nora_proxy_location": location,
 		"protocol":               "socks",
 		"settings": map[string]any{
 			"servers": []map[string]any{{

@@ -174,9 +174,7 @@ export const SponsorCarousel: FC<SponsorCarouselProps> = memo(
 					)}
 				>
 					{stableItems.map((item) => {
-						const effectiveHref =
-							item.href ||
-							(item.isSponsor ? "https://webdade.com/" : undefined);
+						const effectiveHref = item.href;
 						const hoverTitle = item.label || item.alt || "Sponsor";
 
 						return (
@@ -217,7 +215,7 @@ export const SponsorCarousel: FC<SponsorCarouselProps> = memo(
 									/>
 									{variant === "logo" && !collapsed ? (
 										<span className="truncate font-sans text-lg font-bold tracking-tight text-panel-text leading-none whitespace-nowrap md:text-xl">
-											{item.isSponsor ? item.label : "Rebecca"}
+											{item.isSponsor ? item.label : "Nora"}
 										</span>
 									) : null}
 								</SponsorLink>

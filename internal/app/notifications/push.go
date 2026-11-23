@@ -28,7 +28,7 @@ const (
 	pushTTLSeconds        = 24 * 60 * 60
 	pushConcurrency       = 8
 	pushIcon              = "/statics/favicon/android-chrome-192x192.png"
-	ServiceWorkerPath     = "/rebecca-admin-sw.js"
+	ServiceWorkerPath     = "/nora-admin-sw.js"
 )
 
 var ErrInvalidSubscription = errors.New("invalid push subscription")

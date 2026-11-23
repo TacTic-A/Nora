@@ -200,7 +200,7 @@ func (s *Server) handleAnyConnectSelfSigned(w http.ResponseWriter, r *http.Reque
 		writeError(w, http.StatusBadRequest, err.Error())
 		return
 	}
-	caCert, caKey, err := generateCA("Rebecca AnyConnect CA")
+	caCert, caKey, err := generateCA("Nora AnyConnect CA")
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "Failed to generate AnyConnect CA")
 		return
@@ -274,7 +274,7 @@ func validCertificateDNSName(value string) bool {
 }
 
 func generateOVCA() (*x509.Certificate, *rsa.PrivateKey, error) {
-	return generateCA("Rebecca OV CA")
+	return generateCA("Nora OV CA")
 }
 
 func generateCA(commonName string) (*x509.Certificate, *rsa.PrivateKey, error) {
@@ -311,7 +311,7 @@ func generateCA(commonName string) (*x509.Certificate, *rsa.PrivateKey, error) {
 }
 
 func generateOVServerCertificate(ca *x509.Certificate, caKey *rsa.PrivateKey) (string, string, error) {
-	return generateServerCertificate(ca, caKey, "Rebecca OV Server", nil, nil)
+	return generateServerCertificate(ca, caKey, "Nora OV Server", nil, nil)
 }
 
 func generateServerCertificate(ca *x509.Certificate, caKey *rsa.PrivateKey, commonName string, dnsNames []string, ipAddresses []net.IP) (string, string, error) {

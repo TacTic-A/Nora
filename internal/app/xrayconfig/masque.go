@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/netip"
 
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
 )
 
 const (

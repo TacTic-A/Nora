@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	nodev1 "github.com/rebeccapanel/rebecca/internal/proto/node/v1"
+	nodev1 "github.com/norapanel/nora/internal/proto/node/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/credentials"

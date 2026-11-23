@@ -371,7 +371,7 @@ func (s Service) fetchBody(ctx context.Context, rawURL string, allowPrivate bool
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", "Rebecca-outbound-sub/1.0")
+	req.Header.Set("User-Agent", "Nora-outbound-sub/1.0")
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err

@@ -12,9 +12,9 @@ import (
 
 func upstreamRoot(t *testing.T, name string) string {
 	t.Helper()
-	base := os.Getenv("REBECCA_BOT_SOURCES")
+	base := os.Getenv("NORA_BOT_SOURCES")
 	if base == "" {
-		t.Skip("set REBECCA_BOT_SOURCES to a folder holding the extracted upstream sources")
+		t.Skip("set NORA_BOT_SOURCES to a folder holding the extracted upstream sources")
 	}
 	matches, _ := filepath.Glob(filepath.Join(base, name, "*"))
 	if len(matches) != 1 {
@@ -55,12 +55,12 @@ func TestUpstreamMirzaBotMatchesTheInstaller(t *testing.T) {
 	}
 	for _, job := range regexp.MustCompile(`'job' => '([A-Za-z0-9_]+)'`).FindAllStringSubmatch(string(jobs), -1) {
 		if !known[job[1]] {
-			t.Errorf("upstream cron job %s is not scheduled by Rebecca", job[1])
+			t.Errorf("upstream cron job %s is not scheduled by Nora", job[1])
 		}
 	}
 	for _, task := range mirzaCronTasks {
 		if _, err := os.Stat(filepath.Join(root, "cronbot", task.path)); err != nil {
-			t.Errorf("Rebecca schedules cronbot/%s but upstream no longer has it", task.path)
+			t.Errorf("Nora schedules cronbot/%s but upstream no longer has it", task.path)
 		}
 	}
 }

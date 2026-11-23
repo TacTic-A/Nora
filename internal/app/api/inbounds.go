@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/labels"
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
+	"github.com/norapanel/nora/internal/app/labels"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
 )
 
 func (s *Server) handleInboundsRootEntry(w http.ResponseWriter, r *http.Request) {

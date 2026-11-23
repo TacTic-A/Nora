@@ -30,7 +30,7 @@ export function AppTitle() {
             >
               <BrandMark className="size-8 shrink-0" />
               <span className="grid min-w-0">
-                <span className="truncate text-[0.9375rem] font-semibold tracking-tight">Rebecca</span>
+                <span className="truncate text-[0.9375rem] font-semibold tracking-tight">Nora</span>
                 <span className="truncate text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                   {t("next.brand.tagline")}
                 </span>

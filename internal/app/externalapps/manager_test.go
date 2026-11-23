@@ -16,7 +16,7 @@ import (
 	"testing"
 	"time"
 
-	certificateapp "github.com/rebeccapanel/rebecca/internal/app/certificates"
+	certificateapp "github.com/norapanel/nora/internal/app/certificates"
 )
 
 func TestExtractExternalAppArchiveAndDetectRuntime(t *testing.T) {
@@ -233,7 +233,7 @@ func TestMirzaBotUpdatePreservesConfigurationAndRunsMigration(t *testing.T) {
 	}
 	writeCommand("id", "if [ \"$1\" = -u ]; then echo "+strconv.Itoa(os.Getuid())+"; else echo "+strconv.Itoa(os.Getgid())+"; fi")
 	writeCommand("runuser", `
-echo "$*" >> "$REBECCA_FAKE_RUNUSER_LOG"
+echo "$*" >> "$NORA_FAKE_RUNUSER_LOG"
 for arg in "$@"; do
   case "$arg" in --working-dir=*) root="${arg#--working-dir=}";; esac
 done
@@ -244,7 +244,7 @@ exit 0`)
 	writeCommand("systemctl", "exit 0")
 	t.Setenv("PATH", bin+":"+os.Getenv("PATH"))
 	runuserLog := filepath.Join(t.TempDir(), "runuser.log")
-	t.Setenv("REBECCA_FAKE_RUNUSER_LOG", runuserLog)
+	t.Setenv("NORA_FAKE_RUNUSER_LOG", runuserLog)
 
 	base := t.TempDir()
 	root := filepath.Join(base, "apps", "0123456789ab")
@@ -292,7 +292,7 @@ exit 0`)
 	if err != nil || string(gotConfig) != config {
 		t.Fatalf("config=%q err=%v", gotConfig, err)
 	}
-	cronSecret, err := os.ReadFile(filepath.Join(root, ".rebecca-cron-secret"))
+	cronSecret, err := os.ReadFile(filepath.Join(root, ".nora-cron-secret"))
 	if err != nil || strings.TrimSpace(string(cronSecret)) != "preserved-cron-secret" {
 		t.Fatalf("cron secret=%q err=%v", cronSecret, err)
 	}
@@ -309,7 +309,7 @@ exit 0`)
 		t.Fatal("upstream web installer was retained")
 	}
 	commands, err := os.ReadFile(runuserLog)
-	if err != nil || !strings.Contains(string(commands), "php .rebecca-init.php") {
+	if err != nil || !strings.Contains(string(commands), "php .nora-init.php") {
 		t.Fatalf("table initializer was not run: %q err=%v", commands, err)
 	}
 }
@@ -331,7 +331,7 @@ telegram('setWebhook', [
 	if err != nil {
 		t.Fatal(err)
 	}
-	if bytes.Contains(updated, []byte("setWebhook")) || !bytes.Contains(updated, []byte("Webhook is configured by Rebecca")) {
+	if bytes.Contains(updated, []byte("setWebhook")) || !bytes.Contains(updated, []byte("Webhook is configured by Nora")) {
 		t.Fatalf("webhook call was not replaced: %s", updated)
 	}
 }
@@ -357,11 +357,11 @@ func TestMirzaRequestSecretsAreIndependent(t *testing.T) {
 	}
 
 	cron := httptest.NewRequest(http.MethodGet, "https://bot.example.com/cronbot/statusday.php", nil)
-	cron.Header.Set("X-Rebecca-Cron-Secret", "webhook-secret")
+	cron.Header.Set("X-Nora-Cron-Secret", "webhook-secret")
 	if err := manager.AuthorizeMirzaRequest(cron, record, "cronbot/statusday.php"); err == nil {
 		t.Fatal("webhook secret was accepted as cron secret")
 	}
-	cron.Header.Set("X-Rebecca-Cron-Secret", "cron-secret")
+	cron.Header.Set("X-Nora-Cron-Secret", "cron-secret")
 	if err := manager.AuthorizeMirzaRequest(cron, record, "cronbot/statusday.php"); err != nil {
 		t.Fatal(err)
 	}
@@ -391,7 +391,7 @@ func TestWriteMirzaCronUsesPerAppIdentityWithoutEmbeddingSecret(t *testing.T) {
 		Path:       "bot0123456789ab",
 		Root:       root,
 		SystemUser: "rbphp_abcdef",
-		CronConfig: filepath.Join(t.TempDir(), "rebecca-php-abcdef"),
+		CronConfig: filepath.Join(t.TempDir(), "nora-php-abcdef"),
 	}
 	if err := writeMirzaCron(record); err != nil {
 		t.Fatal(err)
@@ -404,7 +404,7 @@ func TestWriteMirzaCronUsesPerAppIdentityWithoutEmbeddingSecret(t *testing.T) {
 	if strings.Count(text, "https://bot.example.com/bot0123456789ab/cronbot/") != len(mirzaCronTasks) {
 		t.Fatalf("cron task count mismatch:\n%s", text)
 	}
-	if !strings.Contains(text, "rbphp_abcdef") || !strings.Contains(text, ".rebecca-cron-secret") {
+	if !strings.Contains(text, "rbphp_abcdef") || !strings.Contains(text, ".nora-cron-secret") {
 		t.Fatalf("cron identity/secret file missing:\n%s", text)
 	}
 	if strings.Contains(text, "super-secret-value") {
@@ -449,8 +449,8 @@ func TestWriteExternalAppPoolBoundsResources(t *testing.T) {
 	record := Record{
 		Root:       t.TempDir(),
 		SystemUser: "rbphp_abcdef",
-		Socket:     "/run/php/rebecca-abcdef.sock",
-		PoolConfig: filepath.Join(t.TempDir(), "rebecca-abcdef.conf"),
+		Socket:     "/run/php/nora-abcdef.sock",
+		PoolConfig: filepath.Join(t.TempDir(), "nora-abcdef.conf"),
 	}
 	if err := writeExternalAppPool(record, false); err != nil {
 		t.Fatal(err)
@@ -683,12 +683,12 @@ func TestDecodeArchiveInstallRequestAcceptsEmptyProjectAndDatabase(t *testing.T)
 	}
 }
 
-func TestCreateExternalAppDatabaseGrantsRebeccaAccess(t *testing.T) {
+func TestCreateExternalAppDatabaseGrantsNoraAccess(t *testing.T) {
 	bin := t.TempDir()
 	logPath := filepath.Join(t.TempDir(), "mysql.log")
 	script := `#!/bin/sh
 query=$(cat)
-printf '%s\n' "$query" >> "$REBECCA_MYSQL_TEST_LOG"
+printf '%s\n' "$query" >> "$NORA_MYSQL_TEST_LOG"
 case "$query" in
   *"SELECT EXISTS"*) printf '0\t0\n' ;;
   *"SELECT Host"*) printf '127.0.0.1\nlocalhost\n' ;;
@@ -698,8 +698,8 @@ esac
 		t.Fatal(err)
 	}
 	t.Setenv("PATH", bin+":"+os.Getenv("PATH"))
-	t.Setenv("REBECCA_MYSQL_TEST_LOG", logPath)
-	manager := &Manager{databaseURL: "mysql://rebecca:secret@127.0.0.1:3306/rebecca"}
+	t.Setenv("NORA_MYSQL_TEST_LOG", logPath)
+	manager := &Manager{databaseURL: "mysql://nora:secret@127.0.0.1:3306/nora"}
 	if err := manager.ensureExternalAppDatabaseFree(context.Background(), "project_db", "project_user"); err != nil {
 		t.Fatal(err)
 	}
@@ -714,8 +714,8 @@ esac
 	for _, expected := range []string{
 		"CREATE DATABASE `project_db`",
 		"GRANT ALL PRIVILEGES ON `project_db`.* TO 'project_user'@'localhost'",
-		"GRANT ALL PRIVILEGES ON `project_db`.* TO 'rebecca'@'127.0.0.1'",
-		"GRANT ALL PRIVILEGES ON `project_db`.* TO 'rebecca'@'localhost'",
+		"GRANT ALL PRIVILEGES ON `project_db`.* TO 'nora'@'127.0.0.1'",
+		"GRANT ALL PRIVILEGES ON `project_db`.* TO 'nora'@'localhost'",
 	} {
 		if !strings.Contains(text, expected) {
 			t.Fatalf("missing %q in queries:\n%s", expected, text)
@@ -772,7 +772,7 @@ func TestDownloadMirzaBotUsesLatestTaggedCommit(t *testing.T) {
 		"mirzabot/table.php": "<?php", "mirzabot/config.php": "<?php", "mirzabot/index.php": "<?php",
 	})
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Header.Get("User-Agent") != "Rebecca" {
+		if r.Header.Get("User-Agent") != "Nora" {
 			t.Errorf("user-agent=%q", r.Header.Get("User-Agent"))
 		}
 		switch r.URL.Path {
@@ -810,8 +810,8 @@ func TestDownloadMirzaBotRejectsInvalidTags(t *testing.T) {
 }
 
 func TestLatestMirzaBotReleaseArchive(t *testing.T) {
-	if os.Getenv("REBECCA_TEST_LATEST_MIRZABOT") != "1" {
-		t.Skip("set REBECCA_TEST_LATEST_MIRZABOT=1 to verify the current tagged GitHub release")
+	if os.Getenv("NORA_TEST_LATEST_MIRZABOT") != "1" {
+		t.Skip("set NORA_TEST_LATEST_MIRZABOT=1 to verify the current tagged GitHub release")
 	}
 	manager := New(Config{BaseDir: t.TempDir()}, nil)
 	source, err := manager.downloadMirzaBot(context.Background())
@@ -913,7 +913,7 @@ func TestFaoximaTableInitializerRemovesWebhookSetup(t *testing.T) {
 		t.Fatal(err)
 	}
 	text := string(output)
-	if strings.Contains(text, "setwebhook") || !strings.Contains(text, "Webhook is configured by Rebecca") || !strings.Contains(text, "after") {
+	if strings.Contains(text, "setwebhook") || !strings.Contains(text, "Webhook is configured by Nora") || !strings.Contains(text, "after") {
 		t.Fatalf("webhook setup was not removed: %s", text)
 	}
 }

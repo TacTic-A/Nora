@@ -77,7 +77,7 @@ jobs:
         run: go test ./internal/app/admin ./internal/app/backup ./internal/app/migrations
 
       - name: Test binary database lifecycle
-        run: bash scripts/rebecca/test-database-maintenance.sh
+        run: bash scripts/nora/test-database-maintenance.sh
 
       - name: Upload dashboard
         uses: actions/upload-artifact@v4
@@ -121,7 +121,7 @@ jobs:
 
       - name: Validate installer shell scripts
         shell: bash
-        run: bash -n scripts/rebecca/rebecca-binary.sh scripts/rebecca/rebecca.sh scripts/rebecca/rebecca-node-binary.sh scripts/rebecca/rebecca-node.sh
+        run: bash -n scripts/nora/nora-binary.sh scripts/nora/nora.sh scripts/nora/nora-node-binary.sh scripts/nora/nora-node.sh
 
       - name: Download dashboard
         uses: actions/download-artifact@v4
@@ -139,22 +139,22 @@ jobs:
         if: matrix.asset_arch == 'amd64' || matrix.asset_arch == 'arm64' || github.ref_type == 'tag' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.full_matrix == true)
         shell: bash
         env:
-          ASSET_NAME: rebecca-linux-${{ matrix.asset_arch }}.tar.gz
+          ASSET_NAME: nora-linux-${{ matrix.asset_arch }}.tar.gz
           GOOS: linux
           GOARCH: ${{ matrix.goarch }}
           GOARM: ${{ matrix.goarm }}
         run: |
           set -euo pipefail
           bash scripts/build_binary.sh
-          tar -C dist -czf "dist/${ASSET_NAME}" rebecca-server rebecca-cli templates
+          tar -C dist -czf "dist/${ASSET_NAME}" nora-server nora-cli templates
           sha256sum "dist/${ASSET_NAME}"
 
       - name: Upload Linux package artifact
         if: matrix.asset_arch == 'amd64' || matrix.asset_arch == 'arm64' || github.ref_type == 'tag' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.full_matrix == true)
         uses: actions/upload-artifact@v4
         with:
-          name: rebecca-linux-${{ matrix.asset_arch }}
-          path: dist/rebecca-linux-${{ matrix.asset_arch }}.tar.gz
+          name: nora-linux-${{ matrix.asset_arch }}
+          path: dist/nora-linux-${{ matrix.asset_arch }}.tar.gz
 
   build-windows-amd64:
     needs: dashboard
@@ -202,15 +202,15 @@ jobs:
         shell: pwsh
         run: |
           Compress-Archive `
-            -Path dist/rebecca-server.exe, dist/rebecca-cli.exe, dist/templates `
-            -DestinationPath dist/rebecca-windows-amd64.zip `
+            -Path dist/nora-server.exe, dist/nora-cli.exe, dist/templates `
+            -DestinationPath dist/nora-windows-amd64.zip `
             -Force
 
       - name: Upload Windows package artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rebecca-windows-amd64
-          path: dist/rebecca-windows-amd64.zip
+          name: nora-windows-amd64
+          path: dist/nora-windows-amd64.zip
 
   publish-release:
     needs:
@@ -241,7 +241,7 @@ jobs:
       - name: Download package artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: rebecca-*
+          pattern: "*windows*,*linux*"
           path: release-assets
           merge-multiple: true
 
@@ -255,13 +255,13 @@ jobs:
           if [ -f "${notes_file}" ]; then
             cp "${notes_file}" release-body.md
           else
-            printf 'Rebecca %s\n' "${release_tag}" > release-body.md
+            printf 'Nora %s\n' "${release_tag}" > release-body.md
           fi
 
           gh release view "${release_tag}" >/dev/null 2>&1 || \
             gh release create "${release_tag}" --title "${release_tag}" --notes-file release-body.md
 
-          gh release upload "${release_tag}" release-assets/rebecca-* --clobber
+          gh release upload "${release_tag}" release-assets/* --clobber
 
   publish-dev-manifest:
     needs:

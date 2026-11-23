@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	dashboardapp "github.com/rebeccapanel/rebecca/internal/app/dashboard"
-	systemapp "github.com/rebeccapanel/rebecca/internal/app/system"
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
+	dashboardapp "github.com/norapanel/nora/internal/app/dashboard"
+	systemapp "github.com/norapanel/nora/internal/app/system"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
 )
 
 func (s *Server) handleSystemStats(w http.ResponseWriter, r *http.Request) {

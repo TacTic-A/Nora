@@ -3,7 +3,7 @@ package xrayconfig
 import (
 	"strings"
 
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
 )
 
 const plainPublicTransportWarning = "Xray 26.7.11+ clients refuse links to this inbound on a public address unless the host adds TLS or REALITY or the inbound uses VLESS encryption"

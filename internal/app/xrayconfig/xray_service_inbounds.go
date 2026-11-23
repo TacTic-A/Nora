@@ -7,7 +7,7 @@ import (
 	"net/netip"
 	"strings"
 
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
 )
 
 const XrayWGProtocol = "wireguard-xray"

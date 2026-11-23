@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
 	"strconv"
 	"strings"
 	"sync"

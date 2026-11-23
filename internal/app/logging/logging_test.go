@@ -6,7 +6,7 @@ import (
 )
 
 func TestRecentDiagnosticsAreBoundedDeduplicatedAndExpire(t *testing.T) {
-	t.Setenv("REBECCA_LOG_LEVEL", "debug")
+	t.Setenv("NORA_LOG_LEVEL", "debug")
 	recentDiagnostics.Lock()
 	recentDiagnostics.items = nil
 	recentDiagnostics.Unlock()

@@ -1,8 +1,8 @@
 services:
-  rebecca:
-    image:  rebeccapanel/rebecca:latest
+  nora:
+    image: norapanel/nora:latest
     restart: always
     env_file: .env
     network_mode: host
     volumes:
-      - /var/lib/rebecca:/var/lib/rebecca
+      - /var/lib/nora:/var/lib/nora

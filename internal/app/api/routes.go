@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi/v5"
-	externalapps "github.com/rebeccapanel/rebecca/internal/app/externalapps"
-	"github.com/rebeccapanel/rebecca/internal/app/notifications"
+	externalapps "github.com/norapanel/nora/internal/app/externalapps"
+	"github.com/norapanel/nora/internal/app/notifications"
 )
 
 const (
@@ -48,7 +48,7 @@ func withAPIRequestBodyLimit(next http.Handler) http.Handler {
 func (s *Server) Handler() http.Handler {
 	r := chi.NewRouter()
 
-	r.HandleFunc("/__rebecca_api/healthz", s.handleHealth)
+	r.HandleFunc("/__nora_api/healthz", s.handleHealth)
 	if s.cfg.APIDocsEnabled {
 		r.HandleFunc("/openapi.json", s.handleOpenAPIJSON)
 		r.HandleFunc("/docs", func(w http.ResponseWriter, r *http.Request) {

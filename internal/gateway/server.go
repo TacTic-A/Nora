@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/pires/go-proxyproto"
-	certificateapp "github.com/rebeccapanel/rebecca/internal/app/certificates"
+	certificateapp "github.com/norapanel/nora/internal/app/certificates"
 )
 
 type Server struct {
@@ -53,11 +53,11 @@ func NewServer(cfg Config) (*Server, error) {
 	apiHandler := cfg.APIHandler
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/__rebecca_go/healthz", func(w http.ResponseWriter, _ *http.Request) {
+	mux.HandleFunc("/__nora_go/healthz", func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		_, _ = w.Write([]byte("ok\n"))
 	})
-	mux.HandleFunc("/__rebecca_go/api_healthz", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/__nora_go/api_healthz", func(w http.ResponseWriter, r *http.Request) {
 		if apiHandler == nil {
 			http.Error(w, "Go API handler is unavailable", http.StatusServiceUnavailable)
 			return
@@ -157,7 +157,7 @@ func newHTTPServer(addr string, handler http.Handler) *http.Server {
 func apiHealthRequest(r *http.Request) *http.Request {
 	req := r.Clone(r.Context())
 	req.Method = http.MethodGet
-	req.URL.Path = "/__rebecca_api/healthz"
+	req.URL.Path = "/__nora_api/healthz"
 	req.URL.RawPath = ""
 	req.URL.RawQuery = ""
 	return req

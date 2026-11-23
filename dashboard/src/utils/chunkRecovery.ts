@@ -1,4 +1,4 @@
-const chunkRecoveryKey = "rebecca:chunk-recovery";
+const chunkRecoveryKey = "nora:chunk-recovery";
 const chunkRecoveryCooldownMs = 60_000;
 
 const chunkLoadErrorPatterns = [

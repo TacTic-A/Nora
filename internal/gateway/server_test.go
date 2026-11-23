@@ -191,7 +191,7 @@ func TestAccessInsightsRouteReachesAPI(t *testing.T) {
 
 func TestGatewayHealthChecks(t *testing.T) {
 	api := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/__rebecca_api/healthz" {
+		if r.URL.Path != "/__nora_api/healthz" {
 			t.Fatalf("unexpected health path: %s", r.URL.Path)
 		}
 		w.WriteHeader(http.StatusOK)
@@ -202,7 +202,7 @@ func TestGatewayHealthChecks(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	for _, path := range []string{"/__rebecca_go/healthz", "/__rebecca_go/api_healthz"} {
+	for _, path := range []string{"/__nora_go/healthz", "/__nora_go/api_healthz"} {
 		rec := httptest.NewRecorder()
 		req := httptest.NewRequest(http.MethodGet, path, nil)
 		server.server.Handler.ServeHTTP(rec, req)

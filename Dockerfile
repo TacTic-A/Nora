@@ -43,9 +43,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /opt/rebecca
-COPY --from=builder /src/dist/rebecca-server /usr/local/bin/rebecca-server
-COPY --from=builder /src/dist/rebecca-cli /usr/local/bin/rebecca-cli
+WORKDIR /opt/nora
+COPY --from=builder /src/dist/nora-server /usr/local/bin/nora-server
+COPY --from=builder /src/dist/nora-cli /usr/local/bin/nora-cli
 COPY templates ./templates
 
-ENTRYPOINT ["rebecca-server"]
+ENTRYPOINT ["nora-server"]

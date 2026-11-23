@@ -23,7 +23,7 @@ export const BootScreen = () => {
 					className="rb-boot-logo pointer-events-none size-10 object-contain select-none [-webkit-user-drag:none] sm:size-12 min-[769px]:size-14"
 				/>
 				<span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-panel-text-muted sm:text-[12px]">
-					Rebecca
+					Nora
 				</span>
 				<div
 					aria-hidden="true"

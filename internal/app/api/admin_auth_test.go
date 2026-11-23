@@ -20,16 +20,16 @@ import (
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	backupapp "github.com/rebeccapanel/rebecca/internal/app/backup"
-	certificateapp "github.com/rebeccapanel/rebecca/internal/app/certificates"
-	"github.com/rebeccapanel/rebecca/internal/app/labels"
-	nodeapp "github.com/rebeccapanel/rebecca/internal/app/node"
-	"github.com/rebeccapanel/rebecca/internal/app/nodecontroller"
-	settingsapp "github.com/rebeccapanel/rebecca/internal/app/settings"
-	telegramapp "github.com/rebeccapanel/rebecca/internal/app/telegram"
-	warpapp "github.com/rebeccapanel/rebecca/internal/app/warp"
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	backupapp "github.com/norapanel/nora/internal/app/backup"
+	certificateapp "github.com/norapanel/nora/internal/app/certificates"
+	"github.com/norapanel/nora/internal/app/labels"
+	nodeapp "github.com/norapanel/nora/internal/app/node"
+	"github.com/norapanel/nora/internal/app/nodecontroller"
+	settingsapp "github.com/norapanel/nora/internal/app/settings"
+	telegramapp "github.com/norapanel/nora/internal/app/telegram"
+	warpapp "github.com/norapanel/nora/internal/app/warp"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
 )
 
 func testAdminServer(t *testing.T) (*Server, *sql.DB) {

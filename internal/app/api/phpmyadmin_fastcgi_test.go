@@ -18,7 +18,7 @@ func TestRewritePHPMyAdminBodyRemovesFrameProtection(t *testing.T) {
 <script data-cfasync="false" type="text/javascript" src="js/dist/cross_framing_protection.js?v=5.2.1deb3"></script>
 <link href="/phpmyadmin/themes/pmahomme/css/theme.css">
 </head>
-<body><a href="/phpmyadmin/server_databases.php">rebecca</a></body>
+<body><a href="/phpmyadmin/server_databases.php">nora</a></body>
 </html>`)
 	status := phpMyAdminResponse{Path: "/phpmyadmin/", Port: 8080}
 
@@ -35,12 +35,12 @@ func TestRewritePHPMyAdminBodyRemovesFrameProtection(t *testing.T) {
 	}
 }
 
-func TestPHPMyAdminEnvValueReadsRebeccaEnvFile(t *testing.T) {
+func TestPHPMyAdminEnvValueReadsNoraEnvFile(t *testing.T) {
 	path := filepath.Join(t.TempDir(), ".env")
 	if err := os.WriteFile(path, []byte("MYSQL_ROOT_PASSWORD = \"root-pass\"\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("REBECCA_ENV_FILE", path)
+	t.Setenv("NORA_ENV_FILE", path)
 	t.Setenv("MYSQL_ROOT_PASSWORD", "")
 
 	if got := phpMyAdminEnvValue("MYSQL_ROOT_PASSWORD"); got != "root-pass" {

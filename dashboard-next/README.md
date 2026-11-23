@@ -1,6 +1,6 @@
 # dashboard-next
 
-The rebuilt Rebecca dashboard: React 19 + TypeScript + Vite, Tailwind CSS v4, and
+The rebuilt Nora dashboard: React 19 + TypeScript + Vite, Tailwind CSS v4, and
 shadcn/ui components that live in this repository as source.
 
 This directory is a parallel app. `../dashboard` (the current Chakra/Emotion

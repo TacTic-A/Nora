@@ -22,9 +22,9 @@ import (
 )
 
 func prepareExternalAppHost(ctx context.Context) error {
-	binary := "/usr/local/bin/rebecca"
+	binary := "/usr/local/bin/nora"
 	if _, err := os.Stat(binary); err != nil {
-		binary = "rebecca"
+		binary = "nora"
 	}
 	output, err := runExternalAppCommand(ctx, 15*time.Minute, binary, "prepare-external-app-hosting")
 	if err != nil {
@@ -33,12 +33,12 @@ func prepareExternalAppHost(ctx context.Context) error {
 	return nil
 }
 
-const externalAppNodeBin = "/opt/rebecca/node/current/bin"
+const externalAppNodeBin = "/opt/nora/node/current/bin"
 
 func prepareExternalAppNodeHost(ctx context.Context) error {
-	binary := "/usr/local/bin/rebecca"
+	binary := "/usr/local/bin/nora"
 	if _, err := os.Stat(binary); err != nil {
-		binary = "rebecca"
+		binary = "nora"
 	}
 	output, err := runExternalAppCommand(ctx, 15*time.Minute, binary, "prepare-external-app-node-hosting")
 	if err != nil {
@@ -121,7 +121,7 @@ func runExternalAppNodeCommand(ctx context.Context, record Record, timeout time.
 
 func externalAppNodeUnit(record Record) string {
 	return fmt.Sprintf(`[Unit]
-Description=Rebecca external Node.js application %s
+Description=Nora external Node.js application %s
 After=network-online.target
 Wants=network-online.target
 
@@ -335,7 +335,7 @@ php_admin_value[upload_tmp_dir] = %s/.tmp
 php_admin_value[upload_max_filesize] = 32M
 php_admin_value[post_max_size] = 32M
 php_admin_value[memory_limit] = 256M
-`, "rebecca-"+filepath.Base(record.Root), record.SystemUser, record.SystemUser, record.Socket, maxChildren, record.Root,
+`, "nora-"+filepath.Base(record.Root), record.SystemUser, record.SystemUser, record.Socket, maxChildren, record.Root,
 		disabledFunctions, record.Root, record.Root, record.Root, record.Root)
 }
 
@@ -382,7 +382,7 @@ func initializeTelegramBotDatabase(ctx context.Context, appRoot, systemUser stri
 	if err != nil {
 		return err
 	}
-	path := filepath.Join(appRoot, ".rebecca-init.php")
+	path := filepath.Join(appRoot, ".nora-init.php")
 	if err := os.WriteFile(path, prepared, 0o600); err != nil {
 		return err
 	}
@@ -392,7 +392,7 @@ func initializeTelegramBotDatabase(ctx context.Context, appRoot, systemUser stri
 	}
 	commandCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
 	defer cancel()
-	command := exec.CommandContext(commandCtx, "runuser", "-u", systemUser, "--", "php", ".rebecca-init.php")
+	command := exec.CommandContext(commandCtx, "runuser", "-u", systemUser, "--", "php", ".nora-init.php")
 	command.Dir = appRoot
 	output, err := command.CombinedOutput()
 	if err != nil {
@@ -413,7 +413,7 @@ func mirzaBotTableInitializer(table []byte) ([]byte, error) {
 	if matches := mirzaWebhookCallPattern.FindAllIndex(table, -1); len(matches) != 1 {
 		return nil, errors.New("MirzaBot table initializer does not contain exactly one setWebhook call")
 	}
-	return mirzaWebhookCallPattern.ReplaceAll(table, []byte("// Webhook is configured by Rebecca with a secret token.")), nil
+	return mirzaWebhookCallPattern.ReplaceAll(table, []byte("// Webhook is configured by Nora with a secret token.")), nil
 }
 
 func configureFaoximaBot(config []byte, database, username, password, botToken, adminID, domain, botUsername string) ([]byte, error) {
@@ -464,7 +464,7 @@ func faoximaTableInitializer(table []byte) ([]byte, error) {
 	end += closeRel + len("\n}\n")
 	updated := make([]byte, 0, len(table)-end+start+64)
 	updated = append(updated, table[:start]...)
-	updated = append(updated, []byte("// Webhook is configured by Rebecca with a secret token.\n")...)
+	updated = append(updated, []byte("// Webhook is configured by Nora with a secret token.\n")...)
 	updated = append(updated, table[end:]...)
 	return updated, nil
 }
@@ -540,13 +540,13 @@ func cronTaskDir(task mirzaCronTask) string {
 }
 
 func writeTelegramCron(record Record, tasks []mirzaCronTask) error {
-	secretPath := filepath.Join(record.Root, ".rebecca-cron-secret")
+	secretPath := filepath.Join(record.Root, ".nora-cron-secret")
 	var content strings.Builder
 	content.WriteString("SHELL=/bin/sh\nPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\nMAILTO=\"\"\n\n")
 	for _, task := range tasks {
 		lockPath := filepath.Join(record.Root, ".locks", strings.TrimSuffix(task.path, ".php")+".lock")
 		fmt.Fprintf(&content,
-			"%s %s /usr/bin/flock -n %s /usr/bin/curl -fsS --max-time 50 --resolve %s:443:127.0.0.1 -H \"X-Rebecca-Cron-Secret: $(/bin/cat %s)\" %s/%s/%s >/dev/null 2>&1\n",
+			"%s %s /usr/bin/flock -n %s /usr/bin/curl -fsS --max-time 50 --resolve %s:443:127.0.0.1 -H \"X-Nora-Cron-Secret: $(/bin/cat %s)\" %s/%s/%s >/dev/null 2>&1\n",
 			task.schedule, record.SystemUser, shellQuote(lockPath), record.Domain, shellQuote(secretPath), externalAppPublicURL(record), cronTaskDir(task), task.path,
 		)
 	}
@@ -557,7 +557,7 @@ func writeAtomicFile(path string, data []byte, mode os.FileMode) error {
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		return err
 	}
-	temp, err := os.CreateTemp(filepath.Dir(path), ".rebecca-*.tmp")
+	temp, err := os.CreateTemp(filepath.Dir(path), ".nora-*.tmp")
 	if err != nil {
 		return err
 	}
@@ -636,11 +636,11 @@ func (m *Manager) createExternalAppDatabase(ctx context.Context, database, usern
 	}
 	hostOutput, err := m.mysqlRoot(ctx, "SELECT Host FROM mysql.user WHERE User="+sqlString(credentials.Username)+" ORDER BY Host;\n")
 	if err != nil {
-		return fmt.Errorf("find Rebecca database grants: %w", err)
+		return fmt.Errorf("find Nora database grants: %w", err)
 	}
 	hosts := strings.Fields(string(hostOutput))
 	if len(hosts) == 0 {
-		return errors.New("Rebecca database user has no local MySQL account")
+		return errors.New("Nora database user has no local MySQL account")
 	}
 	var query strings.Builder
 	fmt.Fprintf(&query, "CREATE DATABASE %s CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;\n", sqlIdentifier(database))
@@ -693,7 +693,7 @@ func (m *Manager) importExternalAppDatabase(ctx context.Context, database, usern
 	if len(data) == 0 || len(data) > maxExternalAppArchiveBytes {
 		return errors.New("SQL backup is empty or exceeds 32 MiB")
 	}
-	file, err := os.CreateTemp("", "rebecca-mysql-app-*.cnf")
+	file, err := os.CreateTemp("", "nora-mysql-app-*.cnf")
 	if err != nil {
 		return err
 	}
@@ -736,7 +736,7 @@ func (m *Manager) dumpExternalAppDatabase(parent context.Context, database strin
 			return nil, errors.New("mariadb-dump or mysqldump is not installed")
 		}
 	}
-	dump, err := os.CreateTemp("", "rebecca-external-app-*.sql")
+	dump, err := os.CreateTemp("", "nora-external-app-*.sql")
 	if err != nil {
 		return nil, err
 	}
@@ -772,7 +772,7 @@ func (m *Manager) dumpExternalAppDatabase(parent context.Context, database strin
 		if password == "" {
 			return cleanup(fmt.Errorf("export application database: %s", limitedExternalAppCommandOutput(stderr.Bytes(), err)))
 		}
-		credentialsFile, fileErr := os.CreateTemp("", "rebecca-mysql-root-*.cnf")
+		credentialsFile, fileErr := os.CreateTemp("", "nora-mysql-root-*.cnf")
 		if fileErr != nil {
 			return cleanup(fileErr)
 		}
@@ -840,7 +840,7 @@ func (m *Manager) mysqlRoot(parent context.Context, query string) ([]byte, error
 	if password == "" {
 		return nil, errors.New("local root socket authentication failed")
 	}
-	file, err := os.CreateTemp("", "rebecca-mysql-root-*.cnf")
+	file, err := os.CreateTemp("", "nora-mysql-root-*.cnf")
 	if err != nil {
 		return nil, err
 	}
@@ -1023,7 +1023,7 @@ func (m *Manager) doExternalAppRequest(request *http.Request) (*http.Response, e
 
 func setMirzaBotGitHubHeaders(request *http.Request) {
 	request.Header.Set("Accept", "application/vnd.github+json")
-	request.Header.Set("User-Agent", "Rebecca")
+	request.Header.Set("User-Agent", "Nora")
 }
 
 func (m *Manager) telegramBotUsername(ctx context.Context, token string) (string, error) {

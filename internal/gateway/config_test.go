@@ -7,27 +7,27 @@ import (
 )
 
 func TestLoadConfigUsesLegacyUvicornEnv(t *testing.T) {
-	t.Setenv("REBECCA_GATEWAY_ADDR", "")
+	t.Setenv("NORA_GATEWAY_ADDR", "")
 	t.Setenv("UVICORN_HOST", "127.0.0.1")
 	t.Setenv("UVICORN_PORT", "9443")
-	t.Setenv("UVICORN_SSL_CERTFILE", "/tmp/rebecca/fullchain.pem")
-	t.Setenv("UVICORN_SSL_KEYFILE", "/tmp/rebecca/key.pem")
+	t.Setenv("UVICORN_SSL_CERTFILE", "/tmp/nora/fullchain.pem")
+	t.Setenv("UVICORN_SSL_KEYFILE", "/tmp/nora/key.pem")
 
 	cfg := LoadConfig()
 
 	if cfg.Addr != "127.0.0.1:9443" {
 		t.Fatalf("Addr=%q want %q", cfg.Addr, "127.0.0.1:9443")
 	}
-	if cfg.TLSCertFile != "/tmp/rebecca/fullchain.pem" {
+	if cfg.TLSCertFile != "/tmp/nora/fullchain.pem" {
 		t.Fatalf("TLSCertFile=%q", cfg.TLSCertFile)
 	}
-	if cfg.TLSKeyFile != "/tmp/rebecca/key.pem" {
+	if cfg.TLSKeyFile != "/tmp/nora/key.pem" {
 		t.Fatalf("TLSKeyFile=%q", cfg.TLSKeyFile)
 	}
 }
 
 func TestLoadConfigKeepsGatewayAddrOverride(t *testing.T) {
-	t.Setenv("REBECCA_GATEWAY_ADDR", ":18080")
+	t.Setenv("NORA_GATEWAY_ADDR", ":18080")
 	t.Setenv("UVICORN_HOST", "127.0.0.1")
 	t.Setenv("UVICORN_PORT", "9443")
 
@@ -38,16 +38,16 @@ func TestLoadConfigKeepsGatewayAddrOverride(t *testing.T) {
 	}
 }
 
-func TestLoadConfigReadsRebeccaEnvFile(t *testing.T) {
+func TestLoadConfigReadsNoraEnvFile(t *testing.T) {
 	envPath := filepath.Join(t.TempDir(), ".env")
 	writeTestFile(t, envPath, `
 UVICORN_HOST = "127.0.0.1"
 UVICORN_PORT = "18083"
-UVICORN_SSL_CERTFILE = "/var/lib/rebecca/certs/fullchain.pem"
-UVICORN_SSL_KEYFILE = "/var/lib/rebecca/certs/key.pem"
+UVICORN_SSL_CERTFILE = "/var/lib/nora/certs/fullchain.pem"
+UVICORN_SSL_KEYFILE = "/var/lib/nora/certs/key.pem"
 `)
-	t.Setenv("REBECCA_ENV_FILE", envPath)
-	t.Setenv("REBECCA_GATEWAY_ADDR", "")
+	t.Setenv("NORA_ENV_FILE", envPath)
+	t.Setenv("NORA_GATEWAY_ADDR", "")
 	t.Setenv("UVICORN_HOST", "")
 	t.Setenv("UVICORN_PORT", "")
 	t.Setenv("UVICORN_SSL_CERTFILE", "")
@@ -58,18 +58,18 @@ UVICORN_SSL_KEYFILE = "/var/lib/rebecca/certs/key.pem"
 	if cfg.Addr != "127.0.0.1:18083" {
 		t.Fatalf("Addr=%q want %q", cfg.Addr, "127.0.0.1:18083")
 	}
-	if cfg.TLSCertFile != "/var/lib/rebecca/certs/fullchain.pem" {
+	if cfg.TLSCertFile != "/var/lib/nora/certs/fullchain.pem" {
 		t.Fatalf("TLSCertFile=%q", cfg.TLSCertFile)
 	}
-	if cfg.TLSKeyFile != "/var/lib/rebecca/certs/key.pem" {
+	if cfg.TLSKeyFile != "/var/lib/nora/certs/key.pem" {
 		t.Fatalf("TLSKeyFile=%q", cfg.TLSKeyFile)
 	}
 }
 
 func TestLoadConfigProxyProtocolDefaultOff(t *testing.T) {
-	t.Setenv("REBECCA_PROXY_PROTOCOL", "")
+	t.Setenv("NORA_PROXY_PROTOCOL", "")
 	t.Setenv("PROXY_PROTOCOL", "")
-	t.Setenv("REBECCA_PROXY_PROTOCOL_POLICY", "")
+	t.Setenv("NORA_PROXY_PROTOCOL_POLICY", "")
 
 	cfg := LoadConfig()
 	if cfg.ProxyProtocol {
@@ -83,7 +83,7 @@ func TestLoadConfigProxyProtocolDefaultOff(t *testing.T) {
 func TestLoadConfigProxyProtocolEnabled(t *testing.T) {
 	for _, val := range []string{"true", "1", "yes", "on", "use"} {
 		t.Run(val, func(t *testing.T) {
-			t.Setenv("REBECCA_PROXY_PROTOCOL", val)
+			t.Setenv("NORA_PROXY_PROTOCOL", val)
 			t.Setenv("PROXY_PROTOCOL", "")
 			cfg := LoadConfig()
 			if !cfg.ProxyProtocol {
@@ -97,7 +97,7 @@ func TestLoadConfigProxyProtocolEnabled(t *testing.T) {
 }
 
 func TestLoadConfigProxyProtocolRequire(t *testing.T) {
-	t.Setenv("REBECCA_PROXY_PROTOCOL", "require")
+	t.Setenv("NORA_PROXY_PROTOCOL", "require")
 	cfg := LoadConfig()
 	if !cfg.ProxyProtocol {
 		t.Fatalf("ProxyProtocol=%v want true", cfg.ProxyProtocol)
@@ -106,8 +106,8 @@ func TestLoadConfigProxyProtocolRequire(t *testing.T) {
 		t.Fatalf("ProxyProtocolPolicy=%q want require", cfg.ProxyProtocolPolicy)
 	}
 
-	t.Setenv("REBECCA_PROXY_PROTOCOL", "true")
-	t.Setenv("REBECCA_PROXY_PROTOCOL_POLICY", "require")
+	t.Setenv("NORA_PROXY_PROTOCOL", "true")
+	t.Setenv("NORA_PROXY_PROTOCOL_POLICY", "require")
 	cfg = LoadConfig()
 	if !cfg.ProxyProtocol || cfg.ProxyProtocolPolicy != "require" {
 		t.Fatalf("ProxyProtocol=%v, Policy=%q want true, require", cfg.ProxyProtocol, cfg.ProxyProtocolPolicy)
@@ -115,7 +115,7 @@ func TestLoadConfigProxyProtocolRequire(t *testing.T) {
 }
 
 func TestLoadConfigProxyProtocolFallbackToGenericEnv(t *testing.T) {
-	t.Setenv("REBECCA_PROXY_PROTOCOL", "")
+	t.Setenv("NORA_PROXY_PROTOCOL", "")
 	t.Setenv("PROXY_PROTOCOL", "true")
 	cfg := LoadConfig()
 	if !cfg.ProxyProtocol {
@@ -126,13 +126,13 @@ func TestLoadConfigProxyProtocolFallbackToGenericEnv(t *testing.T) {
 func TestLoadConfigProxyProtocolFromEnvFile(t *testing.T) {
 	envPath := filepath.Join(t.TempDir(), ".env")
 	writeTestFile(t, envPath, `
-REBECCA_PROXY_PROTOCOL = "true"
-REBECCA_PROXY_PROTOCOL_POLICY = "require"
+NORA_PROXY_PROTOCOL = "true"
+NORA_PROXY_PROTOCOL_POLICY = "require"
 `)
-	t.Setenv("REBECCA_ENV_FILE", envPath)
-	t.Setenv("REBECCA_PROXY_PROTOCOL", "")
+	t.Setenv("NORA_ENV_FILE", envPath)
+	t.Setenv("NORA_PROXY_PROTOCOL", "")
 	t.Setenv("PROXY_PROTOCOL", "")
-	t.Setenv("REBECCA_PROXY_PROTOCOL_POLICY", "")
+	t.Setenv("NORA_PROXY_PROTOCOL_POLICY", "")
 
 	cfg := LoadConfig()
 	if !cfg.ProxyProtocol {
@@ -151,13 +151,13 @@ func writeTestFile(t *testing.T, path string, content string) {
 }
 
 func TestLoadConfigProxyProtocolTrusted(t *testing.T) {
-	t.Setenv("REBECCA_PROXY_PROTOCOL_TRUSTED", "")
+	t.Setenv("NORA_PROXY_PROTOCOL_TRUSTED", "")
 	cfg := LoadConfig()
 	if len(cfg.ProxyProtocolTrusted) == 0 || cfg.ProxyProtocolTrusted[0] != "127.0.0.0/8" {
 		t.Fatalf("default trusted ranges = %v, want loopback first", cfg.ProxyProtocolTrusted)
 	}
 
-	t.Setenv("REBECCA_PROXY_PROTOCOL_TRUSTED", " 203.0.113.0/24, 192.0.2.7 ,")
+	t.Setenv("NORA_PROXY_PROTOCOL_TRUSTED", " 203.0.113.0/24, 192.0.2.7 ,")
 	cfg = LoadConfig()
 	if len(cfg.ProxyProtocolTrusted) != 2 || cfg.ProxyProtocolTrusted[0] != "203.0.113.0/24" || cfg.ProxyProtocolTrusted[1] != "192.0.2.7" {
 		t.Fatalf("trusted ranges = %v, want the two configured entries", cfg.ProxyProtocolTrusted)

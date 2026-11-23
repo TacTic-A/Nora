@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
 )
 
 type outboundTrafficTarget struct {

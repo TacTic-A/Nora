@@ -9,7 +9,7 @@ func TestSplitCommand(t *testing.T) {
 		arg     string
 	}{
 		{"/user alice", "/user", "alice"},
-		{"/user@RebeccaBot alice", "/user", "alice"},
+		{"/user@NoraBot alice", "/user", "alice"},
 		{"/start", "/start", ""},
 		{"  /usage   bob  ", "/usage", "bob"},
 		{"", "", ""},

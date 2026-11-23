@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
-	"github.com/rebeccapanel/rebecca/internal/app/outboundsub"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/outboundsub"
 )
 
 type ConfigIssue struct {

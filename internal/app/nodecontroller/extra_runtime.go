@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
-	userapp "github.com/rebeccapanel/rebecca/internal/app/user"
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
+	userapp "github.com/norapanel/nora/internal/app/user"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
 )
 
 type ExtraRuntime struct {

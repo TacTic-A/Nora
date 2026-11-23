@@ -11,9 +11,9 @@ import (
 	"strings"
 	"testing"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	"github.com/rebeccapanel/rebecca/internal/app/usage"
-	userapp "github.com/rebeccapanel/rebecca/internal/app/user"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	"github.com/norapanel/nora/internal/app/usage"
+	userapp "github.com/norapanel/nora/internal/app/user"
 )
 
 type serviceUsageTestPoint struct {

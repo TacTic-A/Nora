@@ -20,7 +20,7 @@ installMockApi()
 // `?theme=light|dark` pins the palette for screenshots and design review.
 const themeParam = new URLSearchParams(window.location.search).get("theme")
 if (themeParam === "light" || themeParam === "dark") {
-  window.localStorage.setItem("rebecca.theme", themeParam)
+  window.localStorage.setItem("nora.theme", themeParam)
 }
 
 const queryClient = new QueryClient({
@@ -41,7 +41,7 @@ window.addEventListener(UNAUTHORIZED_EVENT, () => {
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="rebecca.theme">
+    <ThemeProvider defaultTheme="dark" storageKey="nora.theme">
       <QueryClientProvider client={queryClient}>
         <TooltipProvider delayDuration={200}>
           <LayoutProvider>

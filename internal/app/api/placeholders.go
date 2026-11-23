@@ -4,8 +4,8 @@ import (
 	"errors"
 	"net/http"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	settingsapp "github.com/rebeccapanel/rebecca/internal/app/settings"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	settingsapp "github.com/norapanel/nora/internal/app/settings"
 )
 
 type subscriptionPlaceholderUpdateRequest struct {

@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
 )
 
 func TestLiveAdminSpeedsSumsAdminScopesForViewer(t *testing.T) {

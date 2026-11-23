@@ -5,8 +5,8 @@ import { getCookie, setCookie } from "@/lib/cookies"
 export type Collapsible = "offcanvas" | "icon" | "none"
 export type SidebarVariant = "inset" | "sidebar" | "floating"
 
-const COLLAPSIBLE_KEY = "rebecca.layout.collapsible"
-const VARIANT_KEY = "rebecca.layout.variant"
+const COLLAPSIBLE_KEY = "nora.layout.collapsible"
+const VARIANT_KEY = "nora.layout.variant"
 const MAX_AGE = 60 * 60 * 24 * 30
 
 const DEFAULT_VARIANT: SidebarVariant = "inset"

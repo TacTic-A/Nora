@@ -45,13 +45,13 @@ func (c Client) Register(ctx context.Context, privateKey string, publicKey strin
 	}
 	hostname, _ := os.Hostname()
 	if strings.TrimSpace(hostname) == "" {
-		hostname = "rebecca-panel"
+		hostname = "nora-panel"
 	}
 	payload := map[string]any{
 		"key":   publicKey,
 		"tos":   time.Now().UTC().Format("2006-01-02T15:04:05.000Z"),
 		"type":  "PC",
-		"model": "rebecca-panel",
+		"model": "nora-panel",
 		"name":  hostname,
 	}
 	return c.request(ctx, http.MethodPost, "/reg", "", payload)

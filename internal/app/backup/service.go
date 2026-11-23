@@ -21,7 +21,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/migrations"
+	"github.com/norapanel/nora/internal/app/migrations"
 	_ "modernc.org/sqlite"
 )
 
@@ -64,14 +64,14 @@ func (s *Service) Export(ctx context.Context, scope string) (ExportResult, error
 		return ExportResult{}, err
 	}
 
-	output, err := os.CreateTemp("", "rebecca-backup-*"+Extension)
+	output, err := os.CreateTemp("", "nora-backup-*"+Extension)
 	if err != nil {
 		return ExportResult{}, err
 	}
 	outputPath := output.Name()
 	_ = output.Close()
 
-	buildDir, err := os.MkdirTemp("", "rebecca-backup-build-*")
+	buildDir, err := os.MkdirTemp("", "nora-backup-build-*")
 	if err != nil {
 		_ = os.Remove(outputPath)
 		return ExportResult{}, err
@@ -137,7 +137,7 @@ func (s *Service) Export(ctx context.Context, scope string) (ExportResult, error
 	cleanup = false
 	return ExportResult{
 		Path:     outputPath,
-		Filename: fmt.Sprintf("rebecca-%s-%s%s", scope, timestamp, Extension),
+		Filename: fmt.Sprintf("nora-%s-%s%s", scope, timestamp, Extension),
 		Scope:    scope,
 	}, nil
 }
@@ -147,7 +147,7 @@ func (s *Service) Import(ctx context.Context, archivePath string) (ImportResult,
 		return ImportResult{}, Error{Message: "Backup file not found"}
 	}
 
-	extractDir, err := os.MkdirTemp("", "rebecca-backup-import-*")
+	extractDir, err := os.MkdirTemp("", "nora-backup-import-*")
 	if err != nil {
 		return ImportResult{}, err
 	}
@@ -214,7 +214,7 @@ func (s *Service) exportDatabasePayload(ctx context.Context, buildDir string) (d
 		}
 		return databasePayload{ArchiveName: DatabaseSQLName, PayloadType: "mysql-dump"}, nil
 	default:
-		return databasePayload{}, Error{Message: "Unsupported database backend for Rebecca backup: " + s.dialect}
+		return databasePayload{}, Error{Message: "Unsupported database backend for Nora backup: " + s.dialect}
 	}
 }
 
@@ -308,7 +308,7 @@ func (s *Service) exportMySQL(ctx context.Context, outputPath string) error {
 	if err != nil {
 		return err
 	}
-	tempDir, err := os.MkdirTemp("", "rebecca-mysql-dump-*")
+	tempDir, err := os.MkdirTemp("", "nora-mysql-dump-*")
 	if err != nil {
 		return err
 	}
@@ -354,7 +354,7 @@ func (s *Service) restoreMySQL(ctx context.Context, payloadPath string) error {
 	if err != nil {
 		return err
 	}
-	tempDir, err := os.MkdirTemp("", "rebecca-mysql-restore-*")
+	tempDir, err := os.MkdirTemp("", "nora-mysql-restore-*")
 	if err != nil {
 		return err
 	}
@@ -414,7 +414,7 @@ func mysqlBackupCommandError(action string, stderr string) error {
 	detail := strings.TrimSpace(stderr)
 	lower := strings.ToLower(detail)
 	if strings.Contains(lower, "error 1045") || strings.Contains(lower, "access denied for user") {
-		return Error{Message: "MySQL/MariaDB rejected Rebecca's configured database credentials (error 1045). Check MYSQL_PASSWORD and SQLALCHEMY_DATABASE_URL."}
+		return Error{Message: "MySQL/MariaDB rejected Nora's configured database credentials (error 1045). Check MYSQL_PASSWORD and SQLALCHEMY_DATABASE_URL."}
 	}
 	if detail == "" {
 		detail = "database command failed"
@@ -490,7 +490,7 @@ func (s *Service) tableNames(ctx context.Context) ([]string, error) {
 	case "mysql", "mariadb":
 		rows, err = s.db.QueryContext(ctx, `SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE() AND table_type = 'BASE TABLE' ORDER BY table_name`)
 	default:
-		return nil, Error{Message: "Unsupported database backend for Rebecca backup: " + s.dialect}
+		return nil, Error{Message: "Unsupported database backend for Nora backup: " + s.dialect}
 	}
 	if err != nil {
 		return nil, err
@@ -572,7 +572,7 @@ func (s *Service) restoreFileRoots(filesDir string) ([]string, []string, error) 
 			return nil, nil, err
 		}
 		if allowed[target] != root.ArchiveName {
-			return nil, nil, Error{Message: "Refusing to restore outside Rebecca paths: " + root.Path}
+			return nil, nil, Error{Message: "Refusing to restore outside Nora paths: " + root.Path}
 		}
 		sourceInfo, err := os.Stat(source)
 		if err != nil {
@@ -594,7 +594,7 @@ func (s *Service) restoreFileRoots(filesDir string) ([]string, []string, error) 
 func (s *Service) preserveLocalDatabaseEnv(filesDir string) error {
 	var targetPath, archiveName string
 	for _, root := range s.fileRoots {
-		if root.ArchiveName == "rebecca_env" {
+		if root.ArchiveName == "nora_env" {
 			targetPath, archiveName = root.Path, root.ArchiveName
 			break
 		}
@@ -622,7 +622,7 @@ func (s *Service) preserveLocalDatabaseEnv(filesDir string) error {
 	if err != nil {
 		return err
 	}
-	assignments = upsertEnvAssignment(assignments, dotenvAssignment("REBECCA_DATABASE_FLAVOR", s.dialect))
+	assignments = upsertEnvAssignment(assignments, dotenvAssignment("NORA_DATABASE_FLAVOR", s.dialect))
 	assignments = upsertEnvAssignment(assignments, dotenvAssignment("SQLALCHEMY_DATABASE_URL", s.databaseURL))
 	if parsed.User != nil {
 		if username := parsed.User.Username(); username != "" {
@@ -668,7 +668,7 @@ func envAssignmentKey(line string) string {
 }
 
 func isDatabaseEnvKey(key string) bool {
-	return key == "REBECCA_DATABASE_FLAVOR" || key == "SQLALCHEMY_DATABASE_URL" || key == "DATABASE_URL" ||
+	return key == "NORA_DATABASE_FLAVOR" || key == "SQLALCHEMY_DATABASE_URL" || key == "DATABASE_URL" ||
 		strings.HasPrefix(key, "MYSQL_") || strings.HasPrefix(key, "MARIADB_")
 }
 
@@ -1427,28 +1427,24 @@ func copyFile(source string, destination string, mode fs.FileMode) error {
 }
 
 func defaultFileRoots() []FileRoot {
-	configDir := strings.TrimSpace(os.Getenv("REBECCA_CONFIG_DIR"))
-	if configDir == "" {
-		configDir = "/etc/rebecca"
-	}
-	dataDir := strings.TrimSpace(os.Getenv("REBECCA_DATA_DIR"))
-	if dataDir == "" {
-		dataDir = "/var/lib/rebecca"
-	}
+	configDir := firstNonEmpty(os.Getenv("NORA_CONFIG_DIR"), os.Getenv("NORA_CONFIG_DIR"), "/etc/nora")
+	dataDir := firstNonEmpty(os.Getenv("NORA_DATA_DIR"), os.Getenv("NORA_DATA_DIR"), "/var/lib/nora")
 	roots := []FileRoot{
-		{ArchiveName: "etc_rebecca", Path: configDir},
-		{ArchiveName: "var_lib_rebecca", Path: dataDir},
+		{ArchiveName: "etc_nora", Path: configDir},
+		{ArchiveName: "var_lib_nora", Path: dataDir},
 	}
 	if envFile := defaultEnvFileRoot(); envFile != "" {
-		roots = append(roots, FileRoot{ArchiveName: "rebecca_env", Path: envFile})
+		roots = append(roots, FileRoot{ArchiveName: "nora_env", Path: envFile})
 	}
 	return roots
 }
 
 func defaultEnvFileRoot() string {
 	for _, candidate := range []string{
-		strings.TrimSpace(os.Getenv("REBECCA_ENV_FILE")),
-		"/opt/rebecca/.env",
+		strings.TrimSpace(os.Getenv("NORA_ENV_FILE")),
+		strings.TrimSpace(os.Getenv("NORA_ENV_FILE")),
+		"/opt/nora/.env",
+		"/opt/nora/.env",
 	} {
 		if candidate == "" {
 			continue
@@ -1563,7 +1559,7 @@ func decodeLegacyValue(value any) any {
 	if !ok || len(object) != 2 {
 		return value
 	}
-	marker, _ := object["__rebecca_type__"].(string)
+	marker, _ := object["__nora_type__"].(string)
 	raw := object["value"]
 	switch marker {
 	case "bytes":

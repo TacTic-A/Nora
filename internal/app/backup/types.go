@@ -3,10 +3,10 @@ package backup
 import "time"
 
 const (
-	Format    = "rebecca-backup"
+	Format    = "nora-backup"
 	Version   = 1
 	Extension = ".rbbackup"
-	MediaType = "application/vnd.rebecca.backup"
+	MediaType = "application/vnd.nora.backup"
 
 	ScopeDatabase = "database"
 	ScopeFull     = "full"
@@ -17,7 +17,7 @@ const (
 	DatabaseSQLName    = "database.sql"
 	FilesPrefix        = "files"
 
-	DisabledDetail = "Rebecca backup and import is available only on binary installations. Migrate this panel to the binary version before using backup or restore from the web UI."
+	DisabledDetail = "Nora backup and import is available only on binary installations. Migrate this panel to the binary version before using backup or restore from the web UI."
 )
 
 type Error struct {

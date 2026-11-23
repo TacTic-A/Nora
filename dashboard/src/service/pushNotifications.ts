@@ -36,7 +36,7 @@ const sameKey = (current: ArrayBuffer | null | undefined, wanted: Uint8Array) =>
 
 const registerWorker = async () => {
 	const scope = dashboardPath("/");
-	await navigator.serviceWorker.register("/rebecca-admin-sw.js", { scope });
+	await navigator.serviceWorker.register("/nora-admin-sw.js", { scope });
 	return navigator.serviceWorker.ready;
 };
 

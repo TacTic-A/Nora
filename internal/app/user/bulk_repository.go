@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	"github.com/rebeccapanel/rebecca/internal/app/labels"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	"github.com/norapanel/nora/internal/app/labels"
 )
 
 const NodeOperationSyncConfig = "sync_config"

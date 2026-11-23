@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/rebeccapanel/rebecca/internal/app/logging"
+	"github.com/norapanel/nora/internal/app/logging"
 )
 
 func checkDatabaseIntegrity(ctx context.Context, db *sql.DB) error {

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 export function BrandMark({ className }: { className?: string }) {
   return (
     <img
-      src="/brand/rebecca-mark.png"
+      src="/brand/nora-mark.png"
       alt=""
       aria-hidden="true"
       draggable={false}

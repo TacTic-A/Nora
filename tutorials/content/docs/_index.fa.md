@@ -19,8 +19,8 @@ cascade:
 - حساب من: کلید API، تغییر رمز، گزارش مصرف روزانه و مصرف هر نود.
 - کد منبع باز است؛ اگر مفید بود در گیت‌هاب ستاره بدهید.
 
-- [گیت‌هاب](https://github.com/rebeccapanel/rebecca)
-- [تلگرام](https://t.me/rebeccapanel)
+- [گیت‌هاب](https://github.com/norapanel/nora)
+- [تلگرام](https://t.me/norapanel)
 
 ## شروع از یک کار مشخص
 

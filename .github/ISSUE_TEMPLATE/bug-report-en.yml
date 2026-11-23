@@ -1,5 +1,5 @@
 name: Bug report (English)
-description: Report a reproducible problem in Rebecca.
+description: Report a reproducible problem in Nora.
 title: "[Bug]: "
 labels: [bug]
 body:
@@ -9,7 +9,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: Rebecca version
+      label: Nora version
       placeholder: dev commit, release tag, or build date
     validations:
       required: true

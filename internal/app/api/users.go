@@ -13,13 +13,13 @@ import (
 	"strings"
 	"time"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	"github.com/rebeccapanel/rebecca/internal/app/labels"
-	"github.com/rebeccapanel/rebecca/internal/app/logging"
-	telegramapp "github.com/rebeccapanel/rebecca/internal/app/telegram"
-	"github.com/rebeccapanel/rebecca/internal/app/usage"
-	userapp "github.com/rebeccapanel/rebecca/internal/app/user"
-	webhookapp "github.com/rebeccapanel/rebecca/internal/app/webhook"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	"github.com/norapanel/nora/internal/app/labels"
+	"github.com/norapanel/nora/internal/app/logging"
+	telegramapp "github.com/norapanel/nora/internal/app/telegram"
+	"github.com/norapanel/nora/internal/app/usage"
+	userapp "github.com/norapanel/nora/internal/app/user"
+	webhookapp "github.com/norapanel/nora/internal/app/webhook"
 )
 
 func (s *Server) handleUsers(w http.ResponseWriter, r *http.Request) {

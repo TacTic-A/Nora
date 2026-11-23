@@ -10,8 +10,8 @@ import (
 	"strconv"
 	"strings"
 
-	backupapp "github.com/rebeccapanel/rebecca/internal/app/backup"
-	systemapp "github.com/rebeccapanel/rebecca/internal/app/system"
+	backupapp "github.com/norapanel/nora/internal/app/backup"
+	systemapp "github.com/norapanel/nora/internal/app/system"
 )
 
 const maxBackupUploadBytes int64 = 8 << 30
@@ -139,7 +139,7 @@ func saveBackupUploadFile(header *multipart.FileHeader, uploads *[]backupapp.Par
 	if suffix == "" {
 		suffix = backupapp.Extension
 	}
-	tempFile, err := os.CreateTemp("", "rebecca-backup-upload-*"+suffix)
+	tempFile, err := os.CreateTemp("", "nora-backup-upload-*"+suffix)
 	if err != nil {
 		return err
 	}
@@ -170,7 +170,7 @@ func writeBackupError(w http.ResponseWriter, err error) {
 func safeDownloadFilename(filename string) string {
 	filename = filepath.Base(strings.TrimSpace(filename))
 	if filename == "." || filename == string(filepath.Separator) || filename == "" {
-		return "rebecca-backup" + backupapp.Extension
+		return "nora-backup" + backupapp.Extension
 	}
 	return filename
 }

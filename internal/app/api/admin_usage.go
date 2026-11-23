@@ -10,10 +10,10 @@ import (
 	"strings"
 	"time"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	"github.com/rebeccapanel/rebecca/internal/app/labels"
-	"github.com/rebeccapanel/rebecca/internal/app/online"
-	"github.com/rebeccapanel/rebecca/internal/app/searchmatch"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	"github.com/norapanel/nora/internal/app/labels"
+	"github.com/norapanel/nora/internal/app/online"
+	"github.com/norapanel/nora/internal/app/searchmatch"
 )
 
 func (s *Server) handleAdminsSpeeds(w http.ResponseWriter, r *http.Request) {

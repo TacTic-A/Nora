@@ -26,7 +26,7 @@ const (
 
 var (
 	errExternalAppInvalidPath   = errors.New("invalid application file path")
-	errExternalAppProtectedPath = errors.New("this application path is managed by Rebecca")
+	errExternalAppProtectedPath = errors.New("this application path is managed by Nora")
 	errExternalAppInvalidFile   = errors.New("unsupported application file")
 	errExternalAppTextTooLarge  = errors.New("text files are limited to 2 MiB")
 	errExternalAppBinaryFile    = errors.New("binary files cannot be opened in the editor")
@@ -142,7 +142,7 @@ func protectedExternalAppSegment(segment string) bool {
 	case ".composer", ".git", ".locks", ".logs", ".next", ".npm", ".sessions", ".tmp", "node_modules", "vendor":
 		return true
 	default:
-		return strings.HasPrefix(segment, ".rebecca-")
+		return strings.HasPrefix(segment, ".nora-")
 	}
 }
 
@@ -344,7 +344,7 @@ func writeExternalAppFile(ctx context.Context, root *os.Root, record Record, nam
 	if err != nil {
 		return err
 	}
-	tempName := path.Join(path.Dir(name), ".rebecca-write-"+suffix)
+	tempName := path.Join(path.Dir(name), ".nora-write-"+suffix)
 	file, err := root.OpenFile(tempName, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
 	if err != nil {
 		return err
@@ -575,7 +575,7 @@ func (m *Manager) safePHPConfigRecord(domain string) (Record, error) {
 	if record.Runtime != "php" || record.PHPVersion == "" {
 		return Record{}, errExternalAppUnsupported
 	}
-	expected := filepath.Join("/etc/php", record.PHPVersion, "fpm", "pool.d", "rebecca-"+record.ID+".conf")
+	expected := filepath.Join("/etc/php", record.PHPVersion, "fpm", "pool.d", "nora-"+record.ID+".conf")
 	if filepath.Clean(record.PoolConfig) != expected || record.Service != "php"+record.PHPVersion+"-fpm" {
 		return Record{}, errExternalAppInvalidPath
 	}
@@ -610,7 +610,7 @@ func validateExternalAppPoolConfig(record Record, content string) error {
 				return fmt.Errorf("%w: unsafe value for %s", errExternalAppInvalidConfig, key)
 			}
 		} else if value != expectedValue {
-			return fmt.Errorf("%w: %s is managed by Rebecca", errExternalAppInvalidConfig, key)
+			return fmt.Errorf("%w: %s is managed by Nora", errExternalAppInvalidConfig, key)
 		}
 	}
 	if phpSizeBytes(values["php_admin_value[post_max_size]"]) < phpSizeBytes(values["php_admin_value[upload_max_filesize]"]) {

@@ -83,7 +83,7 @@ func (r Repository) APIKeyByToken(ctx context.Context, token string) (AdminAPIKe
 }
 
 func APIKeyTokenHash(token string) string {
-	mac := hmac.New(sha256.New, []byte("rebecca-admin-api-key-v1"))
+	mac := hmac.New(sha256.New, []byte("nora-admin-api-key-v1"))
 	_, _ = mac.Write([]byte(token))
 	return hex.EncodeToString(mac.Sum(nil))
 }

@@ -162,7 +162,7 @@ func TestSendDocumentSplitsLargeFileAndUsesBackupThread(t *testing.T) {
 		Destination: DestinationRequest{Purpose: DestinationBackup, Category: "backup"},
 		FileName:    "backup.rbbackup",
 		Content:     []byte("0123456789abcdefghijXYZ"),
-		Caption:     EscapeHTML("Rebecca <backup>"),
+		Caption:     EscapeHTML("Nora <backup>"),
 		ParseMode:   "HTML",
 	})
 	if err != nil {

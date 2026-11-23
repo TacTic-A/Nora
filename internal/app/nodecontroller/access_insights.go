@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/online"
-	"github.com/rebeccapanel/rebecca/internal/app/searchmatch"
+	"github.com/norapanel/nora/internal/app/online"
+	"github.com/norapanel/nora/internal/app/searchmatch"
 )
 
 const maxAccessInsightRecords = 5000

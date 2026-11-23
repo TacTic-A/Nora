@@ -848,7 +848,7 @@ describe("Xray service inbounds", () => {
 		expect(validateInboundFormFields({ ...base, masqueMtu: "1000" }).masqueMtu).toBeDefined();
 	});
 
-	it("labels the Xray WireGuard apart from Rebecca's and blocks hosts for service inbounds", () => {
+	it("labels the Xray WireGuard apart from Nora's and blocks hosts for service inbounds", () => {
 		expect(protocolLabel("wireguard-xray")).toBe("WIREGUARD(XRAY)");
 		expect(protocolLabel("wireguard")).toBe("WIREGUARD");
 		for (const protocol of ["http", "mixed", "tunnel", "tun", "wireguard-xray"]) {

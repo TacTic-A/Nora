@@ -3,7 +3,7 @@ package nodecontroller
 import (
 	"context"
 
-	nodev1 "github.com/rebeccapanel/rebecca/internal/proto/node/v1"
+	nodev1 "github.com/norapanel/nora/internal/proto/node/v1"
 )
 
 func (c Controller) IssueCertificate(ctx context.Context, nodeID int64, identifier, email string) ([]byte, []byte, error) {

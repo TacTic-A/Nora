@@ -35,7 +35,7 @@ func TestImportRejectsUnsafeArchivePath(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	service := NewService(nil, "sqlite", "sqlite:///tmp/rebecca.sqlite3")
+	service := NewService(nil, "sqlite", "sqlite:///tmp/nora.sqlite3")
 	_, err = service.Import(context.Background(), archivePath)
 	if err == nil || !strings.Contains(err.Error(), "unsafe paths") {
 		t.Fatalf("expected unsafe path error, got %v", err)
@@ -73,7 +73,7 @@ func TestSafeExtractSupportsZipBackups(t *testing.T) {
 		t.Fatal(err)
 	}
 	writer := zip.NewWriter(file)
-	for name, content := range map[string]string{ManifestName: `{"format":"rebecca"}`, "files/rebecca_env": "PANEL_DOMAIN=example.com\n"} {
+	for name, content := range map[string]string{ManifestName: `{"format":"nora"}`, "files/nora_env": "PANEL_DOMAIN=example.com\n"} {
 		entry, err := writer.Create(name)
 		if err != nil {
 			t.Fatal(err)
@@ -93,7 +93,7 @@ func TestSafeExtractSupportsZipBackups(t *testing.T) {
 	if err := safeExtract(archivePath, destination); err != nil {
 		t.Fatal(err)
 	}
-	for _, name := range []string{ManifestName, "files/rebecca_env"} {
+	for _, name := range []string{ManifestName, "files/nora_env"} {
 		if _, err := os.Stat(filepath.Join(destination, filepath.FromSlash(name))); err != nil {
 			t.Fatalf("extracted %s: %v", name, err)
 		}
@@ -105,7 +105,7 @@ func TestImportRejectsInvalidManifest(t *testing.T) {
 	writeBackupArchiveForTest(t, archivePath, map[string][]byte{
 		ManifestName: []byte(`{"format":"wrong","version":1}`),
 	})
-	service := NewService(nil, "sqlite", "sqlite:///tmp/rebecca.sqlite3")
+	service := NewService(nil, "sqlite", "sqlite:///tmp/nora.sqlite3")
 	_, err := service.Import(context.Background(), archivePath)
 	if err == nil || !strings.Contains(err.Error(), "Invalid backup manifest format") {
 		t.Fatalf("expected invalid manifest error, got %v", err)
@@ -114,7 +114,7 @@ func TestImportRejectsInvalidManifest(t *testing.T) {
 
 func TestMySQLMissingDumpTool(t *testing.T) {
 	t.Setenv("PATH", filepath.Join(t.TempDir(), "empty-bin"))
-	service := NewService(nil, "mysql", "mysql://user:pass@127.0.0.1:3306/rebecca")
+	service := NewService(nil, "mysql", "mysql://user:pass@127.0.0.1:3306/nora")
 	_, err := service.Export(context.Background(), ScopeDatabase)
 	if err == nil || !strings.Contains(err.Error(), "Required database tool is not installed") {
 		t.Fatalf("expected missing tool error, got %v", err)
@@ -122,31 +122,31 @@ func TestMySQLMissingDumpTool(t *testing.T) {
 }
 
 func TestFullRestoreKeepsDestinationMySQLCredentials(t *testing.T) {
-	targetEnv := filepath.Join(t.TempDir(), "rebecca_env")
+	targetEnv := filepath.Join(t.TempDir(), "nora_env")
 	if err := os.WriteFile(targetEnv, []byte(strings.Join([]string{
-		`REBECCA_DATABASE_FLAVOR="mysql"`,
-		`MYSQL_DATABASE="rebecca"`,
-		`MYSQL_USER="rebecca"`,
+		`NORA_DATABASE_FLAVOR="mysql"`,
+		`MYSQL_DATABASE="nora"`,
+		`MYSQL_USER="nora"`,
 		`MYSQL_PASSWORD="destination-password"`,
 		`MYSQL_ROOT_PASSWORD="destination-root-password"`,
-		`SQLALCHEMY_DATABASE_URL="mysql+pymysql://rebecca:destination-password@127.0.0.1:3306/rebecca"`,
+		`SQLALCHEMY_DATABASE_URL="mysql+pymysql://nora:destination-password@127.0.0.1:3306/nora"`,
 	}, "\n")+"\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
 
 	filesDir := t.TempDir()
-	sourceEnv := filepath.Join(filesDir, "rebecca_env")
+	sourceEnv := filepath.Join(filesDir, "nora_env")
 	if err := os.WriteFile(sourceEnv, []byte(strings.Join([]string{
 		`PANEL_DOMAIN="source.example.com"`,
 		`MYSQL_PASSWORD="source-password"`,
 		`MYSQL_ROOT_PASSWORD="source-root-password"`,
-		`SQLALCHEMY_DATABASE_URL="mysql+pymysql://rebecca:source-password@127.0.0.1:3306/rebecca"`,
+		`SQLALCHEMY_DATABASE_URL="mysql+pymysql://nora:source-password@127.0.0.1:3306/nora"`,
 	}, "\n")+"\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
 
-	service := NewService(nil, "mysql", "mysql+pymysql://rebecca:destination-password@127.0.0.1:3306/rebecca", WithFileRoots([]FileRoot{
-		{ArchiveName: "rebecca_env", Path: targetEnv},
+	service := NewService(nil, "mysql", "mysql+pymysql://nora:destination-password@127.0.0.1:3306/nora", WithFileRoots([]FileRoot{
+		{ArchiveName: "nora_env", Path: targetEnv},
 	}))
 	if err := service.preserveLocalDatabaseEnv(filesDir); err != nil {
 		t.Fatal(err)
@@ -161,7 +161,7 @@ func TestFullRestoreKeepsDestinationMySQLCredentials(t *testing.T) {
 		`PANEL_DOMAIN="source.example.com"`,
 		`MYSQL_PASSWORD="destination-password"`,
 		`MYSQL_ROOT_PASSWORD="destination-root-password"`,
-		`SQLALCHEMY_DATABASE_URL="mysql+pymysql://rebecca:destination-password@127.0.0.1:3306/rebecca"`,
+		`SQLALCHEMY_DATABASE_URL="mysql+pymysql://nora:destination-password@127.0.0.1:3306/nora"`,
 	} {
 		if !strings.Contains(text, expected) {
 			t.Fatalf("restored env missing %q in %q", expected, text)
@@ -173,7 +173,7 @@ func TestFullRestoreKeepsDestinationMySQLCredentials(t *testing.T) {
 }
 
 func TestMySQLAccessDeniedBackupError(t *testing.T) {
-	err := mysqlBackupCommandError("restore", "ERROR 1045 (28000): Access denied for user 'rebecca'@'localhost'")
+	err := mysqlBackupCommandError("restore", "ERROR 1045 (28000): Access denied for user 'nora'@'localhost'")
 	if !strings.Contains(err.Error(), "configured database credentials") || !strings.Contains(err.Error(), "MYSQL_PASSWORD") {
 		t.Fatalf("expected actionable credential error, got %v", err)
 	}

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/logging"
+	"github.com/norapanel/nora/internal/app/logging"
 )
 
 const defaultNodeOperationsPollInterval = 15 * time.Second

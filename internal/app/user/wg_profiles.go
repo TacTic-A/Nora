@@ -12,7 +12,7 @@ import (
 
 	"golang.org/x/crypto/curve25519"
 
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
 )
 
 const (

@@ -2,8 +2,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
 	type BackupExportProgress,
-	exportRebeccaBackup,
-	importRebeccaBackup,
+	exportNoraBackup,
+	importNoraBackup,
 } from "./settings";
 import { useAPIRequestErrors } from "./http";
 
@@ -46,7 +46,7 @@ class UploadRequest {
 	}
 }
 
-describe("importRebeccaBackup", () => {
+describe("importNoraBackup", () => {
 	afterEach(() => {
 		vi.unstubAllGlobals();
 		useAPIRequestErrors.getState().clear();
@@ -56,7 +56,7 @@ describe("importRebeccaBackup", () => {
 		vi.stubGlobal("XMLHttpRequest", UploadRequest);
 		const progress: number[] = [];
 
-		const result = await importRebeccaBackup(
+		const result = await importNoraBackup(
 			new File(["backup"], "test.rbbackup"),
 			(percent) => progress.push(percent),
 		);
@@ -78,14 +78,14 @@ describe("importRebeccaBackup", () => {
 		vi.stubGlobal("XMLHttpRequest", FailedUploadRequest);
 
 		await expect(
-			importRebeccaBackup(new File(["backup"], "test.rbbackup")),
+			importNoraBackup(new File(["backup"], "test.rbbackup")),
 		).rejects.toMatchObject({
 			message: "backup upload timed out",
 			response: { status: 408, _data: { detail: "backup upload timed out" } },
 		});
 		expect(useAPIRequestErrors.getState().errors).toEqual([{ key: "POST /settings/backup/import", message: "backup upload timed out" }]);
 		vi.stubGlobal("XMLHttpRequest", UploadRequest);
-		await importRebeccaBackup(new File(["backup"], "test.rbbackup"));
+		await importNoraBackup(new File(["backup"], "test.rbbackup"));
 		expect(useAPIRequestErrors.getState().errors).toEqual([]);
 	});
 });
@@ -121,7 +121,7 @@ class ExportRequest {
 	}
 }
 
-describe("exportRebeccaBackup", () => {
+describe("exportNoraBackup", () => {
 	afterEach(() => {
 		vi.unstubAllGlobals();
 		useAPIRequestErrors.getState().clear();
@@ -131,7 +131,7 @@ describe("exportRebeccaBackup", () => {
 		vi.stubGlobal("XMLHttpRequest", ExportRequest);
 		const events: BackupExportProgress[] = [];
 
-		const blob = await exportRebeccaBackup("full", (event) => events.push(event));
+		const blob = await exportNoraBackup("full", (event) => events.push(event));
 
 		expect(ExportRequest.current.url).toBe("/api/settings/backup/export?scope=full");
 		expect(ExportRequest.current.withCredentials).toBe(true);
@@ -152,7 +152,7 @@ describe("exportRebeccaBackup", () => {
 		}
 		vi.stubGlobal("XMLHttpRequest", FailedExportRequest);
 
-		await expect(exportRebeccaBackup("database")).rejects.toMatchObject({
+		await expect(exportNoraBackup("database")).rejects.toMatchObject({
 			message: "backup export failed",
 			response: { status: 500 },
 		});

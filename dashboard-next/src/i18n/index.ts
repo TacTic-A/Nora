@@ -12,7 +12,7 @@ export const SUPPORTED_LOCALES: ReadonlyArray<{ code: Locale; label: string; nat
   { code: "zh", label: "Chinese", native: "中文", dir: "ltr" },
 ]
 
-const STORAGE_KEY = "rebecca.lang"
+const STORAGE_KEY = "nora.lang"
 
 export function directionOf(locale: string): "ltr" | "rtl" {
   return locale.startsWith("fa") || locale.startsWith("ar") || locale.startsWith("he") ? "rtl" : "ltr"

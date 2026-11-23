@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/logging"
-	webhookapp "github.com/rebeccapanel/rebecca/internal/app/webhook"
+	"github.com/norapanel/nora/internal/app/logging"
+	webhookapp "github.com/norapanel/nora/internal/app/webhook"
 )
 
 const defaultWebhookSendInterval = 30 * time.Second

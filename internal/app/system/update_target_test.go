@@ -3,6 +3,7 @@ package system
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"sync/atomic"
@@ -123,9 +124,9 @@ func TestGitHubCatalogServesLastCatalogWhenGitHubFails(t *testing.T) {
 			return
 		}
 		switch r.URL.Path {
-		case "/repos/rebeccapanel/Rebecca-node/releases":
+		case fmt.Sprintf("/repos/%s/releases", NodeUpdateRepo), "/repos/norapanel/Nora-node/releases":
 			_ = json.NewEncoder(w).Encode([]map[string]any{{"tag_name": "v1.6.0"}})
-		case "/rebeccapanel/Rebecca-node/dev-build-manifest/dev-builds.json":
+		case fmt.Sprintf("/%s/dev-build-manifest/dev-builds.json", NodeUpdateRepo), "/norapanel/Nora-node/dev-build-manifest/dev-builds.json":
 			_ = json.NewEncoder(w).Encode(map[string]any{"builds": []map[string]any{}})
 		default:
 			http.NotFound(w, r)
@@ -167,13 +168,13 @@ func TestGitHubCatalogServesLastCatalogWhenGitHubFails(t *testing.T) {
 func TestGitHubStatusTargetSkipsReleasesBelowTheFloor(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case "/repos/rebeccapanel/Rebecca/releases/latest":
+		case fmt.Sprintf("/repos/%s/releases/latest", PanelUpdateRepo), "/repos/norapanel/Nora/releases/latest":
 			_ = json.NewEncoder(w).Encode(map[string]any{"tag_name": "v1.5.1", "name": "v1.5.1"})
-		case "/repos/rebeccapanel/Rebecca/releases":
+		case fmt.Sprintf("/repos/%s/releases", PanelUpdateRepo), "/repos/norapanel/Nora/releases":
 			_ = json.NewEncoder(w).Encode([]map[string]any{{"tag_name": "v1.5.1"}, {"tag_name": "v1.6.0"}})
-		case "/rebeccapanel/Rebecca/dev-build-manifest/dev-builds.json":
+		case fmt.Sprintf("/%s/dev-build-manifest/dev-builds.json", PanelUpdateRepo), "/norapanel/Nora/dev-build-manifest/dev-builds.json":
 			_ = json.NewEncoder(w).Encode(map[string]any{"builds": []map[string]any{}})
-		case "/repos/rebeccapanel/Rebecca/actions/workflows/binary-build.yml/runs":
+		case fmt.Sprintf("/repos/%s/actions/workflows/binary-build.yml/runs", PanelUpdateRepo), "/repos/norapanel/Nora/actions/workflows/binary-build.yml/runs":
 			_ = json.NewEncoder(w).Encode(map[string]any{"workflow_runs": []map[string]any{}})
 		default:
 			http.NotFound(w, r)

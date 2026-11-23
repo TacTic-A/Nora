@@ -38,7 +38,7 @@ func TestCertificateSANs(t *testing.T) {
 		t.Fatalf("expected IP SAN, got %#v", parsed.IPAddresses)
 	}
 
-	cert, _, err = GenerateCertificate("Rebecca Panel")
+	cert, _, err = GenerateCertificate("Nora Panel")
 	if err != nil {
 		t.Fatalf("GenerateCertificate with legacy CN error: %v", err)
 	}

@@ -9,7 +9,7 @@
 export const API_BASE = import.meta.env.VITE_API_BASE ?? "/api"
 
 /** Dispatched on `window` when a request comes back 401. */
-export const UNAUTHORIZED_EVENT = "rebecca:unauthorized"
+export const UNAUTHORIZED_EVENT = "nora:unauthorized"
 
 export class ApiError extends Error {
   readonly status: number

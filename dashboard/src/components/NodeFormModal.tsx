@@ -362,7 +362,7 @@ export const NodeFormModal: FC<NodeFormModalProps> = ({
 						</div>
 						<div className="min-w-0">
 							<DialogTitle className="truncate text-base">
-								{isAddMode ? t("nodes.addNewRebeccaNode") : t("nodes.editNode")}
+								{isAddMode ? t("nodes.addNewNoraNode") : t("nodes.editNode")}
 							</DialogTitle>
 							{!isAddMode && node?.name ? (
 								<DialogDescription className="truncate"><AppleEmojiText>{node.name}</AppleEmojiText></DialogDescription>
@@ -419,7 +419,7 @@ export const NodeFormModal: FC<NodeFormModalProps> = ({
 													value={field.value ?? ""}
 													onChange={field.onChange}
 													onBlur={field.onBlur}
-													placeholder="Rebecca-S2"
+													placeholder="Nora-S2"
 													maxLength={120}
 													aria-invalid={Boolean(errors?.name) || undefined}
 												/>

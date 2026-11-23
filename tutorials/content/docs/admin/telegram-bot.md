@@ -5,7 +5,7 @@ description: "Connect the admin bot, limit who can use it, send events to the ri
 adminOnly: true
 ---
 
-Rebecca's Telegram bot gives administrators quick access to users, usage, and system status. It can also send operational notifications to the chats you choose. Scheduled backups are configured separately in [Telegram backup activation](../telegram-backup/).
+Nora's Telegram bot gives administrators quick access to users, usage, and system status. It can also send operational notifications to the chats you choose. Scheduled backups are configured separately in [Telegram backup activation](../telegram-backup/).
 
 <p class="rb-panel-actions"><a class="rb-panel-button" data-primary="true" href="#" data-panel-route="/settings#telegram">Open Telegram tab</a></p>
 

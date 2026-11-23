@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	nodev1 "github.com/rebeccapanel/rebecca/internal/proto/node/v1"
+	nodev1 "github.com/norapanel/nora/internal/proto/node/v1"
 )
 
 func TestNodeGRPCPortCandidatesPreferControlPortWithLegacyFallback(t *testing.T) {
@@ -31,7 +31,7 @@ func TestOperationRevisionUsesStableQueueID(t *testing.T) {
 }
 
 func TestMissingNodeCLIIsPermanentOperationError(t *testing.T) {
-	err := errors.New("Node error during update service: unable to locate rebecca-node CLI on this host")
+	err := errors.New("Node error during update service: unable to locate nora-node CLI on this host")
 	if !isPermanentOperationError(err) {
 		t.Fatal("a missing node CLI cannot be fixed by retrying the same update")
 	}

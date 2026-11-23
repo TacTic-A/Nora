@@ -11,8 +11,8 @@ import (
 
 func TestSaveBackupUploadsKeepsEveryPartFile(t *testing.T) {
 	names := []string{
-		"rebecca-database-20261019.part01-of-02.rbbackup",
-		"rebecca-database-20261019.part02-of-02.rbbackup",
+		"nora-database-20261019.part01-of-02.rbbackup",
+		"nora-database-20261019.part02-of-02.rbbackup",
 	}
 	contents := []string{"first", "second"}
 	body := &bytes.Buffer{}

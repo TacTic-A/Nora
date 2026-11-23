@@ -3,7 +3,7 @@ package nodecontroller
 import (
 	"testing"
 
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
 )
 
 func TestOVRuntimeSettingsAppliesDCOAndDefaults(t *testing.T) {

@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
-	nodev1 "github.com/rebeccapanel/rebecca/internal/proto/node/v1"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
+	nodev1 "github.com/norapanel/nora/internal/proto/node/v1"
 )
 
 type Repository struct {
@@ -439,9 +439,9 @@ func (r Repository) RuntimeSessionCallback(ctx context.Context, node NodeRow) (R
 		}
 		node = full
 	}
-	base := strings.TrimSpace(os.Getenv("REBECCA_NODE_SESSION_CALLBACK_URL"))
+	base := strings.TrimSpace(os.Getenv("NORA_NODE_SESSION_CALLBACK_URL"))
 	if base == "" {
-		base = strings.TrimSpace(os.Getenv("REBECCA_PUBLIC_URL"))
+		base = strings.TrimSpace(os.Getenv("NORA_PUBLIC_URL"))
 	}
 	if base == "" {
 		base = strings.TrimSpace(os.Getenv("PUBLIC_URL"))

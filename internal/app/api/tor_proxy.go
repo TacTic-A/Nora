@@ -10,8 +10,8 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/rebeccapanel/rebecca/internal/app/logging"
-	"github.com/rebeccapanel/rebecca/internal/app/nodecontroller"
+	"github.com/norapanel/nora/internal/app/logging"
+	"github.com/norapanel/nora/internal/app/nodecontroller"
 )
 
 var torCountryPattern = regexp.MustCompile(`^[a-zA-Z]{2}$`)
@@ -247,8 +247,8 @@ func splitTorLocations(value string) []string {
 func torOutbound(profile torProxyProfile) map[string]any {
 	return map[string]any{
 		"tag":                    profile.Tag,
-		"rebecca_proxy":          "tor",
-		"rebecca_proxy_location": profile.Country,
+		"nora_proxy":          "tor",
+		"nora_proxy_location": profile.Country,
 		"protocol":               "socks",
 		"settings": map[string]any{
 			"servers": []map[string]any{{

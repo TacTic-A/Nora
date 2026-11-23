@@ -386,7 +386,7 @@ func TestManagerImportsListsAndDeletesManualCertificate(t *testing.T) {
 	}
 	metadata := readMetadata(filepath.Join(ManagedBaseDir(base), record.Domain, ".metadata"))
 	metadata["provider"] = "letsencrypt"
-	metadata["certbot_cert_name"] = "rebecca-bot.example.com"
+	metadata["certbot_cert_name"] = "nora-bot.example.com"
 	if err := writeMetadata(filepath.Join(ManagedBaseDir(base), record.Domain), metadata); err != nil {
 		t.Fatal(err)
 	}
@@ -398,7 +398,7 @@ func TestManagerImportsListsAndDeletesManualCertificate(t *testing.T) {
 			t.Fatalf("unexpected revoke command: %s %v", name, args)
 		}
 		command := " " + strings.Join(args, " ") + " "
-		if !strings.Contains(command, " --cert-name rebecca-bot.example.com ") {
+		if !strings.Contains(command, " --cert-name nora-bot.example.com ") {
 			t.Fatalf("revoke must use the managed Certbot lineage: %v", args)
 		}
 		switch args[0] {

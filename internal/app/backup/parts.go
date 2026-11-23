@@ -52,7 +52,7 @@ func (s *Service) ImportUploads(ctx context.Context, files []PartFile) (ImportRe
 	if len(files) == 1 && !IsPartName(files[0].Name) {
 		return s.Import(ctx, files[0].Path)
 	}
-	assembled, err := os.CreateTemp("", "rebecca-backup-assembled-*"+Extension)
+	assembled, err := os.CreateTemp("", "nora-backup-assembled-*"+Extension)
 	if err != nil {
 		return ImportResult{}, err
 	}

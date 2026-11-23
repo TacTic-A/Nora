@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/rebeccapanel/rebecca/internal/app/nodeclient"
-	nodev1 "github.com/rebeccapanel/rebecca/internal/proto/node/v1"
+	"github.com/norapanel/nora/internal/app/nodeclient"
+	nodev1 "github.com/norapanel/nora/internal/proto/node/v1"
 	"google.golang.org/protobuf/proto"
 	_ "modernc.org/sqlite"
 )

@@ -27,8 +27,8 @@ import {
 import { useTranslation } from "react-i18next";
 import { copyTextToClipboard } from "../../utils/clipboard";
 import {
-	stringifyRebeccaJson,
-	type RebeccaJsonContext,
+	stringifyNoraJson,
+	type NoraJsonContext,
 } from "../../utils/jsonFormatting";
 import "./styles.css";
 
@@ -40,7 +40,7 @@ export type JSONEditorProps = {
 	minHeight?: string | number;
 	readOnly?: boolean;
 	showToolbar?: boolean;
-	canonicalContext?: RebeccaJsonContext;
+	canonicalContext?: NoraJsonContext;
 	toolbarActions?: ReactNode;
 	onValidityChange?: (isValid: boolean, error?: string) => void;
 	highlightLines?: number[];
@@ -181,7 +181,7 @@ export const JsonEditor = forwardRef<HTMLDivElement, JSONEditorProps>(
 				return;
 			}
 			const parsed = text.trim() ? JSON.parse(text) : {};
-			applyText(stringifyRebeccaJson(parsed, 2, canonicalContext));
+			applyText(stringifyNoraJson(parsed, 2, canonicalContext));
 		}, [applyText, canonicalContext, text]);
 
 		const compactJson = useCallback(() => {
@@ -189,7 +189,7 @@ export const JsonEditor = forwardRef<HTMLDivElement, JSONEditorProps>(
 				return;
 			}
 			const parsed = text.trim() ? JSON.parse(text) : {};
-			applyText(stringifyRebeccaJson(parsed, 0, canonicalContext));
+			applyText(stringifyNoraJson(parsed, 0, canonicalContext));
 		}, [applyText, canonicalContext, text]);
 
 		const copyJson = useCallback(() => {
@@ -263,7 +263,7 @@ export const JsonEditor = forwardRef<HTMLDivElement, JSONEditorProps>(
 				highlightMarkerRefs.current.push(
 					session.addMarker(
 						new Range(row, 0, row, 1),
-						`rebecca-json-diff-${highlightVariant}`,
+						`nora-json-diff-${highlightVariant}`,
 						"fullLine",
 						true,
 					),
@@ -276,7 +276,7 @@ export const JsonEditor = forwardRef<HTMLDivElement, JSONEditorProps>(
 				highlightMarkerRefs.current.push(
 					session.addMarker(
 						new Range(row, start, row, end),
-						`rebecca-json-diff-${highlightVariant}-text`,
+						`nora-json-diff-${highlightVariant}-text`,
 						"text",
 						false,
 					),
@@ -310,7 +310,7 @@ export const JsonEditor = forwardRef<HTMLDivElement, JSONEditorProps>(
 			const Range = editor.getSelectionRange().constructor as any;
 			errorMarkerRef.current = session.addMarker(
 				new Range(row, 0, row, 1),
-				"rebecca-json-error-line",
+				"nora-json-error-line",
 				"fullLine",
 				true,
 			);
@@ -323,7 +323,7 @@ export const JsonEditor = forwardRef<HTMLDivElement, JSONEditorProps>(
 		const mutedColor = "text-[var(--rb-panel-text-muted)]";
 
 		return (
-			<div ref={ref} style={{ minHeight: minHeight }} className={cn(cn("flex flex-col items-stretch border rounded-[10px] h-full overflow-hidden gap-0", bg, borderColor, textColor, "rebecca-json-editor"))}>
+			<div ref={ref} style={{ minHeight: minHeight }} className={cn(cn("flex flex-col items-stretch border rounded-[10px] h-full overflow-hidden gap-0", bg, borderColor, textColor, "nora-json-editor"))}>
 				{showToolbar && (
 					<div className={cn("flex flex-row items-center border-b flex-wrap justify-between min-h-[44px] px-3 py-2 gap-3", elevatedBg, borderColor)}>
 						<div className="flex-1 min-w-[180px]!">

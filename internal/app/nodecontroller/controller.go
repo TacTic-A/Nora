@@ -14,11 +14,11 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/logging"
-	"github.com/rebeccapanel/rebecca/internal/app/nodeclient"
-	outboundsubapp "github.com/rebeccapanel/rebecca/internal/app/outboundsub"
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
-	nodev1 "github.com/rebeccapanel/rebecca/internal/proto/node/v1"
+	"github.com/norapanel/nora/internal/app/logging"
+	"github.com/norapanel/nora/internal/app/nodeclient"
+	outboundsubapp "github.com/norapanel/nora/internal/app/outboundsub"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
+	nodev1 "github.com/norapanel/nora/internal/proto/node/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/connectivity"
 )
@@ -151,7 +151,7 @@ func (c Controller) Connect(ctx context.Context, req Request) (RuntimeResult, er
 		return RuntimeResult{}, err
 	}
 
-	connect, err := client.Control().Connect(ctx, &nodev1.ConnectRequest{MasterId: "rebecca-master"})
+	connect, err := client.Control().Connect(ctx, &nodev1.ConnectRequest{MasterId: "nora-master"})
 	if err != nil {
 		_ = c.repo.SetError(ctx, req.NodeID, err.Error())
 		return RuntimeResult{}, friendlyNodeError("connect", req.NodeID, err)
@@ -1065,7 +1065,7 @@ func isPermanentOperationError(err error) bool {
 		strings.Contains(message, "config_json is required") ||
 		strings.Contains(message, "invalid character") ||
 		strings.Contains(message, "node update required for safe user reconciliation") ||
-		strings.Contains(message, "unable to locate rebecca-node cli") ||
+		strings.Contains(message, "unable to locate nora-node cli") ||
 		strings.Contains(message, "node not found")
 }
 
@@ -1120,7 +1120,7 @@ func (c Controller) dial(ctx context.Context, nodeID int64) (*nodeclient.Client,
 			// The dial deadline only covers transport setup. Reusing that context
 			// for Hello makes a slow TLS handshake leave no time for the first RPC.
 			helloCtx, helloCancel := withNodeDialAttemptTimeout(ctx)
-			hello, helloErr := client.Control().Hello(helloCtx, &nodev1.HelloRequest{MasterId: "rebecca-master"})
+			hello, helloErr := client.Control().Hello(helloCtx, &nodev1.HelloRequest{MasterId: "nora-master"})
 			helloCancel()
 			if helloErr != nil {
 				_ = client.Close()
@@ -1147,7 +1147,7 @@ func (c Controller) dial(ctx context.Context, nodeID int64) (*nodeclient.Client,
 func refreshNodeHandshake(ctx context.Context, client *nodeclient.Client) {
 	helloCtx, cancel := withNodeDialAttemptTimeout(ctx)
 	defer cancel()
-	hello, err := client.Control().Hello(helloCtx, &nodev1.HelloRequest{MasterId: "rebecca-master"})
+	hello, err := client.Control().Hello(helloCtx, &nodev1.HelloRequest{MasterId: "nora-master"})
 	if err != nil {
 		client.DeferHandshake()
 		return

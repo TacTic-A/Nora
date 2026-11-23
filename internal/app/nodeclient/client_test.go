@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	nodev1 "github.com/rebeccapanel/rebecca/internal/proto/node/v1"
+	nodev1 "github.com/norapanel/nora/internal/proto/node/v1"
 )
 
 func TestClientHandshakeIsDueOnlyAfterInterval(t *testing.T) {

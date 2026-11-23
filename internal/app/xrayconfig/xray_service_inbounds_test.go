@@ -128,7 +128,7 @@ func TestXrayServiceInboundsAreHostlessAndManageable(t *testing.T) {
 		}
 	}
 	if IsXrayServiceInboundProtocol(WGProtocol) || !InboundSupportsHosts(WGProtocol) {
-		t.Fatal("Rebecca's own wireguard must stay a host-bearing virtual tunnel")
+		t.Fatal("Nora's own wireguard must stay a host-bearing virtual tunnel")
 	}
 }
 

@@ -18,7 +18,7 @@ export interface TelegramSettingsResponse {
 	forum_topics: Record<string, TelegramTopicSettingsPayload>;
 	event_toggles: Record<string, boolean>;
 	backup_enabled: boolean;
-	backup_scope: RebeccaBackupScope;
+	backup_scope: NoraBackupScope;
 	backup_interval_value: number;
 	backup_interval_unit: "minutes" | "hours" | "days";
 	backup_last_sent_at: string | null;
@@ -38,7 +38,7 @@ export interface TelegramSettingsUpdatePayload {
 	forum_topics?: Record<string, TelegramTopicSettingsPayload>;
 	event_toggles?: Record<string, boolean>;
 	backup_enabled?: boolean;
-	backup_scope?: RebeccaBackupScope;
+	backup_scope?: NoraBackupScope;
 	backup_interval_value?: number;
 	backup_interval_unit?: "minutes" | "hours" | "days";
 }
@@ -46,7 +46,7 @@ export interface TelegramSettingsUpdatePayload {
 export interface TelegramBackupSendResponse {
 	ok: boolean;
 	filename: string;
-	scope: RebeccaBackupScope;
+	scope: NoraBackupScope;
 	size: number;
 	results: Array<{
 		chat_id: number;
@@ -122,7 +122,7 @@ export const testTelegramSettings = async (): Promise<{
 };
 
 export const sendTelegramBackup = async (
-	scope: RebeccaBackupScope,
+	scope: NoraBackupScope,
 ): Promise<TelegramBackupSendResponse> => {
 	return apiFetch("/settings/telegram/backup/send", {
 		method: "POST",
@@ -138,10 +138,10 @@ export interface PanelSettingsUpdatePayload {
 	default_subscription_type?: "username-key" | "key" | "token" | "key-username";
 }
 
-export type RebeccaBackupScope = "database" | "full";
+export type NoraBackupScope = "database" | "full";
 
-export interface RebeccaBackupImportResponse {
-	scope: RebeccaBackupScope;
+export interface NoraBackupImportResponse {
+	scope: NoraBackupScope;
 	tables_restored: number;
 	rows_restored: number;
 	files_restored: string[];
@@ -299,7 +299,7 @@ export interface RuntimeSettingsResponse {
 	phpmyadmin_port: number;
 	phpmyadmin_path: string;
 	phpmyadmin_public_url: string;
-	phpmyadmin_login_mode: "rebecca" | "custom";
+	phpmyadmin_login_mode: "nora" | "custom";
 	phpmyadmin_username: string;
 	phpmyadmin_password: string;
 }
@@ -357,7 +357,7 @@ export interface PHPMyAdminStatus {
 	public_url: string;
 	external_url: string;
 	embed_url: string;
-	login_mode: "rebecca" | "custom";
+	login_mode: "nora" | "custom";
 }
 
 export interface PHPMyAdminActionResponse {
@@ -680,8 +680,8 @@ export interface BackupExportProgress {
 	total?: number;
 }
 
-export const exportRebeccaBackup = async (
-	scope: RebeccaBackupScope,
+export const exportNoraBackup = async (
+	scope: NoraBackupScope,
 	onProgress?: (progress: BackupExportProgress) => void,
 ): Promise<Blob> => {
 	return new Promise((resolve, reject) => {
@@ -784,10 +784,10 @@ export const exportRebeccaBackup = async (
 	});
 };
 
-export const importRebeccaBackup = async (
+export const importNoraBackup = async (
 	files: File | File[],
 	onProgress?: (percent: number) => void,
-): Promise<RebeccaBackupImportResponse> => {
+): Promise<NoraBackupImportResponse> => {
 	return new Promise((resolve, reject) => {
 		const errorKey = "POST /settings/backup/import";
 		const fail = (error: Error) => {
@@ -827,7 +827,7 @@ export const importRebeccaBackup = async (
 			const response = responseBody();
 			if (xhr.status >= 200 && xhr.status < 300) {
 				useAPIRequestErrors.getState().clear(errorKey);
-				resolve(response as RebeccaBackupImportResponse);
+				resolve(response as NoraBackupImportResponse);
 				return;
 			}
 			const responseRecord =

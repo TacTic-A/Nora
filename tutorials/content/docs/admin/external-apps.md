@@ -1,11 +1,11 @@
 ---
 title: "External apps"
 weight: 6
-description: "Deploy isolated PHP or static web applications, such as MirzaBot or Faoxima, through Rebecca with their own domain certificate, database, and settings."
+description: "Deploy isolated PHP or static web applications, such as MirzaBot or Faoxima, through Nora with their own domain certificate, database, and settings."
 adminOnly: true
 ---
 
-External apps let Rebecca host small PHP or static web applications without a separate web server. The available templates are **MirzaBot**, **Faoxima**, and a **custom PHP / HTML project** from a ZIP archive.
+External apps let Nora host small PHP or static web applications without a separate web server. The available templates are **MirzaBot**, **Faoxima**, and a **custom PHP / HTML project** from a ZIP archive.
 
 <p class="rb-panel-actions"><a class="rb-panel-button" data-primary="true" href="#" data-panel-route="/external-apps">Open External apps</a></p>
 
@@ -24,19 +24,19 @@ External apps let Rebecca host small PHP or static web applications without a se
 3. Select the **Domain and SSL certificate**.
 4. For MirzaBot or Faoxima, enter the **Telegram bot token** and the **Telegram admin ID**.
 5. Choose the database option:
-   - **Create a dedicated MySQL / MariaDB database** gives the application its own database and user. Use **Generate all** to fill in the names and password automatically. Rebecca also gets access to this database.
-   - If you have an existing SQL backup of the application, turn on the backup option and upload it. The backup can be up to 32 MiB. Rebecca imports it into the isolated database and runs `table.php` once to update an older schema.
+   - **Create a dedicated MySQL / MariaDB database** gives the application its own database and user. Use **Generate all** to fill in the names and password automatically. Nora also gets access to this database.
+   - If you have an existing SQL backup of the application, turn on the backup option and upload it. The backup can be up to 32 MiB. Nora imports it into the isolated database and runs `table.php` once to update an older schema.
 6. Click **Deploy**.
 
 {{< callout type="warning" >}}
-Save the database password before you close the dialog. Rebecca does not store it for later display.
+Save the database password before you close the dialog. Nora does not store it for later display.
 {{< /callout >}}
 
 ## Project ZIP rules
 
 - The archive can be up to 32 MiB compressed and 256 MiB after extraction.
 - `index.php` or `index.html` must be at the root of the archive.
-- Rebecca detects the runtime, PHP or static HTML, from the uploaded ZIP. An empty project uses the static runtime.
+- Nora detects the runtime, PHP or static HTML, from the uploaded ZIP. An empty project uses the static runtime.
 - You can deploy without a ZIP and add files later with **Files**.
 
 ## How applications run
@@ -61,7 +61,7 @@ Each application offers these actions:
   - **Request body limit** sets the largest accepted request or upload, from 1 to 32 MiB.
   - **Static asset cache** sets how long browsers cache CSS, JavaScript, images, and other static files, in seconds. Use 0 to disable browser caching. HTML is always revalidated.
 - **Download SQL backup** exports the application's database.
-- **Update** is available for MirzaBot. It replaces the application files and keeps `config.php`, the database, and Rebecca's secrets. The pinned Composer dependencies and `table.php` run before the new files go live.
+- **Update** is available for MirzaBot. It replaces the application files and keeps `config.php`, the database, and Nora's secrets. The pinned Composer dependencies and `table.php` run before the new files go live.
 - **Delete** removes the application files. You can keep the dedicated database and database user. The SSL certificate is always kept.
 
 {{< callout type="info" >}}

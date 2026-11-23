@@ -52,7 +52,7 @@ import {
 	BuildVersionSelect,
 } from "./BuildVersionSelect";
 import { PanelSelect as Select } from "./common/PanelSelect";
-import { DashboardBackupControls } from "./RebeccaBackupPanel";
+import { DashboardBackupControls } from "./NoraBackupPanel";
 
 type UpdateChannel = "current" | "latest" | "dev";
 type MaintenanceAction = "update" | "restart" | "soft-reload";

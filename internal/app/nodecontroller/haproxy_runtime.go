@@ -17,7 +17,7 @@ import (
 	"strings"
 	"time"
 
-	certificateapp "github.com/rebeccapanel/rebecca/internal/app/certificates"
+	certificateapp "github.com/norapanel/nora/internal/app/certificates"
 )
 
 type HAProxyConfig struct {
@@ -732,7 +732,7 @@ func (r Repository) normalizeHAProxyTarget(ctx context.Context, target *HAProxyT
 			return err
 		}
 		if callback.URL == "" || callback.Token == "" {
-			return fmt.Errorf("uploaded templates require REBECCA_PUBLIC_URL and an enrolled node certificate")
+			return fmt.Errorf("uploaded templates require NORA_PUBLIC_URL and an enrolled node certificate")
 		}
 	}
 	return nil
@@ -956,7 +956,7 @@ func renderHAProxyConfig(settings HAProxySettings, configID int64, target HAProx
 		fmt.Fprintln(&out, "    option srvtcpka")
 	}
 	for listenerIndex, listener := range target.Listeners {
-		frontend := fmt.Sprintf("rebecca_%d", listenerIndex)
+		frontend := fmt.Sprintf("nora_%d", listenerIndex)
 		address := listener.ListenAddress
 		if address == "::" {
 			address = "[::]"
@@ -1039,11 +1039,11 @@ func renderHAProxyConfig(settings HAProxySettings, configID int64, target HAProx
 }
 
 func haproxySiteSocket(configID int64, listenerIndex, siteIndex int) string {
-	return fmt.Sprintf("/tmp/rebecca-haproxy-%d-%d-%d.sock", configID, listenerIndex, siteIndex)
+	return fmt.Sprintf("/tmp/nora-haproxy-%d-%d-%d.sock", configID, listenerIndex, siteIndex)
 }
 
 func haproxyDefaultTLSSiteSocket(configID int64, listenerIndex, siteIndex int) string {
-	return fmt.Sprintf("/tmp/rebecca-haproxy-%d-%d-%d-tls.sock", configID, listenerIndex, siteIndex)
+	return fmt.Sprintf("/tmp/nora-haproxy-%d-%d-%d-tls.sock", configID, listenerIndex, siteIndex)
 }
 
 func candidateHasMatcher(candidate HAProxyCandidate, matchType, matchValue string) bool {

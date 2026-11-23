@@ -3,7 +3,7 @@ package xrayconfig
 import (
 	"encoding/base64"
 	"encoding/json"
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
 	"os"
 	"os/exec"
 	"path/filepath"

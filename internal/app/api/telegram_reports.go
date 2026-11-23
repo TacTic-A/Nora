@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strings"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	telegramapp "github.com/rebeccapanel/rebecca/internal/app/telegram"
-	userapp "github.com/rebeccapanel/rebecca/internal/app/user"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	telegramapp "github.com/norapanel/nora/internal/app/telegram"
+	userapp "github.com/norapanel/nora/internal/app/user"
 )
 
 func telegramActor(r *http.Request) string {

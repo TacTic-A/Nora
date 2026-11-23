@@ -13,7 +13,7 @@ func init() {
 
 func up000034PHPMyAdminLoginSettings(ctx context.Context, tx *sql.Tx) error {
 	dialect := activeDialect()
-	if err := addColumn(ctx, tx, dialect, "settings", "phpmyadmin_login_mode", "TEXT NOT NULL DEFAULT 'rebecca'", "VARCHAR(16) NOT NULL DEFAULT 'rebecca'"); err != nil {
+	if err := addColumn(ctx, tx, dialect, "settings", "phpmyadmin_login_mode", "TEXT NOT NULL DEFAULT 'nora'", "VARCHAR(16) NOT NULL DEFAULT 'nora'"); err != nil {
 		return err
 	}
 	if err := addColumn(ctx, tx, dialect, "settings", "phpmyadmin_username", "TEXT NOT NULL DEFAULT ''", "VARCHAR(255) NOT NULL DEFAULT ''"); err != nil {
@@ -24,7 +24,7 @@ func up000034PHPMyAdminLoginSettings(ctx context.Context, tx *sql.Tx) error {
 	}
 	_, err := tx.ExecContext(ctx, `
 UPDATE settings
-SET phpmyadmin_login_mode = COALESCE(NULLIF(phpmyadmin_login_mode, ''), 'rebecca'),
+SET phpmyadmin_login_mode = COALESCE(NULLIF(phpmyadmin_login_mode, ''), 'nora'),
 	phpmyadmin_username = COALESCE(phpmyadmin_username, ''),
 	phpmyadmin_password = COALESCE(phpmyadmin_password, '')
 WHERE id = 1`)

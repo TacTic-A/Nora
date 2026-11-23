@@ -56,7 +56,7 @@ Screenshot parity for logged-in pages was not verified: the HEAD baseline needs 
 | 41 | 496 | `components/MullvadModal.tsx` | D pages | ported |
 | 42 | 467 | `components/AdminPermissionsEditor.tsx` | D pages | ported |
 | 43 | 450 | `pages/NotificationsPage.tsx` | D pages | ported |
-| 44 | 450 | `components/RebeccaBackupPanel.tsx` | D pages | ported |
+| 44 | 450 | `components/NoraBackupPanel.tsx` | D pages | ported |
 | 45 | 446 | `components/DateTimePicker.tsx` | D pages | ported |
 | 46 | 418 | `components/users/UsersFilterBar.tsx` | D pages | ported |
 | 47 | 413 | `components/ReverseModal.tsx` | D pages | ported |

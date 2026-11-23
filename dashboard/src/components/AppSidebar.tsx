@@ -91,45 +91,16 @@ const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
 		const [isPaused, setIsPaused] = useState(false);
 
 		const items = useMemo(() => {
-			const rebeccaItem = {
-				id: "rebecca",
+			const noraItem = {
+				id: "nora",
 				src: logoUrl,
-				alt: "Rebecca",
-				label: "Rebecca",
+				alt: "Nora",
+				label: "Nora",
 				isSponsor: false,
 				href: undefined as string | undefined,
 			};
-			const validSponsors = (sponsors || [])
-				.filter((s) =>
-					Boolean(
-						s?.image_url || (s as unknown as { src?: string })?.src,
-					),
-				)
-				.map((s) => {
-					const rawSrc =
-						s.image_url || (s as unknown as { src?: string })?.src || "";
-					const href =
-						s.target_url || (s as unknown as { href?: string })?.href;
-					return {
-						id: s.id,
-						src: resolveAssetUrl(rawSrc),
-						alt: s.alt || s.label || "Sponsor",
-						label: s.label
-							? s.label.charAt(0).toUpperCase() + s.label.slice(1)
-							: s.alt || "Sponsor",
-						isSponsor: true,
-						href,
-					};
-				});
-			if (validSponsors.length === 0) {
-				return [rebeccaItem];
-			}
-			const result: typeof rebeccaItem[] = [];
-			for (const sp of validSponsors) {
-				result.push(rebeccaItem, sp);
-			}
-			return result;
-		}, [sponsors]);
+			return [noraItem];
+		}, []);
 
 		useEffect(() => {
 			if (activeIndex >= items.length) {
@@ -175,7 +146,7 @@ const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
 				) : (
 					<img
 						src={currentItem.src}
-						alt="Rebecca"
+						alt="Nora"
 						draggable={false}
 						style={{
 							filter:

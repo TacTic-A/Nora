@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-const helpText = `🤖 <b>Rebecca admin bot</b>
+const helpText = `🤖 <b>Nora admin bot</b>
 
 <b>Commands</b>
 /user <code>&lt;username&gt;</code> — show a user and manage it

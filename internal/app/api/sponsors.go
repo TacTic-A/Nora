@@ -109,6 +109,14 @@ func newSponsorManager(manifestURL, cacheDir string, client *http.Client) *spons
 }
 
 func (m *sponsorManager) response(ctx context.Context) (sponsorResponse, error) {
+	if m.manifestURL == "" {
+		return sponsorResponse{
+			Header:       make([]sponsorAssetResponse, 0),
+			HeaderMobile: make([]sponsorAssetResponse, 0),
+			Sidebar:      make([]sponsorAssetResponse, 0),
+			SidebarLogo:  make([]sponsorAssetResponse, 0),
+		}, nil
+	}
 	assets, err := m.ensure(ctx)
 	if err != nil {
 		return sponsorResponse{}, err

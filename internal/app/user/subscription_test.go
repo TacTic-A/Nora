@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
-	"github.com/rebeccapanel/rebecca/internal/app/outboundsub"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/outboundsub"
 )
 
 func readTestTemplateFile(t *testing.T, relativePath string) string {
@@ -157,7 +157,7 @@ func TestShadowsocksTLSUsesClientNativeLinkWithoutLossyConversion(t *testing.T) 
 	if masks := listOfMaps(mapValue(stream["finalmask"])["tcp"]); len(masks) != 1 || jsonvalue.String(masks[0]["type"]) != "fragment" {
 		t.Fatalf("Xray JSON lost Shadowsocks FinalMask: %#v", stream)
 	}
-	if binary := strings.TrimSpace(os.Getenv("REBECCA_XRAY_TEST_BINARY")); binary != "" {
+	if binary := strings.TrimSpace(os.Getenv("NORA_XRAY_TEST_BINARY")); binary != "" {
 		config, err := json.Marshal(configs[0])
 		if err != nil {
 			t.Fatal(err)
@@ -264,7 +264,7 @@ func TestStructuredSubscriptionsCoverSupportedShareProtocols(t *testing.T) {
 			t.Fatalf("sing-box output missing %s: %s", protocol, singBoxBody)
 		}
 	}
-	if binary := strings.TrimSpace(os.Getenv("REBECCA_SING_BOX_TEST_BINARY")); binary != "" {
+	if binary := strings.TrimSpace(os.Getenv("NORA_SING_BOX_TEST_BINARY")); binary != "" {
 		path := filepath.Join(t.TempDir(), "config.json")
 		if err := os.WriteFile(path, []byte(singBoxBody), 0o600); err != nil {
 			t.Fatal(err)
@@ -292,7 +292,7 @@ func TestStructuredSubscriptionsCoverSupportedShareProtocols(t *testing.T) {
 			t.Fatalf("Xray JSON output missing %s: %s", protocol, v2rayBody)
 		}
 	}
-	if binary := strings.TrimSpace(os.Getenv("REBECCA_XRAY_TEST_BINARY")); binary != "" {
+	if binary := strings.TrimSpace(os.Getenv("NORA_XRAY_TEST_BINARY")); binary != "" {
 		for index, config := range configs {
 			data, err := json.Marshal(config)
 			if err != nil {
@@ -311,7 +311,7 @@ func TestStructuredSubscriptionsCoverSupportedShareProtocols(t *testing.T) {
 
 func TestSingBoxSubscriptionUsesFullTemplateAndRealNames(t *testing.T) {
 	template := readTestTemplateFile(t, filepath.Join("templates", "singbox", "default.json"))
-	settings := `{"wsSettings":{"headers":{"User-Agent":"Rebecca"}}}`
+	settings := `{"wsSettings":{"headers":{"User-Agent":"Nora"}}}`
 	remark := url.PathEscape("تهران ویژه")
 	links := []string{
 		"vless://11111111-1111-4111-8111-111111111111@one.example.com:443?security=tls&type=ws&path=%2Fws&host=one.example.com&sni=one.example.com&encryption=none#" + remark,
@@ -345,7 +345,7 @@ func TestSingBoxSubscriptionUsesFullTemplateAndRealNames(t *testing.T) {
 			proxyCount++
 			transport := outbound["transport"].(map[string]any)
 			headers := transport["headers"].(map[string]any)
-			if headers["User-Agent"] != "Rebecca" || headers["Host"] == "" {
+			if headers["User-Agent"] != "Nora" || headers["Host"] == "" {
 				t.Fatalf("sing-box settings/link transport merge failed: %#v", transport)
 			}
 			if strings.HasPrefix(jsonvalue.String(outbound["tag"]), "proxy-") {
@@ -360,7 +360,7 @@ func TestSingBoxSubscriptionUsesFullTemplateAndRealNames(t *testing.T) {
 		t.Fatalf("selector tags = %#v, want %#v", got, wantTags)
 	}
 
-	if binary := strings.TrimSpace(os.Getenv("REBECCA_SING_BOX_TEST_BINARY")); binary != "" {
+	if binary := strings.TrimSpace(os.Getenv("NORA_SING_BOX_TEST_BINARY")); binary != "" {
 		path := filepath.Join(t.TempDir(), "config.json")
 		if err := os.WriteFile(path, []byte(body), 0o600); err != nil {
 			t.Fatal(err)
@@ -396,7 +396,7 @@ func TestSingBoxOmitsUnsupportedRawHTTPHeaderObfuscation(t *testing.T) {
 	if proxyCount != 1 {
 		t.Fatalf("sing-box proxy count = %d, want 1: %s", proxyCount, body)
 	}
-	if binary := strings.TrimSpace(os.Getenv("REBECCA_SING_BOX_TEST_BINARY")); binary != "" {
+	if binary := strings.TrimSpace(os.Getenv("NORA_SING_BOX_TEST_BINARY")); binary != "" {
 		path := filepath.Join(t.TempDir(), "config.json")
 		if err := os.WriteFile(path, []byte(body), 0o600); err != nil {
 			t.Fatal(err)
@@ -472,7 +472,7 @@ func TestSingBoxSubscriptionMigratesLegacyCustomTemplate(t *testing.T) {
 			t.Fatalf("missing migrated %s action: %s", action, body)
 		}
 	}
-	if binary := strings.TrimSpace(os.Getenv("REBECCA_SING_BOX_TEST_BINARY")); binary != "" {
+	if binary := strings.TrimSpace(os.Getenv("NORA_SING_BOX_TEST_BINARY")); binary != "" {
 		path := filepath.Join(t.TempDir(), "config.json")
 		if err := os.WriteFile(path, []byte(body), 0o600); err != nil {
 			t.Fatal(err)
@@ -973,7 +973,7 @@ func TestVLESSEncryptionRoundTripsXrayJSONTemplates(t *testing.T) {
 				if template.content != "" && (len(outbounds) != 2 || outbounds[1].(map[string]any)["tag"] != "DIRECT") {
 					t.Fatalf("custom template outbound was not preserved: %#v", outbounds)
 				}
-				if binary := strings.TrimSpace(os.Getenv("REBECCA_XRAY_VLESS_ENCRYPTION_TEST_BINARY")); binary != "" {
+				if binary := strings.TrimSpace(os.Getenv("NORA_XRAY_VLESS_ENCRYPTION_TEST_BINARY")); binary != "" {
 					data, err := json.Marshal(configs[0])
 					if err != nil {
 						t.Fatal(err)
@@ -1962,9 +1962,9 @@ func TestGenericXrayJSONRejectsPostStableFinalMaskFields(t *testing.T) {
 }
 
 func TestGenericXrayJSONStableDialectAcceptedByOfficialXray(t *testing.T) {
-	binary := strings.TrimSpace(os.Getenv("REBECCA_XRAY_STABLE_TEST_BINARY"))
+	binary := strings.TrimSpace(os.Getenv("NORA_XRAY_STABLE_TEST_BINARY"))
 	if binary == "" {
-		t.Skip("set REBECCA_XRAY_STABLE_TEST_BINARY to the official stable Xray binary")
+		t.Skip("set NORA_XRAY_STABLE_TEST_BINARY to the official stable Xray binary")
 	}
 	fm := url.QueryEscape(`{"tcp":[{"type":"fragment","settings":{"packets":"tlshello","lengths":["3-5"],"delays":["10-20"],"maxSplit":"3"}}]}`)
 	link := "vless://11111111-1111-4111-8111-111111111111@example.com:443?type=kcp&security=none&encryption=none&seed=seed-value&headerType=dns&host=dns.example&mtu=1350&tti=20&fm=" + fm
@@ -1979,9 +1979,9 @@ func TestGenericXrayJSONStableDialectAcceptedByOfficialXray(t *testing.T) {
 }
 
 func TestGenericXrayJSONCurrentDialectAcceptedByOfficialXray(t *testing.T) {
-	binary := strings.TrimSpace(os.Getenv("REBECCA_XRAY_CURRENT_TEST_BINARY"))
+	binary := strings.TrimSpace(os.Getenv("NORA_XRAY_CURRENT_TEST_BINARY"))
 	if binary == "" {
-		t.Skip("set REBECCA_XRAY_CURRENT_TEST_BINARY to the official current Xray binary")
+		t.Skip("set NORA_XRAY_CURRENT_TEST_BINARY to the official current Xray binary")
 	}
 	fm := url.QueryEscape(`{"tcp":[{"type":"fragment","settings":{"packets":"tlshello","lengths":["3-5"],"delays":["10-20"],"maxSplit":"3"}}]}`)
 	kcp := "vless://11111111-1111-4111-8111-111111111111@example.com:443?type=kcp&security=none&encryption=none&seed=seed-value&headerType=dns&host=dns.example&mtu=1350&tti=20&fm=" + fm

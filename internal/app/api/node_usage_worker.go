@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/logging"
-	"github.com/rebeccapanel/rebecca/internal/app/nodecontroller"
+	"github.com/norapanel/nora/internal/app/logging"
+	"github.com/norapanel/nora/internal/app/nodecontroller"
 )
 
 const defaultNodeUsageCollectionInterval = 5 * time.Second

@@ -149,7 +149,7 @@ func TestValidateCertificateFilesInlineContentSkipsFileCheck(t *testing.T) {
 
 func TestValidateCertificateFilesRejectsPathTraversal(t *testing.T) {
 	payload := tlsInboundPayload(map[string]any{
-		"certificateFile": "/etc/rebecca/../../etc/shadow",
+		"certificateFile": "/etc/nora/../../etc/shadow",
 	})
 
 	err := ValidateCertificateFiles(payload)

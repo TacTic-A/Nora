@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             (unknown)
-// source: rebecca/node/v1/node.proto
+// source: nora/node/v1/node.proto
 
 package nodev1
 
@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	NodeControlService_Hello_FullMethodName   = "/rebecca.node.v1.NodeControlService/Hello"
-	NodeControlService_Connect_FullMethodName = "/rebecca.node.v1.NodeControlService/Connect"
-	NodeControlService_Health_FullMethodName  = "/rebecca.node.v1.NodeControlService/Health"
+	NodeControlService_Hello_FullMethodName   = "/nora.node.v1.NodeControlService/Hello"
+	NodeControlService_Connect_FullMethodName = "/nora.node.v1.NodeControlService/Connect"
+	NodeControlService_Health_FullMethodName  = "/nora.node.v1.NodeControlService/Health"
 )
 
 // NodeControlServiceClient is the client API for NodeControlService service.
@@ -176,7 +176,7 @@ func _NodeControlService_Health_Handler(srv interface{}, ctx context.Context, de
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var NodeControlService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "rebecca.node.v1.NodeControlService",
+	ServiceName: "nora.node.v1.NodeControlService",
 	HandlerType: (*NodeControlServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -193,32 +193,32 @@ var NodeControlService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "rebecca/node/v1/node.proto",
+	Metadata: "nora/node/v1/node.proto",
 }
 
 const (
-	NodeRuntimeService_StartRuntime_FullMethodName        = "/rebecca.node.v1.NodeRuntimeService/StartRuntime"
-	NodeRuntimeService_RestartRuntime_FullMethodName      = "/rebecca.node.v1.NodeRuntimeService/RestartRuntime"
-	NodeRuntimeService_StopRuntime_FullMethodName         = "/rebecca.node.v1.NodeRuntimeService/StopRuntime"
-	NodeRuntimeService_SyncConfig_FullMethodName          = "/rebecca.node.v1.NodeRuntimeService/SyncConfig"
-	NodeRuntimeService_AddUser_FullMethodName             = "/rebecca.node.v1.NodeRuntimeService/AddUser"
-	NodeRuntimeService_UpdateUser_FullMethodName          = "/rebecca.node.v1.NodeRuntimeService/UpdateUser"
-	NodeRuntimeService_RemoveUser_FullMethodName          = "/rebecca.node.v1.NodeRuntimeService/RemoveUser"
-	NodeRuntimeService_ApplyUserBatch_FullMethodName      = "/rebecca.node.v1.NodeRuntimeService/ApplyUserBatch"
-	NodeRuntimeService_Metrics_FullMethodName             = "/rebecca.node.v1.NodeRuntimeService/Metrics"
-	NodeRuntimeService_PublicIPs_FullMethodName           = "/rebecca.node.v1.NodeRuntimeService/PublicIPs"
-	NodeRuntimeService_TestOutbound_FullMethodName        = "/rebecca.node.v1.NodeRuntimeService/TestOutbound"
-	NodeRuntimeService_TestRoute_FullMethodName           = "/rebecca.node.v1.NodeRuntimeService/TestRoute"
-	NodeRuntimeService_UpdateRuntime_FullMethodName       = "/rebecca.node.v1.NodeRuntimeService/UpdateRuntime"
-	NodeRuntimeService_UpdateGeo_FullMethodName           = "/rebecca.node.v1.NodeRuntimeService/UpdateGeo"
-	NodeRuntimeService_RestartService_FullMethodName      = "/rebecca.node.v1.NodeRuntimeService/RestartService"
-	NodeRuntimeService_UpdateService_FullMethodName       = "/rebecca.node.v1.NodeRuntimeService/UpdateService"
-	NodeRuntimeService_RebootHost_FullMethodName          = "/rebecca.node.v1.NodeRuntimeService/RebootHost"
-	NodeRuntimeService_ApplyIPBlocks_FullMethodName       = "/rebecca.node.v1.NodeRuntimeService/ApplyIPBlocks"
-	NodeRuntimeService_ApplyTorProxy_FullMethodName       = "/rebecca.node.v1.NodeRuntimeService/ApplyTorProxy"
-	NodeRuntimeService_ConfigureWindscribe_FullMethodName = "/rebecca.node.v1.NodeRuntimeService/ConfigureWindscribe"
-	NodeRuntimeService_ConfigurePsiphon_FullMethodName    = "/rebecca.node.v1.NodeRuntimeService/ConfigurePsiphon"
-	NodeRuntimeService_IssueCertificate_FullMethodName    = "/rebecca.node.v1.NodeRuntimeService/IssueCertificate"
+	NodeRuntimeService_StartRuntime_FullMethodName        = "/nora.node.v1.NodeRuntimeService/StartRuntime"
+	NodeRuntimeService_RestartRuntime_FullMethodName      = "/nora.node.v1.NodeRuntimeService/RestartRuntime"
+	NodeRuntimeService_StopRuntime_FullMethodName         = "/nora.node.v1.NodeRuntimeService/StopRuntime"
+	NodeRuntimeService_SyncConfig_FullMethodName          = "/nora.node.v1.NodeRuntimeService/SyncConfig"
+	NodeRuntimeService_AddUser_FullMethodName             = "/nora.node.v1.NodeRuntimeService/AddUser"
+	NodeRuntimeService_UpdateUser_FullMethodName          = "/nora.node.v1.NodeRuntimeService/UpdateUser"
+	NodeRuntimeService_RemoveUser_FullMethodName          = "/nora.node.v1.NodeRuntimeService/RemoveUser"
+	NodeRuntimeService_ApplyUserBatch_FullMethodName      = "/nora.node.v1.NodeRuntimeService/ApplyUserBatch"
+	NodeRuntimeService_Metrics_FullMethodName             = "/nora.node.v1.NodeRuntimeService/Metrics"
+	NodeRuntimeService_PublicIPs_FullMethodName           = "/nora.node.v1.NodeRuntimeService/PublicIPs"
+	NodeRuntimeService_TestOutbound_FullMethodName        = "/nora.node.v1.NodeRuntimeService/TestOutbound"
+	NodeRuntimeService_TestRoute_FullMethodName           = "/nora.node.v1.NodeRuntimeService/TestRoute"
+	NodeRuntimeService_UpdateRuntime_FullMethodName       = "/nora.node.v1.NodeRuntimeService/UpdateRuntime"
+	NodeRuntimeService_UpdateGeo_FullMethodName           = "/nora.node.v1.NodeRuntimeService/UpdateGeo"
+	NodeRuntimeService_RestartService_FullMethodName      = "/nora.node.v1.NodeRuntimeService/RestartService"
+	NodeRuntimeService_UpdateService_FullMethodName       = "/nora.node.v1.NodeRuntimeService/UpdateService"
+	NodeRuntimeService_RebootHost_FullMethodName          = "/nora.node.v1.NodeRuntimeService/RebootHost"
+	NodeRuntimeService_ApplyIPBlocks_FullMethodName       = "/nora.node.v1.NodeRuntimeService/ApplyIPBlocks"
+	NodeRuntimeService_ApplyTorProxy_FullMethodName       = "/nora.node.v1.NodeRuntimeService/ApplyTorProxy"
+	NodeRuntimeService_ConfigureWindscribe_FullMethodName = "/nora.node.v1.NodeRuntimeService/ConfigureWindscribe"
+	NodeRuntimeService_ConfigurePsiphon_FullMethodName    = "/nora.node.v1.NodeRuntimeService/ConfigurePsiphon"
+	NodeRuntimeService_IssueCertificate_FullMethodName    = "/nora.node.v1.NodeRuntimeService/IssueCertificate"
 )
 
 // NodeRuntimeServiceClient is the client API for NodeRuntimeService service.
@@ -1000,7 +1000,7 @@ func _NodeRuntimeService_IssueCertificate_Handler(srv interface{}, ctx context.C
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var NodeRuntimeService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "rebecca.node.v1.NodeRuntimeService",
+	ServiceName: "nora.node.v1.NodeRuntimeService",
 	HandlerType: (*NodeRuntimeServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -1093,17 +1093,17 @@ var NodeRuntimeService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "rebecca/node/v1/node.proto",
+	Metadata: "nora/node/v1/node.proto",
 }
 
 const (
-	NodeUsageService_CollectOnlineUsers_FullMethodName   = "/rebecca.node.v1.NodeUsageService/CollectOnlineUsers"
-	NodeUsageService_CollectUserUsage_FullMethodName     = "/rebecca.node.v1.NodeUsageService/CollectUserUsage"
-	NodeUsageService_AckUserUsage_FullMethodName         = "/rebecca.node.v1.NodeUsageService/AckUserUsage"
-	NodeUsageService_CollectOutboundUsage_FullMethodName = "/rebecca.node.v1.NodeUsageService/CollectOutboundUsage"
-	NodeUsageService_AckOutboundUsage_FullMethodName     = "/rebecca.node.v1.NodeUsageService/AckOutboundUsage"
-	NodeUsageService_CollectAllUsage_FullMethodName      = "/rebecca.node.v1.NodeUsageService/CollectAllUsage"
-	NodeUsageService_AckAllUsage_FullMethodName          = "/rebecca.node.v1.NodeUsageService/AckAllUsage"
+	NodeUsageService_CollectOnlineUsers_FullMethodName   = "/nora.node.v1.NodeUsageService/CollectOnlineUsers"
+	NodeUsageService_CollectUserUsage_FullMethodName     = "/nora.node.v1.NodeUsageService/CollectUserUsage"
+	NodeUsageService_AckUserUsage_FullMethodName         = "/nora.node.v1.NodeUsageService/AckUserUsage"
+	NodeUsageService_CollectOutboundUsage_FullMethodName = "/nora.node.v1.NodeUsageService/CollectOutboundUsage"
+	NodeUsageService_AckOutboundUsage_FullMethodName     = "/nora.node.v1.NodeUsageService/AckOutboundUsage"
+	NodeUsageService_CollectAllUsage_FullMethodName      = "/nora.node.v1.NodeUsageService/CollectAllUsage"
+	NodeUsageService_AckAllUsage_FullMethodName          = "/nora.node.v1.NodeUsageService/AckAllUsage"
 )
 
 // NodeUsageServiceClient is the client API for NodeUsageService service.
@@ -1390,7 +1390,7 @@ func _NodeUsageService_AckAllUsage_Handler(srv interface{}, ctx context.Context,
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var NodeUsageService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "rebecca.node.v1.NodeUsageService",
+	ServiceName: "nora.node.v1.NodeUsageService",
 	HandlerType: (*NodeUsageServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -1423,11 +1423,11 @@ var NodeUsageService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "rebecca/node/v1/node.proto",
+	Metadata: "nora/node/v1/node.proto",
 }
 
 const (
-	NodeLogsService_StreamLogs_FullMethodName = "/rebecca.node.v1.NodeLogsService/StreamLogs"
+	NodeLogsService_StreamLogs_FullMethodName = "/nora.node.v1.NodeLogsService/StreamLogs"
 )
 
 // NodeLogsServiceClient is the client API for NodeLogsService service.
@@ -1518,7 +1518,7 @@ type NodeLogsService_StreamLogsServer = grpc.ServerStreamingServer[LogLine]
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var NodeLogsService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "rebecca.node.v1.NodeLogsService",
+	ServiceName: "nora.node.v1.NodeLogsService",
 	HandlerType: (*NodeLogsServiceServer)(nil),
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
@@ -1528,5 +1528,5 @@ var NodeLogsService_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 	},
-	Metadata: "rebecca/node/v1/node.proto",
+	Metadata: "nora/node/v1/node.proto",
 }

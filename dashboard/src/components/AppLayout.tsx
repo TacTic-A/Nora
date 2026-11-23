@@ -302,8 +302,7 @@ function AppLayoutContent() {
 	const effectiveRole = getUserIsSuccess
 		? userData.role
 		: (cachedRole as AdminRole | null);
-	const canSeeSponsors =
-		effectiveRole === AdminRole.FullAccess || effectiveRole === AdminRole.Sudo;
+	const canSeeSponsors = false;
 
 	useEffect(() => {
 		if (getUserIsSuccess && userData.role) {

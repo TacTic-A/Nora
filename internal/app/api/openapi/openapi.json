@@ -1,14 +1,14 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Rebecca API",
+    "title": "Nora API",
     "version": "0.3.0",
-    "description": "Go-native Rebecca panel API for dashboard, bot, and third-party client developers.\n\nAuthentication: the dashboard uses an opaque server-side session stored in the HttpOnly `rebecca_session` cookie. Session permissions are loaded from the database on every request, so permission changes take effect without logging out. Bots and external integrations should use personal `rk_...` API keys as `Authorization: Bearer <api_key>`. Legacy JWT creation at `POST /admin/token` and `POST /api/admin/token` remains available only for older Marzban-compatible clients.\n\nDo not automate username/password login for bots. API keys can be revoked independently and inherit the owner admin permissions, service scope, and limits.\n\nMutation behavior: user, service, node, config, and host mutations are transactional where applicable. Runtime changes are synchronized to nodes through gRPC and recorded for recovery."
+    "description": "Go-native Nora panel API for dashboard, bot, and third-party client developers.\n\nAuthentication: the dashboard uses an opaque server-side session stored in the HttpOnly `nora_session` cookie. Session permissions are loaded from the database on every request, so permission changes take effect without logging out. Bots and external integrations should use personal `rk_...` API keys as `Authorization: Bearer <api_key>`. Legacy JWT creation at `POST /admin/token` and `POST /api/admin/token` remains available only for older Marzban-compatible clients.\n\nDo not automate username/password login for bots. API keys can be revoked independently and inherit the owner admin permissions, service scope, and limits.\n\nMutation behavior: user, service, node, config, and host mutations are transactional where applicable. Runtime changes are synchronized to nodes through gRPC and recorded for recovery."
   },
   "servers": [
     {
       "url": "/",
-      "description": "Current Rebecca panel origin"
+      "description": "Current Nora panel origin"
     }
   ],
   "security": [
@@ -96,7 +96,7 @@
           "Docs"
         ],
         "summary": "Get OpenAPI schema",
-        "description": "Returns the Rebecca OpenAPI document used by the offline Swagger UI.\n\nAuthentication: public route; no bearer token is required.\n\nPermissions: Public endpoint.",
+        "description": "Returns the Nora OpenAPI document used by the offline Swagger UI.\n\nAuthentication: public route; no bearer token is required.\n\nPermissions: Public endpoint.",
         "security": [],
         "responses": {
           "200": {
@@ -128,7 +128,7 @@
           "Admin"
         ],
         "summary": "Create legacy admin JWT",
-        "description": "Authenticate a database-backed admin and issue a legacy JWT bearer token for older Marzban-compatible clients. The Rebecca dashboard does not call this endpoint; it uses the opaque session flow under /api/auth instead. New bots and integrations should use personal rk_ API keys rather than storing an admin password.",
+        "description": "Authenticate a database-backed admin and issue a legacy JWT bearer token for older Marzban-compatible clients. The Nora dashboard does not call this endpoint; it uses the opaque session flow under /api/auth instead. New bots and integrations should use personal rk_ API keys rather than storing an admin password.",
         "security": [],
         "requestBody": {
           "$ref": "#/components/requestBodies/LoginForm"
@@ -150,7 +150,7 @@
           "Admin"
         ],
         "summary": "Create legacy admin JWT",
-        "description": "Authenticate a database-backed admin and issue a legacy JWT bearer token for older Marzban-compatible clients. The Rebecca dashboard does not call this endpoint; it uses the opaque session flow under /api/auth instead. New bots and integrations should use personal rk_ API keys rather than storing an admin password.",
+        "description": "Authenticate a database-backed admin and issue a legacy JWT bearer token for older Marzban-compatible clients. The Nora dashboard does not call this endpoint; it uses the opaque session flow under /api/auth instead. New bots and integrations should use personal rk_ API keys rather than storing an admin password.",
         "security": [],
         "requestBody": {
           "$ref": "#/components/requestBodies/LoginForm"
@@ -760,7 +760,7 @@
           "Users"
         ],
         "summary": "Create user",
-        "description": "Create a user with required service assignment, permission checks, admin/service limits, credential normalization, and node operation enqueue.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: Requires an active authenticated admin. Standard admins are limited to users they own and services assigned to them; traffic fields may be zeroed when visibility is disabled.\n\nRequest body: send JSON unless this operation explicitly declares multipart/form-data. Unknown fields are generally ignored only when the underlying handler is compatibility-oriented; business-rule violations return 400/403/409.\n\nSide effects: this is a mutation. Database writes are transactional where applicable; runtime-affecting changes enqueue node operations or call the node controller as documented by the route.\n\nRoute details: Required business fields: `username` and `service_id`. `service_id` must point to an existing non-default service. Manual `inbounds` and `proxies` payloads are rejected; `credential_key` may be omitted, a Rebecca key, or a UUID that is normalized into the stored credential key.",
+        "description": "Create a user with required service assignment, permission checks, admin/service limits, credential normalization, and node operation enqueue.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: Requires an active authenticated admin. Standard admins are limited to users they own and services assigned to them; traffic fields may be zeroed when visibility is disabled.\n\nRequest body: send JSON unless this operation explicitly declares multipart/form-data. Unknown fields are generally ignored only when the underlying handler is compatibility-oriented; business-rule violations return 400/403/409.\n\nSide effects: this is a mutation. Database writes are transactional where applicable; runtime-affecting changes enqueue node operations or call the node controller as documented by the route.\n\nRoute details: Required business fields: `username` and `service_id`. `service_id` must point to an existing non-default service. Manual `inbounds` and `proxies` payloads are rejected; `credential_key` may be omitted, a Nora key, or a UUID that is normalized into the stored credential key.",
         "requestBody": {
           "$ref": "#/components/requestBodies/JSON"
         },
@@ -820,7 +820,7 @@
           "Users"
         ],
         "summary": "Update user",
-        "description": "Update user fields, service assignment, status, next plans, credential key, and node operation queue state.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: Requires an active authenticated admin. Standard admins are limited to users they own and services assigned to them; traffic fields may be zeroed when visibility is disabled.\n\nRequest body: send JSON unless this operation explicitly declares multipart/form-data. Unknown fields are generally ignored only when the underlying handler is compatibility-oriented; business-rule violations return 400/403/409.\n\nSide effects: this is a mutation. Database writes are transactional where applicable; runtime-affecting changes enqueue node operations or call the node controller as documented by the route.\n\nRoute details: Only send fields you want to change. `next_plan` was removed; use `next_plans`. If a legacy `setservice-<id>` inbound is supplied, Rebecca converts it to service assignment; ordinary inbound selection is rejected.",
+        "description": "Update user fields, service assignment, status, next plans, credential key, and node operation queue state.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: Requires an active authenticated admin. Standard admins are limited to users they own and services assigned to them; traffic fields may be zeroed when visibility is disabled.\n\nRequest body: send JSON unless this operation explicitly declares multipart/form-data. Unknown fields are generally ignored only when the underlying handler is compatibility-oriented; business-rule violations return 400/403/409.\n\nSide effects: this is a mutation. Database writes are transactional where applicable; runtime-affecting changes enqueue node operations or call the node controller as documented by the route.\n\nRoute details: Only send fields you want to change. `next_plan` was removed; use `next_plans`. If a legacy `setservice-<id>` inbound is supplied, Nora converts it to service assignment; ordinary inbound selection is rejected.",
         "parameters": [
           {
             "$ref": "#/components/parameters/Username"
@@ -1643,7 +1643,7 @@
           "Nodes"
         ],
         "summary": "Restart node service",
-        "description": "Restart the Rebecca node service on a binary-mode node.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: Requires sudo/full_access. Node calls use Go node controller and gRPC/mTLS where runtime communication is needed.\n\nSide effects: this is a mutation. Database writes are transactional where applicable; runtime-affecting changes enqueue node operations or call the node controller as documented by the route.",
+        "description": "Restart the Nora node service on a binary-mode node.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: Requires sudo/full_access. Node calls use Go node controller and gRPC/mTLS where runtime communication is needed.\n\nSide effects: this is a mutation. Database writes are transactional where applicable; runtime-affecting changes enqueue node operations or call the node controller as documented by the route.",
         "parameters": [
           {
             "$ref": "#/components/parameters/NodeID"
@@ -1663,7 +1663,7 @@
           "Nodes"
         ],
         "summary": "Update node service",
-        "description": "Update the Rebecca node service binary on a node.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: Requires sudo/full_access. Node calls use Go node controller and gRPC/mTLS where runtime communication is needed.\n\nRequest body: send JSON unless this operation explicitly declares multipart/form-data. Unknown fields are generally ignored only when the underlying handler is compatibility-oriented; business-rule violations return 400/403/409.\n\nSide effects: this is a mutation. Database writes are transactional where applicable; runtime-affecting changes enqueue node operations or call the node controller as documented by the route.",
+        "description": "Update the Nora node service binary on a node.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: Requires sudo/full_access. Node calls use Go node controller and gRPC/mTLS where runtime communication is needed.\n\nRequest body: send JSON unless this operation explicitly declares multipart/form-data. Unknown fields are generally ignored only when the underlying handler is compatibility-oriented; business-rule violations return 400/403/409.\n\nSide effects: this is a mutation. Database writes are transactional where applicable; runtime-affecting changes enqueue node operations or call the node controller as documented by the route.",
         "parameters": [
           {
             "$ref": "#/components/parameters/NodeID"
@@ -2711,7 +2711,7 @@
           "System"
         ],
         "summary": "Maintenance info",
-        "description": "Return panel runtime/install metadata and Rebecca/Rebecca-node update metadata.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: System stats require an authenticated admin. Maintenance actions require sudo/full_access and binary runtime.",
+        "description": "Return panel runtime/install metadata and Nora/Nora-node update metadata.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: System stats require an authenticated admin. Maintenance actions require sudo/full_access and binary runtime.",
         "responses": {
           "200": {
             "$ref": "#/components/responses/JSON"
@@ -3079,7 +3079,7 @@
           "Settings"
         ],
         "summary": "Send Telegram backup now",
-        "description": "Create a Rebecca backup with the Go backup service and send it to Telegram immediately. The route reads the stored Telegram bot token, proxy URL, backup chat destination, admin-chat fallback, and backup topic/thread settings from `telegram_settings`. The request may specify `scope` as `database` or `full`; if omitted, the stored periodic backup scope is used. Large backup archives are split into multiple Telegram documents and each part gets a part-number caption. Delivery status is written back to `backup_last_sent_at` or `backup_last_error`.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: sudo/full_access is required because this operation exports database/files and sends them to an external Telegram chat.\n\nRuntime constraints: backup export is available only in binary installation mode. Docker/non-binary installations return 409. Telegram delivery errors return 400/502 depending on whether the failure is configuration-related or remote-delivery-related.",
+        "description": "Create a Nora backup with the Go backup service and send it to Telegram immediately. The route reads the stored Telegram bot token, proxy URL, backup chat destination, admin-chat fallback, and backup topic/thread settings from `telegram_settings`. The request may specify `scope` as `database` or `full`; if omitted, the stored periodic backup scope is used. Large backup archives are split into multiple Telegram documents and each part gets a part-number caption. Delivery status is written back to `backup_last_sent_at` or `backup_last_error`.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: sudo/full_access is required because this operation exports database/files and sends them to an external Telegram chat.\n\nRuntime constraints: backup export is available only in binary installation mode. Docker/non-binary installations return 409. Telegram delivery errors return 400/502 depending on whether the failure is configuration-related or remote-delivery-related.",
         "requestBody": {
           "$ref": "#/components/requestBodies/JSON"
         },
@@ -3106,7 +3106,7 @@
           "Settings"
         ],
         "summary": "Send Telegram test message",
-        "description": "Send a Telegram test message using the stored bot token, proxy, and destination settings. If a `chat_id` is not provided, Rebecca uses the log chat first and then the first admin chat. The route records the last Telegram error in `telegram_settings.last_error`, which is also surfaced by `/api/system` as `last_telegram_error`.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: sudo/full_access is required because this sends an external message and validates secret bot credentials.\n\nRequest body: optional JSON object with `chat_id` and `text`.",
+        "description": "Send a Telegram test message using the stored bot token, proxy, and destination settings. If a `chat_id` is not provided, Nora uses the log chat first and then the first admin chat. The route records the last Telegram error in `telegram_settings.last_error`, which is also surfaced by `/api/system` as `last_telegram_error`.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: sudo/full_access is required because this sends an external message and validates secret bot credentials.\n\nRequest body: optional JSON object with `chat_id` and `text`.",
         "requestBody": {
           "$ref": "#/components/requestBodies/JSON"
         },
@@ -3130,7 +3130,7 @@
           "Settings"
         ],
         "summary": "Export backup",
-        "description": "Export Rebecca backup in .rbbackup format on binary installations.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: Panel read requires an authenticated admin. Settings mutation, backup, templates, and TODO/410 settings routes require sudo/full_access.\n\nRoute details: Only works in binary installation mode. The response is a `.rbbackup` archive with manifest and database/files depending on scope.",
+        "description": "Export Nora backup in .rbbackup format on binary installations.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: Panel read requires an authenticated admin. Settings mutation, backup, templates, and TODO/410 settings routes require sudo/full_access.\n\nRoute details: Only works in binary installation mode. The response is a `.rbbackup` archive with manifest and database/files depending on scope.",
         "responses": {
           "200": {
             "description": "Backup archive."
@@ -3148,7 +3148,7 @@
           "Settings"
         ],
         "summary": "Import backup",
-        "description": "Import a Rebecca backup archive and restore database/files according to backup scope.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: Panel read requires an authenticated admin. Settings mutation, backup, templates, and TODO/410 settings routes require sudo/full_access.\n\nRequest body: send JSON unless this operation explicitly declares multipart/form-data. Unknown fields are generally ignored only when the underlying handler is compatibility-oriented; business-rule violations return 400/403/409.\n\nSide effects: this is a mutation. Database writes are transactional where applicable; runtime-affecting changes enqueue node operations or call the node controller as documented by the route.\n\nRoute details: Only works in binary installation mode. Import performs safe extraction and hard restore; use a maintenance window for production restores.",
+        "description": "Import a Nora backup archive and restore database/files according to backup scope.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. Create personal admin API keys from My Account -> API Keys; each key inherits the owner admin permissions and limits. The current dashboard JWT from `POST /api/admin/token` is also accepted for interactive dashboard sessions and for Swagger UI when opened from inside the panel.\n\nPermissions: Panel read requires an authenticated admin. Settings mutation, backup, templates, and TODO/410 settings routes require sudo/full_access.\n\nRequest body: send JSON unless this operation explicitly declares multipart/form-data. Unknown fields are generally ignored only when the underlying handler is compatibility-oriented; business-rule violations return 400/403/409.\n\nSide effects: this is a mutation. Database writes are transactional where applicable; runtime-affecting changes enqueue node operations or call the node controller as documented by the route.\n\nRoute details: Only works in binary installation mode. Import performs safe extraction and hard restore; use a maintenance window for production restores.",
         "requestBody": {
           "required": true,
           "content": {
@@ -3534,7 +3534,7 @@
           "Subscriptions"
         ],
         "summary": "Render two-part subscription path",
-        "description": "Render either identifier/client_type or username/credential_key subscription paths. Rebecca resolves the meaning from stored user credentials and known client types.\n\nAuthentication: public route; no bearer token is required.\n\nPermissions: Public endpoint. Do not send admin bearer tokens unless you are using a custom integration that deliberately does so.\n\nRoute details: Ambiguous two-part subscription paths are resolved by checking whether the second part is a known client type or a credential key. Known client types include `v2ray`, `v2ray-json`, `clash`, `clash-meta`, `sing-box`, `outline`, `openvpn`, `wireguard`/`wg`, `happ`, `v2raytun`, `throne`, `shadowrocket`, `karing`, `hiddify`, `clash-mi`, `incy`, `passwall`, and `nekobox`.\n\nOutput notes: subscription responses set client/profile headers such as subscription-userinfo when available and may return plain text, base64, JSON, YAML, or HTML depending on format resolution.",
+        "description": "Render either identifier/client_type or username/credential_key subscription paths. Nora resolves the meaning from stored user credentials and known client types.\n\nAuthentication: public route; no bearer token is required.\n\nPermissions: Public endpoint. Do not send admin bearer tokens unless you are using a custom integration that deliberately does so.\n\nRoute details: Ambiguous two-part subscription paths are resolved by checking whether the second part is a known client type or a credential key. Known client types include `v2ray`, `v2ray-json`, `clash`, `clash-meta`, `sing-box`, `outline`, `openvpn`, `wireguard`/`wg`, `happ`, `v2raytun`, `throne`, `shadowrocket`, `karing`, `hiddify`, `clash-mi`, `incy`, `passwall`, and `nekobox`.\n\nOutput notes: subscription responses set client/profile headers such as subscription-userinfo when available and may return plain text, base64, JSON, YAML, or HTML depending on format resolution.",
         "security": [],
         "parameters": [
           {
@@ -3750,7 +3750,7 @@
           "Maintenance"
         ],
         "summary": "Get latest panel maintenance operation status",
-        "description": "Returns the latest host-level update, restart, or soft-reload operation tracked by the Go API. Dashboard clients poll this endpoint while the maintenance dialog is open to show command output, parsed download percentage, current phase, and whether the panel is entering restart. The state is intentionally in-memory and resets after the Rebecca process comes back.",
+        "description": "Returns the latest host-level update, restart, or soft-reload operation tracked by the Go API. Dashboard clients poll this endpoint while the maintenance dialog is open to show command output, parsed download percentage, current phase, and whether the panel is entering restart. The state is intentionally in-memory and resets after the Nora process comes back.",
         "security": [
           {
             "bearerAuth": []
@@ -3825,7 +3825,7 @@
           "Nodes"
         ],
         "summary": "Reboot node host",
-        "description": "Request a binary Rebecca-node host reboot through the node gRPC controller. The node schedules the Linux `reboot` command and active connections on that node will drop until the server returns.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. The current dashboard JWT is also accepted.\n\nPermissions: Requires sudo/full_access. Node calls use Go node controller and gRPC/mTLS where runtime communication is needed.\n\nSide effects: this reboots the node server OS.",
+        "description": "Request a binary Nora-node host reboot through the node gRPC controller. The node schedules the Linux `reboot` command and active connections on that node will drop until the server returns.\n\nAuthentication: send `Authorization: Bearer <api_key>` for bots and third-party integrations. The current dashboard JWT is also accepted.\n\nPermissions: Requires sudo/full_access. Node calls use Go node controller and gRPC/mTLS where runtime communication is needed.\n\nSide effects: this reboots the node server OS.",
         "operationId": "postNodeNodeIdHostReboot",
         "parameters": [
           {
@@ -4440,13 +4440,13 @@
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "bearerFormat": "Rebecca admin API key or legacy JWT",
+        "bearerFormat": "Nora admin API key or legacy JWT",
         "description": "Use a personal rk_ API key for bots and third-party integrations. Legacy JWTs from /admin/token remain accepted for older Marzban-compatible clients."
       },
       "cookieAuth": {
         "type": "apiKey",
         "in": "cookie",
-        "name": "rebecca_session",
+        "name": "nora_session",
         "description": "Opaque HttpOnly dashboard session cookie issued by POST /api/auth/login. It is managed by the browser and is not readable by dashboard JavaScript."
       }
     },
@@ -4458,7 +4458,7 @@
         "schema": {
           "type": "string"
         },
-        "description": "Rebecca username. Matching is case-insensitive in most user lookup paths."
+        "description": "Nora username. Matching is case-insensitive in most user lookup paths."
       },
       "AdminID": {
         "name": "admin_id",
@@ -4679,7 +4679,7 @@
     },
     "responses": {
       "JSON": {
-        "description": "JSON response. Exact object fields follow the dashboard-compatible Rebecca API response for the route.",
+        "description": "JSON response. Exact object fields follow the dashboard-compatible Nora API response for the route.",
         "content": {
           "application/json": {
             "schema": {

@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
 )
 
 func TestRetryHostModificationAfterDeadlock(t *testing.T) {
@@ -48,7 +48,7 @@ func TestHostsListCreatesDefaultHosts(t *testing.T) {
 	if len(hosts["cdn"]) != 1 || len(hosts["info"]) != 1 {
 		t.Fatalf("unexpected hosts response: %#v", hosts)
 	}
-	if hosts["cdn"][0].Remark != "Rebecca ({USERNAME}) [{PROTOCOL} - {TRANSPORT}]" || hosts["cdn"][0].Address != "{SERVER_IP}" {
+	if hosts["cdn"][0].Remark != "Nora ({USERNAME}) [{PROTOCOL} - {TRANSPORT}]" || hosts["cdn"][0].Address != "{SERVER_IP}" {
 		t.Fatalf("default host mismatch: %#v", hosts["cdn"][0])
 	}
 	assertMasterAPICount(t, db, `SELECT COUNT(*) FROM inbounds`, 2)

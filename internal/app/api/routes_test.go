@@ -97,8 +97,8 @@ func TestDocsRoutes(t *testing.T) {
 		if rec.Code != http.StatusOK {
 			t.Fatalf("expected docs UI 200, got %d body %q", rec.Code, rec.Body.String())
 		}
-		if !strings.Contains(rec.Body.String(), "--rebecca-docs-bg") {
-			t.Fatalf("expected docs UI to include Rebecca dark theme CSS")
+		if !strings.Contains(rec.Body.String(), "--nora-docs-bg") {
+			t.Fatalf("expected docs UI to include Nora dark theme CSS")
 		}
 		if !strings.Contains(rec.Body.String(), "preauthorizeApiKey") {
 			t.Fatalf("expected docs UI to auto-authorize with the current dashboard token")

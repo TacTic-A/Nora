@@ -25,10 +25,10 @@ var (
 	devVersionPattern     = regexp.MustCompile(`^dev-[0-9a-fA-F]{7,40}$`)
 )
 
-const (
+var (
 	// PanelUpdateRepo and NodeUpdateRepo are the repositories updates are read from.
-	PanelUpdateRepo = "rebeccapanel/Rebecca"
-	NodeUpdateRepo  = "rebeccapanel/Rebecca-node"
+	PanelUpdateRepo = firstEnv("NORA_UPDATE_REPO", firstEnv("NORA_UPDATE_REPO", "norapanel/Nora"))
+	NodeUpdateRepo  = firstEnv("NORA_NODE_UPDATE_REPO", firstEnv("NORA_NODE_UPDATE_REPO", "norapanel/Nora-node"))
 )
 
 // versionSwitchFloor is the first stable panel release that runs database schema v60.
@@ -156,7 +156,7 @@ func (s *MaintenanceService) Info(ctx context.Context) (MaintenanceInfo, error) 
 	return MaintenanceInfo{
 		Panel:      panel,
 		Node:       nil,
-		NodeUpdate: s.Updates.Status(ctx, "rebeccapanel/Rebecca-node", nil, ""),
+		NodeUpdate: s.Updates.Status(ctx, "norapanel/Nora-node", nil, ""),
 	}, nil
 }
 
@@ -172,7 +172,7 @@ func (s *MaintenanceService) Update(ctx context.Context, req MaintenanceUpdateRe
 	if err != nil {
 		return MaintenanceOperationSnapshot{}, err
 	}
-	args, err := BuildRebeccaUpdateArgs(req.Channel, version)
+	args, err := BuildNoraUpdateArgs(req.Channel, version)
 	if err != nil {
 		return MaintenanceOperationSnapshot{}, err
 	}
@@ -204,7 +204,7 @@ func ValidateUpdateTarget(ctx context.Context, checker UpdateChecker, repo strin
 }
 
 func ResolveUpdateVersion(ctx context.Context, checker UpdateChecker, repo string, channel string, version string, currentChannel string) (string, error) {
-	if _, err := BuildRebeccaUpdateArgs(channel, version); err != nil {
+	if _, err := BuildNoraUpdateArgs(channel, version); err != nil {
 		return "", err
 	}
 	target, catalog, err := resolveUpdateTarget(ctx, checker, repo, channel, version, currentChannel)
@@ -337,7 +337,7 @@ func (s *MaintenanceService) startOperation(action string, args []string, messag
 			s.ops.Finish(op.ID, err)
 			return s.ops.Get(op.ID), err
 		}
-		s.ops.MarkRestarting(op.ID, "Command accepted. Waiting for Rebecca to restart.")
+		s.ops.MarkRestarting(op.ID, "Command accepted. Waiting for Nora to restart.")
 		return s.ops.Get(op.ID), nil
 	}
 	if scheduler, ok := s.Commands.(ProgressCommandScheduler); ok {
@@ -351,7 +351,7 @@ func (s *MaintenanceService) startOperation(action string, args []string, messag
 		s.ops.Finish(op.ID, err)
 		return s.ops.Get(op.ID), err
 	}
-	s.ops.MarkRestarting(op.ID, "Command accepted. Waiting for Rebecca to restart.")
+	s.ops.MarkRestarting(op.ID, "Command accepted. Waiting for Nora to restart.")
 	return s.ops.Get(op.ID), nil
 }
 
@@ -362,7 +362,7 @@ func requireBinaryRuntime(info RuntimeInfo) error {
 	return MaintenanceError{Status: http.StatusConflict, Detail: hostOperationDisabledDetail}
 }
 
-func BuildRebeccaUpdateArgs(channel string, version string) ([]string, error) {
+func BuildNoraUpdateArgs(channel string, version string) ([]string, error) {
 	args := []string{"update"}
 	normalizedVersion := strings.TrimSpace(version)
 	normalizedChannel := strings.ToLower(strings.TrimSpace(channel))
@@ -399,7 +399,7 @@ type DefaultRuntimeDetector struct{}
 
 func (DefaultRuntimeDetector) Info() RuntimeInfo {
 	metadata := readRuntimeMetadata()
-	mode := strings.ToLower(strings.TrimSpace(os.Getenv("REBECCA_INSTALL_MODE")))
+	mode := strings.ToLower(strings.TrimSpace(os.Getenv("NORA_INSTALL_MODE")))
 	if mode == "" {
 		mode = strings.ToLower(strings.TrimSpace(readTextFile(installModePath())))
 	}
@@ -415,9 +415,9 @@ func (DefaultRuntimeDetector) Info() RuntimeInfo {
 	image := strings.TrimSpace(stringFromAny(metadata["image"]))
 	if image == "" {
 		if mode == "binary" {
-			image = "rebecca-server (binary)"
+			image = "nora-server (binary)"
 		} else {
-			image = "rebeccapanel/rebecca"
+			image = "norapanel/nora"
 		}
 	}
 	return RuntimeInfo{
@@ -434,31 +434,49 @@ func (DefaultRuntimeDetector) Info() RuntimeInfo {
 }
 
 func serviceName() string {
-	if value := strings.TrimSpace(os.Getenv("REBECCA_SERVICE_NAME")); value != "" {
+	if value := strings.TrimSpace(os.Getenv("NORA_SERVICE_NAME")); value != "" {
 		return value
 	}
-	return "rebecca"
+	if value := strings.TrimSpace(os.Getenv("NORA_SERVICE_NAME")); value != "" {
+		return value
+	}
+	return "nora"
 }
 
 func runtimeMetadataPath() string {
-	if value := strings.TrimSpace(os.Getenv("REBECCA_BINARY_METADATA_FILE")); value != "" {
+	if value := strings.TrimSpace(os.Getenv("NORA_BINARY_METADATA_FILE")); value != "" {
+		return value
+	}
+	if value := strings.TrimSpace(os.Getenv("NORA_BINARY_METADATA_FILE")); value != "" {
 		return value
 	}
 	return filepath.Join(appDir(), ".binary-release.json")
 }
 
 func installModePath() string {
-	if value := strings.TrimSpace(os.Getenv("REBECCA_INSTALL_MODE_FILE")); value != "" {
+	if value := strings.TrimSpace(os.Getenv("NORA_INSTALL_MODE_FILE")); value != "" {
+		return value
+	}
+	if value := strings.TrimSpace(os.Getenv("NORA_INSTALL_MODE_FILE")); value != "" {
 		return value
 	}
 	return filepath.Join(appDir(), ".install-mode")
 }
 
 func appDir() string {
-	if value := strings.TrimSpace(os.Getenv("REBECCA_APP_DIR")); value != "" {
+	if value := strings.TrimSpace(os.Getenv("NORA_APP_DIR")); value != "" {
 		return value
 	}
-	return "/opt/rebecca"
+	if value := strings.TrimSpace(os.Getenv("NORA_APP_DIR")); value != "" {
+		return value
+	}
+	if stat, err := os.Stat("/opt/nora"); err == nil && stat.IsDir() {
+		return "/opt/nora"
+	}
+	if stat, err := os.Stat("/opt/nora"); err == nil && stat.IsDir() {
+		return "/opt/nora"
+	}
+	return "/opt/nora"
 }
 
 func readRuntimeMetadata() map[string]any {
@@ -487,16 +505,16 @@ func readTextFile(path string) string {
 type DefaultCommandScheduler struct{}
 
 func (DefaultCommandScheduler) Schedule(args []string) error {
-	cli, err := resolveRebeccaCLI()
+	cli, err := resolveNoraCLI()
 	if err != nil {
 		return err
 	}
 	command := append([]string{cli}, args...)
 	if runtime.GOOS != "windows" {
 		if systemdRun, err := exec.LookPath("systemd-run"); err == nil && systemdRun != "" {
-			unit := fmt.Sprintf("rebecca-host-action-%d", time.Now().UnixNano())
+			unit := fmt.Sprintf("nora-host-action-%d", time.Now().UnixNano())
 			command = append(
-				[]string{systemdRun, "--unit", unit, "--collect", "--description", "Rebecca host action", "--"},
+				[]string{systemdRun, "--unit", unit, "--collect", "--description", "Nora host action", "--"},
 				command...,
 			)
 		}
@@ -505,7 +523,7 @@ func (DefaultCommandScheduler) Schedule(args []string) error {
 	cmd.Stdout = io.Discard
 	cmd.Stderr = io.Discard
 	if err := cmd.Start(); err != nil {
-		return MaintenanceError{Status: http.StatusInternalServerError, Detail: "Failed to schedule Rebecca command: " + err.Error()}
+		return MaintenanceError{Status: http.StatusInternalServerError, Detail: "Failed to schedule Nora command: " + err.Error()}
 	}
 	if cmd.Process != nil {
 		_ = cmd.Process.Release()
@@ -514,7 +532,7 @@ func (DefaultCommandScheduler) Schedule(args []string) error {
 }
 
 func (DefaultCommandScheduler) ScheduleWithProgress(args []string, onOutput func(string), onDone func(error)) error {
-	cli, err := resolveRebeccaCLI()
+	cli, err := resolveNoraCLI()
 	if err != nil {
 		return err
 	}
@@ -522,14 +540,14 @@ func (DefaultCommandScheduler) ScheduleWithProgress(args []string, onOutput func
 	cmd := exec.Command(command[0], command[1:]...)
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
-		return MaintenanceError{Status: http.StatusInternalServerError, Detail: "Failed to capture Rebecca command output: " + err.Error()}
+		return MaintenanceError{Status: http.StatusInternalServerError, Detail: "Failed to capture Nora command output: " + err.Error()}
 	}
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
-		return MaintenanceError{Status: http.StatusInternalServerError, Detail: "Failed to capture Rebecca command output: " + err.Error()}
+		return MaintenanceError{Status: http.StatusInternalServerError, Detail: "Failed to capture Nora command output: " + err.Error()}
 	}
 	if err := cmd.Start(); err != nil {
-		return MaintenanceError{Status: http.StatusInternalServerError, Detail: "Failed to schedule Rebecca command: " + err.Error()}
+		return MaintenanceError{Status: http.StatusInternalServerError, Detail: "Failed to schedule Nora command: " + err.Error()}
 	}
 	readPipe := func(reader io.Reader) {
 		scanner := bufio.NewScanner(reader)
@@ -564,12 +582,18 @@ func splitMaintenanceOutput(data []byte, atEOF bool) (advance int, token []byte,
 	return 0, nil, nil
 }
 
-func resolveRebeccaCLI() (string, error) {
-	candidates := []string{strings.TrimSpace(os.Getenv("REBECCA_SCRIPT_BIN"))}
-	if path, err := exec.LookPath("rebecca"); err == nil {
+func resolveNoraCLI() (string, error) {
+	candidates := []string{
+		strings.TrimSpace(os.Getenv("NORA_SCRIPT_BIN")),
+		strings.TrimSpace(os.Getenv("NORA_SCRIPT_BIN")),
+	}
+	if path, err := exec.LookPath("nora"); err == nil {
 		candidates = append(candidates, path)
 	}
-	candidates = append(candidates, "/usr/local/bin/rebecca")
+	if path, err := exec.LookPath("nora"); err == nil {
+		candidates = append(candidates, path)
+	}
+	candidates = append(candidates, "/usr/local/bin/nora", "/usr/local/bin/nora")
 	for _, candidate := range candidates {
 		if candidate == "" {
 			continue
@@ -578,7 +602,7 @@ func resolveRebeccaCLI() (string, error) {
 			return candidate, nil
 		}
 	}
-	return "", MaintenanceError{Status: http.StatusServiceUnavailable, Detail: "Rebecca CLI was not found on this host"}
+	return "", MaintenanceError{Status: http.StatusServiceUnavailable, Detail: "Nora CLI was not found on this host"}
 }
 
 type GitHubUpdateChecker struct {
@@ -617,7 +641,7 @@ func NewGitHubUpdateChecker() *GitHubUpdateChecker {
 		APIBase:        "https://api.github.com",
 		RawBase:        "https://raw.githubusercontent.com",
 		HTTPClient:     &http.Client{Timeout: 8 * time.Second},
-		ManifestBranch: firstEnv("REBECCA_BINARY_DEV_MANIFEST_BRANCH", "dev-build-manifest"),
+		ManifestBranch: firstEnv("NORA_BINARY_DEV_MANIFEST_BRANCH", "dev-build-manifest"),
 		ManifestPath:   "dev-builds.json",
 		Now:            time.Now,
 		CacheTTL:       10 * time.Minute,
@@ -977,7 +1001,7 @@ func (c *GitHubUpdateChecker) buildDevVersionsFromWorkflow(ctx context.Context, 
 }
 
 func (c *GitHubUpdateChecker) latestDev(ctx context.Context, repo string) (*ReleaseInfo, error) {
-	if strings.EqualFold(strings.TrimSpace(repo), "rebeccapanel/Rebecca-node") {
+	if strings.EqualFold(strings.TrimSpace(repo), "norapanel/Nora-node") {
 		if info := c.latestNodeDevBinary(ctx, repo); info != nil {
 			return info, nil
 		}
@@ -1205,7 +1229,7 @@ func (c *GitHubUpdateChecker) getJSON(ctx context.Context, url string, target an
 		return err
 	}
 	req.Header.Set("Accept", "application/vnd.github+json")
-	req.Header.Set("User-Agent", "Rebecca-update-check")
+	req.Header.Set("User-Agent", "Nora-update-check")
 	if token := firstEnv("GITHUB_TOKEN", ""); token != "" {
 		req.Header.Set("Authorization", "Bearer "+token)
 	} else if token := firstEnv("GH_TOKEN", ""); token != "" {

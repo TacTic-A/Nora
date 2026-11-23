@@ -79,9 +79,9 @@ import type { RoutingRule } from "../components/RuleModal";
 import type { TorProxyFormValues } from "../components/TorProxyModal";
 import type { WindscribeProxyFormValues } from "../components/WindscribeProxyModal";
 import {
-	canonicalizeRebeccaJson,
-	type RebeccaJsonContext,
-	stringifyRebeccaJson,
+	canonicalizeNoraJson,
+	type NoraJsonContext,
+	stringifyNoraJson,
 } from "../utils/jsonFormatting";
 import { SizeFormatter } from "../utils/outbound";
 import { computeOutboundIds } from "../utils/outboundId";
@@ -274,7 +274,7 @@ const SERVICES_OPTIONS: { label: string; value: string }[] = [
 	{ label: "Speedtest", value: "geosite:speedtest" },
 ];
 
-const XRAY_LOG_DIR_HINT = "/var/lib/rebecca/xray-core";
+const XRAY_LOG_DIR_HINT = "/var/lib/nora/xray-core";
 const DEFAULT_ACCESS_LOG_PATH = `${XRAY_LOG_DIR_HINT}/access.log`;
 const DEFAULT_ERROR_LOG_PATH = `${XRAY_LOG_DIR_HINT}/error.log`;
 const LOG_CLEANUP_INTERVAL_OPTIONS = [
@@ -369,7 +369,7 @@ type ManagedOutboundMeta = {
 };
 
 const managedOutboundMeta = (outbound: any): ManagedOutboundMeta | null => {
-	const metadataProvider = String(outbound?.rebecca_proxy ?? "")
+	const metadataProvider = String(outbound?.nora_proxy ?? "")
 		.trim()
 		.toLowerCase();
 	if (["tor", "windscribe", "psiphon"].includes(metadataProvider)) {
@@ -3131,17 +3131,17 @@ export const CoreSettingsPage: FC = () => {
 		const cfg = form.getValues("config") || {};
 		switch (advSettings) {
 			case "inboundSettings":
-				return stringifyRebeccaJson(cfg.inbounds ?? [], 2, "inbounds");
+				return stringifyNoraJson(cfg.inbounds ?? [], 2, "inbounds");
 			case "outboundSettings":
-				return stringifyRebeccaJson(cfg.outbounds ?? [], 2, "outbounds");
+				return stringifyNoraJson(cfg.outbounds ?? [], 2, "outbounds");
 			case "routingRuleSettings":
-				return stringifyRebeccaJson(
+				return stringifyNoraJson(
 					cfg.routing?.rules ?? [],
 					2,
 					"routingRules",
 				);
 			default:
-				return stringifyRebeccaJson(cfg ?? {}, 2, "config");
+				return stringifyNoraJson(cfg ?? {}, 2, "config");
 		}
 	};
 
@@ -3151,20 +3151,20 @@ export const CoreSettingsPage: FC = () => {
 			const cfg = { ...(form.getValues("config") || {}) };
 			switch (advSettings) {
 				case "inboundSettings":
-					cfg.inbounds = canonicalizeRebeccaJson(parsed, "inbounds");
+					cfg.inbounds = canonicalizeNoraJson(parsed, "inbounds");
 					break;
 				case "outboundSettings":
-					cfg.outbounds = canonicalizeRebeccaJson(parsed, "outbounds");
+					cfg.outbounds = canonicalizeNoraJson(parsed, "outbounds");
 					syncOutboundDisplay(cfg.outbounds as OutboundJson[]);
 					break;
 				case "routingRuleSettings":
 					if (!cfg.routing) cfg.routing = {};
-					cfg.routing.rules = canonicalizeRebeccaJson(parsed, "routingRules");
+					cfg.routing.rules = canonicalizeNoraJson(parsed, "routingRules");
 					syncRoutingRuleDisplay(cfg.routing.rules as RoutingRule[]);
 					break;
 				default: {
 					// replace whole config
-					const canonicalConfig = canonicalizeRebeccaJson(
+					const canonicalConfig = canonicalizeNoraJson(
 						parsed,
 						"config",
 					) as Record<string, any>;
@@ -3188,7 +3188,7 @@ export const CoreSettingsPage: FC = () => {
 			}
 			form.setValue(
 				"config",
-				canonicalizeRebeccaJson(cfg, "config") as EditableCoreConfig,
+				canonicalizeNoraJson(cfg, "config") as EditableCoreConfig,
 				{
 					shouldDirty: true,
 				},
@@ -4061,7 +4061,7 @@ export const CoreSettingsPage: FC = () => {
 	const activeAdvancedJsonMode =
 		advancedJsonModes.find((option) => option.value === advSettings) ||
 		advancedJsonModes[0];
-	const advancedJsonContext: RebeccaJsonContext =
+	const advancedJsonContext: NoraJsonContext =
 		advSettings === "inboundSettings"
 			? "inbounds"
 			: advSettings === "outboundSettings"

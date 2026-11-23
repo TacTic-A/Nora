@@ -1,6 +1,6 @@
 # Node Client
 
-This package is the low-level gRPC client for rebecca-node.
+This package is the low-level gRPC client for nora-node.
 
 It builds mTLS credentials from the current certificate model and opens typed
 gRPC clients for the node protobuf services.

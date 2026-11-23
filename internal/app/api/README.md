@@ -1,6 +1,6 @@
 # API
 
-This package is the main HTTP API surface for Rebecca.
+This package is the main HTTP API surface for Nora.
 
 It wires routes, middleware, auth checks, request decoding, response shaping,
 OpenAPI/Swagger documentation, and handlers for users, admins, services, nodes,

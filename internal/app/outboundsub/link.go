@@ -50,7 +50,7 @@ type V2rayNShadowsocksProfile struct {
 	ShortID              string                          `json:"ShortId,omitempty"`
 	SpiderX              string                          `json:"SpiderX,omitempty"`
 	MLDSA65Verify        string                          `json:"Mldsa65Verify,omitempty"`
-	CipherSuites         string                          `json:"CipherSuites,omitempty"` // Rebecca/xray-json extension.
+	CipherSuites         string                          `json:"CipherSuites,omitempty"` // Nora/xray-json extension.
 	MuxEnabled           bool                            `json:"MuxEnabled,omitempty"`   // Supported by v2rayN; ignored by v2rayNG.
 	CertSHA              string                          `json:"CertSha,omitempty"`
 	ECHConfigList        string                          `json:"EchConfigList,omitempty"`
@@ -76,8 +76,8 @@ type V2rayNShadowsocksTransportExtra struct {
 	KCPHeaderType string `json:"KcpHeaderType,omitempty"`
 	KCPSeed       string `json:"KcpSeed,omitempty"`
 	KCPMTU        int    `json:"KcpMtu,omitempty"`
-	KCPTTI        int    `json:"KcpTti,omitempty"`          // Rebecca/xray-json extension.
-	Heartbeat     int    `json:"HeartbeatPeriod,omitempty"` // Rebecca/xray-json extension.
+	KCPTTI        int    `json:"KcpTti,omitempty"`          // Nora/xray-json extension.
+	Heartbeat     int    `json:"HeartbeatPeriod,omitempty"` // Nora/xray-json extension.
 }
 
 func EncodeV2rayNShadowsocks(profile V2rayNShadowsocksProfile) string {
@@ -128,7 +128,7 @@ func DecodeV2rayNShadowsocks(link string) (V2rayNShadowsocksProfile, error) {
 }
 
 // NormalizeV2rayNShadowsocks converts the client-internal envelope into the
-// existing Xray-aware SS URL representation used only inside Rebecca.
+// existing Xray-aware SS URL representation used only inside Nora.
 func NormalizeV2rayNShadowsocks(link string) (string, error) {
 	profile, err := DecodeV2rayNShadowsocks(link)
 	if err != nil {

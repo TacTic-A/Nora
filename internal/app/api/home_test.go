@@ -19,7 +19,7 @@ func TestHomeRouteServesHomeTemplateFromGo(t *testing.T) {
 	if err := os.MkdirAll(filepath.Join(templateRoot, "templates", "home"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(templateRoot, "templates", "home", "index.html"), []byte("<html>Rebecca Home</html>"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(templateRoot, "templates", "home", "index.html"), []byte("<html>Nora Home</html>"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 
@@ -33,7 +33,7 @@ func TestHomeRouteServesHomeTemplateFromGo(t *testing.T) {
 	if got := rec.Header().Get("Content-Type"); got != "text/html; charset=utf-8" {
 		t.Fatalf("content-type = %q", got)
 	}
-	if rec.Body.String() != "<html>Rebecca Home</html>" {
+	if rec.Body.String() != "<html>Nora Home</html>" {
 		t.Fatalf("unexpected home body: %s", rec.Body.String())
 	}
 }

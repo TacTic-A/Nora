@@ -12,11 +12,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
-	"github.com/rebeccapanel/rebecca/internal/app/labels"
-	"github.com/rebeccapanel/rebecca/internal/app/online"
-	"github.com/rebeccapanel/rebecca/internal/app/outboundsub"
-	"github.com/rebeccapanel/rebecca/internal/app/searchmatch"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/labels"
+	"github.com/norapanel/nora/internal/app/online"
+	"github.com/norapanel/nora/internal/app/outboundsub"
+	"github.com/norapanel/nora/internal/app/searchmatch"
 )
 
 const (

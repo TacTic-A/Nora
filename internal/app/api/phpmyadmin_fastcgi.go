@@ -137,7 +137,7 @@ func phpMyAdminFastCGIParams(r *http.Request, scriptRel string, scriptPath strin
 	}
 	params := map[string]string{
 		"GATEWAY_INTERFACE": "CGI/1.1",
-		"SERVER_SOFTWARE":   "Rebecca",
+		"SERVER_SOFTWARE":   "Nora",
 		"REQUEST_METHOD":    r.Method,
 		"QUERY_STRING":      r.URL.RawQuery,
 		"REQUEST_URI":       r.URL.RequestURI(),
@@ -414,8 +414,8 @@ func rewritePHPMyAdminBody(body []byte, status phpMyAdminResponse, proxyBase str
 	upstreamBase := normalizePHPMyAdminPath(status.Path)
 	upstreamBaseNoSlash := strings.TrimRight(upstreamBase, "/")
 	proxyBaseNoSlash := strings.TrimRight(proxyBase, "/")
-	const proxyBasePlaceholder = "__REBECCA_PMA_PROXY_BASE__"
-	const proxyBaseNoSlashPlaceholder = "__REBECCA_PMA_PROXY_BASE_NO_SLASH__"
+	const proxyBasePlaceholder = "__NORA_PMA_PROXY_BASE__"
+	const proxyBaseNoSlashPlaceholder = "__NORA_PMA_PROXY_BASE_NO_SLASH__"
 	body = stripHTMLBlockContaining(body, "<script", "</script>", "cross_framing_protection.js")
 	body = stripHTMLBlockContaining(body, "<style", "</style>", "cfs-style")
 	body = bytes.ReplaceAll(body, []byte("http://127.0.0.1:"+strconv.Itoa(status.Port)+upstreamBase), []byte(proxyBasePlaceholder))

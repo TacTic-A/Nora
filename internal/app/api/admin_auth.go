@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	"github.com/rebeccapanel/rebecca/internal/app/logging"
-	telegramapp "github.com/rebeccapanel/rebecca/internal/app/telegram"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	"github.com/norapanel/nora/internal/app/logging"
+	telegramapp "github.com/norapanel/nora/internal/app/telegram"
 )
 
 type adminLoginRequest struct {

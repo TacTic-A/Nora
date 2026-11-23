@@ -1,6 +1,6 @@
 # Backup
 
-This package implements Rebecca backup export and import.
+This package implements Nora backup export and import.
 
 It preserves the current `.rbbackup` format, including manifest validation,
 SQLite backup/restore, MySQL/MariaDB dump and restore paths, full backup file

@@ -96,8 +96,8 @@ func TestExternalAppFileManagerRejectsEscapedRoot(t *testing.T) {
 func TestValidateExternalAppPoolConfigLocksSecurityDirectives(t *testing.T) {
 	record := Record{
 		Template: "mirzabot", Domain: "bot.example.com", Runtime: "php", PHPVersion: "8.4",
-		Root: "/var/lib/rebecca/external-apps/apps/abcdef", SystemUser: "rbphp_abcdef",
-		Socket: "/run/php/rebecca-abcdef.sock",
+		Root: "/var/lib/nora/external-apps/apps/abcdef", SystemUser: "rbphp_abcdef",
+		Socket: "/run/php/nora-abcdef.sock",
 	}
 	config := externalAppPoolConfig(record, true)
 	valid := strings.Replace(config, "pm.max_children = 2", "pm.max_children = 4", 1)
@@ -126,7 +126,7 @@ func TestSafePHPConfigRecordUsesApplicationID(t *testing.T) {
 		Domain:     "bot.example.com",
 		Runtime:    "php",
 		PHPVersion: "8.4",
-		PoolConfig: "/etc/php/8.4/fpm/pool.d/rebecca-0123456789ab.conf",
+		PoolConfig: "/etc/php/8.4/fpm/pool.d/nora-0123456789ab.conf",
 		Service:    "php8.4-fpm",
 	}
 	manager := &Manager{apps: map[string]Record{record.ID: record}}

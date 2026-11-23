@@ -31,7 +31,7 @@ func LoadConfig() Config {
 		Addr:                 gatewayListenAddr(env),
 		TLSCertFile:          lookupEnv(env, "UVICORN_SSL_CERTFILE", ""),
 		TLSKeyFile:           lookupEnv(env, "UVICORN_SSL_KEYFILE", ""),
-		CertificateBase:      lookupEnv(env, "REBECCA_CERT_BASE", "/var/lib/rebecca/certificates"),
+		CertificateBase:      lookupEnv(env, "NORA_CERT_BASE", "/var/lib/nora/certificates"),
 		DashboardPath:        "/dashboard/",
 		ProxyProtocol:        proxyProtocol,
 		ProxyProtocolPolicy:  proxyProtocolPolicy,
@@ -41,7 +41,7 @@ func LoadConfig() Config {
 
 func parseProxyProtocolTrusted(env map[string]string) []string {
 	var trusted []string
-	for _, item := range strings.Split(lookupEnv(env, "REBECCA_PROXY_PROTOCOL_TRUSTED", ""), ",") {
+	for _, item := range strings.Split(lookupEnv(env, "NORA_PROXY_PROTOCOL_TRUSTED", ""), ",") {
 		if item = strings.TrimSpace(item); item != "" {
 			trusted = append(trusted, item)
 		}
@@ -53,8 +53,8 @@ func parseProxyProtocolTrusted(env map[string]string) []string {
 }
 
 func parseProxyProtocolConfig(env map[string]string) (bool, string) {
-	val := strings.ToLower(strings.TrimSpace(lookupEnv(env, "REBECCA_PROXY_PROTOCOL", lookupEnv(env, "PROXY_PROTOCOL", ""))))
-	policy := strings.ToLower(strings.TrimSpace(lookupEnv(env, "REBECCA_PROXY_PROTOCOL_POLICY", lookupEnv(env, "PROXY_PROTOCOL_POLICY", "use"))))
+	val := strings.ToLower(strings.TrimSpace(lookupEnv(env, "NORA_PROXY_PROTOCOL", lookupEnv(env, "PROXY_PROTOCOL", ""))))
+	policy := strings.ToLower(strings.TrimSpace(lookupEnv(env, "NORA_PROXY_PROTOCOL_POLICY", lookupEnv(env, "PROXY_PROTOCOL_POLICY", "use"))))
 	if policy == "" {
 		policy = "use"
 	}
@@ -71,7 +71,7 @@ func parseProxyProtocolConfig(env map[string]string) (bool, string) {
 }
 
 func gatewayListenAddr(env map[string]string) string {
-	if addr := lookupEnv(env, "REBECCA_GATEWAY_ADDR", ""); addr != "" {
+	if addr := lookupEnv(env, "NORA_GATEWAY_ADDR", ""); addr != "" {
 		return addr
 	}
 	host := lookupEnv(env, "UVICORN_HOST", "0.0.0.0")
@@ -122,7 +122,7 @@ func candidateEnvFiles() []string {
 	}
 
 	paths := []string{}
-	paths = add(paths, os.Getenv("REBECCA_ENV_FILE"))
+	paths = add(paths, os.Getenv("NORA_ENV_FILE"))
 	if exe, err := os.Executable(); err == nil {
 		dir := filepath.Dir(exe)
 		paths = add(paths, filepath.Join(dir, ".env"))

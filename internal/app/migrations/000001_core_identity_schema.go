@@ -5,7 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/pressly/goose/v3"
-	"github.com/rebeccapanel/rebecca/internal/app/node"
+	"github.com/norapanel/nora/internal/app/node"
 )
 
 func init() {
@@ -216,7 +216,7 @@ func seedTLS(ctx context.Context, tx *sql.Tx) error {
 	if exists > 0 {
 		return nil
 	}
-	cert, key, err := node.GenerateCertificate("Rebecca Panel")
+	cert, key, err := node.GenerateCertificate("Nora Panel")
 	if err != nil {
 		return err
 	}

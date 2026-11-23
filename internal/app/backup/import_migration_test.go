@@ -1,3 +1,5 @@
+//go:build cgo
+
 package backup
 
 import (
@@ -6,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/rebeccapanel/rebecca/internal/app/migrations"
+	"github.com/norapanel/nora/internal/app/migrations"
 )
 
 func TestImportOldBackupIsMigratedToCurrentSchema(t *testing.T) {

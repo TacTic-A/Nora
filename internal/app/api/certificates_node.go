@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"strings"
 
-	certificateapp "github.com/rebeccapanel/rebecca/internal/app/certificates"
-	"github.com/rebeccapanel/rebecca/internal/app/nodecontroller"
+	certificateapp "github.com/norapanel/nora/internal/app/certificates"
+	"github.com/norapanel/nora/internal/app/nodecontroller"
 )
 
 func (s *Server) handleCertificateIssueNode(w http.ResponseWriter, r *http.Request) {

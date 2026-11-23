@@ -9,7 +9,7 @@ const ServiceWorkerScript = `self.addEventListener('install', function () { self
 self.addEventListener('activate', function (event) { event.waitUntil(self.clients.claim()); });
 self.addEventListener('push', function (event) {
   var data = {};
-  try { data = event.data ? event.data.json() : {}; } catch (error) { data = { title: 'Rebecca', body: event.data ? event.data.text() : '' }; }
+  try { data = event.data ? event.data.json() : {}; } catch (error) { data = { title: 'Nora', body: event.data ? event.data.text() : '' }; }
   var options = {
     body: data.body || '',
     icon: data.icon || '/statics/favicon/android-chrome-192x192.png',
@@ -18,7 +18,7 @@ self.addEventListener('push', function (event) {
     renotify: !!data.tag,
     data: { url: data.url || '/' }
   };
-  event.waitUntil(self.registration.showNotification(data.title || 'Rebecca', options));
+  event.waitUntil(self.registration.showNotification(data.title || 'Nora', options));
 });
 self.addEventListener('notificationclick', function (event) {
   event.notification.close();
@@ -53,8 +53,8 @@ type manifest struct {
 func ManifestJSON(basename string) ([]byte, error) {
 	basename = strings.TrimRight(cleanPageURL(basename), "/")
 	return json.Marshal(manifest{
-		Name:            "Rebecca",
-		ShortName:       "Rebecca",
+		Name:            "Nora",
+		ShortName:       "Nora",
 		StartURL:        basename + "/",
 		Scope:           basename + "/",
 		Display:         "standalone",

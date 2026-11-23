@@ -3,7 +3,7 @@ package xrayconfig
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
 	"net/netip"
 	"strings"
 )
@@ -976,23 +976,23 @@ func RuntimeTunnelTag(tag string) string {
 
 func RuntimeTunnelTagForProtocol(protocol string, tag string) string {
 	tag = strings.TrimSpace(tag)
-	prefix := "__rebecca_ov_tunnel"
+	prefix := "__nora_ov_tunnel"
 	if normalizeProxyProtocol(protocol) == WGProtocol {
-		prefix = "__rebecca_wg_tunnel"
+		prefix = "__nora_wg_tunnel"
 	} else if normalizeProxyProtocol(protocol) == L2TPProtocol {
-		prefix = "__rebecca_l2tp_tunnel"
+		prefix = "__nora_l2tp_tunnel"
 	} else if normalizeProxyProtocol(protocol) == PPTPProtocol {
-		prefix = "__rebecca_pptp_tunnel"
+		prefix = "__nora_pptp_tunnel"
 	} else if normalizeProxyProtocol(protocol) == IKEv2Protocol {
-		prefix = "__rebecca_ikev2_tunnel"
+		prefix = "__nora_ikev2_tunnel"
 	} else if normalizeProxyProtocol(protocol) == AnyConnectProtocol {
-		prefix = "__rebecca_anyconnect_tunnel"
+		prefix = "__nora_anyconnect_tunnel"
 	} else if normalizeProxyProtocol(protocol) == SSTPProtocol {
-		prefix = "__rebecca_sstp_tunnel"
+		prefix = "__nora_sstp_tunnel"
 	} else if normalizeProxyProtocol(protocol) == AWGProtocol {
-		prefix = "__rebecca_awg_tunnel"
+		prefix = "__nora_awg_tunnel"
 	} else if normalizeProxyProtocol(protocol) == GREProtocol {
-		prefix = "__rebecca_gre_tunnel"
+		prefix = "__nora_gre_tunnel"
 	}
 	if tag == "" {
 		return prefix

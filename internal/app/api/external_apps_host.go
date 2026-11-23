@@ -15,7 +15,7 @@ import (
 	"strconv"
 	"strings"
 
-	externalapps "github.com/rebeccapanel/rebecca/internal/app/externalapps"
+	externalapps "github.com/norapanel/nora/internal/app/externalapps"
 )
 
 const maxExternalAppResponseBytes = 64 << 20
@@ -303,7 +303,7 @@ func externalAppFastCGIParams(r *http.Request, record externalapps.Record, scrip
 	}
 	params := map[string]string{
 		"GATEWAY_INTERFACE": "CGI/1.1",
-		"SERVER_SOFTWARE":   "Rebecca",
+		"SERVER_SOFTWARE":   "Nora",
 		"REQUEST_METHOD":    r.Method,
 		"QUERY_STRING":      r.URL.RawQuery,
 		"REQUEST_URI":       r.URL.RequestURI(),

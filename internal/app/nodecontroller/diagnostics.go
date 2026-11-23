@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/system"
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
+	"github.com/norapanel/nora/internal/app/system"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
 )
 
 type runtimeDiagnosticSnapshot struct {

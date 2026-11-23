@@ -8,10 +8,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rebeccapanel/rebecca/internal/app/logging"
-	userread "github.com/rebeccapanel/rebecca/internal/app/user"
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
-	nodev1 "github.com/rebeccapanel/rebecca/internal/proto/node/v1"
+	"github.com/norapanel/nora/internal/app/logging"
+	userread "github.com/norapanel/nora/internal/app/user"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
+	nodev1 "github.com/norapanel/nora/internal/proto/node/v1"
 )
 
 var proxyProtocols = map[string]struct{}{

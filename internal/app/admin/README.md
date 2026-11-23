@@ -1,6 +1,6 @@
 # Admin
 
-This package owns Rebecca's administrator identity model.
+This package owns Nora's administrator identity model.
 
 It handles admin password hashing and verification, JWT creation and validation,
 API key validation, role and permission normalization, active/disabled/deleted

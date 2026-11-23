@@ -3,7 +3,7 @@ package externalapps
 import (
 	"context"
 
-	"github.com/rebeccapanel/rebecca/internal/app/logging"
+	"github.com/norapanel/nora/internal/app/logging"
 )
 
 func (m *Manager) RepairTelegramBots(ctx context.Context) {

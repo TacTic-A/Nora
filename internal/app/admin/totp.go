@@ -26,10 +26,10 @@ func GenerateTOTPSecret() (string, error) {
 }
 
 func TOTPURI(account string, secret string) string {
-	label := url.PathEscape("Rebecca:" + account)
+	label := url.PathEscape("Nora:" + account)
 	values := url.Values{
 		"secret":    {secret},
-		"issuer":    {"Rebecca"},
+		"issuer":    {"Nora"},
 		"algorithm": {"SHA1"},
 		"digits":    {"6"},
 		"period":    {"30"},
@@ -114,6 +114,6 @@ func DecryptTOTPSecret(value string, keyMaterial string) (string, error) {
 }
 
 func totpEncryptionKey(material string) []byte {
-	sum := sha256.Sum256([]byte("rebecca-admin-totp-v1:" + material))
+	sum := sha256.Sum256([]byte("nora-admin-totp-v1:" + material))
 	return sum[:]
 }

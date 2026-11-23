@@ -16,11 +16,11 @@ import (
 	"strings"
 	"time"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	"github.com/rebeccapanel/rebecca/internal/app/labels"
-	telegramapp "github.com/rebeccapanel/rebecca/internal/app/telegram"
-	webhookapp "github.com/rebeccapanel/rebecca/internal/app/webhook"
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	"github.com/norapanel/nora/internal/app/labels"
+	telegramapp "github.com/norapanel/nora/internal/app/telegram"
+	webhookapp "github.com/norapanel/nora/internal/app/webhook"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
 )
 
 const (

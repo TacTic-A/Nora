@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/logging"
+	"github.com/norapanel/nora/internal/app/logging"
 )
 
 const (

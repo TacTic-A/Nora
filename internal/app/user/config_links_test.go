@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
-	outboundsubapp "github.com/rebeccapanel/rebecca/internal/app/outboundsub"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
+	outboundsubapp "github.com/norapanel/nora/internal/app/outboundsub"
 )
 
 func assertSIP002UserInfo(t *testing.T, link, want string) {
@@ -273,7 +273,7 @@ func TestBuildConfigLinksReplacesServerIPPlaceholder(t *testing.T) {
 		[]Host{{
 			ID:         1,
 			InboundTag: "Shadowsocks TCP",
-			Remark:     "Rebecca ({username})",
+			Remark:     "Nora ({username})",
 			Address:    "{SERVER_IP}",
 			Security:   "inbound_default",
 			ServiceIDs: []int64{1},

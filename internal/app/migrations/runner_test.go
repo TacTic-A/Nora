@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	platformdb "github.com/rebeccapanel/rebecca/internal/platform/db"
+	platformdb "github.com/norapanel/nora/internal/platform/db"
 
 	_ "github.com/mattn/go-sqlite3"
 	_ "modernc.org/sqlite"
@@ -131,9 +131,9 @@ func TestRunMigrationsFreshSQLiteAndDoubleRun(t *testing.T) {
 }
 
 func TestRunMigrationsExternalDatabase(t *testing.T) {
-	url := strings.TrimSpace(os.Getenv("REBECCA_TEST_DATABASE_URL"))
+	url := strings.TrimSpace(os.Getenv("NORA_TEST_DATABASE_URL"))
 	if url == "" {
-		t.Skip("REBECCA_TEST_DATABASE_URL is not set")
+		t.Skip("NORA_TEST_DATABASE_URL is not set")
 	}
 	ctx := context.Background()
 	pool, err := platformdb.Open(url)

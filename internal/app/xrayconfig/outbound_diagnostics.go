@@ -2,7 +2,7 @@ package xrayconfig
 
 import (
 	"fmt"
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
 	"strings"
 	"time"
 )
@@ -10,7 +10,7 @@ import (
 // ManagedOutboundProvider preserves the legacy name-based classification.
 // Diagnostics never rename outbounds or install services.
 func ManagedOutboundProvider(outbound map[string]any) string {
-	provider := strings.ToLower(strings.TrimSpace(jsonvalue.String(outbound["rebecca_proxy"])))
+	provider := strings.ToLower(strings.TrimSpace(jsonvalue.String(outbound["nora_proxy"])))
 	if provider == "tor" || provider == "windscribe" || provider == "psiphon" {
 		return provider
 	}
@@ -75,7 +75,7 @@ func outboundIssues(target string, config map[string]any) []ConfigIssue {
 			}
 			windscribe = tag
 		}
-		location := strings.ToLower(strings.TrimSpace(jsonvalue.String(outbound["rebecca_proxy_location"])))
+		location := strings.ToLower(strings.TrimSpace(jsonvalue.String(outbound["nora_proxy_location"])))
 		if location == "" {
 			parts := strings.Split(strings.ToLower(strings.TrimSpace(tag)), "-")
 			if len(parts) > 1 && len(parts[len(parts)-1]) == 2 {

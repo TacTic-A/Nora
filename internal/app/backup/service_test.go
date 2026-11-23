@@ -89,9 +89,9 @@ func TestExportImportFullBackupFileRoots(t *testing.T) {
 	}
 
 	service := NewService(db, "sqlite", sqliteURL(dbPath), WithFileRoots([]FileRoot{
-		{ArchiveName: "etc_rebecca", Path: configRoot},
-		{ArchiveName: "var_lib_rebecca", Path: dataRoot},
-		{ArchiveName: "rebecca_env", Path: envFile},
+		{ArchiveName: "etc_nora", Path: configRoot},
+		{ArchiveName: "var_lib_nora", Path: dataRoot},
+		{ArchiveName: "nora_env", Path: envFile},
 	}))
 	exported, err := service.Export(ctx, ScopeFull)
 	if err != nil {
@@ -130,12 +130,12 @@ func TestExportImportFullBackupFileRoots(t *testing.T) {
 }
 
 func TestMySQLBackupURLParsing(t *testing.T) {
-	service := NewService(nil, "mysql", "mysql+pymysql://rebecca:p%40ss%21%23frag%3Deq%5Cslash@127.0.0.1:3306/rebecca")
+	service := NewService(nil, "mysql", "mysql+pymysql://nora:p%40ss%21%23frag%3Deq%5Cslash@127.0.0.1:3306/nora")
 	name, err := service.mysqlDatabaseName()
 	if err != nil {
 		t.Fatal(err)
 	}
-	if name != "rebecca" {
+	if name != "nora" {
 		t.Fatalf("unexpected database name: %s", name)
 	}
 	dir := t.TempDir()
@@ -149,7 +149,7 @@ func TestMySQLBackupURLParsing(t *testing.T) {
 	}
 	text := string(content)
 	for _, expected := range []string{
-		`user="rebecca"`,
+		`user="nora"`,
 		`password="p@ss!#frag=eq\\slash"`,
 		`host="127.0.0.1"`,
 		`port="3306"`,
@@ -166,10 +166,10 @@ func TestFilterMySQLDumpForDatabase(t *testing.T) {
 	input := filepath.Join(dir, "in.sql")
 	output := filepath.Join(dir, "out.sql")
 	content := strings.Join([]string{
-		"-- Current Database: `rebecca`",
-		"/*!40000 DROP DATABASE IF EXISTS `rebecca`*/;",
-		"CREATE DATABASE /*!32312 IF NOT EXISTS*/ `rebecca` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;",
-		"USE `rebecca`;",
+		"-- Current Database: `nora`",
+		"/*!40000 DROP DATABASE IF EXISTS `nora`*/;",
+		"CREATE DATABASE /*!32312 IF NOT EXISTS*/ `nora` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;",
+		"USE `nora`;",
 		"CREATE TABLE `users` (`id` int);",
 		"INSERT INTO `users` VALUES (1);",
 	}, "\n")
@@ -184,7 +184,7 @@ func TestFilterMySQLDumpForDatabase(t *testing.T) {
 		t.Fatal(err)
 	}
 	filtered := string(filteredBytes)
-	for _, forbidden := range []string{"DROP DATABASE", "CREATE DATABASE", "USE `rebecca`"} {
+	for _, forbidden := range []string{"DROP DATABASE", "CREATE DATABASE", "USE `nora`"} {
 		if strings.Contains(filtered, forbidden) {
 			t.Fatalf("filtered dump still contains %q: %s", forbidden, filtered)
 		}

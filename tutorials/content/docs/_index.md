@@ -1,7 +1,7 @@
 ---
 title: "Panel overview"
 weight: 1
-description: "Rebecca panel to create, manage, and troubleshoot users, admins, and nodes. Main areas: Dashboard, Users, Admins, Services, Hosts, Nodes, Integrations, My Account."
+description: "Nora panel to create, manage, and troubleshoot users, admins, and nodes. Main areas: Dashboard, Users, Admins, Services, Hosts, Nodes, Integrations, My Account."
 cascade:
   params:
     noindex: true
@@ -9,7 +9,7 @@ cascade:
 
 This page is a quick walk-through so you can ship accounts fast without touching the backend.
 
-Rebecca panel to create, manage, and troubleshoot users, admins, and nodes. Main areas: Dashboard, Users, Admins, Services, Hosts, Nodes, Integrations, My Account.
+Nora panel to create, manage, and troubleshoot users, admins, and nodes. Main areas: Dashboard, Users, Admins, Services, Hosts, Nodes, Integrations, My Account.
 
 - Create/renew users, statuses (active/on hold/limited/expired), links/QR, Auto Renew.
 - Admins with roles and permissions, data limit and user limit.
@@ -19,8 +19,8 @@ Rebecca panel to create, manage, and troubleshoot users, admins, and nodes. Main
 - My Account: API keys, password change, daily and per-node usage charts.
 - Open source—if it helps you, please star the GitHub repo.
 
-- [GitHub](https://github.com/rebeccapanel/rebecca)
-- [Telegram](https://t.me/rebeccapanel)
+- [GitHub](https://github.com/norapanel/nora)
+- [Telegram](https://t.me/norapanel)
 
 ## Start with a task
 

@@ -198,7 +198,7 @@ const defaultRuntimeSettings: RuntimeSettingsResponse = {
 	phpmyadmin_port: 8080,
 	phpmyadmin_path: "/phpmyadmin/",
 	phpmyadmin_public_url: "",
-	phpmyadmin_login_mode: "rebecca",
+	phpmyadmin_login_mode: "nora",
 	phpmyadmin_username: "",
 	phpmyadmin_password: "",
 };
@@ -1929,11 +1929,11 @@ export const IntegrationSettingsPage = () => {
 											(phpMyAdminEnableMutation.isPending || phpMyAdminDisableMutation.isPending) &&
 												"pointer-events-none opacity-60",
 										)}>
-										<SegmentedControl<"rebecca" | "custom">
+										<SegmentedControl<"nora" | "custom">
 											label={t("phpmyadmin.loginMode")}
 											value={runtimeSettingsForm.phpmyadmin_login_mode}
 											options={[
-												{ value: "rebecca", label: t("phpmyadmin.loginModeRebecca") },
+												{ value: "nora", label: t("phpmyadmin.loginModeNora") },
 												{ value: "custom", label: t("phpmyadmin.loginModeCustom") },
 											]}
 											onChange={(next) =>
@@ -2312,7 +2312,7 @@ export const IntegrationSettingsPage = () => {
 									</FormField>
 									<FormField label={t("settings.subscriptions.customTemplatesDir")} description={t("settings.subscriptions.customTemplatesDirHint")}>
 										<UiInput
-											placeholder="/var/lib/rebecca/templates"
+											placeholder="/var/lib/nora/templates"
 											{...subscriptionRegister("custom_templates_directory")}
 										/>
 									</FormField>

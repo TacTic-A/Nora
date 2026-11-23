@@ -9,9 +9,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	settingsapp "github.com/rebeccapanel/rebecca/internal/app/settings"
-	telegramapp "github.com/rebeccapanel/rebecca/internal/app/telegram"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	settingsapp "github.com/norapanel/nora/internal/app/settings"
+	telegramapp "github.com/norapanel/nora/internal/app/telegram"
 )
 
 func createSettingsTables(t *testing.T, db *sql.DB) {
@@ -34,7 +34,7 @@ func createSettingsTables(t *testing.T, db *sql.DB) {
 			phpmyadmin_port INTEGER NOT NULL DEFAULT 8080,
 			phpmyadmin_path TEXT NOT NULL DEFAULT '/phpmyadmin/',
 			phpmyadmin_public_url TEXT NOT NULL DEFAULT '',
-			phpmyadmin_login_mode TEXT NOT NULL DEFAULT 'rebecca',
+			phpmyadmin_login_mode TEXT NOT NULL DEFAULT 'nora',
 			phpmyadmin_username TEXT NOT NULL DEFAULT '',
 			phpmyadmin_password TEXT NOT NULL DEFAULT '',
 			created_at DATETIME NULL,

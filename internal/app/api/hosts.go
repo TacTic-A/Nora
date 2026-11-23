@@ -21,10 +21,10 @@ import (
 	"strings"
 	"time"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	"github.com/rebeccapanel/rebecca/internal/app/labels"
-	userapp "github.com/rebeccapanel/rebecca/internal/app/user"
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	"github.com/norapanel/nora/internal/app/labels"
+	userapp "github.com/norapanel/nora/internal/app/user"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
 )
 
 var (
@@ -694,7 +694,7 @@ func ensureHostInboundRecordTx(ctx context.Context, tx *sql.Tx, tag string) erro
 		ctx,
 		`INSERT INTO hosts (remark, address, inbound_tag, security, alpn, fingerprint, is_disabled, mux_enable, random_user_agent, use_sni_as_host)
 		 VALUES (?, ?, ?, 'inbound_default', 'none', 'none', 0, 0, 0, 0)`,
-		"Rebecca ({USERNAME}) [{PROTOCOL} - {TRANSPORT}]",
+		"Nora ({USERNAME}) [{PROTOCOL} - {TRANSPORT}]",
 		"{SERVER_IP}",
 		tag,
 	)

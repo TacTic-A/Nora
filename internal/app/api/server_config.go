@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-const defaultSponsorManifestURL = "https://raw.githubusercontent.com/rebeccapanel/Rebecca/dev/sponsors/webdade/manifest.json"
+const defaultSponsorManifestURL = ""
 
 type Config struct {
 	Database                     string
@@ -63,36 +63,36 @@ func LoadConfig() (Config, error) {
 
 	cfg := Config{
 		Database:                     lookup("SQLALCHEMY_DATABASE_URL", "DATABASE_URL"),
-		CertificateBase:              lookup("REBECCA_CERT_BASE"),
-		CertbotBinary:                lookup("REBECCA_CERTBOT_BIN"),
-		ExternalAppsBase:             lookup("REBECCA_EXTERNAL_APPS_BASE"),
-		SponsorManifestURL:           firstNonEmpty(lookup("REBECCA_SPONSOR_MANIFEST_URL"), defaultSponsorManifestURL),
-		SponsorCacheDir:              firstNonEmpty(lookup("REBECCA_SPONSOR_CACHE_DIR"), filepath.Join(firstNonEmpty(lookup("REBECCA_DATA_DIR"), "/var/lib/rebecca"), "sponsor-cache")),
+		CertificateBase:              lookup("NORA_CERT_BASE"),
+		CertbotBinary:                lookup("NORA_CERTBOT_BIN"),
+		ExternalAppsBase:             lookup("NORA_EXTERNAL_APPS_BASE"),
+		SponsorManifestURL:           lookup("NORA_SPONSOR_MANIFEST_URL", "NORA_SPONSOR_MANIFEST_URL"),
+		SponsorCacheDir:              firstNonEmpty(lookup("NORA_SPONSOR_CACHE_DIR", "NORA_SPONSOR_CACHE_DIR"), filepath.Join(firstNonEmpty(lookup("NORA_DATA_DIR", "NORA_DATA_DIR"), "/var/lib/nora"), "sponsor-cache")),
 		MySQLRootPassword:            lookup("MYSQL_ROOT_PASSWORD"),
-		NodeOperationsPollInterval:   lookup("REBECCA_NODE_OPERATIONS_POLL_INTERVAL"),
-		NodeUsageCollectionInterval:  lookup("REBECCA_NODE_USAGE_COLLECTION_INTERVAL"),
-		NodeUsageCollectionLimit:     parseIntDefault(lookup("REBECCA_NODE_USAGE_COLLECTION_LIMIT"), 0),
-		NodeUsageFlushInterval:       lookup("REBECCA_NODE_USAGE_FLUSH_INTERVAL"),
-		NodeUsageFlushBatchSize:      parseIntDefault(lookup("REBECCA_NODE_USAGE_FLUSH_BATCH_SIZE"), 2000),
+		NodeOperationsPollInterval:   lookup("NORA_NODE_OPERATIONS_POLL_INTERVAL"),
+		NodeUsageCollectionInterval:  lookup("NORA_NODE_USAGE_COLLECTION_INTERVAL"),
+		NodeUsageCollectionLimit:     parseIntDefault(lookup("NORA_NODE_USAGE_COLLECTION_LIMIT"), 0),
+		NodeUsageFlushInterval:       lookup("NORA_NODE_USAGE_FLUSH_INTERVAL"),
+		NodeUsageFlushBatchSize:      parseIntDefault(lookup("NORA_NODE_USAGE_FLUSH_BATCH_SIZE"), 2000),
 		RecordNodeUsage:              true,
 		RecordNodeUserUsages:         true,
-		AdminLifecycleInterval:       lookup("REBECCA_ADMIN_LIFECYCLE_INTERVAL"),
-		UserLifecycleInterval:        firstNonEmpty(lookup("REBECCA_USER_LIFECYCLE_INTERVAL"), secondsEnv(lookup("JOB_REVIEW_USERS_INTERVAL"))),
-		UserLifecycleBatchSize:       parseIntDefault(lookup("REBECCA_USER_LIFECYCLE_BATCH_SIZE", "JOB_REVIEW_USERS_BATCH_SIZE"), 500),
-		UserUsageResetInterval:       lookup("REBECCA_USER_USAGE_RESET_INTERVAL"),
-		UserUsageResetBatchSize:      parseIntDefault(lookup("REBECCA_USER_USAGE_RESET_BATCH_SIZE"), 500),
-		UserAutodeleteInterval:       lookup("REBECCA_USER_AUTODELETE_INTERVAL"),
-		UserAutodeleteBatchSize:      parseIntDefault(lookup("REBECCA_USER_AUTODELETE_BATCH_SIZE"), 500),
+		AdminLifecycleInterval:       lookup("NORA_ADMIN_LIFECYCLE_INTERVAL"),
+		UserLifecycleInterval:        firstNonEmpty(lookup("NORA_USER_LIFECYCLE_INTERVAL"), secondsEnv(lookup("JOB_REVIEW_USERS_INTERVAL"))),
+		UserLifecycleBatchSize:       parseIntDefault(lookup("NORA_USER_LIFECYCLE_BATCH_SIZE", "JOB_REVIEW_USERS_BATCH_SIZE"), 500),
+		UserUsageResetInterval:       lookup("NORA_USER_USAGE_RESET_INTERVAL"),
+		UserUsageResetBatchSize:      parseIntDefault(lookup("NORA_USER_USAGE_RESET_BATCH_SIZE"), 500),
+		UserAutodeleteInterval:       lookup("NORA_USER_AUTODELETE_INTERVAL"),
+		UserAutodeleteBatchSize:      parseIntDefault(lookup("NORA_USER_AUTODELETE_BATCH_SIZE"), 500),
 		UsersAutodeleteDays:          parseIntDefault(lookup("USERS_AUTODELETE_DAYS"), -1),
 		UserAutodeleteIncludeLimited: parseBoolDefault(lookup("USER_AUTODELETE_INCLUDE_LIMITED_ACCOUNTS"), false),
 		JWTAccessTokenExpireMinutes:  parseIntDefault(lookup("JWT_ACCESS_TOKEN_EXPIRE_MINUTES"), 1440),
 		UsersListTimeoutSeconds:      parseFloatDefault(lookup("USERS_LIST_TIMEOUT_SECONDS"), 0),
-		TelegramAPIBase:              lookup("REBECCA_TELEGRAM_API_BASE"),
+		TelegramAPIBase:              lookup("NORA_TELEGRAM_API_BASE"),
 		WebhookAddresses:             splitWebhookAddresses(lookup("WEBHOOK_ADDRESS")),
 		WebhookSecret:                lookup("WEBHOOK_SECRET"),
-		WebhookSendInterval:          firstNonEmpty(lookup("REBECCA_WEBHOOK_SEND_INTERVAL"), secondsEnv(lookup("JOB_SEND_NOTIFICATIONS_INTERVAL"))),
+		WebhookSendInterval:          firstNonEmpty(lookup("NORA_WEBHOOK_SEND_INTERVAL"), secondsEnv(lookup("JOB_SEND_NOTIFICATIONS_INTERVAL"))),
 		WebhookMaxRetries:            parseIntDefault(lookup("NUMBER_OF_RECURRENT_NOTIFICATIONS"), 3),
-		WebhookRetryInterval:         firstNonEmpty(lookup("REBECCA_WEBHOOK_RETRY_INTERVAL"), secondsEnv(lookup("RECURRENT_NOTIFICATIONS_TIMEOUT"))),
+		WebhookRetryInterval:         firstNonEmpty(lookup("NORA_WEBHOOK_RETRY_INTERVAL"), secondsEnv(lookup("RECURRENT_NOTIFICATIONS_TIMEOUT"))),
 	}
 	if cfg.Database == "" {
 		return Config{}, fmt.Errorf("SQLALCHEMY_DATABASE_URL is required")
@@ -204,7 +204,7 @@ func candidateEnvFiles() []string {
 	}
 
 	paths := []string{}
-	paths = add(paths, os.Getenv("REBECCA_ENV_FILE"))
+	paths = add(paths, os.Getenv("NORA_ENV_FILE"))
 	if exe, err := os.Executable(); err == nil {
 		dir := filepath.Dir(exe)
 		paths = add(paths, filepath.Join(dir, ".env"))

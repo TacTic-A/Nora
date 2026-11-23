@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rebeccapanel/rebecca/internal/app/online"
+	"github.com/norapanel/nora/internal/app/online"
 )
 
 type Repository struct {

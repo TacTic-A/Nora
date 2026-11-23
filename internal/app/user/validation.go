@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/rebeccapanel/rebecca/internal/app/labels"
+	"github.com/norapanel/nora/internal/app/labels"
 )
 
 const UsernameValidationMessage = "Username only can be 3 to 32 characters and contain a-z, 0-9, underscores, hyphens, dots, or @."

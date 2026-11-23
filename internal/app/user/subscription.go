@@ -17,10 +17,10 @@ import (
 	"time"
 
 	"github.com/flosch/pongo2/v6"
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
-	outboundsubapp "github.com/rebeccapanel/rebecca/internal/app/outboundsub"
-	"github.com/rebeccapanel/rebecca/internal/app/usage"
-	"github.com/rebeccapanel/rebecca/internal/app/xrayconfig"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
+	outboundsubapp "github.com/norapanel/nora/internal/app/outboundsub"
+	"github.com/norapanel/nora/internal/app/usage"
+	"github.com/norapanel/nora/internal/app/xrayconfig"
 )
 
 const subscriptionDialectShadowrocket = "shadowrocket"

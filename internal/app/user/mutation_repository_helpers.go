@@ -13,8 +13,8 @@ import (
 	"time"
 
 	"github.com/go-sql-driver/mysql"
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
 )
 
 func rollbackQuiet(tx *sql.Tx) {

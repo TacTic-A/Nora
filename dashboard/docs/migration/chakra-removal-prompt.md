@@ -1,9 +1,9 @@
 # Chakra → Tailwind/shadcn migration: handoff spec
 
 Read this file completely before touching code. It is the contract for porting the
-remaining Chakra UI surface of the Rebecca dashboard to Tailwind v4 + shadcn/ui.
+remaining Chakra UI surface of the Nora dashboard to Tailwind v4 + shadcn/ui.
 
-Target repo: `rebecca-new-dashboard/dashboard` (the **legacy** dashboard, Vite 3 +
+Target repo: `nora-new-dashboard/dashboard` (the **legacy** dashboard, Vite 3 +
 React 18). Do **not** touch `dashboard-next/`; it is a separate app.
 
 Branch: work on a branch off `refactor/legacy-tailwind`. Never push.
@@ -34,7 +34,7 @@ Branch: work on a branch off `refactor/legacy-tailwind`. Never push.
 ## 2. Commands
 
 ```bash
-cd rebecca-new-dashboard/dashboard
+cd nora-new-dashboard/dashboard
 
 npm run dev                 # dev server, reads VITE_BASE_API from .env.local
 VITE_BASE_API=https://roverloom.com/api npx vite --port 3000   # real backend
@@ -287,7 +287,7 @@ tail of ~60 small modals (`DnsModal`, `WarpModal`, `NordVPNModal`, …).
 
 ## 9. Copy-paste prompt for the next AI (Batch A)
 
-> You are continuing a UI migration in `/home/pouria/project/rebeca-panel/rebecca-new-dashboard/dashboard`,
+> You are continuing a UI migration in `/home/pouria/project/rebeca-panel/nora-new-dashboard/dashboard`,
 > a Vite 3 + React 18 + TypeScript app that is being ported from Chakra UI v2 to
 > Tailwind v4 + shadcn/ui. Read `docs/migration/chakra-removal-prompt.md` first;
 > it contains the token map, the component map, the reference implementations and

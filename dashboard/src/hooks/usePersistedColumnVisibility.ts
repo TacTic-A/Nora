@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-const PREFIX = "rebecca-columns-";
+const PREFIX = "nora-columns-";
 
 const read = (key: string): Record<string, boolean> => {
 	try {

@@ -25,13 +25,13 @@ import (
 	"sync"
 	"time"
 
-	certificateapp "github.com/rebeccapanel/rebecca/internal/app/certificates"
+	certificateapp "github.com/norapanel/nora/internal/app/certificates"
 )
 
 const (
-	defaultBaseDir              = "/var/lib/rebecca/external-apps"
-	legacyBaseDir               = "/var/lib/rebecca/php-apps"
-	externalAppFileAccessRoot   = "/var/lib/rebecca"
+	defaultBaseDir              = "/var/lib/nora/external-apps"
+	legacyBaseDir               = "/var/lib/nora/php-apps"
+	externalAppFileAccessRoot   = "/var/lib/nora"
 	mirzaBotRepositoryURL       = "https://github.com/mahdiMGF2/mirzabot"
 	mirzaBotAPIBaseURL          = "https://api.github.com/repos/mahdiMGF2/mirzabot"
 	mirzaBotArchiveBaseURL      = "https://codeload.github.com/mahdiMGF2/mirzabot"
@@ -44,7 +44,7 @@ const (
 	defaultRequestBodyLimitMB   = 32
 	defaultStaticCacheSeconds   = 3600
 	maxStaticCacheSeconds       = 365 * 24 * 60 * 60
-	externalAppsSQLiteDetail    = "External application hosting requires MySQL or MariaDB and is disabled when Rebecca uses SQLite."
+	externalAppsSQLiteDetail    = "External application hosting requires MySQL or MariaDB and is disabled when Nora uses SQLite."
 )
 
 type Config struct {
@@ -278,7 +278,7 @@ func (m *Manager) reload() {
 			if record.Runtime == "php" && (!pathWithin("/run/php", record.Socket) || !pathWithin("/etc/php", record.PoolConfig)) {
 				continue
 			}
-			if record.Runtime == "node" && (record.Port < 20000 || record.Port > 39999 || !pathWithin("/etc/systemd/system", record.UnitConfig) || !strings.HasPrefix(record.Service, "rebecca-node-")) {
+			if record.Runtime == "node" && (record.Port < 20000 || record.Port > 39999 || !pathWithin("/etc/systemd/system", record.UnitConfig) || !strings.HasPrefix(record.Service, "nora-node-")) {
 				continue
 			}
 			if record.CronConfig != "" && !pathWithin("/etc/cron.d", record.CronConfig) {
@@ -601,7 +601,7 @@ func (m *Manager) hostingSupported() (bool, string) {
 	if m.sqliteDisabled() {
 		return false, externalAppsSQLiteDetail
 	}
-	mode, err := os.ReadFile("/opt/rebecca/.install-mode")
+	mode, err := os.ReadFile("/opt/nora/.install-mode")
 	if err != nil || strings.TrimSpace(string(mode)) != "binary" {
 		return false, "External application hosting is available only in binary installations."
 	}
@@ -614,7 +614,7 @@ func (m *Manager) mirzaSupported() (bool, string) {
 	}
 	credentials, err := parseDatabaseCredentials(m.databaseURL)
 	if err != nil || !isLocalDatabaseHost(credentials.Host) || credentials.Port != "3306" {
-		return false, "Telegram bot hosting requires Rebecca to use the local MySQL or MariaDB service on port 3306."
+		return false, "Telegram bot hosting requires Nora to use the local MySQL or MariaDB service on port 3306."
 	}
 	return true, ""
 }
@@ -688,7 +688,7 @@ func (m *Manager) installArchive(ctx context.Context, request ArchiveInstallRequ
 		}
 		credentials, err := parseDatabaseCredentials(m.databaseURL)
 		if err != nil || !isLocalDatabaseHost(credentials.Host) || credentials.Port != "3306" {
-			return PublicRecord{}, errors.New("managed application databases require Rebecca to use the local MySQL or MariaDB service on port 3306")
+			return PublicRecord{}, errors.New("managed application databases require Nora to use the local MySQL or MariaDB service on port 3306")
 		}
 		if err := m.ensureExternalAppDatabaseFree(ctx, request.Database, request.DatabaseUser); err != nil {
 			return PublicRecord{}, err
@@ -801,8 +801,8 @@ func (m *Manager) installArchive(ctx context.Context, request ArchiveInstallRequ
 		}
 		record.PHPVersion = phpVersion
 		record.SystemUser = "rbphp_" + suffix
-		record.Socket = filepath.Join("/run/php", "rebecca-"+suffix+".sock")
-		record.PoolConfig = filepath.Join("/etc/php", phpVersion, "fpm", "pool.d", "rebecca-"+suffix+".conf")
+		record.Socket = filepath.Join("/run/php", "nora-"+suffix+".sock")
+		record.PoolConfig = filepath.Join("/etc/php", phpVersion, "fpm", "pool.d", "nora-"+suffix+".conf")
 		record.Service = "php" + phpVersion + "-fpm"
 		if err := ensureExternalAppRuntimeFree(ctx, record); err != nil {
 			return PublicRecord{}, err
@@ -817,7 +817,7 @@ func (m *Manager) installArchive(ctx context.Context, request ArchiveInstallRequ
 		}
 		record.SystemUser = "rbnode_" + suffix
 		record.Port = externalAppNodePort(suffix)
-		record.Service = "rebecca-node-" + suffix + ".service"
+		record.Service = "nora-node-" + suffix + ".service"
 		record.UnitConfig = filepath.Join("/etc/systemd/system", record.Service)
 		if err := ensureExternalAppRuntimeFree(ctx, record); err != nil {
 			return PublicRecord{}, err
@@ -984,9 +984,9 @@ func (m *Manager) installTelegramBot(ctx context.Context, request InstallRequest
 		BotUsername:  botUsername,
 		IndexFile:    "index.php",
 		Root:         filepath.Join(m.appsDir(), suffix),
-		Socket:       filepath.Join("/run/php", "rebecca-"+suffix+".sock"),
-		PoolConfig:   filepath.Join("/etc/php", phpVersion, "fpm", "pool.d", "rebecca-"+suffix+".conf"),
-		CronConfig:   filepath.Join("/etc/cron.d", "rebecca-php-"+suffix),
+		Socket:       filepath.Join("/run/php", "nora-"+suffix+".sock"),
+		PoolConfig:   filepath.Join("/etc/php", phpVersion, "fpm", "pool.d", "nora-"+suffix+".conf"),
+		CronConfig:   filepath.Join("/etc/cron.d", "nora-php-"+suffix),
 		Service:      "php" + phpVersion + "-fpm",
 		SystemUser:   "rbphp_" + suffix,
 		Database:     spec.databasePrefix + suffix,
@@ -1104,7 +1104,7 @@ func (m *Manager) installTelegramBot(ctx context.Context, request InstallRequest
 	if err != nil {
 		return PublicRecord{}, err
 	}
-	if err := writeExternalAppSecretFile(record.Root, ".rebecca-cron-secret", cronSecret, uid, gid); err != nil {
+	if err := writeExternalAppSecretFile(record.Root, ".nora-cron-secret", cronSecret, uid, gid); err != nil {
 		return PublicRecord{}, err
 	}
 	if err := writeExternalAppPool(record, true); err != nil {
@@ -1186,7 +1186,7 @@ func (m *Manager) AuthorizeMirzaRequest(r *http.Request, record Record, rel stri
 		actual = strings.TrimSpace(r.Header.Get("X-Telegram-Bot-Api-Secret-Token"))
 		expected = secrets.WebhookSecret
 	} else if strings.HasPrefix(rel, "cronbot/") || cronEntry {
-		actual = strings.TrimSpace(r.Header.Get("X-Rebecca-Cron-Secret"))
+		actual = strings.TrimSpace(r.Header.Get("X-Nora-Cron-Secret"))
 		expected = secrets.CronSecret
 	} else {
 		return nil
@@ -1348,7 +1348,7 @@ func patchMirzaMiniApp(root, mountPath string) error {
 		if err != nil {
 			return err
 		}
-		const patchMarker = "/* rebecca-mirza-mounted */"
+		const patchMarker = "/* nora-mirza-mounted */"
 		if strings.Contains(string(content), patchMarker) {
 			return nil
 		}
@@ -1436,7 +1436,7 @@ func (m *Manager) updateMirzaBot(ctx context.Context, identifier string) (Public
 	if err := os.Chown(configPath, uid, gid); err != nil {
 		return PublicRecord{}, err
 	}
-	if err := writeExternalAppSecretFile(nextRoot, ".rebecca-cron-secret", storedSecrets.CronSecret, uid, gid); err != nil {
+	if err := writeExternalAppSecretFile(nextRoot, ".nora-cron-secret", storedSecrets.CronSecret, uid, gid); err != nil {
 		return PublicRecord{}, err
 	}
 	if err := installMirzaBotDependencies(ctx, nextRoot, record.SystemUser); err != nil {

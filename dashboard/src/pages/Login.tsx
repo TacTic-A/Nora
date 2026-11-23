@@ -655,7 +655,7 @@ export const Login: FC = () => {
 								/>
 							</div>
 							<span className="text-[18px] font-bold tracking-tight text-panel-text leading-none">
-								Rebecca
+								Nora
 							</span>
 						</div>
 

@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	adminapp "github.com/rebeccapanel/rebecca/internal/app/admin"
+	adminapp "github.com/norapanel/nora/internal/app/admin"
 )
 
 type contextKey string
@@ -44,7 +44,7 @@ func (s *Server) requireAdmin(next http.HandlerFunc) http.HandlerFunc {
 }
 
 func recentActionBatchID(r *http.Request) string {
-	value := strings.TrimSpace(r.Header.Get("X-Rebecca-Action-Batch"))
+	value := strings.TrimSpace(r.Header.Get("X-Nora-Action-Batch"))
 	if value == "" || len(value) > 64 {
 		return ""
 	}

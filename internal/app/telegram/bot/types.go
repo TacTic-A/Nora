@@ -1,4 +1,4 @@
-// Package bot implements the Rebecca Telegram admin bot using getUpdates
+// Package bot implements the Nora Telegram admin bot using getUpdates
 // long-polling, matching the transport of the legacy Python bot. It is
 // decoupled from the concrete Go services through the interfaces below; the API
 // layer wires real implementations so bot commands reuse the same Go services as

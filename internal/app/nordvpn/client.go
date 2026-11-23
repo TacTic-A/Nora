@@ -71,7 +71,7 @@ func (c Client) get(ctx context.Context, path string, basicToken string) (string
 		return "", err
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", "Rebecca Panel")
+	req.Header.Set("User-Agent", "Nora Panel")
 	if strings.TrimSpace(basicToken) != "" {
 		req.SetBasicAuth("token", strings.TrimSpace(basicToken))
 	}

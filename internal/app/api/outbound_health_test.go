@@ -8,7 +8,7 @@ func TestManagedOutboundProvider(t *testing.T) {
 		outbound map[string]any
 		want     string
 	}{
-		{name: "metadata", outbound: map[string]any{"rebecca_proxy": "tor"}, want: "tor"},
+		{name: "metadata", outbound: map[string]any{"nora_proxy": "tor"}, want: "tor"},
 		{name: "legacy tag", outbound: map[string]any{"tag": "psiphon-de"}, want: "psiphon"},
 		{name: "unmanaged", outbound: map[string]any{"tag": "direct"}},
 	} {

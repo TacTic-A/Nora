@@ -53,7 +53,7 @@ func (s *MaintenanceOperationStore) Start(action string, args []string, message 
 		Message:    message,
 		Running:    true,
 		Restarting: false,
-		Logs:       []string{"rebecca " + strings.Join(args, " ")},
+		Logs:       []string{"nora " + strings.Join(args, " ")},
 		StartedAt:  now,
 		UpdatedAt:  now,
 	}
@@ -172,7 +172,7 @@ func (s *MaintenanceOperationStore) Finish(id string, err error) {
 	}
 	if s.latest.Action == "update" || s.latest.Action == "restart" || s.latest.Action == "soft-reload" {
 		s.latest.Phase = "restarting"
-		s.latest.Message = "Rebecca is restarting. Waiting for the API to come back."
+		s.latest.Message = "Nora is restarting. Waiting for the API to come back."
 		s.latest.Restarting = true
 		s.latest.NeedsReload = true
 		s.setProgressAtLeastLocked(100)
@@ -232,18 +232,18 @@ func classifyMaintenanceLine(line string, action string) (string, string) {
 	lower := strings.ToLower(line)
 	switch {
 	case strings.Contains(lower, "download"):
-		return "downloading", "Downloading the new Rebecca image"
+		return "downloading", "Downloading the new Nora image"
 	case strings.Contains(lower, "extract") || strings.Contains(lower, "unpack"):
 		return "installing", "Extracting and installing the new binary"
 	case strings.Contains(lower, "install"):
-		return "installing", "Installing Rebecca files"
+		return "installing", "Installing Nora files"
 	case strings.Contains(lower, "migrat"):
 		return "migrating", "Running database migrations"
 	case strings.Contains(lower, "restart") || strings.Contains(lower, "stopping") || strings.Contains(lower, "started"):
-		return "restarting", "Rebecca is restarting"
+		return "restarting", "Nora is restarting"
 	case strings.Contains(lower, "selected") || strings.Contains(lower, "update"):
 		if action == "update" {
-			return "updating", "Updating Rebecca"
+			return "updating", "Updating Nora"
 		}
 	}
 	return "", ""

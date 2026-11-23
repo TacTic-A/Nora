@@ -17,7 +17,7 @@ const (
 	defaultDashboardPath                 = "/dashboard/"
 	defaultPHPMyAdminPort                = 8080
 	defaultPHPMyAdminPath                = "/phpmyadmin/"
-	defaultPHPMyAdminLoginMode           = "rebecca"
+	defaultPHPMyAdminLoginMode           = "nora"
 	defaultSubscriptionProfileTitle      = "Subscription"
 	defaultSubscriptionSupportURL        = "https://t.me/"
 	defaultSubscriptionUpdateInterval    = "12"
@@ -335,7 +335,7 @@ SELECT
 	COALESCE(phpmyadmin_port, 8080),
 	COALESCE(phpmyadmin_path, '/phpmyadmin/'),
 	COALESCE(phpmyadmin_public_url, ''),
-	COALESCE(phpmyadmin_login_mode, 'rebecca'),
+	COALESCE(phpmyadmin_login_mode, 'nora'),
 	COALESCE(phpmyadmin_username, ''),
 	COALESCE(phpmyadmin_password, ''),
 	COALESCE(user_speed_limit_enabled, 1)

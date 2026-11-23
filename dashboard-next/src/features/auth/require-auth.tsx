@@ -9,7 +9,7 @@ function BootScreen() {
       <div className="flex flex-col items-center gap-3">
         <BrandMark className="size-10 animate-pulse" />
         <span className="text-[0.6875rem] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          Rebecca
+          Nora
         </span>
       </div>
     </div>

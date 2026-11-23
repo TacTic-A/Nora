@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/rebeccapanel/rebecca/internal/app/jsonvalue"
+	"github.com/norapanel/nora/internal/app/jsonvalue"
 	"math"
 	"regexp"
 	"sort"
@@ -1285,7 +1285,7 @@ func (r Repository) ensureDefaultHostForInboundTx(ctx context.Context, tx *sql.T
 	_, err = tx.ExecContext(
 		ctx,
 		`INSERT INTO hosts (remark, address, inbound_tag) VALUES (?, ?, ?)`,
-		"Rebecca ({USERNAME}) [{PROTOCOL} - {TRANSPORT}]",
+		"Nora ({USERNAME}) [{PROTOCOL} - {TRANSPORT}]",
 		"{SERVER_IP}",
 		tag,
 	)

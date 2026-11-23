@@ -32,7 +32,7 @@ func (s *Server) handleDocsDisabled(w http.ResponseWriter, r *http.Request) {
 
 func swaggerUIHandler() http.Handler {
 	return v5emb.NewHandlerWithConfig(swgui.Config{
-		Title:       "Rebecca API",
+		Title:       "Nora API",
 		SwaggerJSON: "/openapi.json",
 		BasePath:    "/docs/",
 		SettingsUI: map[string]string{
@@ -45,23 +45,23 @@ func swaggerUIHandler() http.Handler {
 const swaggerDarkThemeCSS = `<style>
 :root {
 	color-scheme: dark;
-	--rebecca-docs-bg: #050912;
-	--rebecca-docs-panel: #0d1524;
-	--rebecca-docs-panel-soft: #111c2d;
-	--rebecca-docs-border: #26364f;
-	--rebecca-docs-text: #e8edf7;
-	--rebecca-docs-muted: #a6b3c8;
-	--rebecca-docs-code: #18243a;
+	--nora-docs-bg: #050912;
+	--nora-docs-panel: #0d1524;
+	--nora-docs-panel-soft: #111c2d;
+	--nora-docs-border: #26364f;
+	--nora-docs-text: #e8edf7;
+	--nora-docs-muted: #a6b3c8;
+	--nora-docs-code: #18243a;
 }
 
 html,
 body {
-	background: var(--rebecca-docs-bg) !important;
-	color: var(--rebecca-docs-text) !important;
+	background: var(--nora-docs-bg) !important;
+	color: var(--nora-docs-text) !important;
 }
 
 .swagger-ui {
-	color: var(--rebecca-docs-text);
+	color: var(--nora-docs-text);
 }
 
 .swagger-ui .scheme-container,
@@ -71,7 +71,7 @@ body {
 .swagger-ui section.models {
 	background: transparent !important;
 	box-shadow: none !important;
-	border-color: var(--rebecca-docs-border) !important;
+	border-color: var(--nora-docs-border) !important;
 }
 
 .swagger-ui .info .title,
@@ -99,7 +99,7 @@ body {
 .swagger-ui .renderedMarkdown li,
 .swagger-ui .markdown p,
 .swagger-ui .markdown li {
-	color: var(--rebecca-docs-text) !important;
+	color: var(--nora-docs-text) !important;
 }
 
 .swagger-ui .info .base-url,
@@ -112,7 +112,7 @@ body {
 .swagger-ui .model .property,
 .swagger-ui .responses-inner h4,
 .swagger-ui .responses-inner h5 {
-	color: var(--rebecca-docs-muted) !important;
+	color: var(--nora-docs-muted) !important;
 }
 
 .swagger-ui .wrapper {
@@ -120,8 +120,8 @@ body {
 }
 
 .swagger-ui .opblock {
-	background: var(--rebecca-docs-panel) !important;
-	border-color: var(--rebecca-docs-border) !important;
+	background: var(--nora-docs-panel) !important;
+	border-color: var(--nora-docs-border) !important;
 	box-shadow: 0 14px 38px rgba(0, 0, 0, 0.22);
 }
 
@@ -134,8 +134,8 @@ body {
 .swagger-ui .opblock-description-wrapper,
 .swagger-ui .opblock-external-docs-wrapper,
 .swagger-ui .opblock-title_normal {
-	background: var(--rebecca-docs-panel-soft) !important;
-	border-color: var(--rebecca-docs-border) !important;
+	background: var(--nora-docs-panel-soft) !important;
+	border-color: var(--nora-docs-border) !important;
 	box-shadow: none !important;
 }
 
@@ -146,9 +146,9 @@ body {
 .swagger-ui textarea,
 .swagger-ui input,
 .swagger-ui select {
-	background: var(--rebecca-docs-code) !important;
-	color: var(--rebecca-docs-text) !important;
-	border-color: var(--rebecca-docs-border) !important;
+	background: var(--nora-docs-code) !important;
+	color: var(--nora-docs-text) !important;
+	border-color: var(--nora-docs-border) !important;
 }
 
 .swagger-ui input::placeholder,
@@ -161,17 +161,17 @@ body {
 }
 
 .swagger-ui .dialog-ux .modal-ux {
-	background: var(--rebecca-docs-panel) !important;
-	border: 1px solid var(--rebecca-docs-border) !important;
+	background: var(--nora-docs-panel) !important;
+	border: 1px solid var(--nora-docs-border) !important;
 	border-radius: 8px !important;
 	box-shadow: 0 24px 70px rgba(0, 0, 0, 0.48) !important;
-	color: var(--rebecca-docs-text) !important;
+	color: var(--nora-docs-text) !important;
 }
 
 .swagger-ui .dialog-ux .modal-ux-header {
-	background: var(--rebecca-docs-panel-soft) !important;
-	border-bottom: 1px solid var(--rebecca-docs-border) !important;
-	color: var(--rebecca-docs-text) !important;
+	background: var(--nora-docs-panel-soft) !important;
+	border-bottom: 1px solid var(--nora-docs-border) !important;
+	color: var(--nora-docs-text) !important;
 }
 
 .swagger-ui .dialog-ux .modal-ux-header h3,
@@ -181,29 +181,29 @@ body {
 .swagger-ui .dialog-ux .auth-container h4,
 .swagger-ui .dialog-ux .auth-container label,
 .swagger-ui .dialog-ux .auth-container .wrapper {
-	color: var(--rebecca-docs-text) !important;
+	color: var(--nora-docs-text) !important;
 }
 
 .swagger-ui .dialog-ux .modal-ux-content,
 .swagger-ui .dialog-ux .auth-container {
-	background: var(--rebecca-docs-panel) !important;
-	color: var(--rebecca-docs-text) !important;
+	background: var(--nora-docs-panel) !important;
+	color: var(--nora-docs-text) !important;
 }
 
 .swagger-ui .dialog-ux .auth-container input {
 	background: #17243a !important;
-	color: var(--rebecca-docs-text) !important;
+	color: var(--nora-docs-text) !important;
 	border: 1px solid #49698f !important;
 }
 
 .swagger-ui .dialog-ux .modal-ux-header .close-modal {
 	background: transparent !important;
 	border: 0 !important;
-	color: var(--rebecca-docs-text) !important;
+	color: var(--nora-docs-text) !important;
 }
 
 .swagger-ui .dialog-ux .modal-ux-header .close-modal svg {
-	fill: var(--rebecca-docs-text) !important;
+	fill: var(--nora-docs-text) !important;
 }
 
 .swagger-ui .btn,
@@ -211,7 +211,7 @@ body {
 .swagger-ui .try-out__btn,
 .swagger-ui button {
 	background: #12223a !important;
-	color: var(--rebecca-docs-text) !important;
+	color: var(--nora-docs-text) !important;
 	border-color: #40638e !important;
 	box-shadow: none !important;
 }
@@ -268,7 +268,7 @@ body {
 
 .swagger-ui svg,
 .swagger-ui .arrow {
-	fill: var(--rebecca-docs-text) !important;
-	color: var(--rebecca-docs-text) !important;
+	fill: var(--nora-docs-text) !important;
+	color: var(--nora-docs-text) !important;
 }
 </style>`

@@ -2,11 +2,11 @@ import { describe, expect, it } from "vitest";
 import { checkBackupParts, parseBackupPartName } from "./backupParts";
 
 const partName = (index: number, total: number) =>
-	`rebecca-database-20261019.part${String(index).padStart(2, "0")}-of-${String(total).padStart(2, "0")}.rbbackup`;
+	`nora-database-20261019.part${String(index).padStart(2, "0")}-of-${String(total).padStart(2, "0")}.rbbackup`;
 
 describe("checkBackupParts", () => {
 	it("accepts a single backup file", () => {
-		expect(checkBackupParts(["rebecca-database-20261019.rbbackup"])).toEqual({
+		expect(checkBackupParts(["nora-database-20261019.rbbackup"])).toEqual({
 			status: "single",
 		});
 	});
@@ -29,7 +29,7 @@ describe("checkBackupParts", () => {
 		expect(
 			checkBackupParts([
 				partName(1, 2),
-				"rebecca-database-20261020.part02-of-02.rbbackup",
+				"nora-database-20261020.part02-of-02.rbbackup",
 			]),
 		).toEqual({ status: "invalid" });
 		expect(checkBackupParts([partName(1, 2), partName(1, 2)])).toEqual({
@@ -45,7 +45,7 @@ describe("checkBackupParts", () => {
 
 	it("parses the Telegram part name format", () => {
 		expect(parseBackupPartName(partName(2, 5))).toEqual({
-			base: "rebecca-database-20261019",
+			base: "nora-database-20261019",
 			ext: ".rbbackup",
 			index: 2,
 			total: 5,

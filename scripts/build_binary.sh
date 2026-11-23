@@ -25,22 +25,22 @@ prepare_go_dashboard_embed() {
     touch "$target_dir/.gitkeep"
 }
 
-gateway_output="$ROOT_DIR/dist/rebecca-server"
+gateway_output="$ROOT_DIR/dist/nora-server"
 mkdir -p "$ROOT_DIR/dist"
 rm -rf "$ROOT_DIR/dist/templates"
 if [[ -d "$ROOT_DIR/templates" ]]; then
     cp -R "$ROOT_DIR/templates" "$ROOT_DIR/dist/templates"
 fi
 if [[ "${OS:-}" == "Windows_NT" ]]; then
-    gateway_output="$ROOT_DIR/dist/rebecca-server.exe"
+    gateway_output="$ROOT_DIR/dist/nora-server.exe"
 fi
 
 (
     prepare_go_dashboard_embed
     cd "$ROOT_DIR"
-    CGO_ENABLED=0 go build -trimpath -buildvcs=false -o "$gateway_output" ./cmd/rebecca_gateway
+    CGO_ENABLED=0 go build -trimpath -buildvcs=false -o "$gateway_output" ./cmd/nora_gateway
 )
 
-echo "Rebecca Go gateway built at $gateway_output"
+echo "Nora Go gateway built at $gateway_output"
 
 bash scripts/build_go_cli.sh
