@@ -1,0 +1,176 @@
+package api
+
+import (
+	"errors"
+	"io"
+	"mime/multipart"
+	"net/http"
+	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
+
+	backupapp "github.com/norapanel/nora/internal/app/backup"
+	systemapp "github.com/norapanel/nora/internal/app/system"
+)
+
+const maxBackupUploadBytes int64 = 8 << 30
+
+const backupUploadMemoryBytes int64 = 8 << 20
+
+func (s *Server) handleBackupExport(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/api/settings/backup/export" {
+		writeError(w, http.StatusNotFound, "not found")
+		return
+	}
+	if r.Method != http.MethodGet {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+	if !s.isBinaryRuntime() {
+		writeError(w, http.StatusConflict, backupapp.DisabledDetail)
+		return
+	}
+	service := s.backup()
+	result, err := service.Export(r.Context(), r.URL.Query().Get("scope"))
+	if err != nil {
+		writeBackupError(w, err)
+		return
+	}
+	defer os.Remove(result.Path)
+	w.Header().Set("Content-Type", backupapp.MediaType)
+	w.Header().Set("Content-Disposition", `attachment; filename=`+strconv.Quote(safeDownloadFilename(result.Filename)))
+	http.ServeFile(w, r, result.Path)
+}
+
+func (s *Server) handleBackupImport(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/api/settings/backup/import" {
+		writeError(w, http.StatusNotFound, "not found")
+		return
+	}
+	if r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+	if !s.isBinaryRuntime() {
+		writeError(w, http.StatusConflict, backupapp.DisabledDetail)
+		return
+	}
+	uploads, cleanup, err := saveBackupUploads(w, r)
+	if err != nil {
+		var maxBytesErr *http.MaxBytesError
+		if errors.As(err, &maxBytesErr) || errors.Is(err, errBackupUploadTooLarge) {
+			writeError(w, http.StatusRequestEntityTooLarge, "backup upload is too large")
+			return
+		}
+		if isBackupUploadTimeout(err) {
+			writeError(w, http.StatusRequestTimeout, "backup upload timed out while receiving data; retry with a stable connection")
+			return
+		}
+		writeError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	defer cleanup()
+	result, err := s.backup().ImportUploads(r.Context(), uploads)
+	if err != nil {
+		writeBackupError(w, err)
+		return
+	}
+	writeJSON(w, http.StatusOK, result)
+}
+
+func (s *Server) backup() *backupapp.Service {
+	if s.backupService != nil {
+		return s.backupService
+	}
+	s.backupService = backupapp.NewService(s.db, s.dialect, s.cfg.Database)
+	return s.backupService
+}
+
+func (s *Server) isBinaryRuntime() bool {
+	var info systemapp.RuntimeInfo
+	if s.maintenance != nil && s.maintenance.Runtime != nil {
+		info = s.maintenance.Runtime.Info()
+	} else {
+		info = systemapp.DefaultRuntimeDetector{}.Info()
+	}
+	return strings.EqualFold(strings.TrimSpace(info.Mode), "binary")
+}
+
+var errBackupUploadTooLarge = errors.New("backup upload is too large")
+
+func saveBackupUploads(w http.ResponseWriter, r *http.Request) ([]backupapp.PartFile, func(), error) {
+	if r.ContentLength > maxBackupUploadBytes {
+		return nil, func() {}, errBackupUploadTooLarge
+	}
+	r.Body = http.MaxBytesReader(w, r.Body, maxBackupUploadBytes)
+	if err := r.ParseMultipartForm(backupUploadMemoryBytes); err != nil {
+		return nil, func() {}, err
+	}
+	if r.MultipartForm != nil {
+		defer r.MultipartForm.RemoveAll()
+	}
+	headers := r.MultipartForm.File["file"]
+	if len(headers) == 0 {
+		return nil, func() {}, http.ErrMissingFile
+	}
+	uploads := make([]backupapp.PartFile, 0, len(headers))
+	cleanup := func() {
+		for _, upload := range uploads {
+			_ = os.Remove(upload.Path)
+		}
+	}
+	for _, header := range headers {
+		if err := saveBackupUploadFile(header, &uploads); err != nil {
+			cleanup()
+			return nil, func() {}, err
+		}
+	}
+	return uploads, cleanup, nil
+}
+
+func saveBackupUploadFile(header *multipart.FileHeader, uploads *[]backupapp.PartFile) error {
+	file, err := header.Open()
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	suffix := filepath.Ext(header.Filename)
+	if suffix == "" {
+		suffix = backupapp.Extension
+	}
+	tempFile, err := os.CreateTemp("", "nora-backup-upload-*"+suffix)
+	if err != nil {
+		return err
+	}
+	*uploads = append(*uploads, backupapp.PartFile{Name: header.Filename, Path: tempFile.Name()})
+	if _, err := io.Copy(tempFile, file); err != nil {
+		_ = tempFile.Close()
+		return err
+	}
+	return tempFile.Close()
+}
+
+func isBackupUploadTimeout(err error) bool {
+	if errors.Is(err, os.ErrDeadlineExceeded) {
+		return true
+	}
+	return strings.Contains(strings.ToLower(err.Error()), "i/o timeout")
+}
+
+func writeBackupError(w http.ResponseWriter, err error) {
+	var backupErr backupapp.Error
+	if errors.As(err, &backupErr) {
+		writeError(w, http.StatusBadRequest, backupErr.Message)
+		return
+	}
+	writeError(w, http.StatusInternalServerError, err.Error())
+}
+
+func safeDownloadFilename(filename string) string {
+	filename = filepath.Base(strings.TrimSpace(filename))
+	if filename == "." || filename == string(filepath.Separator) || filename == "" {
+		return "nora-backup" + backupapp.Extension
+	}
+	return filename
+}
