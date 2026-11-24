@@ -750,14 +750,18 @@ func (c *GitHubUpdateChecker) statusUncached(ctx context.Context, repo string, c
 		CheckedAt: checkedAt,
 	}
 	latestRelease, err := c.latestRelease(ctx, repo)
-	if err != nil {
-		status.Error = err.Error()
-		return status
+	if err != nil && !strings.Contains(err.Error(), "404") {
+		if currentChannel != "dev" {
+			status.Error = err.Error()
+			return status
+		}
 	}
 	latestDev, err := c.latestDev(ctx, repo)
-	if err != nil {
-		status.Error = err.Error()
-		return status
+	if err != nil && !strings.Contains(err.Error(), "404") {
+		if currentChannel == "dev" {
+			status.Error = err.Error()
+			return status
+		}
 	}
 	status.LatestRelease = latestRelease
 	status.LatestDev = latestDev
@@ -860,6 +864,9 @@ func cloneReleaseInfo(info ReleaseInfo) ReleaseInfo {
 func (c *GitHubUpdateChecker) latestRelease(ctx context.Context, repo string) (*ReleaseInfo, error) {
 	var data map[string]any
 	if err := c.getJSON(ctx, strings.TrimRight(c.APIBase, "/")+"/repos/"+repo+"/releases/latest", &data); err != nil {
+		if strings.Contains(err.Error(), "404") {
+			return nil, nil
+		}
 		return nil, err
 	}
 	tag := firstNonEmptyString(stringFromAny(data["tag_name"]), stringFromAny(data["name"]))
@@ -902,6 +909,9 @@ func (c *GitHubUpdateChecker) buildStableVersions(ctx context.Context, repo stri
 	var data []map[string]any
 	url := strings.TrimRight(c.APIBase, "/") + "/repos/" + repo + "/releases?per_page=100"
 	if err := c.getJSON(ctx, url, &data); err != nil {
+		if strings.Contains(err.Error(), "404") {
+			return []BuildVersion{}, nil
+		}
 		return nil, err
 	}
 	versions := make([]BuildVersion, 0, len(data))

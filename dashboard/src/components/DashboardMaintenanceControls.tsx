@@ -562,11 +562,14 @@ export const DashboardMaintenanceControls: FC<DashboardMaintenanceControlsProps>
 	const maintenanceRefreshButton = (
 		<Button
 			type="button"
-			onClick={() => info.refetch()}
+			onClick={() => {
+				void info.refetch();
+				void builds.refetch();
+			}}
 			variant="ghost"
 			size="sm"
-			loading={info.isFetching}
-			className="h-8 min-h-8 rounded-xl px-2.5 has-[>svg]:px-2.5 text-[12px] text-[#8b949e] active:scale-[0.97] hover:bg-[#21262d] hover:text-white"
+			loading={info.isFetching || builds.isFetching}
+			className="h-8 min-h-8 rounded-xl px-2.5 has-[>svg]:px-2.5 text-[12px] text-[var(--rb-panel-text-muted)] active:scale-[0.97] hover:bg-[var(--rb-panel-elevated)] hover:text-[var(--rb-panel-text)]"
 		>
 			<RefreshCw className="size-3.5" />
 			<span>{t("refresh")}</span>
