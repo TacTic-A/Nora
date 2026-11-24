@@ -52,7 +52,7 @@ const breakpointOrder: Record<DataTableBreakpoint, number> = {
 	xl: 4,
 };
 
-const selectionColumnWidth = "32px";
+const selectionColumnWidth = "48px";
 
 type SelectableTableHandle = {
 	isVisible: () => boolean;
@@ -888,7 +888,7 @@ export function DataTable<TData>({
 											if (event.key !== "Enter" && event.key !== " ") return;
 											event.preventDefault();
 											toggleExpanded();
-										}} className={cn(canExpand ? "cursor-pointer" : "cursor-default", "rb-resource-card rounded-xl border border-white/[0.08] bg-[#161b22] p-3.5 shadow-md relative transition-all duration-150 hover:border-white/[0.15]")}>
+										}} className={cn(canExpand ? "cursor-pointer" : "cursor-default", "rb-resource-card rounded-xl border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] p-3.5 shadow-md relative transition-all duration-150 hover:border-[var(--rb-panel-border-strong)]")}>
 										<div className="flex flex-row items-center gap-2.5 min-w-0! rb-resource-card-main">
 											{enableSelection && (
 												<div className="flex items-center shrink-0">
@@ -968,9 +968,9 @@ export function DataTable<TData>({
 					{state}
 				</div>
 			) : (
-				<div className="rb-data-table-wrap relative w-full overflow-x-auto rounded-xl border border-white/[0.08] bg-[#161b22] shadow-xl">
+				<div className="rb-data-table-wrap relative w-full overflow-x-auto rounded-xl border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] shadow-xl">
 					<table aria-label={ariaLabel} {...resolvedTableProps} className={cn("w-full border-separate border-spacing-0", tableClassNameValue)}>
-						<thead className="rb-data-table-head bg-[#1b2027] border-b border-white/[0.08]">
+						<thead className="rb-data-table-head bg-[var(--canvas-subtle)] border-b border-[var(--rb-panel-border)]">
 							{table.getHeaderGroups().map((headerGroup) => (
 								<tr key={headerGroup.id}>
 									{headerGroup.headers.map((header) => {
@@ -1011,36 +1011,41 @@ export function DataTable<TData>({
 													isSelectColumn || headerAlign === "center"
 														? "true"
 														: undefined
-												} {...config?.headerProps} className={cn("bg-[#1b2027] px-4 py-3 text-start text-xs font-semibold uppercase tracking-wider text-[#8b949e]", [
+												} {...config?.headerProps} className={cn("bg-[var(--canvas-subtle)] py-3 text-start text-xs font-semibold uppercase tracking-wider text-[var(--rb-panel-text-muted)]", isSelectColumn ? "px-2 text-center" : "px-4", [
 													isSelectColumn ? "rb-select-cell" : "",
 													isActionsColumn ? "rb-actions-cell" : "",
 													config?.isPrimary ? "rb-primary-cell" : "",
 												].filter(Boolean).join(" "))}>
-												<div style={{ paddingInlineStart: !isSelectColumn &&
-														!isActionsColumn &&
-														headerAlign === "start"
-															? headerInset
-															: undefined, paddingInlineEnd: !isSelectColumn &&
-														!isActionsColumn &&
-														headerAlign === "end"
-															? headerInset
-															: undefined, justifyContent: isActionsColumn
-															? "flex-end"
-															: isSelectColumn
-																? "center"
-																: alignToFlexJustify(headerAlign) }}    className="flex flex-row items-center gap-1 w-full">
-													<span className="min-w-0! max-w-full overflow-hidden text-ellipsis">
+												{isSelectColumn ? (
+													<div className="flex items-center justify-center w-full">
 														{flexRender(
 															header.column.columnDef.header,
 															header.getContext(),
 														)}
-													</span>
-													{sorted && (
-														<span className="text-xs text-cyan-400 font-bold">
-															{sorted === "desc" ? "↓" : "↑"}
+													</div>
+												) : (
+													<div style={{ paddingInlineStart: !isActionsColumn &&
+															headerAlign === "start"
+																? headerInset
+																: undefined, paddingInlineEnd: !isActionsColumn &&
+															headerAlign === "end"
+																? headerInset
+																: undefined, justifyContent: isActionsColumn
+																? "flex-end"
+																: alignToFlexJustify(headerAlign) }}    className="flex flex-row items-center gap-1 w-full">
+														<span className="min-w-0! max-w-full overflow-hidden text-ellipsis">
+															{flexRender(
+																header.column.columnDef.header,
+																header.getContext(),
+															)}
 														</span>
-													)}
-												</div>
+														{sorted && (
+															<span className="text-xs text-cyan-400 font-bold">
+																{sorted === "desc" ? "↓" : "↑"}
+															</span>
+														)}
+													</div>
+												)}
 											</th>
 										);
 									})}
@@ -1066,7 +1071,7 @@ export function DataTable<TData>({
 													: undefined
 											} onClick={() => onRowClick?.(row.original)} onContextMenu={(event) =>
 												handleTableContextMenu(event, row.original)
-											} className={cn(onRowClick ? "cursor-pointer" : "cursor-default", "rb-data-table-row border-b border-white/[0.06] transition-colors duration-150 hover:bg-[#21262d]/60 data-[selected=true]:bg-cyan-500/10")}>
+											} className={cn(onRowClick ? "cursor-pointer" : "cursor-default", "rb-data-table-row border-b border-[var(--rb-panel-border)] transition-colors duration-150 hover:bg-[var(--rb-panel-row-hover)] data-[selected=true]:bg-cyan-500/10")}>
 											{row.getVisibleCells().map((cell) => {
 												const config = cell.column.columnDef.meta as
 													| DataTableColumn<TData>
@@ -1103,13 +1108,20 @@ export function DataTable<TData>({
 															isSelectColumn || cellAlign === "center"
 																? "true"
 																: undefined
-														}    {...config?.cellProps} className={cn("px-4 py-3 text-sm text-[#c9d1d9] align-middle", [
+														}    {...config?.cellProps} className={cn("py-3 text-sm text-[var(--rb-panel-text-secondary)] align-middle", isSelectColumn ? "px-2 text-center" : "px-4", [
 															isSelectColumn ? "rb-select-cell" : "",
 															isActionsColumn ? "rb-actions-cell" : "",
-															config?.isPrimary ? "rb-primary-cell text-white font-medium" : "",
-															config?.isMeta ? "rb-meta-cell text-xs text-[#8b949e]" : "",
+															config?.isPrimary ? "rb-primary-cell text-[var(--rb-panel-text)] font-medium" : "",
+															config?.isMeta ? "rb-meta-cell text-xs text-[var(--rb-panel-text-muted)]" : "",
 														].filter(Boolean).join(" "))}>
-														{isSelectColumn || isActionsColumn ? (
+														{isSelectColumn ? (
+															<div className="flex items-center justify-center w-full">
+																{flexRender(
+																	cell.column.columnDef.cell,
+																	cell.getContext(),
+																)}
+															</div>
+														) : isActionsColumn ? (
 															flexRender(
 																cell.column.columnDef.cell,
 																cell.getContext(),

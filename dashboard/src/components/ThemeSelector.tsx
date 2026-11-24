@@ -243,8 +243,10 @@ const applyThemeMode = (theme: ThemeMode) => {
 			"rb-theme-dark",
 			"chakra-ui-light",
 			"chakra-ui-dark",
+			"light",
+			"dark",
 		);
-		target.classList.add(`rb-theme-${theme}`, `chakra-ui-${theme}`);
+		target.classList.add(`rb-theme-${theme}`, `chakra-ui-${theme}`, theme);
 		target.dataset.theme = theme;
 		target.style.colorScheme = theme;
 	}

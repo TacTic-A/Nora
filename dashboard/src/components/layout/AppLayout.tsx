@@ -314,7 +314,7 @@ function AppLayoutContent() {
 			<div
 				dir={isRTL ? "rtl" : "ltr"}
 				className={cn(
-					"flex h-[100dvh] max-h-[100dvh] min-h-[100dvh] overflow-hidden bg-[#0d1117] min-[769px]:h-[100vh] min-[769px]:max-h-[100vh] min-[769px]:min-h-[100vh]",
+					"flex h-[100dvh] max-h-[100dvh] min-h-[100dvh] overflow-hidden bg-[var(--rb-panel-bg)] min-[769px]:h-[100vh] min-[769px]:max-h-[100vh] min-[769px]:min-h-[100vh]",
 					isRTL ? "flex-row-reverse" : "flex-row",
 				)}
 				style={
@@ -340,7 +340,7 @@ function AppLayoutContent() {
 
 				<div
 					ref={contentRef}
-					className="relative flex h-full min-w-0 flex-1 flex-col overflow-hidden bg-[#0d1117] transition-[margin] duration-[220ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+					className="relative flex h-full min-w-0 flex-1 flex-col overflow-hidden bg-[var(--rb-panel-bg)] transition-[margin] duration-[220ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
 					style={{
 						marginLeft:
 							isMobile || isRTL

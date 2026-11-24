@@ -161,15 +161,15 @@ export const Pagination: FC<PaginationProps> = ({
 			<div className="order-2 md:order-1 w-full md:w-auto">
 				<div className="flex flex-row items-center gap-2 justify-center md:justify-start min-w-0!">
 					<DropdownMenu>
-						<DropdownMenuTrigger asChild><KitButton size="sm" variant="outline" className="min-w-[104px]! md:min-w-[112px]! max-w-[104px] md:max-w-[120px] justify-between px-3 bg-[#161b22] border-white/[0.08] hover:bg-[#21262d] text-white font-mono text-xs">
+						<DropdownMenuTrigger asChild><KitButton size="sm" variant="outline" className="min-w-[104px]! md:min-w-[112px]! max-w-[104px] md:max-w-[120px] justify-between px-3 bg-[var(--rb-panel-surface)] border-[var(--rb-panel-border)] hover:bg-[var(--rb-panel-elevated)] text-[var(--rb-panel-text)] font-mono text-xs">
 							{perPageNum}
 						{<ChevronIcon />}</KitButton></DropdownMenuTrigger>
 						
-							<DropdownMenuContent className="z-[1800] min-w-[104px]! md:min-w-[112px]! max-w-[104px] md:max-w-[120px] py-1 rounded-xl shadow-2xl bg-[#21262d] border border-white/10 overflow-hidden">
+							<DropdownMenuContent className="z-[1800] min-w-[104px]! md:min-w-[112px]! max-w-[104px] md:max-w-[120px] py-1 rounded-xl shadow-2xl bg-[var(--rb-panel-elevated)] border border-[var(--rb-panel-border)] overflow-hidden">
 								{PAGE_SIZE_OPTIONS.map((option) => {
 									const isSelected = option === perPageNum;
 									return (
-										<DropdownMenuItem key={option} onSelect={() => handlePageSizeSelect(option)} className={cn("text-xs font-mono px-3 py-1.5 cursor-pointer transition-colors", isSelected ? "badge-soft-cyan font-bold text-cyan-400" : "text-[#c9d1d9] hover:bg-white/[0.08] hover:text-white")}>
+										<DropdownMenuItem key={option} onSelect={() => handlePageSizeSelect(option)} className={cn("text-xs font-mono px-3 py-1.5 cursor-pointer transition-colors", isSelected ? "badge-soft-cyan font-bold text-cyan-400" : "text-[var(--rb-panel-text-secondary)] hover:bg-[var(--rb-panel-surface)] hover:text-[var(--rb-panel-text)]")}>
 											{option}
 										</DropdownMenuItem>
 									);
@@ -177,7 +177,7 @@ export const Pagination: FC<PaginationProps> = ({
 							</DropdownMenuContent>
 						
 					</DropdownMenu>
-					<p className="whitespace-nowrap text-xs text-[#8b949e]">
+					<p className="whitespace-nowrap text-xs text-[var(--rb-panel-text-muted)]">
 						{t("itemsPerPage")}
 					</p>
 				</div>
@@ -187,19 +187,19 @@ export const Pagination: FC<PaginationProps> = ({
 				/* Pagination controls: the panel's own button row (Previous, numbered
 				   pages, Next), separated by the attached group's seams. */
 				<div className="order-1 md:order-2 w-full md:w-auto max-w-full inline-flex items-center gap-1">
-					<KitButton variant="outline" size="sm" onClick={() => changePage(page - 1)} disabled={!canPrev} className="rounded-lg border-white/[0.08] bg-[#161b22] text-[#c9d1d9] hover:bg-[#21262d] hover:text-white disabled:opacity-40 flex-[1_1_0] md:flex-[0_0_auto] px-2 md:px-3 text-xs font-medium">
+					<KitButton variant="outline" size="sm" onClick={() => changePage(page - 1)} disabled={!canPrev} className="rounded-lg border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] text-[var(--rb-panel-text-secondary)] hover:bg-[var(--rb-panel-elevated)] hover:text-[var(--rb-panel-text)] disabled:opacity-40 flex-[1_1_0] md:flex-[0_0_auto] px-2 md:px-3 text-xs font-medium">
 						{isRTL ? <NextIcon /> : <PrevIcon />}
 						{t("previous")}
 					</KitButton>
 
 					{isCompactPagination ? (
-						<KitButton variant="outline" size="sm" disabled className="rounded-lg border-white/[0.08] bg-[#161b22] text-[#8b949e] font-mono flex-[0_0_auto] px-3 text-xs">
+						<KitButton variant="outline" size="sm" disabled className="rounded-lg border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] text-[var(--rb-panel-text-muted)] font-mono flex-[0_0_auto] px-3 text-xs">
 							{page + 1} / {noPages}
 						</KitButton>
 					) : (
 						pages.map((pageIndex) =>
 							typeof pageIndex === "string" ? (
-								<KitButton variant="outline" size="sm" key={pageIndex} className="rounded-lg border-white/[0.08] text-[#8b949e] font-mono text-xs" disabled>
+								<KitButton variant="outline" size="sm" key={pageIndex} className="rounded-lg border-[var(--rb-panel-border)] text-[var(--rb-panel-text-muted)] font-mono text-xs" disabled>
 									…
 								</KitButton>
 							) : (
@@ -208,7 +208,7 @@ export const Pagination: FC<PaginationProps> = ({
 									key={pageIndex}
 									variant={pageIndex === page ? "default" : "outline"}
 									onClick={() => changePage(pageIndex)}
-									className={cn("size-8 p-0 rounded-lg font-mono text-xs", pageIndex === page ? "bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 font-bold shadow-[0_0_12px_rgba(6,182,212,0.25)] hover:bg-cyan-500/25" : "border-white/[0.08] bg-transparent text-[#8b949e] hover:bg-white/[0.05] hover:text-white")}
+									className={cn("size-8 p-0 rounded-lg font-mono text-xs", pageIndex === page ? "bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 font-bold shadow-[0_0_12px_rgba(6,182,212,0.25)] hover:bg-cyan-500/25" : "border-[var(--rb-panel-border)] bg-transparent text-[var(--rb-panel-text-muted)] hover:bg-[var(--rb-panel-elevated)] hover:text-[var(--rb-panel-text)]")}
 								>
 									{pageIndex + 1}
 								</KitButton>
@@ -216,7 +216,7 @@ export const Pagination: FC<PaginationProps> = ({
 						)
 					)}
 
-					<KitButton variant="outline" size="sm" onClick={() => changePage(page + 1)} disabled={!canNext} className="rounded-lg border-white/[0.08] bg-[#161b22] text-[#c9d1d9] hover:bg-[#21262d] hover:text-white disabled:opacity-40 flex-[1_1_0] md:flex-[0_0_auto] px-2 md:px-3 text-xs font-medium">
+					<KitButton variant="outline" size="sm" onClick={() => changePage(page + 1)} disabled={!canNext} className="rounded-lg border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] text-[var(--rb-panel-text-secondary)] hover:bg-[var(--rb-panel-elevated)] hover:text-[var(--rb-panel-text)] disabled:opacity-40 flex-[1_1_0] md:flex-[0_0_auto] px-2 md:px-3 text-xs font-medium">
 						{t("next")}
 						{isRTL ? <PrevIcon /> : <NextIcon />}
 					</KitButton>

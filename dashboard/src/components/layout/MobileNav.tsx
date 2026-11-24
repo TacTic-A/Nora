@@ -62,7 +62,7 @@ const DOCK_CYAN_TINT =
 	"bg-gradient-to-r from-cyan-500/20 via-cyan-500/15 to-cyan-500/20 border border-cyan-400/40 text-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.25)]";
 
 const DOCK_SURFACE_CLASS =
-	"border border-white/10 bg-[#161b22]/95 backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.55)]";
+	"border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)]/95 backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.55)]";
 
 type BottomNavItem = {
 	key: string;
@@ -527,7 +527,7 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 					showCloseButton={false}
 					data-side={isRTL ? "right" : "left"}
 					className={cn(
-						"rb-sidebar-drawer h-[100dvh] max-h-[100dvh] w-[min(320px,86vw)]! max-w-[min(320px,86vw)]! gap-0 bg-[#161b22] p-0 shadow-[0_24px_64px_rgba(0,0,0,0.55)] will-change-transform border-white/[0.08]",
+						"rb-sidebar-drawer h-[100dvh] max-h-[100dvh] w-[min(320px,86vw)]! max-w-[min(320px,86vw)]! gap-0 bg-[var(--rb-panel-sidebar)] p-0 shadow-[0_24px_64px_rgba(0,0,0,0.55)] will-change-transform border-[var(--rb-panel-border)]",
 						isRTL
 							? "rounded-s-[24px] border-s border-e-0"
 							: "rounded-e-[24px] border-e border-s-0",
@@ -551,15 +551,15 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 			{/* iOS PWA Add-To-Home Prompt */}
 			{showIosPrompt ? (
 				<div className="fixed inset-x-0 bottom-[86px] z-[2000] px-4 sm:bottom-[90px]">
-					<div className="flex items-center gap-3 rounded-[20px] border border-white/10 bg-[#161b22] px-4 py-3 shadow-lg">
-						<span className="flex size-8 items-center justify-center rounded-full bg-[#21262d] text-[#f0f6fc]">
+					<div className="flex items-center gap-3 rounded-[20px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] px-4 py-3 shadow-lg">
+						<span className="flex size-8 items-center justify-center rounded-full bg-[var(--rb-panel-elevated)] text-[var(--rb-panel-text)]">
 							<Share className="size-4" />
 						</span>
 						<div className="flex-1">
-							<p className="text-sm font-semibold text-[#f0f6fc]">
+							<p className="text-sm font-semibold text-[var(--rb-panel-text)]">
 								{t("pwa.ios.title")}
 							</p>
-							<p className="text-xs text-slate-400">
+							<p className="text-xs text-[var(--rb-panel-text-muted)]">
 								{t("pwa.ios.body")}
 							</p>
 						</div>
@@ -647,7 +647,7 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 													strokeWidth={1.75}
 												/>
 												{item.key === "notifications" && unread > 0 ? (
-													<span className="absolute top-0.5 end-2 z-[2] size-2 rounded-full border border-[#161b22] bg-cyan-400" />
+													<span className="absolute top-0.5 end-2 z-[2] size-2 rounded-full border border-[var(--rb-panel-surface)] bg-cyan-400" />
 												) : null}
 											</div>
 											<span

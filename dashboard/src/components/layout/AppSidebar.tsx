@@ -190,7 +190,7 @@ const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
 								<TooltipContent
 									side={isRTL ? "left" : "right"}
 									sideOffset={10}
-									className="z-[2200] rounded-[10px] border border-white/[0.08] bg-[#21262d] px-3 py-1.5 text-xs font-semibold text-[#f0f6fc] shadow-lg"
+									className="z-[2200] rounded-[10px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-elevated)] px-3 py-1.5 text-xs font-semibold text-[var(--rb-panel-text)] shadow-lg"
 								>
 									{currentItem.label}
 								</TooltipContent>
@@ -201,7 +201,7 @@ const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
 						<span
 							aria-hidden={collapsed}
 							className={cn(
-								"min-w-0 flex-1 truncate pt-0.5 text-[17px] font-extrabold tracking-[-0.02em] text-[#f0f6fc] transition-opacity ease-out",
+								"min-w-0 flex-1 truncate pt-0.5 text-[17px] font-extrabold tracking-[-0.02em] text-[var(--rb-panel-text)] transition-opacity ease-out",
 								collapsed
 									? "pointer-events-none opacity-0 duration-150"
 									: "opacity-100 delay-[40ms] duration-200",
@@ -302,15 +302,15 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 							}
 						}}
 						className={cn(
-							"relative flex h-[38px] w-full cursor-pointer items-center justify-start gap-2.5 overflow-hidden rounded-[12px] text-[13px] transition-[padding,background-color,color,transform] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)] outline-none select-none active:scale-[0.98] min-[769px]:hover:bg-[#21262d]",
+							"relative flex h-[38px] w-full cursor-pointer items-center justify-start gap-2.5 overflow-hidden rounded-[12px] text-[13px] transition-[padding,background-color,color,transform] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)] outline-none select-none active:scale-[0.98] min-[769px]:hover:bg-[var(--rb-panel-elevated)]",
 							collapsed ? "ps-4 pe-4" : "ps-3 pe-2.5",
 							showAccentBar
 								? isRTL
 									? "bg-gradient-to-l from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-[3px] border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.12)]"
 									: "bg-gradient-to-r from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-[3px] border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.12)]"
 								: isGroupActive
-									? "bg-transparent font-bold text-[#f0f6fc]"
-									: "bg-transparent font-medium text-slate-400 min-[769px]:hover:text-white",
+									? "bg-transparent font-bold text-[var(--rb-panel-text)]"
+									: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
 						)}
 					>
 						{showAccentBar ? (
@@ -367,9 +367,9 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 						}
 					}}
 					onOpenAutoFocus={(e) => e.preventDefault()}
-					className="relative z-[2200] w-auto min-w-[196px]! rounded-[16px] border border-white/[0.08] bg-[#161b22] p-1.5 text-[#f0f6fc] shadow-[0_14px_34px_rgba(0,0,0,0.48)] select-none data-[state=closed]:duration-[75ms] before:pointer-events-auto before:absolute before:inset-y-0 before:w-4 before:content-[''] data-[side=right]:before:-left-4 data-[side=left]:before:-right-4"
+					className="relative z-[2200] w-auto min-w-[196px]! rounded-[16px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] p-1.5 text-[var(--rb-panel-text)] shadow-[0_14px_34px_rgba(0,0,0,0.48)] select-none data-[state=closed]:duration-[75ms] before:pointer-events-auto before:absolute before:inset-y-0 before:w-4 before:content-[''] data-[side=right]:before:-left-4 data-[side=left]:before:-right-4"
 				>
-					<div className="mb-1 border-b border-white/[0.08] px-2.5 pt-1 pb-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-400">
+					<div className="mb-1 border-b border-[var(--rb-panel-border)] px-2.5 pt-1 pb-1.5 text-[11px] font-bold tracking-wider uppercase text-[var(--rb-panel-text-muted)]">
 						{group.title}
 					</div>
 					<div className="flex flex-col gap-0.5">
@@ -386,12 +386,12 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 										onNavigate(sub.url, e);
 									}}
 									className={cn(
-										"relative flex h-[34px] items-center gap-2.5 rounded-[10px] px-2.5 text-xs no-underline transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] min-[769px]:hover:bg-[#21262d]",
+										"relative flex h-[34px] items-center gap-2.5 rounded-[10px] px-2.5 text-xs no-underline transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] min-[769px]:hover:bg-[var(--rb-panel-elevated)]",
 										subActive
 											? isRTL
 												? "bg-gradient-to-l from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-2 border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.12)]"
 												: "bg-gradient-to-r from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-2 border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.12)]"
-											: "bg-transparent font-medium text-slate-400 min-[769px]:hover:text-white",
+											: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
 									)}
 								>
 									<SubIcon className={cn("size-4 shrink-0", subActive ? "text-cyan-400" : "text-slate-400")} />
@@ -423,7 +423,7 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 					)}
 				>
 					<div className="min-h-0 overflow-hidden">
-						<div className="ms-[21px] flex flex-col gap-0.5 border-s border-white/[0.08] ps-2.5 pt-1 pb-0.5">
+						<div className="ms-[21px] flex flex-col gap-0.5 border-s border-[var(--rb-panel-border)] ps-2.5 pt-1 pb-0.5">
 							{visibleSubs.map((sub) => {
 								const subActive = isItemActive(sub.url);
 								const SubIcon = sub.icon;
@@ -435,12 +435,12 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 										to={sub.url}
 										onClick={(e) => onNavigate(sub.url, e)}
 										className={cn(
-											"relative flex h-[34px] items-center gap-2.5 rounded-[10px] px-2.5 text-xs no-underline transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none select-none active:scale-[0.98] min-[769px]:hover:bg-[#21262d]",
+											"relative flex h-[34px] items-center gap-2.5 rounded-[10px] px-2.5 text-xs no-underline transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none select-none active:scale-[0.98] min-[769px]:hover:bg-[var(--rb-panel-elevated)]",
 											subActive
 												? isRTL
 													? "bg-gradient-to-l from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-2 border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.12)]"
 													: "bg-gradient-to-r from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-2 border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.12)]"
-												: "bg-transparent font-medium text-slate-400 min-[769px]:hover:text-white",
+												: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
 										)}
 									>
 										{subActive ? (
@@ -714,10 +714,10 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 					...(inDrawer ? {} : { [isRTL ? "right" : "left"]: 12 }),
 				}}
 				className={cn(
-					"flex shrink-0 overflow-hidden bg-[#161b22] select-none [touch-action:manipulation]",
+					"flex shrink-0 overflow-hidden bg-[var(--rb-panel-sidebar)] select-none [touch-action:manipulation]",
 					inDrawer
 						? "relative h-full max-h-full w-full"
-						: "fixed top-3 z-[200] h-[calc(100dvh-24px)] max-h-[calc(100dvh-24px)] rounded-[20px] border border-white/[0.08] shadow-[0_1px_2px_rgba(0,0,0,0.03),inset_0_1px_0_0_rgba(255,255,255,0.06)] transition-[width] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+						: "fixed top-3 z-[200] h-[calc(100dvh-24px)] max-h-[calc(100dvh-24px)] rounded-[20px] border border-[var(--rb-panel-border)] shadow-[0_1px_2px_rgba(0,0,0,0.03),inset_0_1px_0_0_rgba(255,255,255,0.06)] transition-[width] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
 				)}
 			>
 				{loading ? (
@@ -731,7 +731,7 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 					>
 						<div
 							className={cn(
-								"-mx-2 mb-2 flex min-h-[48px] items-center justify-between border-b border-white/[0.08] py-2.5 ps-0",
+								"-mx-2 mb-2 flex min-h-[48px] items-center justify-between border-b border-[var(--rb-panel-border)] py-2.5 ps-0",
 								inDrawer ? "pe-2.5" : "pe-0",
 							)}
 						>
@@ -751,7 +751,7 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 									data-drawer-close="true"
 									aria-label={t("close")}
 									onClick={onRequestExpand}
-									className="inline-flex size-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-white/[0.08] bg-[#21262d] text-slate-300 transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none active:scale-[0.92] min-[769px]:hover:bg-[#21262d] min-[769px]:hover:text-white"
+									className="inline-flex size-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-[var(--rb-panel-border)] bg-[var(--rb-panel-elevated)] text-[var(--rb-panel-text)] transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none active:scale-[0.92] min-[769px]:hover:bg-[var(--rb-panel-elevated)] min-[769px]:hover:text-[var(--rb-panel-text)]"
 								>
 									<X className="size-4" />
 								</button>
@@ -788,7 +788,7 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 														: "mb-1.5 mt-0 max-h-[26px] opacity-100",
 												)}
 											>
-												<span className="flex items-center truncate px-3 text-[10.5px] font-bold tracking-[0.08em] uppercase text-slate-400">
+												<span className="flex items-center truncate px-3 text-[10.5px] font-bold tracking-[0.08em] uppercase text-[var(--rb-panel-text-muted)]">
 													<span className="inline-block h-[10px] w-[3px] rounded-[2px] bg-gradient-to-r from-cyan-400 to-teal-400 me-2 shrink-0" />
 													{section.title}
 												</span>
@@ -819,13 +819,13 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 																		}}
 																		onClick={(e) => handleNavigate(item.url, e)}
 																		className={cn(
-																			"relative flex h-[38px] w-full items-center justify-start gap-2.5 overflow-hidden rounded-[12px] text-[13px] no-underline transition-[padding,background-color,color,transform] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)] outline-none select-none active:scale-[0.98] min-[769px]:hover:bg-[#21262d]",
+																			"relative flex h-[38px] w-full items-center justify-start gap-2.5 overflow-hidden rounded-[12px] text-[13px] no-underline transition-[padding,background-color,color,transform] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)] outline-none select-none active:scale-[0.98] min-[769px]:hover:bg-[var(--rb-panel-elevated)]",
 																			collapsed ? "ps-4 pe-4" : "ps-3 pe-2.5",
 																			isActive
 																				? isRTL
 																					? "bg-gradient-to-l from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-[3px] border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.12)]"
 																					: "bg-gradient-to-r from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-[3px] border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.12)]"
-																				: "bg-transparent font-medium text-slate-400 min-[769px]:hover:text-white",
+																				: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
 																		)}
 																	>
 																		{isActive ? (
@@ -835,7 +835,7 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 																		<span className="relative inline-flex size-[18px] shrink-0 items-center justify-center">
 																			<ItemIcon className={cn("size-[18px] transition-colors", isActive ? "text-cyan-400 drop-shadow-[0_0_6px_rgba(6,182,212,0.4)]" : "text-slate-400")} />
 																			{showBadge && collapsed ? (
-																				<span className="absolute -top-1 -end-1 size-2 rounded-full border-[1.5px] border-[#161b22] bg-cyan-400" />
+																				<span className="absolute -top-1 -end-1 size-2 rounded-full border-[1.5px] border-[var(--rb-panel-sidebar)] bg-cyan-400" />
 																			) : null}
 																		</span>
 
@@ -862,7 +862,7 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 																<TooltipContent
 																	side={isRTL ? "left" : "right"}
 																	sideOffset={10}
-																	className="z-[2200] rounded-[10px] border border-white/[0.08] bg-[#21262d] px-3 py-1.5 text-xs font-semibold text-[#f0f6fc] shadow-lg"
+																	className="z-[2200] rounded-[10px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-elevated)] px-3 py-1.5 text-xs font-semibold text-[var(--rb-panel-text)] shadow-lg"
 																>
 																	{item.title}
 																</TooltipContent>

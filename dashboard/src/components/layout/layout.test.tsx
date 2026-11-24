@@ -181,7 +181,7 @@ describe("Milestone 2: Shell, Layout & Navigation", () => {
 	});
 
 	describe("AppHeader", () => {
-		it("renders Remnawave dark header styling with #161b22 surface and 1px border", () => {
+		it("renders header styling with panel surface and border", () => {
 			const { container } = render(
 				<AppHeader
 					sidebarCollapsed={false}
@@ -195,8 +195,8 @@ describe("Milestone 2: Shell, Layout & Navigation", () => {
 
 			const header = container.querySelector("header");
 			expect(header).toBeDefined();
-			expect(header?.className).toContain("bg-[#161b22]");
-			expect(header?.className).toContain("border-white/[0.08]");
+			expect(header?.className).toContain("bg-[var(--rb-panel-surface)]");
+			expect(header?.className).toContain("border-[var(--rb-panel-border)]");
 		});
 
 		it("renders breadcrumbs and triggers onNavigate on link click", () => {
@@ -259,15 +259,15 @@ describe("Milestone 2: Shell, Layout & Navigation", () => {
 	});
 
 	describe("AppSidebar", () => {
-		it("renders sidebar with Remnawave dark #161b22 surface and 1px border", () => {
+		it("renders sidebar with panel surface and border", () => {
 			const { container } = render(<AppSidebar collapsed={false} />, {
 				wrapper: createWrapper(),
 			});
 
 			const aside = container.querySelector("aside");
 			expect(aside).toBeDefined();
-			expect(aside?.className).toContain("bg-[#161b22]");
-			expect(aside?.className).toContain("border-white/[0.08]");
+			expect(aside?.className).toContain("bg-[var(--rb-panel-sidebar)]");
+			expect(aside?.className).toContain("border-[var(--rb-panel-border)]");
 		});
 
 		it("displays Nora brand logo and title", () => {
@@ -291,7 +291,7 @@ describe("Milestone 2: Shell, Layout & Navigation", () => {
 	});
 
 	describe("MobileNav", () => {
-		it("renders mobile bottom dock with #161b22 surface and cyan tint on active indicator", () => {
+		it("renders mobile bottom dock with panel surface and cyan tint on active indicator", () => {
 			const { container } = render(
 				<MobileNav isDrawerOpen={false} onCloseDrawer={vi.fn()} />,
 				{ wrapper: createWrapper() },
@@ -299,7 +299,7 @@ describe("Milestone 2: Shell, Layout & Navigation", () => {
 
 			const dock = container.querySelector(".rb-mobile-dock");
 			expect(dock).toBeDefined();
-			expect(dock?.innerHTML).toContain("bg-[#161b22]/95");
+			expect(dock?.innerHTML).toContain("bg-[var(--rb-panel-surface)]/95");
 		});
 
 		it("renders navigation tabs in the mobile bottom dock", () => {

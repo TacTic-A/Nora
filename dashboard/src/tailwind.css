@@ -220,6 +220,50 @@
     --accent-blue-light: #60a5fa;
   }
 
+  .rb-theme-light,
+  [data-theme="light"],
+  .light,
+  .chakra-ui-light {
+    /* Clean Light Design Tokens */
+    --rb-panel-bg: #f6f8fa;
+    --rb-panel-main: #f6f8fa;
+    --rb-panel-sidebar: #ffffff;
+    --rb-panel-surface: #ffffff;
+    --rb-panel-elevated: #f0f2f5;
+    --rb-panel-border: rgba(0, 0, 0, 0.08);
+    --rb-panel-border-subtle: rgba(0, 0, 0, 0.04);
+    --rb-panel-border-strong: #d0d7de;
+    --rb-panel-text: #1f2328;
+    --rb-panel-text-secondary: #424a53;
+    --rb-panel-text-muted: #656d76;
+    --rb-panel-row-hover: rgba(0, 0, 0, 0.03);
+    --rb-panel-row-selected: rgba(6, 182, 212, 0.08);
+
+    /* Canvas & Surface Tokens */
+    --canvas-base: #f6f8fa;
+    --canvas-surface: #ffffff;
+    --canvas-elevated: #f0f2f5;
+    --canvas-subtle: #eaeef2;
+    --border-default: rgba(0, 0, 0, 0.08);
+    --border-subtle: rgba(0, 0, 0, 0.04);
+    --border-accent: #d0d7de;
+    --border-highlight: #afb8c1;
+
+    /* Light Accents */
+    --accent-cyan: #0891b2;
+    --accent-cyan-light: #06b6d4;
+    --accent-teal: #0f766e;
+    --accent-teal-light: #0d9488;
+    --accent-red: #dc2626;
+    --accent-red-light: #ef4444;
+    --accent-amber: #d97706;
+    --accent-amber-light: #f59e0b;
+    --accent-purple: #7c3aed;
+    --accent-purple-light: #8b5cf6;
+    --accent-blue: #2563eb;
+    --accent-blue-light: #3b82f6;
+  }
+
   /* Custom Cyber Scrollbars */
   ::-webkit-scrollbar {
     width: 8px;
@@ -250,13 +294,13 @@
   --font-sans: var(--rb-font-stack);
   --font-mono: "Fira Mono", "JetBrains Mono", "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
-  --color-canvas-base: #0d1117;
-  --color-canvas-surface: #161b22;
-  --color-canvas-elevated: #21262d;
-  --color-canvas-subtle: #1b2027;
-  --color-border-subtle: rgba(255, 255, 255, 0.04);
-  --color-border-accent: #30363d;
-  --color-border-highlight: #484f58;
+  --color-canvas-base: var(--canvas-base);
+  --color-canvas-surface: var(--canvas-surface);
+  --color-canvas-elevated: var(--canvas-elevated);
+  --color-canvas-subtle: var(--canvas-subtle);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-accent: var(--border-accent);
+  --color-border-highlight: var(--border-highlight);
 
   --color-cyber-cyan: #06b6d4;
   --color-cyber-cyan-light: #22d3ee;
