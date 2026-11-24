@@ -1770,7 +1770,7 @@ export const UserDialog: FC<UserDialogProps> = () => {
 		>
 			<DialogContent
 				dir={isRTL ? "rtl" : "ltr"}
-				className="flex max-h-[min(840px,calc(100dvh-3rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-4xl lg:max-w-5xl rounded-[20px] border border-white/[0.08] bg-[#161b22] text-white shadow-2xl max-md:inset-x-3 max-md:w-auto max-md:top-[3rem] max-md:bottom-16 max-md:max-h-none max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0"
+				className="flex max-h-[min(840px,calc(100dvh-3rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-4xl lg:max-w-5xl rounded-[20px] border border-white/[0.08] bg-[#161b22] text-[var(--rb-panel-text)] shadow-2xl max-md:inset-x-3 max-md:w-auto max-md:top-[3rem] max-md:bottom-16 max-md:max-h-none max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0"
 			>
 				<form onSubmit={form.handleSubmit(submit)} className="flex min-h-0 flex-1 flex-col">
 					<DialogHeader className="sticky top-0 z-20 flex-row items-center gap-3 border-b border-white/[0.06] bg-[#161b22]/95 backdrop-blur-md px-6 py-4 pe-12 text-start sm:text-start">
@@ -1778,7 +1778,7 @@ export const UserDialog: FC<UserDialogProps> = () => {
 							{isEditing ? <Pencil className="size-4" /> : <UserPlus className="size-4" />}
 						</div>
 						<div className="min-w-0">
-							<DialogTitle className="truncate text-base font-semibold text-white tracking-tight">{title}</DialogTitle>
+							<DialogTitle className="truncate text-base font-semibold text-[var(--rb-panel-text)] tracking-tight">{title}</DialogTitle>
 							{isEditing && hasPrivilegedRole && editingUser?.admin_username ? (
 								<DialogDescription className="truncate text-xs text-[#8b949e]">
 									{t("userDialog.createdBy")}: {editingUser.admin_username}

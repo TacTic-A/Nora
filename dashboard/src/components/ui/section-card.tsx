@@ -40,7 +40,7 @@ function SectionCardHeader({
     <div
       data-slot="section-card-header"
       className={cn(
-        "flex items-center gap-2.5 pb-2.5 mb-3 border-b border-white/[0.06] text-xs font-semibold text-white",
+        "flex items-center gap-2.5 pb-2.5 mb-3 border-b border-white/[0.06] text-xs font-semibold text-[var(--rb-panel-text)]",
         className
       )}
       {...props}
@@ -102,7 +102,7 @@ function SectionCardTitle({
   return (
     <h3
       data-slot="section-card-title"
-      className={cn("text-xs font-semibold text-white truncate", className)}
+      className={cn("text-xs font-semibold text-[var(--rb-panel-text)] truncate", className)}
       {...props}
     />
   );

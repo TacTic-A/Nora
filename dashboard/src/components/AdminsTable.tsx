@@ -667,7 +667,7 @@ export const AdminsTable: FC<AdminsTableProps> = ({
 				mobilePriority: 0,
 				mobileMetaLabel: t("username"),
 				cell: (admin) => (
-					<p dir="ltr" className="font-medium text-white truncate max-w-[10rem] [unicode-bidi:isolate]">
+					<p dir="ltr" className="font-medium text-[var(--rb-panel-text)] truncate max-w-[10rem] [unicode-bidi:isolate]">
 						{admin.username}
 					</p>
 				),
@@ -741,7 +741,7 @@ export const AdminsTable: FC<AdminsTableProps> = ({
 				mobilePriority: 3,
 				mobileMetaLabel: t("admins.details.activeLabel"),
 				cell: (admin) => (
-					<p dir="ltr" className="text-xs font-semibold font-mono tabular-nums [unicode-bidi:isolate] text-white">
+					<p dir="ltr" className="text-xs font-semibold font-mono tabular-nums [unicode-bidi:isolate] text-[var(--rb-panel-text)]">
 						{formatCount(admin.active_users ?? 0, locale)}
 						<span className="text-[#8b949e] font-medium">
 							/{formatCount(admin.users_count ?? 0, locale)}
