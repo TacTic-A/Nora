@@ -313,10 +313,6 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 									: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
 						)}
 					>
-						{showAccentBar ? (
-							<span className="pointer-events-none absolute inset-s-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.6)]" />
-						) : null}
-
 						<span
 							className={cn(
 								"inline-flex size-[18px] shrink-0 items-center justify-center transition-colors",
@@ -828,10 +824,6 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 																				: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
 																		)}
 																	>
-																		{isActive ? (
-																			<span className="pointer-events-none absolute inset-s-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.6)]" />
-																		) : null}
-
 																		<span className="relative inline-flex size-[18px] shrink-0 items-center justify-center">
 																			<ItemIcon className={cn("size-[18px] transition-colors", isActive ? "text-cyan-400 drop-shadow-[0_0_6px_rgba(6,182,212,0.4)]" : "text-slate-400")} />
 																			{showBadge && collapsed ? (

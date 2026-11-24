@@ -775,9 +775,6 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 																							: "bg-transparent font-medium text-slate-400",
 																					)}
 																				>
-																					{entrySelected ? (
-																						<span className="pointer-events-none absolute inset-s-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.6)]" />
-																					) : null}
 																					<EntryIcon className={cn("size-[18px] shrink-0", entrySelected ? "text-cyan-400" : "text-slate-400")} />
 																					<span className="min-w-0 flex-1 truncate">
 																						{navEntry.title}
@@ -847,10 +844,6 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 																								: "bg-transparent font-medium text-slate-400",
 																					)}
 																				>
-																					{isGroupActive && !isGroupOpen ? (
-																						<span className="pointer-events-none absolute inset-s-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-full bg-cyan-400" />
-																					) : null}
-
 																					<span className="flex min-w-0 flex-1 items-center gap-2.5 overflow-hidden">
 																						<GroupIcon
 																							className={cn(
