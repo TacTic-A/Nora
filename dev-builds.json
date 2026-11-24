@@ -1,9 +1,33 @@
 {
   "schema_version": 1,
   "project": "Nora",
-  "latest": "dev-d6e5a90",
-  "updated_at": "2026-11-24T21:31:21Z",
+  "latest": "dev-c752072",
+  "updated_at": "2026-11-24T21:48:54Z",
   "builds": [
+    {
+      "tag": "dev-c752072",
+      "sha": "c7520720073001c2351915ad58f86505bcfa8e70",
+      "branch": "dev",
+      "workflow": "Binary Build",
+      "run_id": "45494640732",
+      "run_number": "31",
+      "created_at": "2026-11-24T21:48:54Z",
+      "release_tag": "dev-builds",
+      "assets": {
+        "windows-amd64": {
+          "name": "nora-windows-amd64-dev-c752072.zip",
+          "url": "https://github.com/TacTic-A/Nora/releases/download/dev-builds/nora-windows-amd64-dev-c752072.zip"
+        },
+        "linux-amd64": {
+          "name": "nora-linux-amd64-dev-c752072.tar.gz",
+          "url": "https://github.com/TacTic-A/Nora/releases/download/dev-builds/nora-linux-amd64-dev-c752072.tar.gz"
+        },
+        "linux-arm64": {
+          "name": "nora-linux-arm64-dev-c752072.tar.gz",
+          "url": "https://github.com/TacTic-A/Nora/releases/download/dev-builds/nora-linux-arm64-dev-c752072.tar.gz"
+        }
+      }
+    },
     {
       "tag": "dev-d6e5a90",
       "sha": "d6e5a90d600850200f9d038b9e567e380b809256",
