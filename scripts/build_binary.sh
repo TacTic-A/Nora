@@ -31,7 +31,7 @@ rm -rf "$ROOT_DIR/dist/templates"
 if [[ -d "$ROOT_DIR/templates" ]]; then
     cp -R "$ROOT_DIR/templates" "$ROOT_DIR/dist/templates"
 fi
-if [[ "${OS:-}" == "Windows_NT" ]]; then
+if [[ "${OS:-}" == "Windows_NT" || "${GOOS:-}" == "windows" ]]; then
     gateway_output="$ROOT_DIR/dist/nora-server.exe"
 fi
 

@@ -17,7 +17,7 @@ fi
 mkdir -p "$ROOT_DIR/dist"
 
 output="$ROOT_DIR/dist/nora-cli"
-if [[ "${OS:-}" == "Windows_NT" ]]; then
+if [[ "${OS:-}" == "Windows_NT" || "${GOOS:-}" == "windows" ]]; then
     output="$ROOT_DIR/dist/nora-cli.exe"
 fi
 

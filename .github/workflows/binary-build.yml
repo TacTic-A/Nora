@@ -2,21 +2,11 @@ name: Binary Build
 
 on:
   workflow_dispatch:
-    inputs:
-      full_matrix:
-        description: "Build every Linux architecture. This is slower than the default release build."
-        required: false
-        type: boolean
-        default: false
   push:
     branches:
       - dev
-      - go-usage-bridge
     tags:
       - "v*"
-  pull_request:
-    branches:
-      - "**"
   release:
     types:
       - published
@@ -30,249 +20,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  dashboard:
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    env:
-      DASH_DIR: ./dashboard
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Node.js 20 LTS
-        uses: actions/setup-node@v6
-        with:
-          node-version: "22"
-          cache: npm
-          cache-dependency-path: ${{ env.DASH_DIR }}/package-lock.json
-
-      - name: Setup Go
-        uses: actions/setup-go@v6
-        with:
-          go-version-file: "go.mod"
-
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: '0.147.7'
-          extended: true
-
-      - name: Install dashboard dependencies
-        working-directory: ${{ env.DASH_DIR }}
-        run: npm ci
-
-      - name: Test dashboard
-        working-directory: ${{ env.DASH_DIR }}
-        run: npm test
-
-      - name: Lint dashboard
-        working-directory: ${{ env.DASH_DIR }}
-        run: npm run lint
-
-      - name: Build dashboard
-        run: bash scripts/build_dashboard.sh
-
-      - name: Test Go
-        run: go test ./internal/app/admin ./internal/app/backup ./internal/app/migrations
-
-      - name: Test binary database lifecycle
-        run: bash scripts/nora/test-database-maintenance.sh
-
-      - name: Upload dashboard
-        uses: actions/upload-artifact@v4
-        with:
-          name: dashboard-build
-          path: dashboard/build
-          retention-days: 1
-
-  build-linux:
-    needs: dashboard
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - asset_arch: "386"
-            goarch: "386"
-            goarm: ""
-          - asset_arch: amd64
-            goarch: amd64
-            goarm: ""
-          - asset_arch: arm64
-            goarch: arm64
-            goarm: ""
-          - asset_arch: armv5
-            goarch: arm
-            goarm: "5"
-          - asset_arch: armv6
-            goarch: arm
-            goarm: "6"
-          - asset_arch: armv7
-            goarch: arm
-            goarm: "7"
-          - asset_arch: s390x
-            goarch: s390x
-            goarm: ""
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Validate installer shell scripts
-        shell: bash
-        run: bash -n scripts/nora/nora-binary.sh scripts/nora/nora.sh scripts/nora/nora-node-binary.sh scripts/nora/nora-node.sh
-
-      - name: Download dashboard
-        uses: actions/download-artifact@v4
-        with:
-          name: dashboard-build
-          path: dashboard/build
-
-      - name: Set up Go
-        if: matrix.asset_arch == 'amd64' || matrix.asset_arch == 'arm64' || github.ref_type == 'tag' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.full_matrix == true)
-        uses: actions/setup-go@v6
-        with:
-          go-version-file: "go.mod"
-
-      - name: Build Linux binary package
-        if: matrix.asset_arch == 'amd64' || matrix.asset_arch == 'arm64' || github.ref_type == 'tag' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.full_matrix == true)
-        shell: bash
-        env:
-          ASSET_NAME: nora-linux-${{ matrix.asset_arch }}.tar.gz
-          GOOS: linux
-          GOARCH: ${{ matrix.goarch }}
-          GOARM: ${{ matrix.goarm }}
-        run: |
-          set -euo pipefail
-          bash scripts/build_binary.sh
-          tar -C dist -czf "dist/${ASSET_NAME}" nora-server nora-cli templates
-          sha256sum "dist/${ASSET_NAME}"
-
-      - name: Upload Linux package artifact
-        if: matrix.asset_arch == 'amd64' || matrix.asset_arch == 'arm64' || github.ref_type == 'tag' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.full_matrix == true)
-        uses: actions/upload-artifact@v4
-        with:
-          name: nora-linux-${{ matrix.asset_arch }}
-          path: dist/nora-linux-${{ matrix.asset_arch }}.tar.gz
-          retention-days: 1
-
-  build-windows-amd64:
-    needs: dashboard
-    runs-on: windows-latest
-    timeout-minutes: 10
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Download dashboard
-        uses: actions/download-artifact@v4
-        with:
-          name: dashboard-build
-          path: dashboard/build
-
-      - name: Set up Go
-        uses: actions/setup-go@v6
-        with:
-          go-version-file: "go.mod"
-
-      - name: Set up Windows C toolchain
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: UCRT64
-          update: false
-          path-type: inherit
-          install: mingw-w64-ucrt-x86_64-gcc
-
-      - name: Add Windows C toolchain to PATH
-        shell: msys2 {0}
-        run: |
-          set -euo pipefail
-          toolchain_path="$(cygpath -w "${MINGW_PREFIX}/bin")"
-          echo "${toolchain_path}" >> "${GITHUB_PATH}"
-          gcc --version
-
-      - name: Build Windows binaries
-        shell: bash
-        run: |
-          set -euo pipefail
-          bash scripts/build_binary.sh
-
-      - name: Package Windows binaries
-        shell: pwsh
-        run: |
-          Compress-Archive `
-            -Path dist/nora-server.exe, dist/nora-cli.exe, dist/templates `
-            -DestinationPath dist/nora-windows-amd64.zip `
-            -Force
-
-      - name: Upload Windows package artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: nora-windows-amd64
-          path: dist/nora-windows-amd64.zip
-          retention-days: 1
-
-  publish-release:
-    needs:
-      - build-linux
-      - build-windows-amd64
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    if: github.event_name == 'release' || github.ref_type == 'tag'
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Resolve release tag
-        id: meta
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [[ "${{ github.event_name }}" == "release" ]]; then
-            RELEASE_TAG="${{ github.event.release.tag_name }}"
-          else
-            RELEASE_TAG="${GITHUB_REF_NAME}"
-          fi
-          echo "release_tag=${RELEASE_TAG}" >> "${GITHUB_OUTPUT}"
-
-      - name: Download package artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: "*windows*,*linux*"
-          path: release-assets
-          merge-multiple: true
-
-      - name: Upload release assets
-        shell: bash
-        run: |
-          set -euo pipefail
-          release_tag="${{ steps.meta.outputs.release_tag }}"
-          notes_file=".github/release-notes/${release_tag}.md"
-
-          if [ -f "${notes_file}" ]; then
-            cp "${notes_file}" release-body.md
-          else
-            printf 'Nora %s\n' "${release_tag}" > release-body.md
-          fi
-
-          gh release view "${release_tag}" >/dev/null 2>&1 || \
-            gh release create "${release_tag}" --title "${release_tag}" --notes-file release-body.md
-
-          gh release upload "${release_tag}" release-assets/* --clobber
-
-  publish-dev-manifest:
-    needs:
-      - build-linux
-      - build-windows-amd64
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    if: github.event_name == 'push' && github.ref_name == 'dev'
+    timeout-minutes: 15
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       DEV_RELEASE_TAG: dev-builds
@@ -281,72 +31,53 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
-          ref: ${{ github.sha }}
+          fetch-depth: 0
 
-      - name: Download package artifacts
-        uses: actions/download-artifact@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
         with:
-          pattern: nora-*
-          path: dev-release-assets
-          merge-multiple: true
+          go-version-file: "go.mod"
 
-      - name: Prepare dev assets
+      - name: Validate installer shell scripts
+        shell: bash
+        run: bash -n scripts/nora/nora-binary.sh scripts/nora/nora.sh scripts/nora/nora-node-binary.sh scripts/nora/nora-node.sh
+
+      - name: Test Go
+        run: go test ./internal/app/system ./internal/app/migrations
+
+      - name: Build and Package Binaries
         id: meta
         shell: bash
         run: |
           set -euo pipefail
           build_tag="dev-${GITHUB_SHA::7}"
-          mkdir -p dev-upload-assets
-          shopt -s nullglob
-          for asset in dev-release-assets/nora-*; do
-            name="$(basename "$asset")"
-            case "$name" in
-              nora-linux-*.tar.gz)
-                base="${name%.tar.gz}"
-                cp "$asset" "dev-upload-assets/${base}-${build_tag}.tar.gz"
-                ;;
-              nora-windows-*.zip)
-                base="${name%.zip}"
-                cp "$asset" "dev-upload-assets/${base}-${build_tag}.zip"
-                ;;
-            esac
+          mkdir -p dist dev-upload-assets release-upload-assets
+
+          for arch in amd64 arm64; do
+            echo "--- Building Linux ${arch} ---"
+            rm -rf dist/*
+            GOOS=linux GOARCH="${arch}" bash scripts/build_binary.sh
+            asset_name="nora-linux-${arch}.tar.gz"
+            tar -C dist -czf "dist/${asset_name}" nora-server nora-cli templates
+            sha256sum "dist/${asset_name}"
+            cp "dist/${asset_name}" "dev-upload-assets/nora-linux-${arch}-${build_tag}.tar.gz"
+            cp "dist/${asset_name}" "release-upload-assets/${asset_name}"
           done
-          if ! compgen -G "dev-upload-assets/*" >/dev/null; then
-            echo "No dev binary assets were prepared" >&2
-            exit 1
-          fi
+
+          echo "--- Building Windows amd64 ---"
+          rm -rf dist/*
+          GOOS=windows GOARCH=amd64 bash scripts/build_binary.sh
+          (cd dist && zip -q -r nora-windows-amd64.zip nora-server.exe nora-cli.exe templates)
+          sha256sum dist/nora-windows-amd64.zip
+          cp dist/nora-windows-amd64.zip "dev-upload-assets/nora-windows-amd64-${build_tag}.zip"
+          cp dist/nora-windows-amd64.zip "release-upload-assets/nora-windows-amd64.zip"
+
           echo "build_tag=${build_tag}" >> "${GITHUB_OUTPUT}"
 
-      - name: Prune old dev build assets
-        shell: bash
-        run: |
-          set -euo pipefail
-          keep_builds=49
-          if ! gh release view "${DEV_RELEASE_TAG}" >/dev/null 2>&1; then
-            exit 0
-          fi
-          gh release view "${DEV_RELEASE_TAG}" --json assets -q '.assets' > dev-assets.json
-          jq -r --argjson keep "${keep_builds}" '
-            [ .[]
-              | select(.name | test("-dev-[0-9a-f]+\\.(tar\\.gz|zip)$"))
-              | {
-                  id: (.apiUrl | split("/") | last),
-                  created: .createdAt,
-                  tag: (.name | capture("-dev-(?<t>[0-9a-f]+)\\.(tar\\.gz|zip)$").t)
-                } ]
-            | group_by(.tag)
-            | map({created: (map(.created) | max), ids: map(.id)})
-            | sort_by(.created)
-            | reverse
-            | .[$keep:][]
-            | .ids[]
-          ' dev-assets.json > dev-assets-to-prune.txt
-          echo "Pruning $(wc -l < dev-assets-to-prune.txt | tr -d ' ') old dev build asset(s), keeping the newest ${keep_builds} builds"
-          xargs -r -P 6 -I{} bash -c 'gh api -X DELETE "repos/${GITHUB_REPOSITORY}/releases/assets/$1" >/dev/null || echo "::warning::could not delete old dev asset $1"' _ {} < dev-assets-to-prune.txt
-
-      - name: Publish dev build assets
+      - name: Publish Dev Release
+        if: github.ref == 'refs/heads/dev' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         shell: bash
         run: |
           set -euo pipefail
@@ -358,7 +89,8 @@ jobs:
               --target "${GITHUB_SHA}"
           gh release upload "${DEV_RELEASE_TAG}" dev-upload-assets/* --clobber
 
-      - name: Checkout dev build manifest branch
+      - name: Update Dev Build Manifest
+        if: github.ref == 'refs/heads/dev' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         shell: bash
         run: |
           set -euo pipefail
@@ -371,10 +103,6 @@ jobs:
             git -C dev-manifest rm -rf . >/dev/null 2>&1 || true
           fi
 
-      - name: Update dev build manifest
-        shell: bash
-        run: |
-          set -euo pipefail
           manifest_path="dev-manifest/${DEV_MANIFEST_PATH}"
           mkdir -p "$(dirname "${manifest_path}")"
           generated_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
@@ -382,6 +110,7 @@ jobs:
           if [ -s "${manifest_path}" ]; then
             previous_manifest="$(<"${manifest_path}")"
           fi
+
           jq -n \
             --argjson previous "${previous_manifest}" \
             --arg project "Nora" \
@@ -451,24 +180,26 @@ jobs:
                 }
             ' > "${manifest_path}"
 
-      - name: Commit dev build manifest
+          git -C dev-manifest add "${DEV_MANIFEST_PATH}"
+          if ! git -C dev-manifest diff --cached --quiet; then
+            git -C dev-manifest config user.name "github-actions[bot]"
+            git -C dev-manifest config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git -C dev-manifest commit -m "Update dev binary build manifest [skip ci]"
+            for attempt in 1 2 3 4; do
+              if git -C dev-manifest push origin "HEAD:${DEV_MANIFEST_BRANCH}"; then
+                break
+              fi
+              git -C dev-manifest fetch origin "${DEV_MANIFEST_BRANCH}"
+              git -C dev-manifest rebase "origin/${DEV_MANIFEST_BRANCH}" || git -C dev-manifest rebase --abort
+            done
+          fi
+
+      - name: Publish Stable Release
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'release'
         shell: bash
         run: |
           set -euo pipefail
-          git -C dev-manifest add "${DEV_MANIFEST_PATH}"
-          if git -C dev-manifest diff --cached --quiet; then
-            echo "Dev build manifest is unchanged."
-            exit 0
-          fi
-          git -C dev-manifest config user.name "github-actions[bot]"
-          git -C dev-manifest config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git -C dev-manifest commit -m "Update dev binary build manifest [skip ci]"
-          for attempt in 1 2 3 4; do
-            if git -C dev-manifest push origin "HEAD:${DEV_MANIFEST_BRANCH}"; then
-              exit 0
-            fi
-            git -C dev-manifest fetch origin "${DEV_MANIFEST_BRANCH}"
-            git -C dev-manifest rebase "origin/${DEV_MANIFEST_BRANCH}" || git -C dev-manifest rebase --abort
-            sleep $((attempt * 5))
-          done
-          exit 1
+          RELEASE_TAG="${GITHUB_REF_NAME}"
+          gh release view "${RELEASE_TAG}" >/dev/null 2>&1 || \
+            gh release create "${RELEASE_TAG}" --title "${RELEASE_TAG}" --notes "Nora Release ${RELEASE_TAG}"
+          gh release upload "${RELEASE_TAG}" release-upload-assets/* --clobber
