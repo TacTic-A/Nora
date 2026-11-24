@@ -110,7 +110,7 @@ export function ResourceGaugeCard({
 				<div className="mb-1 flex items-baseline gap-1.5 font-mono">
 					<span
 						dir="ltr"
-						className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-white tabular-nums [unicode-bidi:isolate]"
+						className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-[var(--rb-panel-text)] tabular-nums [unicode-bidi:isolate]"
 					>
 						{value}
 					</span>
@@ -144,7 +144,7 @@ export function ResourceGaugeCard({
 					<span className="font-semibold text-[#8b949e]">Utilization</span>
 					<span
 						dir="ltr"
-						className="font-bold text-white tabular-nums [unicode-bidi:isolate]"
+						className="font-bold text-[var(--rb-panel-text)] tabular-nums [unicode-bidi:isolate]"
 					>
 						{safePercent.toFixed(1)}%
 					</span>

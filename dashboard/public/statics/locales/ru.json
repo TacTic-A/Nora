@@ -1152,5 +1152,15 @@
 	"dashboard.backup.importRestoring": "Восстановление из резервной копии...",
 	"dashboard.backup.importCompleted": "Восстановление завершено.",
 	"dashboard.backup.stepUpload": "Отправка",
-	"dashboard.backup.stepRestore": "Восстановление"
+	"dashboard.backup.stepRestore": "Восстановление",
+	"userDialog.identity": "Идентификация",
+	"userDialog.identityDesc": "Основной идентификатор и статус аккаунта",
+	"userDialog.expirySection": "Доступ и срок действия",
+	"userDialog.expirySectionDesc": "Срок действия, режим ожидания и тариф",
+	"userDialog.securitySection": "Безопасность и ключи",
+	"userDialog.securitySectionDesc": "Настройка пользовательских ключей доступа",
+	"userDialog.trafficSection": "Трафик и лимиты",
+	"userDialog.trafficSectionDesc": "Лимиты трафика, подключений и скорости",
+	"userDialog.autoRenewDesc": "Правила автоматического продления подписки",
+	"userDialog.metadataDesc": "Теги, заметки администратора и контакты"
 }

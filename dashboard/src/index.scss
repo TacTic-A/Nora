@@ -3012,9 +3012,13 @@ input[type="number"] {
 [data-theme="light"],
 .light {
   .bg-\[\#0d1117\] { background-color: var(--canvas-base) !important; }
+  .bg-\[\#0d1117\]\/60 { background-color: color-mix(in srgb, var(--canvas-base) 60%, transparent) !important; }
+  .bg-\[\#0d1117\]\/80 { background-color: color-mix(in srgb, var(--canvas-base) 80%, transparent) !important; }
   .bg-\[\#161b22\] { background-color: var(--canvas-surface) !important; }
   .bg-\[\#161b22\]\/95 { background-color: color-mix(in srgb, var(--canvas-surface) 95%, transparent) !important; }
   .bg-\[\#21262d\] { background-color: var(--canvas-elevated) !important; }
+  .bg-\[\#21262d\]\/50 { background-color: color-mix(in srgb, var(--canvas-elevated) 75%, transparent) !important; }
+  .bg-\[\#21262d\]\/60 { background-color: color-mix(in srgb, var(--canvas-elevated) 80%, transparent) !important; }
   .bg-\[\#1b2027\] { background-color: var(--canvas-subtle) !important; }
   .bg-\[\#1b2027\]\/70 { background-color: color-mix(in srgb, var(--canvas-subtle) 70%, transparent) !important; }
   .border-white\/\[0\.08\] { border-color: var(--border-default) !important; }
@@ -3022,6 +3026,8 @@ input[type="number"] {
   .border-white\/10 { border-color: var(--border-default) !important; }
   .border-white\/20 { border-color: var(--border-accent) !important; }
   .text-\[\#f0f6fc\] { color: var(--rb-panel-text) !important; }
+  .text-\[\#e6edf3\] { color: var(--rb-panel-text) !important; }
   .text-\[\#c9d1d9\] { color: var(--rb-panel-text-secondary) !important; }
+  .text-\[\#b1bac4\] { color: var(--rb-panel-text-secondary) !important; }
   .text-\[\#8b949e\] { color: var(--rb-panel-text-muted) !important; }
 }

@@ -65,7 +65,7 @@ export function KpiCard({
 				{isLoading ? (
 					<div className="h-7 w-20 animate-pulse rounded bg-white/[0.06]" />
 				) : (
-					<span className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-white tabular-nums truncate">
+					<span className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-[var(--rb-panel-text)] tabular-nums truncate">
 						{typeof value === "number" ? value.toLocaleString() : value}
 					</span>
 				)}

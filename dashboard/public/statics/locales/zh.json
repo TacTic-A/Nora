@@ -1153,5 +1153,15 @@
 	"dashboard.backup.importRestoring": "正在恢复备份...",
 	"dashboard.backup.importCompleted": "备份恢复已完成。",
 	"dashboard.backup.stepUpload": "上传",
-	"dashboard.backup.stepRestore": "恢复"
+	"dashboard.backup.stepRestore": "恢复",
+	"userDialog.identity": "用户身份",
+	"userDialog.identityDesc": "主标识符和账户状态",
+	"userDialog.expirySection": "访问与有效期",
+	"userDialog.expirySectionDesc": "有效期、保持时长与服务方案",
+	"userDialog.securitySection": "安全与凭据",
+	"userDialog.securitySectionDesc": "自定义凭据密钥配置",
+	"userDialog.trafficSection": "流量与限制",
+	"userDialog.trafficSectionDesc": "流量限制、连接数与速率控制",
+	"userDialog.autoRenewDesc": "自动续费订阅规则",
+	"userDialog.metadataDesc": "标签、管理员备注与联系方式"
 }

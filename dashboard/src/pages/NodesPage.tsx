@@ -292,7 +292,7 @@ const NodeMetricDisplay = ({
 	const progressValue = boundedPercent(percent);
 	return (
 		<div className="flex flex-col items-center justify-center gap-0.5 min-w-0! max-w-full min-h-[34px] pb-1 text-center mx-auto font-mono tabular-nums">
-			<p className="font-semibold text-xs leading-[1.375] truncate max-w-full text-white">
+			<p className="font-semibold text-xs leading-[1.375] truncate max-w-full text-[var(--rb-panel-text)]">
 				{value}
 			</p>
 			{helper && helper !== "-" ? (
@@ -301,7 +301,7 @@ const NodeMetricDisplay = ({
 				</p>
 			) : null}
 			{progressValue !== undefined && (
-				<Progress value={progressValue} indicatorClassName={barClass(colorScheme)} className="rounded-full w-[46px] h-1.5 mx-auto bg-white/[0.08]" />
+				<Progress value={progressValue} indicatorClassName={barClass(colorScheme)} className="rounded-full w-[46px] h-1.5 mx-auto bg-[#21262d]" />
 			)}
 		</div>
 	);
@@ -1848,7 +1848,7 @@ export const NodesPage: FC = () => {
 				mobilePriority: 0,
 				mobileMetaLabel: t("nodes.nodeName"),
 				cell: (node) => (
-					<p dir="auto" className="font-medium text-white truncate max-w-full">
+					<p dir="auto" className="font-medium text-[var(--rb-panel-text)] truncate max-w-full">
 						<AppleEmojiText>
 							{formatNodeNamePreview(node.name || t("nodes.unnamedNode"))}
 						</AppleEmojiText>

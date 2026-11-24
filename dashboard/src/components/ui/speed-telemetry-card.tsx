@@ -40,7 +40,7 @@ export function SpeedTelemetryCard({
 					<span className="badge-soft-cyan flex size-7 items-center justify-center rounded-lg text-cyan-400 [&_svg]:size-3.5">
 						<Signal />
 					</span>
-					<span className="text-xs font-semibold text-white">{title}</span>
+					<span className="text-xs font-semibold text-[var(--rb-panel-text)]">{title}</span>
 				</div>
 
 				<div className="flex items-center gap-1.5">
