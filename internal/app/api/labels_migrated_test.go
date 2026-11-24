@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -44,12 +45,12 @@ func TestHostTagsTravelWithTheHostPayload(t *testing.T) {
 	}
 	hostID := sqliteHostID(t, server.db, "one")
 
-	rec = sqliteJSONRequest(server, http.MethodPut, "/api/hosts", token, `{"label-in":[{"id":`+itoa(hostID)+`,"remark":"one","address":"two.example.com","port":443,"security":"inbound_default","is_disabled":false}]}`)
+	rec = sqliteJSONRequest(server, http.MethodPut, "/api/hosts", token, `{"label-in":[{"id":`+strconv.FormatInt(hostID, 10)+`,"remark":"one","address":"two.example.com","port":443,"security":"inbound_default","is_disabled":false}]}`)
 	if rec.Code != http.StatusOK || !strings.Contains(rec.Body.String(), `"tags":["edge","eu"]`) {
 		t.Fatalf("a payload without tags must keep them: status=%d body=%s", rec.Code, rec.Body.String())
 	}
 
-	rec = sqliteJSONRequest(server, http.MethodPut, "/api/hosts", token, `{"label-in":[{"id":`+itoa(hostID)+`,"remark":"one","address":"two.example.com","port":443,"security":"inbound_default","is_disabled":false,"tags":[]}]}`)
+	rec = sqliteJSONRequest(server, http.MethodPut, "/api/hosts", token, `{"label-in":[{"id":`+strconv.FormatInt(hostID, 10)+`,"remark":"one","address":"two.example.com","port":443,"security":"inbound_default","is_disabled":false,"tags":[]}]}`)
 	if rec.Code != http.StatusOK || strings.Contains(rec.Body.String(), `"edge"`) {
 		t.Fatalf("empty tags must clear them: status=%d body=%s", rec.Code, rec.Body.String())
 	}

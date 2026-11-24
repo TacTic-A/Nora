@@ -49,9 +49,14 @@ jobs:
 
       - name: Build Dashboard
         working-directory: dashboard
+        env:
+          VITE_BASE_API: "/api/"
         run: |
           npm ci
           npm run build
+          cp ./build/index.html ./build/404.html
+          mkdir -p ../internal/gateway/static/dashboard/build
+          cp -R ./build/. ../internal/gateway/static/dashboard/build/
 
       - name: Validate installer shell scripts
         shell: bash

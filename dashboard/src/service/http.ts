@@ -11,7 +11,7 @@ export const useAPIRequestErrors = create<{
 	clear: (key) => set((state) => ({ errors: key ? state.errors.filter((item) => item.key !== key) : [] })),
 }));
 
-const configuredBaseURL = import.meta.env.VITE_BASE_API || "";
+const configuredBaseURL = import.meta.env.VITE_BASE_API || "/api";
 
 const getDevProxyBaseURL = (baseURL: string) => {
 	try {
@@ -25,7 +25,7 @@ const getDevProxyBaseURL = (baseURL: string) => {
 export const apiBaseURL =
 	import.meta.env.DEV && /^https?:\/\//i.test(configuredBaseURL)
 		? getDevProxyBaseURL(configuredBaseURL)
-		: configuredBaseURL;
+		: (configuredBaseURL || "/api");
 
 const rawFetch = ohMyFetch.create({
 	baseURL: apiBaseURL,
