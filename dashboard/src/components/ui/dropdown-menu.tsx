@@ -26,7 +26,7 @@ function DropdownMenuContent({
         data-slot="dropdown-menu-content"
         sideOffset={sideOffset}
         className={cn(
-          "bg-[#21262d] text-white data-[state=open]:animate-rb-pop-in data-[state=closed]:animate-rb-pop-out z-[13000] max-h-(--radix-dropdown-menu-content-available-height) min-w-[9rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-xl border border-white/10 p-1.5 shadow-2xl backdrop-blur-md",
+          "bg-[var(--rb-panel-surface)] text-[var(--rb-panel-text)] data-[state=open]:animate-rb-pop-in data-[state=closed]:animate-rb-pop-out z-[13000] max-h-(--radix-dropdown-menu-content-available-height) min-w-[9rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-xl border border-[var(--rb-panel-border)] p-1.5 shadow-2xl backdrop-blur-md",
           className,
         )}
         {...props}
@@ -54,7 +54,7 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "relative flex cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm text-[#c9d1d9] outline-hidden select-none transition-colors hover:bg-white/[0.08] hover:text-white focus:bg-white/[0.08] focus:text-white data-[highlighted]:bg-white/[0.08] data-[highlighted]:text-white data-[variant=destructive]:text-red-400 data-[variant=destructive]:hover:bg-red-500/15 data-[variant=destructive]:focus:bg-red-500/15 data-[variant=destructive]:focus:text-red-300 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:ps-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative flex cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm text-[var(--rb-panel-text-secondary)] outline-hidden select-none transition-colors hover:bg-[var(--rb-panel-elevated)] hover:text-[var(--rb-panel-text)] focus:bg-[var(--rb-panel-elevated)] focus:text-[var(--rb-panel-text)] data-[highlighted]:bg-[var(--rb-panel-elevated)] data-[highlighted]:text-[var(--rb-panel-text)] data-[variant=destructive]:text-red-400 data-[variant=destructive]:hover:bg-red-500/15 data-[variant=destructive]:focus:bg-red-500/15 data-[variant=destructive]:focus:text-red-300 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:ps-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}

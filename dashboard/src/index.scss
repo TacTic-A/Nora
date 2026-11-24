@@ -207,6 +207,7 @@ body {
   color: var(--rb-panel-text-muted) !important;
   background: transparent !important;
   border: 0 !important;
+  box-shadow: none !important;
   padding-top: 0 !important;
   padding-bottom: 3px !important;
   padding-left: clamp(4px, 0.45vw, 8px) !important;
@@ -339,7 +340,9 @@ body {
 
 .rb-data-table th.rb-select-cell,
 .rb-data-table th.rb-actions-cell {
-  background: var(--rb-panel-main) !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
   z-index: 4;
 }
 
@@ -1146,11 +1149,11 @@ body {
 
 table thead {
   th:first-of-type {
-    border-top-left-radius: 8px;
+    border-top-left-radius: 0;
   }
 
   th:last-of-type {
-    border-top-right-radius: 8px;
+    border-top-right-radius: 0;
   }
 }
 

@@ -59,18 +59,20 @@ export const RowActionsMenu: FC<RowActionsMenuProps> = ({ actions, label = "Acti
 				/>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent
+				side="bottom"
 				align={isRtl ? "start" : "end"}
-				collisionPadding={8}
-				sideOffset={6}
+				sideOffset={4}
+				collisionPadding={16}
+				collisionBoundary={typeof document !== "undefined" ? [document.body] : undefined}
 				onClick={(event) => event.stopPropagation()}
-				className="min-w-[200px]! max-w-[calc(100vw_-_16px)] max-h-[min(50vh,_360px)] overflow-y-auto overflow-x-hidden overscroll-contain z-[2500] rounded-xl bg-[#21262d] border border-white/10 p-1.5 shadow-2xl backdrop-blur-md"
+				className="min-w-[200px]! max-w-[calc(100vw_-_32px)] max-h-[min(65vh,_420px)] overflow-y-auto overflow-x-hidden overscroll-contain z-[13500] rounded-xl bg-[var(--rb-panel-surface)] border border-[var(--rb-panel-border)] p-1.5 shadow-2xl backdrop-blur-md text-[var(--rb-panel-text)]"
 			>
 				{orderedActions.map((action) => (
 					<DropdownMenuItem
 						key={action.id}
 						disabled={action.disabled}
 						className={cn(
-							"px-2.5 py-1.5 rounded-lg text-sm font-medium text-[#c9d1d9] hover:bg-white/[0.08] hover:text-white transition-colors cursor-pointer flex items-center gap-2",
+							"px-2.5 py-1.5 rounded-lg text-sm font-medium text-[var(--rb-panel-text-secondary)] hover:bg-[var(--rb-panel-elevated)] hover:text-[var(--rb-panel-text)] focus:bg-[var(--rb-panel-elevated)] focus:text-[var(--rb-panel-text)] transition-colors cursor-pointer flex items-center gap-2",
 							action.isDanger
 								? "text-red-400 hover:bg-red-500/15 hover:text-red-300 focus:bg-red-500/15 focus:text-red-300"
 								: toneClass(action.color)

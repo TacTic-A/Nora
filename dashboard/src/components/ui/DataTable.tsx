@@ -97,11 +97,7 @@ const installSelectAllShortcut = () => {
 	}, true);
 };
 
-const ActionsHeaderIcon = () => (
-	<div aria-hidden="true" className="inline-flex items-center justify-end w-full text-panel-text-muted rb-actions-header-icon">
-		<SlidersHorizontal className="w-3.5 h-3.5" />
-	</div>
-);
+const ActionsHeaderIcon = () => null;
 
 const isBelowBreakpoint = (
 	current: DataTableBreakpoint,
@@ -968,9 +964,9 @@ export function DataTable<TData>({
 					{state}
 				</div>
 			) : (
-				<div className="rb-data-table-wrap relative w-full overflow-x-auto rounded-xl border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] shadow-xl">
+				<div className="rb-data-table-wrap relative w-full overflow-x-auto bg-transparent border-0 shadow-none">
 					<table aria-label={ariaLabel} {...resolvedTableProps} className={cn("w-full border-separate border-spacing-0", tableClassNameValue)}>
-						<thead className="rb-data-table-head bg-[var(--canvas-subtle)] border-b border-[var(--rb-panel-border)]">
+						<thead className="rb-data-table-head bg-transparent border-0">
 							{table.getHeaderGroups().map((headerGroup) => (
 								<tr key={headerGroup.id}>
 									{headerGroup.headers.map((header) => {
@@ -1011,7 +1007,7 @@ export function DataTable<TData>({
 													isSelectColumn || headerAlign === "center"
 														? "true"
 														: undefined
-												} {...config?.headerProps} className={cn("bg-[var(--canvas-subtle)] py-3 text-start text-xs font-semibold uppercase tracking-wider text-[var(--rb-panel-text-muted)]", isSelectColumn ? "px-2 text-center" : "px-4", [
+												} {...config?.headerProps} className={cn("bg-transparent py-2.5 text-start text-xs font-semibold tracking-wider text-[var(--rb-panel-text-muted)] border-0 shadow-none select-none", isSelectColumn ? "px-2 text-center" : "px-3.5", [
 													isSelectColumn ? "rb-select-cell" : "",
 													isActionsColumn ? "rb-actions-cell" : "",
 													config?.isPrimary ? "rb-primary-cell" : "",
