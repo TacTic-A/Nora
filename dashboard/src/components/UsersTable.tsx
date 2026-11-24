@@ -983,21 +983,7 @@ export const UsersTable: FC<UsersTableProps> = ({
 				mobileVisible: true,
 				mobilePriority: 9,
 				mobileMetaLabel: t("usersTable.admin"),
-				cell: (user) => {
-					const createdAt = user.created_at
-						? dayjs(user.created_at).format("YYYY-MM-DD HH:mm")
-						: null;
-					return (
-						<div className="flex flex-col gap-0.5 min-w-0!">
-							<UserAdminChip adminUsername={user.admin_username} />
-							{createdAt && (
-								<p dir="ltr" className="text-xs text-[var(--rb-panel-text-muted)] font-mono tabular-nums">
-									{createdAt}
-								</p>
-							)}
-						</div>
-					);
-				},
+				cell: (user) => <UserAdminChip adminUsername={user.admin_username} />,
 			});
 		}
 
@@ -1015,6 +1001,21 @@ export const UsersTable: FC<UsersTableProps> = ({
 					withMargin={false}
 					compact
 				/>
+			),
+		});
+
+		columns.push({
+			id: "created_at",
+			menuLabel: t("usersTable.createdAt"),
+			header: t("usersTable.createdAt"),
+			desktopVisible: false,
+			mobileVisible: true,
+			mobilePriority: 11,
+			mobileMetaLabel: t("usersTable.createdAt"),
+			cell: (user) => (
+				<p dir="ltr" className="text-xs text-[var(--rb-panel-text-secondary)] font-mono tabular-nums">
+					{user.created_at ? dayjs(user.created_at).format("YYYY-MM-DD HH:mm") : "—"}
+				</p>
 			),
 		});
 

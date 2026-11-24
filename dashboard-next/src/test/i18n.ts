@@ -2375,6 +2375,7 @@ const en = {
   "usersTable.userId": "User ID",
   "usersTable.status": "Status",
   "usersTable.by": "by",
+  "usersTable.createdAt": "Created at",
   "usersTable.total": "Total",
   "users.searchHelpLabel": "Search tips",
   "users.searchHelp": "Search by username, key, token, UUID, config link, or subscription URL.",

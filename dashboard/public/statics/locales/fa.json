@@ -2424,6 +2424,7 @@
 	"usersTable.userId": "شناسه کاربر",
 	"usersTable.status": "وضعیت",
 	"usersTable.by": "توسط",
+	"usersTable.createdAt": "تاریخ ساخت",
 	"usersTable.total": "مجموع",
 	"users.searchHelpLabel": "راهنمای جستجو",
 	"users.searchHelp": "با نام کاربری، کلید، توکن، UUID، لینک کانفیگ یا لینک سابسکریپشن جستجو کن.",
