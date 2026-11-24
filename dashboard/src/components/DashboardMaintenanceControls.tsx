@@ -159,7 +159,8 @@ export const DashboardMaintenanceControls: FC<DashboardMaintenanceControlsProps>
 		queryFn: () => fetch<MaintenanceInfo>("/maintenance/info", { timeout: 8000 }),
 		enabled: canMaintain || canBackUp,
 		refetchOnWindowFocus: false,
-		staleTime: 5 * 60 * 1000,
+		staleTime: 60 * 1000,
+		refetchInterval: 2 * 60 * 1000,
 		retry: false,
 	});
 
@@ -562,7 +563,15 @@ export const DashboardMaintenanceControls: FC<DashboardMaintenanceControlsProps>
 	const maintenanceRefreshButton = (
 		<Button
 			type="button"
-			onClick={() => {
+			onClick={async () => {
+				try {
+					await Promise.allSettled([
+						fetch("/maintenance/info?refresh=1", { timeout: 10000 }),
+						fetch("/maintenance/builds?target=panel&refresh=1", { timeout: 10000 }),
+					]);
+				} catch {
+					// ignore
+				}
 				void info.refetch();
 				void builds.refetch();
 			}}

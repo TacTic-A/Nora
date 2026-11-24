@@ -22,6 +22,10 @@ func (s *Server) handleMaintenanceInfo(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 		return
 	}
+	q := r.URL.Query()
+	if q.Get("refresh") == "1" || strings.EqualFold(q.Get("refresh"), "true") || q.Get("force") == "1" || strings.EqualFold(q.Get("force"), "true") {
+		s.maintenanceService().InvalidateCache()
+	}
 	ctx, cancel := context.WithTimeout(r.Context(), 15*time.Second)
 	defer cancel()
 	info, err := s.maintenanceService().Info(ctx)
@@ -40,6 +44,10 @@ func (s *Server) handleMaintenanceBuilds(w http.ResponseWriter, r *http.Request)
 	if r.Method != http.MethodGet {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 		return
+	}
+	q := r.URL.Query()
+	if q.Get("refresh") == "1" || strings.EqualFold(q.Get("refresh"), "true") || q.Get("force") == "1" || strings.EqualFold(q.Get("force"), "true") {
+		s.maintenanceService().InvalidateCache()
 	}
 	repo := systemapp.PanelUpdateRepo
 	if strings.EqualFold(strings.TrimSpace(r.URL.Query().Get("target")), "node") {

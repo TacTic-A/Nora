@@ -150,6 +150,12 @@ func NewMaintenanceServiceWithDeps(runtimeDetector RuntimeDetector, updateChecke
 	}
 }
 
+func (s *MaintenanceService) InvalidateCache() {
+	if c, ok := s.Updates.(*GitHubUpdateChecker); ok {
+		c.Invalidate()
+	}
+}
+
 func (s *MaintenanceService) Info(ctx context.Context) (MaintenanceInfo, error) {
 	panel := s.Runtime.Info()
 	panel.Update = ptr(s.Updates.Status(ctx, PanelUpdateRepo, panel.Tag, panel.Channel))
@@ -644,9 +650,16 @@ func NewGitHubUpdateChecker() *GitHubUpdateChecker {
 		ManifestBranch: firstEnv("NORA_BINARY_DEV_MANIFEST_BRANCH", "dev-build-manifest"),
 		ManifestPath:   "dev-builds.json",
 		Now:            time.Now,
-		CacheTTL:       10 * time.Minute,
-		ErrorTTL:       5 * time.Minute,
+		CacheTTL:       3 * time.Minute,
+		ErrorTTL:       1 * time.Minute,
 	}
+}
+
+func (c *GitHubUpdateChecker) Invalidate() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.cache = map[string]githubUpdateCacheEntry{}
+	c.catalog = map[string]githubBuildCacheEntry{}
 }
 
 func (c *GitHubUpdateChecker) Status(ctx context.Context, repo string, current *string, channel string) UpdateStatus {
