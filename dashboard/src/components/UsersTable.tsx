@@ -705,9 +705,9 @@ export const UsersTable: FC<UsersTableProps> = ({
 				menuLabel: t("usersTable.online"),
 				header: t("usersTable.online"),
 				priority: "high",
-				width: "48px",
-				minWidth: "44px",
-				maxWidth: "52px",
+				width: "78px",
+				minWidth: "72px",
+				maxWidth: "84px",
 				headerAlign: "start",
 				cellAlign: "start",
 				mobileVisible: false,
@@ -983,7 +983,21 @@ export const UsersTable: FC<UsersTableProps> = ({
 				mobileVisible: true,
 				mobilePriority: 9,
 				mobileMetaLabel: t("usersTable.admin"),
-				cell: (user) => <UserAdminChip adminUsername={user.admin_username} />,
+				cell: (user) => {
+					const createdAt = user.created_at
+						? dayjs(user.created_at).format("YYYY-MM-DD HH:mm")
+						: null;
+					return (
+						<div className="flex flex-col gap-0.5 min-w-0!">
+							<UserAdminChip adminUsername={user.admin_username} />
+							{createdAt && (
+								<p dir="ltr" className="text-xs text-[var(--rb-panel-text-muted)] font-mono tabular-nums">
+									{createdAt}
+								</p>
+							)}
+						</div>
+					);
+				},
 			});
 		}
 
