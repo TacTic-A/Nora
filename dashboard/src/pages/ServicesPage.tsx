@@ -1054,7 +1054,7 @@ const ServicesPage: FC = () => {
 				mobilePriority: 1,
 				mobileMetaLabel: t("services.columns.id"),
 				cell: (service) => (
-					<span className="tabular-nums text-panel-text-secondary">
+					<span className="font-mono tabular-nums text-xs text-[#8b949e]">
 						#{service.id}
 					</span>
 				),
@@ -1076,17 +1076,17 @@ const ServicesPage: FC = () => {
 				cell: (service) => (
 					<div className="flex flex-col gap-0.5 items-start text-start min-w-0!">
 						<div className="flex flex-row items-center gap-2 justify-start min-w-0! max-w-full">
-							<p className="font-semibold truncate">
+							<p className="font-medium text-white truncate">
 								{service.name}
 							</p>
 							{!service.has_hosts && (
-								<Badge className={cn("bg-destructive/10 text-destructive", "rounded-md shrink-0")}>
+								<Badge className={cn("badge-soft-red text-red-400 font-semibold px-2 py-0.5 rounded-full border border-red-500/30", "shrink-0")}>
 									{t("services.broken")}
 								</Badge>
 							)}
 						</div>
 						{service.description && (
-							<p className={cn(labelColor, "text-[0.75rem] truncate")}>
+							<p className="text-xs text-[#8b949e] truncate">
 								{service.description}
 							</p>
 						)}
@@ -1103,7 +1103,7 @@ const ServicesPage: FC = () => {
 				mobilePriority: 2,
 				mobileMetaLabel: t("services.columns.hosts"),
 				cell: (service) => (
-					<p className="font-semibold">{service.host_count}</p>
+					<p className="font-mono tabular-nums text-xs font-semibold text-[#c9d1d9]">{service.host_count}</p>
 				),
 			},
 			{
@@ -1116,7 +1116,7 @@ const ServicesPage: FC = () => {
 				mobilePriority: 3,
 				mobileMetaLabel: t("users"),
 				cell: (service) => (
-					<p className="font-semibold">{service.user_count}</p>
+					<p className="font-mono tabular-nums text-xs font-semibold text-[#c9d1d9]">{service.user_count}</p>
 				),
 			},
 			{
@@ -1130,7 +1130,7 @@ const ServicesPage: FC = () => {
 				mobileSummary: true,
 				mobileMetaLabel: t("services.columns.usage"),
 				cell: (service) => (
-					<p dir="ltr" className="[unicode-bidi:isolate] whitespace-nowrap">
+					<p dir="ltr" className="[unicode-bidi:isolate] whitespace-nowrap font-mono tabular-nums text-xs text-[#c9d1d9]">
 						{formatBytes(service.used_traffic)}
 					</p>
 				),
@@ -1146,7 +1146,7 @@ const ServicesPage: FC = () => {
 				mobilePriority: 5,
 				mobileMetaLabel: t("services.columns.lifetime"),
 				cell: (service) => (
-					<p dir="ltr" className="[unicode-bidi:isolate] whitespace-nowrap">
+					<p dir="ltr" className="[unicode-bidi:isolate] whitespace-nowrap font-mono tabular-nums text-xs text-[#8b949e]">
 						{formatBytes(service.lifetime_used_traffic)}
 					</p>
 				),
@@ -1737,9 +1737,9 @@ const ServicesPage: FC = () => {
 
 	return (
 		<div className="flex flex-col gap-4 items-stretch rb-services-section">
-			<div className="border border-panel-border! bg-panel-surface rounded-xl overflow-hidden">
+			<div className="border border-white/[0.08] bg-[#161b22] rounded-xl overflow-hidden shadow-md">
 				<OverviewBand total={serviceOverview.total} rows={serviceOverview.rows} distribution={serviceOverview.distribution} extra={serviceOverview.extra} locale={locale} />
-				<div className="border-t border-panel-border! p-3">
+				<div className="border-t border-white/[0.06] p-3">
 					<div className="flex flex-col gap-2 md:flex-row md:items-center">
 						<div className="min-w-0 flex-1">
 							<SearchInput
@@ -1754,8 +1754,8 @@ const ServicesPage: FC = () => {
 							/>
 						</div>
 						<div className="flex shrink-0 items-center justify-end gap-1.5">
-							<Button aria-label={t("refresh")} onClick={() => void fetchServices(listFilters)} variant="ghost" size="sm" loading={isServicesLoading} className="size-8 p-0">{<RefreshCw className="w-[16px]" />}</Button>
-							<Button onClick={openCreateDialog} size="sm" className="h-[36px] px-3 rounded-[4px]">
+							<Button aria-label={t("refresh")} onClick={() => void fetchServices(listFilters)} variant="ghost" size="sm" loading={isServicesLoading} className="size-8 p-0 text-[#8b949e] hover:bg-white/[0.08] hover:text-white rounded-lg">{<RefreshCw className="w-[16px]" />}</Button>
+							<Button onClick={openCreateDialog} size="sm" className="h-[36px] px-3 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white font-semibold">
 								<Plus className="w-[18px]" />
 								{t("services.addService")}
 							</Button>

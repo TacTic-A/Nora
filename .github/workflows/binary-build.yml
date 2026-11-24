@@ -84,6 +84,7 @@ jobs:
         with:
           name: dashboard-build
           path: dashboard/build
+          retention-days: 1
 
   build-linux:
     needs: dashboard
@@ -155,6 +156,7 @@ jobs:
         with:
           name: nora-linux-${{ matrix.asset_arch }}
           path: dist/nora-linux-${{ matrix.asset_arch }}.tar.gz
+          retention-days: 1
 
   build-windows-amd64:
     needs: dashboard
@@ -211,6 +213,7 @@ jobs:
         with:
           name: nora-windows-amd64
           path: dist/nora-windows-amd64.zip
+          retention-days: 1
 
   publish-release:
     needs:
@@ -285,7 +288,7 @@ jobs:
       - name: Download package artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: rebecca-*
+          pattern: nora-*
           path: dev-release-assets
           merge-multiple: true
 
@@ -297,14 +300,14 @@ jobs:
           build_tag="dev-${GITHUB_SHA::7}"
           mkdir -p dev-upload-assets
           shopt -s nullglob
-          for asset in dev-release-assets/rebecca-*; do
+          for asset in dev-release-assets/nora-*; do
             name="$(basename "$asset")"
             case "$name" in
-              rebecca-linux-*.tar.gz)
+              nora-linux-*.tar.gz)
                 base="${name%.tar.gz}"
                 cp "$asset" "dev-upload-assets/${base}-${build_tag}.tar.gz"
                 ;;
-              rebecca-windows-*.zip)
+              nora-windows-*.zip)
                 base="${name%.zip}"
                 cp "$asset" "dev-upload-assets/${base}-${build_tag}.zip"
                 ;;
@@ -349,8 +352,8 @@ jobs:
           set -euo pipefail
           gh release view "${DEV_RELEASE_TAG}" >/dev/null 2>&1 || \
             gh release create "${DEV_RELEASE_TAG}" \
-              --title "Rebecca dev binary builds" \
-              --notes "Rolling prerelease that stores Rebecca dev binary build assets." \
+              --title "Nora dev binary builds" \
+              --notes "Rolling prerelease that stores Nora dev binary build assets." \
               --prerelease \
               --target "${GITHUB_SHA}"
           gh release upload "${DEV_RELEASE_TAG}" dev-upload-assets/* --clobber
@@ -381,7 +384,7 @@ jobs:
           fi
           jq -n \
             --argjson previous "${previous_manifest}" \
-            --arg project "Rebecca" \
+            --arg project "Nora" \
             --arg build_tag "${{ steps.meta.outputs.build_tag }}" \
             --arg sha "${GITHUB_SHA}" \
             --arg branch "${GITHUB_REF_NAME}" \
@@ -396,8 +399,8 @@ jobs:
               def build_assets($names):
                 reduce $names[]? as $name
                   ({};
-                    if ($name | test("^rebecca-(?<platform>(linux|windows)-[A-Za-z0-9_]+)-dev-[0-9a-fA-F]+(\\.tar\\.gz|\\.zip)$")) then
-                      ($name | capture("^rebecca-(?<platform>(linux|windows)-[A-Za-z0-9_]+)-dev-[0-9a-fA-F]+(\\.tar\\.gz|\\.zip)$")) as $match
+                    if ($name | test("^nora-(?<platform>(linux|windows)-[A-Za-z0-9_]+)-dev-[0-9a-fA-F]+(\\.tar\\.gz|\\.zip)$")) then
+                      ($name | capture("^nora-(?<platform>(linux|windows)-[A-Za-z0-9_]+)-dev-[0-9a-fA-F]+(\\.tar\\.gz|\\.zip)$")) as $match
                       | .[$match.platform] = {name: $name, url: ($download_base + "/" + $name)}
                     else
                       .

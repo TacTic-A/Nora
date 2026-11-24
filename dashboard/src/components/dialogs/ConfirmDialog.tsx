@@ -51,9 +51,9 @@ export const ConfirmDialog = ({
 }: ConfirmDialogProps) => {
 	const { t } = useTranslation();
 	const cancelRef = useRef<HTMLButtonElement | null>(null);
-	const mutedText = "text-panel-text-muted";
-	const iconBg = `bg-${colorScheme}-50 dark:bg-${colorScheme}-200/16`;
-	const iconColor = `text-${colorScheme}-600 dark:text-${colorScheme}-200`;
+	const isDestructive = colorScheme === "red";
+	const iconBg = isDestructive ? "badge-soft-red" : "badge-soft-cyan";
+	const iconColor = isDestructive ? "text-red-400" : "text-cyan-400";
 
 	return (
 		<Dialog open={isOpen} onOpenChange={(next) => { if (!next) onClose(); }}>
@@ -64,20 +64,20 @@ export const ConfirmDialog = ({
 					event.preventDefault();
 					void onConfirm();
 				}}
-				className="mx-4 max-w-[calc(100vw_-_32px)] gap-0 overflow-hidden rounded-2xl px-4 py-3.5 shadow-2xl sm:mx-0 sm:max-w-[520px] sm:px-4.5 sm:py-4"
+				className="mx-4 max-w-[calc(100vw_-_32px)] gap-0 overflow-hidden rounded-[20px] border border-white/[0.08] bg-[#161b22] text-white px-5 py-4.5 shadow-2xl sm:mx-0 sm:max-w-[500px]"
 			>
-				<div className="flex items-start gap-2.5">
-					<div className={cn(iconBg, iconColor, "flex size-9 shrink-0 items-center justify-center rounded-full")}>
+				<div className="flex items-start gap-3.5">
+					<div className={cn(iconBg, iconColor, "flex size-10 shrink-0 items-center justify-center rounded-xl")}>
 						<WarningIcon />
 					</div>
 					<div className="min-w-0! flex-1">
-						<DialogTitle className="mb-0.5 text-[1.125rem] font-extrabold leading-[1.375] rb-confirm-dialog-content">
+						<DialogTitle className="mb-0.5 text-base sm:text-lg font-semibold text-white tracking-tight rb-confirm-dialog-content">
 							{title}
 						</DialogTitle>
 						<DialogDescription asChild className="mt-1.5">
 							<div>
 								{typeof description === "string" ? (
-									<p className={cn("text-[0.875rem] leading-[1.45]", mutedText)}>{description}</p>
+									<p className="text-sm leading-relaxed text-[#8b949e]">{description}</p>
 								) : (
 									description
 								)}
@@ -85,11 +85,11 @@ export const ConfirmDialog = ({
 						</DialogDescription>
 					</div>
 				</div>
-				<DialogFooter className="mt-2 flex-wrap justify-end gap-1.5 rb-confirm-dialog-actions">
-					<Button ref={cancelRef} onClick={onClose} disabled={isLoading} size="sm" className="h-[34px] min-h-[34px] min-w-[76px]! px-3 text-[0.875rem]">
+				<DialogFooter className="mt-4 flex-wrap justify-end gap-2 border-t border-white/[0.06] pt-3.5 rb-confirm-dialog-actions">
+					<Button ref={cancelRef} variant="outline" onClick={onClose} disabled={isLoading} size="sm" className="h-[36px] min-h-[36px] min-w-[80px]! px-3 text-sm">
 						{cancelLabel ?? t("cancel")}
 					</Button>
-					<Button variant={colorScheme === "red" ? "destructive" : "default"} disabled={isConfirmDisabled} onClick={onConfirm} size="sm" loading={isLoading} className="h-[34px] min-h-[34px] min-w-[76px]! px-3 text-[0.875rem]">
+					<Button variant={isDestructive ? "destructive" : "soft-cyan"} disabled={isConfirmDisabled} onClick={onConfirm} size="sm" loading={isLoading} className="h-[36px] min-h-[36px] min-w-[80px]! px-3 text-sm">
 						{confirmLabel ?? t("confirm")}
 					</Button>
 				</DialogFooter>

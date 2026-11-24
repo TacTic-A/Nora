@@ -2448,12 +2448,12 @@ export const HostsManager: FC = () => {
 </Tooltip>
 							<div className="flex flex-row items-center gap-1 flex-wrap">
 								{host.data.id != null && (
-									<p className="text-[0.75rem] text-panel-text-muted">
+									<p className="text-xs font-mono text-[#8b949e]">
 										ID: {host.data.id}
 									</p>
 								)}
 								{dirty && (
-									<Badge className="bg-orange-100 text-orange-800 hover:bg-orange-200 dark:bg-orange-500/20 dark:text-orange-200">
+									<Badge className="badge-soft-amber text-amber-400 font-semibold px-2 py-0.5 rounded-full border border-amber-500/30 text-xs">
 										{t("hostsPage.unsaved")}
 									</Badge>
 								)}
@@ -2475,11 +2475,19 @@ export const HostsManager: FC = () => {
 				mobilePriority: 1,
 				mobileMetaLabel: t("usersTable.status"),
 				cell: (host) => (
-					<p className={cn("text-[0.875rem] font-semibold", host.data.is_disabled ? "text-red-400" : "text-green-400")}>
+					<span
+						data-slot="badge"
+						className={cn(
+							"inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold capitalize tracking-wide transition-all",
+							host.data.is_disabled
+								? "badge-soft-red text-red-400 border border-red-500/30"
+								: "badge-soft-teal text-teal-400 border border-teal-500/30"
+						)}
+					>
 						{t(
 							host.data.is_disabled ? "hostsPage.inactive" : "hostsPage.active",
 						)}
-					</p>
+					</span>
 				),
 			},
 			{
@@ -2600,7 +2608,7 @@ export const HostsManager: FC = () => {
 				mobilePriority: 6,
 				mobileMetaLabel: t("hostsDialog.security"),
 				cell: (host) => (
-					<Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-500/20 dark:text-blue-200">
+					<Badge className="badge-soft-cyan text-cyan-400 font-mono text-xs px-2 py-0.5 rounded-full border border-cyan-500/30 font-semibold">
 						{host.data.security || "inbound_default"}
 					</Badge>
 				),

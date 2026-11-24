@@ -1,4 +1,4 @@
-import { Check, ChevronLeft, ChevronRight, Copy } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Copy, QrCode } from "lucide-react";
 import { QRCodeCanvas } from "qrcode.react";
 import { type FC, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -82,20 +82,20 @@ const QRCopyPanel = ({ value, size, label, onSwipe }: QRCopyPanelProps) => {
 					swiped.current = true;
 					onSwipe(delta);
 				}}
-				className="rounded-xl bg-white p-3 shadow-sm ring-1 ring-black/5 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring"
+				className="rounded-2xl border border-white/10 bg-white p-3.5 shadow-xl transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-[2px] focus-visible:ring-cyan-400"
 			>
 				<QRCodeCanvas value={value} size={size} level="M" includeMargin={false} />
 			</button>
-			<div className="flex w-full min-w-0 items-center gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2">
-				<p dir="ltr" title={value} className="min-w-0 flex-1 truncate font-mono text-xs text-muted-foreground">
+			<div className="flex w-full min-w-0 items-center gap-2 rounded-lg border border-white/10 bg-[#0d1117] px-3 py-2">
+				<p dir="ltr" title={value} className="min-w-0 flex-1 truncate font-mono text-xs text-[#8b949e]">
 					{value}
 				</p>
 				<button
 					type="button"
 					onClick={() => void copyText()}
-					className={cn(buttonVariants({ variant: "outline", size: "sm" }), "shrink-0 gap-1.5")}
+					className={cn(buttonVariants({ variant: "outline", size: "sm" }), "shrink-0 gap-1.5 hover:border-cyan-500/50 hover:bg-cyan-500/10")}
 				>
-					{copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+					{copied ? <Check className="size-4 text-cyan-400" /> : <Copy className="size-4" />}
 					{copied ? t("copied") : t("copy")}
 				</button>
 			</div>
@@ -157,8 +157,8 @@ export const QRCodeDialog: FC = () => {
 					<ChevronLeft className="rtl:rotate-180" />
 				</button>
 				<div className="min-w-0 text-center">
-					<p className="truncate text-sm font-semibold">{activeConfig.label}</p>
-					<p className="text-xs tabular-nums text-muted-foreground">
+					<p className="truncate text-sm font-semibold text-white">{activeConfig.label}</p>
+					<p className="text-xs tabular-nums text-[#8b949e]">
 						{activeIndex + 1} / {configItems.length}
 					</p>
 				</div>
@@ -190,7 +190,7 @@ export const QRCodeDialog: FC = () => {
 		if (hasSubscription && configItems.length > 0) {
 			return (
 				<Tabs defaultValue="subscription" className="w-full">
-					<TabsList className="w-full">
+					<TabsList className="w-full bg-[#0d1117] border border-white/[0.08] p-1">
 						<TabsTrigger value="subscription">{t("userDialog.links.subscription")}</TabsTrigger>
 						<TabsTrigger value="configs">{t("userDialog.links.configs")}</TabsTrigger>
 					</TabsList>
@@ -206,7 +206,7 @@ export const QRCodeDialog: FC = () => {
 		if (hasSubscription) return subscriptionView;
 		if (configsView) return configsView;
 		return (
-			<p className="py-6 text-center text-sm text-muted-foreground">{t("userDialog.links.noConfigs")}</p>
+			<p className="py-6 text-center text-sm text-[#8b949e]">{t("userDialog.links.noConfigs")}</p>
 		);
 	};
 
@@ -217,14 +217,19 @@ export const QRCodeDialog: FC = () => {
 				if (!open) onClose();
 			}}
 		>
-			<DialogContent className="max-h-[min(560px,calc(100dvh-10rem))] gap-0 overflow-hidden p-0 sm:max-w-md">
-				<DialogHeader className="border-b border-border px-6 py-4 pe-12 text-start sm:text-start">
-					<DialogTitle>{t("usersTable.qrCode")}</DialogTitle>
-					{qrCodeUsername && (
-						<DialogDescription dir="ltr" className="truncate text-start">
-							{qrCodeUsername}
-						</DialogDescription>
-					)}
+			<DialogContent className="max-h-[min(600px,calc(100dvh-5rem))] gap-0 overflow-hidden p-0 sm:max-w-md rounded-[20px] border border-white/[0.08] bg-[#161b22] text-white shadow-2xl">
+				<DialogHeader className="flex-row items-center gap-3 border-b border-white/[0.06] px-6 py-4 pe-12 text-start sm:text-start">
+					<div className="size-9 shrink-0 rounded-xl flex items-center justify-center badge-soft-cyan text-cyan-400 [&_svg]:size-5">
+						<QrCode />
+					</div>
+					<div className="min-w-0">
+						<DialogTitle className="text-base font-semibold text-white tracking-tight">{t("usersTable.qrCode")}</DialogTitle>
+						{qrCodeUsername && (
+							<DialogDescription dir="ltr" className="truncate text-start text-xs text-[#8b949e]">
+								{qrCodeUsername}
+							</DialogDescription>
+						)}
+					</div>
 				</DialogHeader>
 				<div className="overflow-y-auto px-6 py-5">{renderBody()}</div>
 			</DialogContent>

@@ -593,7 +593,7 @@ export const InboundsManager: FC = () => {
 				mobilePriority: 1,
 				mobileMetaLabel: t("protocol"),
 				cell: (inbound) => (
-					<Badge className={cn("bg-purple-100 text-purple-800 hover:bg-purple-200 dark:bg-purple-500/20 dark:text-purple-200", "uppercase")}>
+					<Badge className={cn("badge-soft-purple text-purple-300 font-mono text-xs px-2 py-0.5 rounded-full border border-purple-500/30 uppercase font-semibold")}>
 						{inbound.protocol}
 					</Badge>
 				),
@@ -608,7 +608,7 @@ export const InboundsManager: FC = () => {
 				mobilePriority: 2,
 				mobileMetaLabel: t("port"),
 				cell: (inbound) => (
-					<p dir="ltr" className="font-semibold [unicode-bidi:isolate]">
+					<p dir="ltr" className="font-semibold font-mono tabular-nums text-xs text-[#c9d1d9] [unicode-bidi:isolate]">
 						{inbound.port}
 					</p>
 				),
@@ -622,7 +622,11 @@ export const InboundsManager: FC = () => {
 				maxWidth: "130px",
 				mobilePriority: 3,
 				mobileMetaLabel: t("inbounds.network"),
-				cell: (inbound) => inbound.streamSettings?.network || "-",
+				cell: (inbound) => (
+					<span className="font-mono text-xs text-[#c9d1d9]">
+						{inbound.streamSettings?.network || "-"}
+					</span>
+				),
 			},
 			{
 				id: "security",
@@ -636,11 +640,11 @@ export const InboundsManager: FC = () => {
 				cell: (inbound) => {
 					const security = inbound.streamSettings?.security;
 					return security && security !== "none" ? (
-						<Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-500/20 dark:text-blue-200">
+						<Badge className="badge-soft-cyan text-cyan-400 font-mono text-xs px-2 py-0.5 rounded-full border border-cyan-500/30 font-semibold">
 							{security}
 						</Badge>
 					) : (
-						<p className="text-panel-text-muted">-</p>
+						<p className="text-xs text-[#8b949e] font-mono">-</p>
 					);
 				},
 			},
@@ -656,11 +660,11 @@ export const InboundsManager: FC = () => {
 				cell: (inbound) => {
 					const traffic = getInboundTraffic(inbound);
 					return (
-						<div dir="ltr" className="rb-stat-pair flex flex-row items-center gap-3 whitespace-nowrap text-[0.75rem] [font-variant-numeric:tabular-nums] [unicode-bidi:isolate]">
+						<div dir="ltr" className="rb-stat-pair flex flex-row items-center gap-3 whitespace-nowrap text-xs font-mono tabular-nums [unicode-bidi:isolate]">
 							<p className="text-teal-400">
 								↑ {SizeFormatter.sizeFormat(traffic.upload)}
 							</p>
-							<p className="text-blue-400">
+							<p className="text-cyan-400">
 								↓ {SizeFormatter.sizeFormat(traffic.download)}
 							</p>
 						</div>
@@ -682,11 +686,11 @@ export const InboundsManager: FC = () => {
 				cell: (inbound) => {
 					const speed = speeds[inbound.tag];
 					return (
-						<div dir="ltr" className="rb-stat-pair flex flex-row items-center gap-3 whitespace-nowrap text-[0.75rem] [font-variant-numeric:tabular-nums] [unicode-bidi:isolate]">
+						<div dir="ltr" className="rb-stat-pair flex flex-row items-center gap-3 whitespace-nowrap text-xs font-mono tabular-nums [unicode-bidi:isolate]">
 							<p className="text-teal-400">
 								↑ {SizeFormatter.sizeFormat(speed?.upload_speed ?? 0)}/s
 							</p>
-							<p className="text-blue-400">
+							<p className="text-cyan-400">
 								↓ {SizeFormatter.sizeFormat(speed?.download_speed ?? 0)}/s
 							</p>
 						</div>
@@ -708,13 +712,13 @@ export const InboundsManager: FC = () => {
 				mobileMetaLabel: t("inbounds.sniffing"),
 				cell: (inbound) =>
 					!supportsSniffing(inbound.protocol) ? (
-						<span className="text-muted-foreground">–</span>
+						<span className="text-xs text-[#8b949e] font-mono">–</span>
 					) : inbound.sniffing?.enabled ? (
-						<Badge className="bg-green-600 text-white">
+						<Badge className="badge-soft-teal text-teal-400 font-semibold px-2 py-0.5 rounded-full border border-teal-500/30 text-xs">
 							{t("inbounds.sniffingEnabled")}
 						</Badge>
 					) : (
-						<Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-500/20 dark:text-gray-200">
+						<Badge className="badge-soft-gray text-gray-400 px-2 py-0.5 rounded-full border border-gray-500/30 text-xs">
 							{t("inbounds.sniffingDisabled")}
 						</Badge>
 					),

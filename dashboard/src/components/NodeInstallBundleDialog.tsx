@@ -41,29 +41,32 @@ export const NodeInstallBundleDialog = ({
 			open
 			onClose={onClose}
 			size="lg"
+			icon={<Download className="size-4" />}
+			iconVariant="amber"
 			title={t("nodes.newNodePublicKeyTitle")}
-			footer={<Button onClick={onClose}>{t("close")}</Button>}
+			subtitle={name ?? undefined}
+			footer={<Button variant="outline" onClick={onClose}>{t("close")}</Button>}
 		>
 			<div className="flex flex-col gap-3">
-				<p className="text-sm text-muted-foreground">{t("nodes.newNodePublicKeyDesc")}</p>
-				<div className="overflow-hidden rounded-lg border">
-					<div className="flex items-center justify-between gap-3 border-b bg-muted/50 px-3 py-2">
-						<p className="text-sm font-medium">{t("nodes.installBundleLabel")}</p>
-						{name ? <p className="min-w-0 truncate font-mono text-xs text-muted-foreground" dir="ltr">{name}</p> : null}
+				<p className="text-sm text-[#8b949e]">{t("nodes.newNodePublicKeyDesc")}</p>
+				<div className="overflow-hidden rounded-xl border border-white/10 bg-[#0d1117]">
+					<div className="flex items-center justify-between gap-3 border-b border-white/[0.06] bg-white/[0.02] px-3.5 py-2.5">
+						<p className="text-sm font-medium text-white">{t("nodes.installBundleLabel")}</p>
+						{name ? <p className="min-w-0 truncate font-mono text-xs text-[#8b949e]" dir="ltr">{name}</p> : null}
 					</div>
-					<div className="grid grid-cols-1 gap-2 border-b p-2 sm:grid-cols-2">
-						<Button variant="outline" size="sm" onClick={onCopy} className="w-full">
-							{hasCopied ? <Check /> : <Copy />}
+					<div className="grid grid-cols-1 gap-2 border-b border-white/[0.06] p-2.5 sm:grid-cols-2">
+						<Button variant="outline" size="sm" onClick={onCopy} className="w-full hover:border-cyan-500/50 hover:bg-cyan-500/10">
+							{hasCopied ? <Check className="text-cyan-400" /> : <Copy />}
 							{hasCopied ? t("copied") : t("copy")}
 						</Button>
-						<Button variant="outline" size="sm" onClick={handleDownload} className="w-full">
+						<Button variant="outline" size="sm" onClick={handleDownload} className="w-full hover:border-cyan-500/50 hover:bg-cyan-500/10">
 							<Download />
 							{t("nodes.download-node-install-bundle")}
 						</Button>
 					</div>
 					<pre
 						dir="ltr"
-						className="max-h-44 overflow-auto whitespace-pre bg-background p-3 font-mono text-[11px] leading-5"
+						className="max-h-52 overflow-auto whitespace-pre bg-[#0d1117] p-3.5 font-mono text-xs leading-5 text-white selection:bg-cyan-500/30"
 					>
 						{bundle}
 					</pre>

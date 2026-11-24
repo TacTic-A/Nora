@@ -1,9 +1,11 @@
 import { type FC, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Activity } from "lucide-react";
 import { buttonVariants } from "components/ui/button";
 import { DataSizeField } from "components/ui/data-size-field";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "components/ui/dialog";
 import { Label } from "components/ui/label";
+import { cn } from "lib/cn";
 
 const GB_IN_BYTES = 1024 * 1024 * 1024;
 
@@ -58,10 +60,15 @@ export const AddTrafficDialog: FC<AddTrafficDialogProps> = ({ target, onClose, o
 				if (!open && !busy) finish();
 			}}
 		>
-			<DialogContent className="flex flex-col gap-4 p-5 sm:max-w-sm">
-				<DialogHeader className="text-start">
-					<DialogTitle>{t("services.userActions.traffic.add")}</DialogTitle>
-					<DialogDescription>{description}</DialogDescription>
+			<DialogContent className="flex flex-col gap-4 p-5 sm:max-w-md rounded-[20px] border border-white/[0.08] bg-[#161b22] text-white shadow-2xl">
+				<DialogHeader className="flex-row items-center gap-3 border-b border-white/[0.06] pb-3 text-start">
+					<div className="size-9 shrink-0 rounded-xl flex items-center justify-center badge-soft-teal text-teal-400 [&_svg]:size-5">
+						<Activity />
+					</div>
+					<div className="min-w-0">
+						<DialogTitle className="text-base font-semibold text-white tracking-tight">{t("services.userActions.traffic.add")}</DialogTitle>
+						<DialogDescription className="text-xs text-[#8b949e]">{description}</DialogDescription>
+					</div>
 				</DialogHeader>
 
 				{view === "presets" ? (
@@ -72,7 +79,7 @@ export const AddTrafficDialog: FC<AddTrafficDialogProps> = ({ target, onClose, o
 								type="button"
 								disabled={busy}
 								onClick={() => void apply(gb * GB_IN_BYTES)}
-								className={buttonVariants({ variant: "outline" })}
+								className={cn(buttonVariants({ variant: "outline" }), "font-mono text-sm hover:border-cyan-500/50 hover:bg-cyan-500/10 transition-colors")}
 							>
 								{PRESET_LABELS[gb]}
 							</button>
@@ -81,16 +88,16 @@ export const AddTrafficDialog: FC<AddTrafficDialogProps> = ({ target, onClose, o
 							type="button"
 							disabled={busy}
 							onClick={() => setView("custom")}
-							className={buttonVariants({ variant: "outline" })}
+							className={cn(buttonVariants({ variant: "outline" }), "text-sm text-cyan-400 hover:border-cyan-500/50 hover:bg-cyan-500/10 transition-colors")}
 						>
 							{t("addTraffic.custom")}
 						</button>
 					</div>
 				) : (
-					<div className="flex flex-col gap-2">
-						<Label htmlFor="add-traffic-amount">{t("addTraffic.amount")}</Label>
+					<div className="flex flex-col gap-3">
+						<Label htmlFor="add-traffic-amount" className="text-sm text-white">{t("addTraffic.amount")}</Label>
 						<DataSizeField id="add-traffic-amount" valueGb={amountGb} onChangeGb={setAmountGb} disabled={busy} />
-						<DialogFooter className="flex-row items-center justify-between gap-2 pt-2">
+						<DialogFooter className="flex-row items-center justify-between gap-2 border-t border-white/[0.06] pt-3">
 							<button
 								type="button"
 								disabled={busy}
@@ -103,7 +110,7 @@ export const AddTrafficDialog: FC<AddTrafficDialogProps> = ({ target, onClose, o
 								type="button"
 								disabled={busy || !(Number(amountGb) > 0)}
 								onClick={() => void apply(Math.round(Number(amountGb) * GB_IN_BYTES))}
-								className={buttonVariants({ size: "sm" })}
+								className={buttonVariants({ variant: "soft-cyan", size: "sm" })}
 							>
 								{t("add")}
 							</button>

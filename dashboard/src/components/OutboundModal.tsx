@@ -54,7 +54,7 @@ import { SearchableTagSelect } from "./common/SearchableTagSelect";
 import { PropagationTargets } from "./xray/PropagationTargets";
 
 const outboundShell =
-	"flex max-h-[min(860px,calc(100dvh-4rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-5xl max-md:inset-x-3 max-md:w-auto max-md:top-[4.5rem] max-md:bottom-24 max-md:max-h-none max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0";
+	"flex max-h-[min(860px,calc(100dvh-4rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-5xl rounded-[20px] border border-white/[0.08] bg-[#161b22] text-white shadow-2xl max-md:inset-x-3 max-md:w-auto max-md:top-[4.5rem] max-md:bottom-24 max-md:max-h-none max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0";
 
 const AddIcon = withClass(Plus, "");
 const MinusIcon = withClass(MinusIconOutline, "");
@@ -1327,21 +1327,21 @@ export const OutboundModal: FC<OutboundModalProps> = ({
 		<Dialog open={isOpen} onOpenChange={(next) => { if (!next) handleClose(); }}>
 			<DialogContent className={outboundShell}>
 				<form onSubmit={onSubmit} className="flex min-h-0 flex-1 flex-col">
-					<DialogHeader className="flex-row items-center gap-3 border-b px-5 py-3.5 pe-12 text-start sm:text-start">
-						<div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+					<DialogHeader className="flex-row items-center gap-3 border-b border-white/[0.08] bg-[#161b22]/95 px-5 py-3.5 pe-12 text-start sm:text-start backdrop-blur-md">
+						<div className="flex size-9 shrink-0 items-center justify-center rounded-xl badge-soft-cyan text-cyan-400">
 							<Send className="size-4" />
 						</div>
 						<div className="min-w-0">
-							<DialogTitle className="truncate text-base">
+							<DialogTitle className="truncate text-base font-semibold text-white tracking-tight">
 								{mode === "edit" ? t("pages.xray.outbound.editOutbound") : t("pages.xray.outbound.addOutbound")}
 							</DialogTitle>
-							<DialogDescription className="truncate">{String(typedProtocol ?? "").toUpperCase() || t("protocol")}</DialogDescription>
+							<DialogDescription className="truncate text-xs text-[#8b949e]">{String(typedProtocol ?? "").toUpperCase() || t("protocol")}</DialogDescription>
 						</div>
 					</DialogHeader>
 
 					<Tabs value={String(activeTab)} onValueChange={(value) => handleTabChange(Number(value))} className="flex min-h-0 flex-1 flex-col">
-						<div className="border-b px-5 pt-2.5 pb-2.5">
-							<TabsList className="w-full">
+						<div className="border-b border-white/[0.08] px-5 pt-2.5 pb-2.5">
+							<TabsList className="w-full bg-[#0d1117] border border-white/[0.08] p-1">
 								<TabsTrigger value="0">
 									{t("form")}
 								</TabsTrigger>
@@ -1693,20 +1693,20 @@ export const OutboundModal: FC<OutboundModalProps> = ({
 
 							<TabsContent value="1" className="mt-0">
 								<div className="flex flex-col gap-4">
-									<div className="flex h-11 items-center overflow-hidden rounded-lg border bg-card/40">
-										<span className="shrink-0 border-e px-3 text-sm font-medium text-muted-foreground">Link</span>
+									<div className="flex h-11 items-center overflow-hidden rounded-lg border border-white/10 bg-[#0d1117] transition-colors focus-within:border-cyan-400">
+										<span className="shrink-0 border-e border-white/10 px-3 text-sm font-medium text-[#8b949e]">Link</span>
 										<UiInput
 											value={configInput}
 											onChange={(event) => setConfigInput(event.target.value)}
 											placeholder={t("pages.outbound.configPlaceholder")}
 											spellCheck={false}
-											className="h-full min-w-0 flex-1 border-0 bg-transparent px-3 font-mono text-sm shadow-none focus-visible:ring-0"
+											className="h-full min-w-0 flex-1 border-0 bg-transparent px-3 font-mono text-sm shadow-none focus-visible:ring-0 text-white placeholder:text-[#6e7681]"
 										/>
-										<Button aria-label={t("pages.outbound.convertConfig")} onClick={handleConfigToJson} variant="ghost" size="sm" className={cn("size-8 p-0", "me-1")}>
+										<Button aria-label={t("pages.outbound.convertConfig")} onClick={handleConfigToJson} variant="ghost" size="sm" className={cn("size-8 p-0 text-[#8b949e] hover:text-white hover:bg-white/[0.08]", "me-1")}>
 											<SquarePen className="w-[17px]" />
 										</Button>
 									</div>
-									<div className="h-[420px] overflow-hidden rounded-lg border">
+									<div className="h-[420px] overflow-hidden rounded-lg border border-white/[0.08] bg-[#0d1117]">
 										<JsonEditor json={jsonData} canonicalContext="outbound" onChange={handleJsonEditorChange} />
 									</div>
 									{jsonError ? <p className="text-sm text-red-500">{jsonError}</p> : null}
@@ -1726,11 +1726,11 @@ export const OutboundModal: FC<OutboundModalProps> = ({
 						</div>
 					</Tabs>
 
-					<DialogFooter className="flex-row flex-wrap items-center justify-end gap-2 border-t px-5 py-3">
+					<DialogFooter className="sticky bottom-0 z-20 flex-row flex-wrap items-center justify-end gap-2 border-t border-white/[0.08] bg-[#161b22]/95 px-5 py-3 backdrop-blur-md">
 						<Button onClick={handleClose} variant="outline" size="sm">
 							{t("cancel")}
 						</Button>
-						<Button type="submit" disabled={!isValid} size="sm">
+						<Button type="submit" disabled={!isValid} size="sm" variant="soft-cyan">
 							{mode === "edit" ? t("save") : t("add")}
 						</Button>
 					</DialogFooter>

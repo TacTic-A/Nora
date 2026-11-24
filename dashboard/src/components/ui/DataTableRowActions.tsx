@@ -3,7 +3,7 @@ import { Ellipsis } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "components/ui/dropdown-menu";
 import { RowActionButton } from "./row-actions";
 
-// Chakra colour token ("red.400") to a text class. The palette is safelisted in tailwind.css.
+import { cn } from "lib/cn";
 const toneClass = (color?: string) => (color ? `text-${color.replace(".", "-")}` : undefined);
 
 export type RowActionItem = {
@@ -63,13 +63,18 @@ export const RowActionsMenu: FC<RowActionsMenuProps> = ({ actions, label = "Acti
 				collisionPadding={8}
 				sideOffset={6}
 				onClick={(event) => event.stopPropagation()}
-				className="min-w-[200px]! max-w-[calc(100vw_-_16px)] max-h-[min(50vh,_360px)] overflow-y-auto overflow-x-hidden overscroll-contain z-[2500] rounded-lg shadow-2xl"
+				className="min-w-[200px]! max-w-[calc(100vw_-_16px)] max-h-[min(50vh,_360px)] overflow-y-auto overflow-x-hidden overscroll-contain z-[2500] rounded-xl bg-[#21262d] border border-white/10 p-1.5 shadow-2xl backdrop-blur-md"
 			>
 				{orderedActions.map((action) => (
 					<DropdownMenuItem
 						key={action.id}
 						disabled={action.disabled}
-						className={toneClass(action.color ?? (action.isDanger ? "red.400" : undefined))}
+						className={cn(
+							"px-2.5 py-1.5 rounded-lg text-sm font-medium text-[#c9d1d9] hover:bg-white/[0.08] hover:text-white transition-colors cursor-pointer flex items-center gap-2",
+							action.isDanger
+								? "text-red-400 hover:bg-red-500/15 hover:text-red-300 focus:bg-red-500/15 focus:text-red-300"
+								: toneClass(action.color)
+						)}
 						onSelect={() => {
 							setOpen(false);
 							action.onClick?.();

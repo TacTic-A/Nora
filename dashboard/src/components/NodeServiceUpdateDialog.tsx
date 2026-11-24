@@ -1,7 +1,7 @@
 import { Button } from "components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "components/ui/field";
 import { Alert, AlertDescription } from "components/ui/alert";
-import { CircleAlert, CircleCheck, Info, TriangleAlert } from "lucide-react";
+import { Server, TriangleAlert } from "lucide-react";
 
 
 import { PanelSelect as Select } from "components/common/PanelSelect";
@@ -71,13 +71,15 @@ export const NodeServiceUpdateDialog = ({
 			open={isOpen}
 			onClose={onClose}
 			size="md"
+			icon={<Server className="size-4" />}
+			iconVariant="cyan"
 			title={title}
 			footer={
 				<>
-					<Button onClick={onClose} disabled={isSubmitting} variant="ghost" className="me-3">
+					<Button onClick={onClose} disabled={isSubmitting} variant="outline" size="sm">
 						{t("cancel")}
 					</Button>
-					<Button onClick={() => onSubmit(channel, version || undefined)} loading={isSubmitting}>
+					<Button onClick={() => onSubmit(channel, version || undefined)} variant="soft-cyan" size="sm" loading={isSubmitting}>
 						{t("nodes.updateServiceAction")}
 					</Button>
 				</>

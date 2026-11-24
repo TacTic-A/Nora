@@ -23,7 +23,7 @@ const DASHBOARD_USER_ROWS = [
 	{ id: "expired", labelWidth: "w-20", valWidth: "w-8", pill: false },
 ] as const;
 
-const cardShellClass = "rb-stat-card rb-skeleton-sweep";
+const cardShellClass = "rounded-xl border border-white/[0.08] bg-[#161b22] shadow-sm transition-all duration-200 rb-skeleton-sweep";
 
 export const PageLoadingSkeleton: FC<PageLoadingSkeletonProps> = ({
 	variant = "entity",
@@ -186,7 +186,7 @@ export const PageLoadingSkeleton: FC<PageLoadingSkeletonProps> = ({
 							<div className="mt-3.5 flex flex-col gap-2">
 								<Skeleton className="h-3 w-10 rounded-xs page-skeleton" />
 								<Skeleton className="h-[6px] w-full rounded-full page-skeleton" />
-								<div className="mt-1 flex items-center justify-between border-t border-panel-border/70! pt-2">
+								<div className="mt-1 flex items-center justify-between border-t border-white/[0.06] pt-2">
 									<Skeleton className="h-3 w-20 rounded-xs page-skeleton" />
 									<Skeleton className="h-3 w-16 rounded-xs page-skeleton" />
 								</div>
@@ -198,7 +198,7 @@ export const PageLoadingSkeleton: FC<PageLoadingSkeletonProps> = ({
 				<div className="rb-dashboard-grid-guard grid grid-cols-1 gap-3 min-[769px]:grid-cols-2 min-[769px]:gap-4">
 					{["bandwidth", "uptime"].map((sectionKey, idx) => (
 						<div key={sectionKey} className={cardShellClass}>
-							<div className="flex items-center justify-between border-b border-panel-border! px-4 py-3.5 sm:px-5 min-[769px]:px-6">
+							<div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-3.5 sm:px-5 min-[769px]:px-6">
 								<div className="flex items-center gap-2.5">
 									<Skeleton
 										className={cn(
@@ -235,7 +235,7 @@ export const PageLoadingSkeleton: FC<PageLoadingSkeletonProps> = ({
 				</div>
 
 				<div className={cardShellClass}>
-					<div className="flex items-center justify-between border-b border-panel-border! px-4 py-3.5 sm:px-5 min-[769px]:px-6">
+					<div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-3.5 sm:px-5 min-[769px]:px-6">
 						<div className="flex items-center gap-2.5">
 							<Skeleton className="size-7 rounded-[9px] page-skeleton" />
 							<Skeleton className="h-4 w-32 rounded-md page-skeleton" />
@@ -246,7 +246,7 @@ export const PageLoadingSkeleton: FC<PageLoadingSkeletonProps> = ({
 						{["panel-cpu", "panel-ram"].map((itemKey) => (
 							<div
 								key={itemKey}
-								className="rb-stat-card flex flex-col justify-between p-4 sm:p-5"
+								className="rounded-xl border border-white/[0.08] bg-[#161b22] flex flex-col justify-between p-4 sm:p-5 shadow-sm"
 							>
 								<div className="mb-3 flex items-center gap-2.5">
 									<Skeleton className="size-8 rounded-[10px] page-skeleton" />
@@ -260,14 +260,14 @@ export const PageLoadingSkeleton: FC<PageLoadingSkeletonProps> = ({
 				</div>
 
 				<div className={cardShellClass}>
-					<div className="flex items-center justify-between border-b border-panel-border! px-4 py-3.5 sm:px-5 min-[769px]:px-6">
+					<div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-3.5 sm:px-5 min-[769px]:px-6">
 						<div className="flex items-center gap-2.5">
 							<Skeleton className="size-7 rounded-[9px] page-skeleton" />
 							<Skeleton className="h-4 w-24 rounded-md page-skeleton" />
 						</div>
 						{canSeeGlobal && <Skeleton className="h-[26px] w-32 rounded-[10px] page-skeleton" />}
 					</div>
-					<div className="flex flex-col divide-y divide-panel-border/80 px-4 py-2 sm:px-5 min-[769px]:px-6">
+					<div className="flex flex-col divide-y divide-white/[0.06] px-4 py-2 sm:px-5 min-[769px]:px-6">
 						{DASHBOARD_USER_ROWS.map((row) => (
 							<div key={row.id} className="flex items-center justify-between py-2.5">
 								<div className="flex items-center gap-2.5">
@@ -283,13 +283,13 @@ export const PageLoadingSkeleton: FC<PageLoadingSkeletonProps> = ({
 
 				{canSeeGlobal && (
 					<div className={cardShellClass}>
-						<div className="flex items-center justify-between border-b border-panel-border! px-4 py-3.5 sm:px-5 min-[769px]:px-6">
+						<div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-3.5 sm:px-5 min-[769px]:px-6">
 							<div className="flex items-center gap-2.5">
 								<Skeleton className="size-7 rounded-[9px] page-skeleton" />
 								<Skeleton className="h-4 w-24 rounded-md page-skeleton" />
 							</div>
 						</div>
-						<div className="flex flex-col divide-y divide-panel-border/80 px-4 py-2 sm:px-5 min-[769px]:px-6">
+						<div className="flex flex-col divide-y divide-white/[0.06] px-4 py-2 sm:px-5 min-[769px]:px-6">
 							{["total", "full", "sudo", "standard", "top"].map((rowKey) => (
 								<div key={rowKey} className="flex items-center justify-between py-2.5">
 									<div className="flex items-center gap-2.5">

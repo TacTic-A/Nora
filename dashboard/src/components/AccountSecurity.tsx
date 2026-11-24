@@ -376,29 +376,33 @@ export const AccountSecurity = ({
 			<AppDialog
 				open={setupDialog.isOpen}
 				onClose={setupDialog.onClose}
+				icon={<ShieldCheck className="size-4" />}
+				iconVariant="cyan"
 				title={t("myaccount.enableTwoFactor")}
 				footer={
-					<Button disabled={code.length !== 6} onClick={confirmSetup} loading={twoFactorLoading}>
+					<Button disabled={code.length !== 6} onClick={confirmSetup} loading={twoFactorLoading} variant="soft-cyan">
 						{t("confirm")}
 					</Button>
 				}
 			>
 				<div className="flex flex-col items-center gap-4">
 					{setup && (
-						<div className="bg-white p-3 rounded-md">
+						<div className="bg-white p-3 rounded-xl shadow-lg">
 							<QRCodeCanvas value={setup.uri} size={200} />
 						</div>
 					)}
-					<p className="font-mono text-[0.75rem] break-all">
+					<p className="font-mono text-xs break-all text-white">
 						{setup?.secret}
 					</p>
-					<Input autoComplete="one-time-code" inputMode="numeric" maxLength={6} value={code} onChange={(event) => setCode(event.target.value.replace(/\D/g, ""))} className="text-center" />
+					<Input autoComplete="one-time-code" inputMode="numeric" maxLength={6} value={code} onChange={(event) => setCode(event.target.value.replace(/\D/g, ""))} className="text-center font-mono text-lg tracking-[0.3em] max-w-[200px]" placeholder="000000" />
 				</div>
 			</AppDialog>
 
 			<AppDialog
 				open={disableDialog.isOpen}
 				onClose={disableDialog.onClose}
+				icon={<ShieldCheck className="size-4" />}
+				iconVariant="red"
 				title={t("myaccount.disableTwoFactor")}
 				footer={
 					<Button disabled={!password || code.length !== 6} onClick={confirmDisable} variant="destructive" loading={twoFactorLoading}>
@@ -407,8 +411,8 @@ export const AccountSecurity = ({
 				}
 			>
 				<div className="flex flex-col gap-3">
-					<Input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
-					<Input autoComplete="one-time-code" inputMode="numeric" maxLength={6} value={code} onChange={(event) => setCode(event.target.value.replace(/\D/g, ""))} />
+					<Input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder={t("password")} />
+					<Input autoComplete="one-time-code" inputMode="numeric" maxLength={6} value={code} onChange={(event) => setCode(event.target.value.replace(/\D/g, ""))} className="text-center font-mono text-lg tracking-[0.3em]" placeholder="000000" />
 				</div>
 			</AppDialog>
 		</div>

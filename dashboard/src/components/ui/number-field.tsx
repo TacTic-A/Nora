@@ -81,8 +81,8 @@ export const NumberField: FC<NumberFieldProps> = ({
 	return (
 		<div
 			className={cn(
-				"flex h-9 w-full min-w-0 items-stretch overflow-hidden rounded-md border border-input bg-transparent shadow-xs transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50",
-				invalid && "border-destructive",
+				"flex h-9 w-full min-w-0 items-stretch overflow-hidden rounded-lg border border-white/10 bg-[#0d1117] shadow-xs transition-all duration-150 focus-within:border-cyan-400 focus-within:ring-[2px] focus-within:ring-cyan-400/25",
+				invalid && "border-destructive focus-within:border-destructive focus-within:ring-destructive/20",
 				disabled && "opacity-50",
 			)}
 		>
@@ -103,7 +103,7 @@ export const NumberField: FC<NumberFieldProps> = ({
 					event.preventDefault();
 					stepBy(event.key === "ArrowUp" ? 1 : -1);
 				}}
-				className="min-w-0 flex-1 bg-transparent px-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
+				className="min-w-0 flex-1 bg-transparent px-3 text-sm text-white font-mono tabular-nums outline-none placeholder:text-[#6e7681] disabled:cursor-not-allowed"
 			/>
 			{doneLabel && focused && !disabled ? (
 				<button
@@ -113,24 +113,24 @@ export const NumberField: FC<NumberFieldProps> = ({
 					title={doneLabel}
 					onPointerDown={(event) => event.preventDefault()}
 					onClick={() => inputRef.current?.blur()}
-					className="flex w-8 shrink-0 items-center justify-center text-primary transition-colors hover:bg-whiteAlpha-100"
+					className="flex w-8 shrink-0 items-center justify-center text-cyan-400 transition-colors hover:bg-white/[0.08]"
 				>
 					<Check className="size-4" />
 				</button>
 			) : null}
 			{unitSlot ?? (unit ? (
-				<span className="inline-flex shrink-0 items-center border-s border-input bg-muted px-2.5 text-xs text-muted-foreground select-none">
+				<span className="inline-flex shrink-0 items-center border-s border-white/10 bg-white/[0.04] px-2.5 text-xs text-[#8b949e] font-mono select-none">
 					{unit}
 				</span>
 			) : null)}
-			<div className="flex w-6 shrink-0 flex-col border-s border-input">
+			<div className="flex w-6 shrink-0 flex-col border-s border-white/10">
 				<button
 					type="button"
 					tabIndex={-1}
 					aria-hidden="true"
 					disabled={disabled}
 					onClick={() => stepBy(1)}
-					className="flex flex-1 items-center justify-center text-muted-foreground transition-colors hover:bg-whiteAlpha-100 hover:text-panel-text disabled:pointer-events-none"
+					className="flex flex-1 items-center justify-center text-[#8b949e] transition-colors hover:bg-white/[0.08] hover:text-white disabled:pointer-events-none"
 				>
 					<ChevronUp className="size-3" />
 				</button>
@@ -140,7 +140,7 @@ export const NumberField: FC<NumberFieldProps> = ({
 					aria-hidden="true"
 					disabled={disabled}
 					onClick={() => stepBy(-1)}
-					className="flex flex-1 items-center justify-center border-t border-input text-muted-foreground transition-colors hover:bg-whiteAlpha-100 hover:text-panel-text disabled:pointer-events-none"
+					className="flex flex-1 items-center justify-center border-t border-white/10 text-[#8b949e] transition-colors hover:bg-white/[0.08] hover:text-white disabled:pointer-events-none"
 				>
 					<ChevronDown className="size-3" />
 				</button>

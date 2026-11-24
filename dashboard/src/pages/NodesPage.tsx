@@ -291,17 +291,17 @@ const NodeMetricDisplay = ({
 }) => {
 	const progressValue = boundedPercent(percent);
 	return (
-		<div className="flex flex-col items-center justify-center gap-1 min-w-0! max-w-full min-h-[34px] pb-1 text-center mx-auto">
-			<p className="font-semibold text-[0.75rem] leading-[1.375] truncate max-w-full">
+		<div className="flex flex-col items-center justify-center gap-0.5 min-w-0! max-w-full min-h-[34px] pb-1 text-center mx-auto font-mono tabular-nums">
+			<p className="font-semibold text-xs leading-[1.375] truncate max-w-full text-white">
 				{value}
 			</p>
 			{helper && helper !== "-" ? (
-				<p className="text-[0.75rem] text-gray-500 leading-[1.375] truncate max-w-full">
+				<p className="text-[0.7rem] text-[#8b949e] leading-[1.375] truncate max-w-full">
 					{helper}
 				</p>
 			) : null}
 			{progressValue !== undefined && (
-				<Progress value={progressValue} indicatorClassName={barClass(colorScheme)} className="rounded-full w-[46px] mx-auto bg-blackAlpha-100 dark:bg-whiteAlpha-200" />
+				<Progress value={progressValue} indicatorClassName={barClass(colorScheme)} className="rounded-full w-[46px] h-1.5 mx-auto bg-white/[0.08]" />
 			)}
 		</div>
 	);
@@ -1848,7 +1848,7 @@ export const NodesPage: FC = () => {
 				mobilePriority: 0,
 				mobileMetaLabel: t("nodes.nodeName"),
 				cell: (node) => (
-					<p dir="auto" className="font-semibold text-panel-text truncate max-w-full">
+					<p dir="auto" className="font-medium text-white truncate max-w-full">
 						<AppleEmojiText>
 							{formatNodeNamePreview(node.name || t("nodes.unnamedNode"))}
 						</AppleEmojiText>
@@ -1887,7 +1887,7 @@ export const NodesPage: FC = () => {
 					<button type="button" dir="ltr" onClick={(event) => {
 							event.stopPropagation();
 							copyToClipboard(node.address, t("nodes.nodeAddress"));
-						}} className="[unicode-bidi:isolate] cursor-pointer text-start max-w-full truncate hover:text-primary-500 hover:underline">
+						}} className="[unicode-bidi:isolate] cursor-pointer text-start max-w-full truncate font-mono tabular-nums text-xs text-[#c9d1d9] hover:text-cyan-400 hover:underline">
 						{formatCellValue(node.address)}
 					</button>
 				),
@@ -1910,11 +1910,11 @@ export const NodesPage: FC = () => {
 						<Badge asChild><button type="button" onClick={(event) => {
 								event.stopPropagation();
 								if (node.id) setVersionDialogTarget({ type: "node", node });
-							}} className={cn("bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-500/20 dark:text-blue-200", "max-w-full overflow-hidden whitespace-nowrap cursor-pointer hover:opacity-[0.82]")}>
+							}} className={cn("badge-soft-cyan text-cyan-400 font-mono text-xs px-2 py-0.5 rounded-full border border-cyan-500/30", "max-w-full overflow-hidden whitespace-nowrap cursor-pointer hover:opacity-[0.82]")}>
 							{`Xray ${node.xray_version}`}
 						</button></Badge>
 					) : (
-						<span className="text-panel-text-muted">
+						<span className="text-[#8b949e] font-mono text-xs">
 							-
 						</span>
 					),
@@ -1965,17 +1965,17 @@ export const NodesPage: FC = () => {
 					return (
 						<div className="flex flex-col items-start justify-center gap-1 min-w-0! max-w-full overflow-hidden">
 							{nodeRuntimeDisplayVersion ? (
-								<Badge className={cn("bg-green-600 text-white", "max-w-full overflow-hidden whitespace-nowrap justify-start")}>
+								<Badge className={cn("badge-soft-teal text-teal-400 font-mono text-xs px-2 py-0.5 rounded-full border border-teal-500/30", "max-w-full overflow-hidden whitespace-nowrap justify-start")}>
 									{t("nodes.nodeServiceVersionTag", {
 										version: nodeRuntimeDisplayVersion,
 									})}
 								</Badge>
 							) : (
-								<span className="text-[0.875rem] text-panel-text-muted">
+								<span className="text-xs font-mono text-[#8b949e]">
 									-
 								</span>
 							)}
-							<p className="text-[0.75rem] text-panel-text-muted truncate min-w-0! max-w-full text-start">
+							<p className="text-xs text-[#8b949e] truncate min-w-0! max-w-full text-start font-mono">
 								{nodeInstallLabel}
 							</p>
 							{nodeServiceUpdateAvailable && (
@@ -2021,7 +2021,7 @@ export const NodesPage: FC = () => {
 				mobilePriority: 5,
 				mobileMetaLabel: t("redisUptime"),
 				cell: (node) => (
-					<p className="font-medium text-[0.875rem] leading-[1.375]">
+					<p className="font-mono tabular-nums text-xs text-[#c9d1d9] leading-[1.375]">
 						{formatNodeUptime(node.uptime_seconds)}
 					</p>
 				),

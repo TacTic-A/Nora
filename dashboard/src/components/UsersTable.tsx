@@ -84,12 +84,12 @@ const UserSpeed: FC<{ user: UserListItem }> = ({ user }) => {
 		user.download_speed ??
 		0;
 	if (upload === 0 && download === 0) {
-		return <p className="text-panel-text-muted">—</p>;
+		return <p className="text-[#8b949e] font-mono text-xs">—</p>;
 	}
 	return (
-		<div dir="ltr" className="rb-stat-pair flex flex-col gap-0 text-[0.75rem] leading-[1.375]">
-			<p><span aria-hidden="true">↑</span> <span className="sr-only">{t("usersTable.uploadSpeed")}: </span>{formatBytes(upload)}/s</p>
-			<p><span aria-hidden="true">↓</span> <span className="sr-only">{t("usersTable.downloadSpeed")}: </span>{formatBytes(download)}/s</p>
+		<div dir="ltr" className="rb-stat-pair flex flex-col gap-0 text-xs font-mono tabular-nums leading-[1.375]">
+			<p className="text-[#c9d1d9]"><span aria-hidden="true" className="text-teal-400 font-bold">↑</span> <span className="sr-only">{t("usersTable.uploadSpeed")}: </span>{formatBytes(upload)}/s</p>
+			<p className="text-[#c9d1d9]"><span aria-hidden="true" className="text-cyan-400 font-bold">↓</span> <span className="sr-only">{t("usersTable.downloadSpeed")}: </span>{formatBytes(download)}/s</p>
 		</div>
 	);
 };
@@ -741,9 +741,26 @@ export const UsersTable: FC<UsersTableProps> = ({
 							</p>
 						</div>
 						<UserAdminChip adminUsername={user.admin_username} />
-						<p style={{ color: USER_STATUS_TEXT_COLORS[user.status] ?? "var(--rb-panel-text)" }} className="text-[0.75rem] font-semibold capitalize rb-user-card-status">
+						<span
+							data-slot="badge"
+							className={cn(
+								"inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold capitalize tracking-wide transition-all rb-user-card-status",
+								(
+									{
+										active: "badge-soft-teal",
+										connected: "badge-soft-teal",
+										connecting: "badge-soft-amber",
+										expired: "badge-soft-red",
+										limited: "badge-soft-amber",
+										on_hold: "badge-soft-purple",
+										disabled: "badge-soft-gray",
+										error: "badge-soft-red",
+									} as Record<string, string>
+								)[user.status] ?? "badge-soft-gray",
+							)}
+						>
 							{t(`status.${user.status}`)}
-						</p>
+						</span>
 					</div>
 				),
 			},
@@ -759,7 +776,7 @@ export const UsersTable: FC<UsersTableProps> = ({
 				cellAlign: "start",
 				mobileVisible: false,
 				cell: (user) => (
-					<p dir="ltr" className="text-[0.875rem] text-panel-text font-mono">
+					<p dir="ltr" className="text-xs text-[#8b949e] font-mono tabular-nums">
 						{user.id}
 					</p>
 				),
@@ -777,9 +794,26 @@ export const UsersTable: FC<UsersTableProps> = ({
 				mobilePriority: 2,
 				mobileMetaLabel: t("usersTable.status"),
 				cell: (user) => (
-					<p style={{ color: USER_STATUS_TEXT_COLORS[user.status] ?? "var(--rb-panel-text)" }} className="text-[0.875rem] font-semibold capitalize">
+					<span
+						data-slot="badge"
+						className={cn(
+							"inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold capitalize tracking-wide transition-all",
+							(
+								{
+									active: "badge-soft-teal",
+									connected: "badge-soft-teal",
+									connecting: "badge-soft-amber",
+									expired: "badge-soft-red",
+									limited: "badge-soft-amber",
+									on_hold: "badge-soft-purple",
+									disabled: "badge-soft-gray",
+									error: "badge-soft-red",
+								} as Record<string, string>
+							)[user.status] ?? "badge-soft-gray",
+						)}
+					>
 						{t(`status.${user.status}`)}
-					</p>
+					</span>
 				),
 			},
 			{

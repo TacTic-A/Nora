@@ -114,17 +114,19 @@ export const AdminApiKeysDialog = ({ admin, open: isOpen, onClose }: Props) => {
 				open={isOpen}
 				onClose={close}
 				size="xl"
+				icon={<Key className="size-4" />}
+				iconVariant="cyan"
 				title={t("admins.apiKeys.title", { username: admin?.username ?? "" })}
-				footer={<Button onClick={close}>{t("close")}</Button>}
+				footer={<Button variant="outline" onClick={close}>{t("close")}</Button>}
 			>
 				<div className="flex flex-col gap-5">
-					<p className="text-panel-text-secondary text-[0.875rem]">
+					<p className="text-[#8b949e] text-[0.875rem]">
 						{t("admins.apiKeys.description")}
 					</p>
 
 					<div className="flex-col sm:flex-row flex gap-2 items-stretch sm:items-end">
 						<div className="flex-1">
-							<p className="text-[0.875rem] font-semibold mb-2">
+							<p className="text-[0.875rem] font-semibold text-white mb-2">
 								{t("myaccount.apiKeyLifetime")}
 							</p>
 							<Select
@@ -140,33 +142,33 @@ export const AdminApiKeysDialog = ({ admin, open: isOpen, onClose }: Props) => {
 								</option>
 							</Select>
 						</div>
-						<Button disabled={Boolean(generatedKey)} onClick={create} loading={creating}>{<Key className="w-[17px]" />}
+						<Button disabled={Boolean(generatedKey)} onClick={create} loading={creating} variant="soft-cyan">{<Key className="w-[17px]" />}
 							{t("admins.apiKeys.create")}
 						</Button>
 					</div>
 
 					{generatedKey && (
-						<div className="border border-orange-300! bg-orange-50 dark:bg-orange-900 dark:border-orange-700! rounded-md p-3">
-							<p className="font-semibold text-[0.875rem] mb-2">
+						<div className="border border-amber-500/30 bg-amber-500/10 rounded-xl p-3.5 text-white">
+							<p className="font-semibold text-amber-300 text-[0.875rem] mb-2">
 								{t("admins.apiKeys.generated", {
 									username: admin?.username ?? "",
 								})}
 							</p>
 							<div className="flex flex-row items-center gap-2">
-								<Input value={generatedKey} readOnly className="bg-panel-elevated font-mono" />
+								<Input value={generatedKey} readOnly className="border-white/10 bg-[#0d1117] text-white font-mono" />
 								<Button aria-label={t("copy")} onClick={async () => {
 										await copyTextToClipboard(generatedKey);
 										generateSuccessMessage(t("copied"), toast);
-									}} className="size-9 p-0">{<Clipboard className="w-[18px]" />}</Button>
+									}} className="size-9 p-0" variant="soft-cyan">{<Clipboard className="w-[18px]" />}</Button>
 							</div>
-							<p className="text-orange-700 dark:text-orange-200 text-[0.75rem] mt-2">
+							<p className="text-amber-400/80 text-[0.75rem] mt-2">
 								{t("myaccount.apiKeyWarning")}
 							</p>
 						</div>
 					)}
 
 					<div>
-						<p className="font-semibold mb-3">
+						<p className="font-semibold text-white mb-3">
 							{t("myaccount.apiKeys")}
 						</p>
 						{loading ? (
@@ -174,18 +176,18 @@ export const AdminApiKeysDialog = ({ admin, open: isOpen, onClose }: Props) => {
 								<Spinner />
 							</div>
 						) : keys.length === 0 ? (
-							<p className="text-panel-text-muted text-[0.875rem]">
+							<p className="text-[#8b949e] text-[0.875rem]">
 								{t("myaccount.noApiKeys")}
 							</p>
 						) : (
-							<div className="flex flex-col gap-0 border border-panel-border! rounded-md overflow-hidden">
+							<div className="flex flex-col gap-0 border border-white/[0.08] rounded-xl overflow-hidden bg-[#0d1117]">
 								{keys.map((key) => (
-									<div key={key.id} className="flex items-center justify-between gap-3 px-3 py-2.5 border-b border-panel-border! last:border-b-0">
+									<div key={key.id} className="flex items-center justify-between gap-3 px-3.5 py-2.5 border-b border-white/[0.08] last:border-b-0 hover:bg-white/[0.02] transition-colors">
 										<div className="min-w-0!">
-											<p className="font-mono text-[0.875rem] font-semibold">
+											<p className="font-mono text-[0.875rem] font-semibold text-white">
 												{key.masked_key ?? "****"}
 											</p>
-											<p className="text-panel-text-muted text-[0.75rem] mt-1">
+											<p className="text-[#8b949e] text-[0.75rem] mt-1">
 												{t("myaccount.apiKeyCreatedAt")}:{" "}
 												{dayjs(key.created_at).format("YYYY-MM-DD")} ·{" "}
 												{t("myaccount.apiKeyExpiresAt")}:{" "}

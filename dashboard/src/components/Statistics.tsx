@@ -32,10 +32,8 @@ import {
 } from "lucide-react";
 import {
 	type ComponentPropsWithoutRef,
-	type CSSProperties,
 	type FC,
 	lazy,
-	type MouseEvent as ReactMouseEvent,
 	type ReactNode,
 	Suspense,
 	useCallback,
@@ -84,71 +82,6 @@ type MaintenanceInfo = {
 };
 
 type BandwidthScope = "master" | "total";
-
-const canUseInteractiveHover = () =>
-	typeof window !== "undefined" &&
-	window.innerWidth > 768 &&
-	Boolean(window.matchMedia?.("(hover: hover) and (pointer: fine)").matches);
-
-const useCardProximity = () => {
-	const leaveTimersRef = useRef<WeakMap<HTMLElement, number>>(new WeakMap());
-
-	const handleMouseMove = useCallback((e: ReactMouseEvent<HTMLElement>) => {
-		if (!canUseInteractiveHover()) return;
-		const card = e.currentTarget;
-		const rect = card.getBoundingClientRect();
-		card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
-		card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
-		card.style.setProperty("--mouse-opacity", "1");
-
-		const swappables = card.querySelectorAll<HTMLElement>(
-			"[data-rb-icon], [data-rb-swap], [data-rb-progress]",
-		);
-		const radius = 210;
-		for (const el of swappables) {
-			const pendingTimer = leaveTimersRef.current.get(el);
-			if (pendingTimer) {
-				window.clearTimeout(pendingTimer);
-				leaveTimersRef.current.delete(el);
-			}
-			el.style.removeProperty("transition");
-			const elRect = el.getBoundingClientRect();
-			const dx = Math.max(elRect.left - e.clientX, 0, e.clientX - elRect.right);
-			const dy = Math.max(elRect.top - e.clientY, 0, e.clientY - elRect.bottom);
-			const dist = Math.hypot(dx, dy);
-			if (dist < radius) {
-				const t = 1 - dist / radius;
-				const proximity = t ** 1.15;
-				el.style.setProperty("--proximity", proximity.toFixed(3));
-			} else {
-				el.style.removeProperty("--proximity");
-			}
-		}
-	}, []);
-
-	const handleMouseLeave = useCallback((e: ReactMouseEvent<HTMLElement>) => {
-		if (typeof window === "undefined" || window.innerWidth <= 768) return;
-		const card = e.currentTarget;
-		card.style.setProperty("--mouse-opacity", "0");
-		const swappables = card.querySelectorAll<HTMLElement>(
-			"[data-rb-icon], [data-rb-swap], [data-rb-progress]",
-		);
-		for (const el of swappables) {
-			el.style.setProperty(
-				"transition",
-				"background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease",
-			);
-			el.style.removeProperty("--proximity");
-			const timer = window.setTimeout(() => {
-				el.style.removeProperty("transition");
-				leaveTimersRef.current.delete(el);
-			}, 260);
-			leaveTimersRef.current.set(el, timer);
-		}
-	}, []);
-
-	return { handleMouseMove, handleMouseLeave };
-};
 
 const formatDurationText = (seconds: number, t: TFunction): string => {
 	if (!seconds || seconds <= 0) {
@@ -749,13 +682,13 @@ const HistoryModal: FC<{
 				sparkline: { enabled: false },
 			},
 			colors: isNetwork
-				? ["#2563eb", "#10b981"]
-				: ["var(--rb-panel-accent)", "#8b5cf6", "#f59e0b", "#ec4899"],
+				? ["#06b6d4", "#0d9488"]
+				: ["#06b6d4", "#0d9488", "#8b5cf6", "#f59e0b"],
 			fill: {
 				type: "gradient",
 				gradient: {
 					shadeIntensity: 1,
-					opacityFrom: 0.26,
+					opacityFrom: 0.25,
 					opacityTo: 0.02,
 					stops: [0, 100],
 				},
@@ -846,15 +779,15 @@ const HistoryModal: FC<{
 						.map((name: string, i: number) => {
 							const val = series[i]?.[dataPointIndex];
 							if (val === undefined || Number.isNaN(val)) return "";
-							const color = w.globals.colors[i] || "var(--rb-panel-accent)";
+							const color = w.globals.colors[i] || "#06b6d4";
 							const displayVal = isNetwork
 								? `${formatBytes(val, 2)}/s`
 								: `${Math.round(val * 10) / 10}%`;
-							return `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px;"><div style="display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:${color};flex-shrink:0;"></span><span style="color:var(--rb-panel-text-secondary,#94a3b8);font-size:11px;font-weight:500;">${name}</span></div><span style="color:var(--rb-panel-text,#ffffff);font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;direction:ltr;">${displayVal}</span></div>`;
+							return `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px;"><div style="display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:${color};flex-shrink:0;"></span><span style="color:#b1bac4;font-size:11px;font-weight:500;">${name}</span></div><span style="color:#ffffff;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;direction:ltr;font-family:var(--font-mono);">${displayVal}</span></div>`;
 						})
 						.join("");
 
-					return `<div style="background:var(--rb-panel-surface,#16171c);border:1px solid var(--rb-panel-border,rgba(255,255,255,0.12));border-radius:12px;padding:8px 12px;box-shadow:0 12px 28px -6px rgba(0,0,0,0.55);direction:${isRTL ? "rtl" : "ltr"};font-family:inherit;min-width:148px;"><div style="color:var(--rb-panel-text-muted,#64748b);font-size:10px;font-weight:600;direction:ltr;text-align:${isRTL ? "right" : "left"};border-bottom:1px solid var(--rb-panel-border,rgba(255,255,255,0.08));padding-bottom:4px;margin-bottom:4px;">${dateStr}</div>${linesHtml}</div>`;
+					return `<div style="background:#161b22;border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:8px 12px;box-shadow:0 12px 28px -6px rgba(0,0,0,0.55);direction:${isRTL ? "rtl" : "ltr"};font-family:inherit;min-width:148px;"><div style="color:#8b949e;font-size:10px;font-weight:600;direction:ltr;text-align:${isRTL ? "right" : "left"};border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:4px;margin-bottom:4px;">${dateStr}</div>${linesHtml}</div>`;
 				},
 			},
 		}),
@@ -882,13 +815,15 @@ const HistoryModal: FC<{
 			<DialogContent
 				dir={isRTL ? "rtl" : "ltr"}
 				showCloseButton={false}
-				className="flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-1.5rem)] max-w-[780px] flex-col gap-0 overflow-hidden rounded-[20px] border border-panel-border! bg-panel-surface p-0 text-panel-text shadow-[0_24px_64px_-12px_rgba(0,0,0,0.48)] sm:w-full sm:max-w-[780px]"
+				className="flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-1.5rem)] max-w-[780px] flex-col gap-0 overflow-hidden rounded-[20px] border border-white/[0.08] bg-[#161b22] p-0 text-white shadow-2xl sm:w-full sm:max-w-[780px]"
 			>
-				<DialogHeader className="flex flex-row items-center justify-between gap-3 border-b border-panel-border/75! px-4 py-3.5 text-start min-[769px]:px-6">
+				<DialogHeader className="flex flex-row items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-3.5 text-start min-[769px]:px-6">
 					<div className="flex min-w-0 items-center gap-2.5">
-						<MetricIcon className="size-4 shrink-0 text-panel-text-secondary" />
+						<span className="badge-soft-cyan flex size-7 shrink-0 items-center justify-center rounded-lg text-cyan-400 [&_svg]:size-3.5">
+							<MetricIcon className="size-3.5" />
+						</span>
 						<div className="min-w-0">
-							<DialogTitle className="truncate text-[14px] font-bold tracking-[-0.01em] text-panel-text">
+							<DialogTitle className="truncate text-[14px] font-bold tracking-tight text-white">
 								{t("dashboard.history.modalTitle", {
 									metric: payload?.title ?? "",
 								})}
@@ -904,7 +839,7 @@ const HistoryModal: FC<{
 						size="icon-sm"
 						onClick={onClose}
 						aria-label={t("close")}
-						className="size-8 shrink-0 rounded-[10px] text-panel-text-muted transition-[background-color,color,transform] duration-150 active:scale-[0.95] min-[769px]:hover:bg-panel-elevated min-[769px]:hover:text-panel-text"
+						className="size-8 shrink-0 rounded-xl text-[#8b949e] transition-all hover:bg-[#21262d] hover:text-white"
 					>
 						<X className="size-4" />
 					</Button>
@@ -920,7 +855,7 @@ const HistoryModal: FC<{
 								)}
 							>
 								{hasEnoughPoints ? (
-									<div className="inline-flex w-full max-w-full items-center gap-1 overflow-x-auto rounded-[12px] border border-panel-border! bg-panel-elevated p-1 min-[769px]:w-fit [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+									<div className="inline-flex w-full max-w-full items-center gap-1 overflow-x-auto rounded-xl border border-white/[0.08] bg-[#21262d] p-1 min-[769px]:w-fit [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 										{HISTORY_INTERVALS.map((interval, idx) => {
 											const isAvailable =
 												idx === 0 || availableSpan >= interval.seconds * 0.5;
@@ -938,7 +873,7 @@ const HistoryModal: FC<{
 																ease: [0.22, 1, 0.36, 1],
 																duration: 0.24,
 															}}
-															className="pointer-events-none absolute inset-0 rounded-[9px] bg-panel-accent shadow-[0_2px_8px_color-mix(in_srgb,var(--rb-panel-accent)_35%,transparent)]"
+															className="pointer-events-none absolute inset-0 rounded-lg bg-cyan-500 shadow-[0_2px_8px_rgba(6,182,212,0.35)]"
 														/>
 													)}
 													<Button
@@ -959,10 +894,10 @@ const HistoryModal: FC<{
 														variant="ghost"
 														size="xs"
 														className={cn(
-															"relative z-10 h-7 w-full rounded-[9px] bg-transparent! px-2.5 text-[11px] whitespace-nowrap transition-colors duration-150 sm:px-3.5",
+															"relative z-10 h-7 w-full rounded-lg bg-transparent! px-2.5 text-[11px] whitespace-nowrap transition-colors duration-150 sm:px-3.5",
 															isActive
 																? "font-bold text-white! min-[769px]:hover:text-white!"
-																: "font-semibold text-panel-text-muted min-[769px]:hover:text-panel-text",
+																: "font-medium text-[#8b949e] min-[769px]:hover:text-white",
 															isAvailable
 																? "cursor-pointer opacity-100"
 																: "cursor-not-allowed opacity-40",
@@ -979,7 +914,7 @@ const HistoryModal: FC<{
 								)}
 
 								{isNetwork && canSeeGlobal && (
-									<div className="relative hidden items-center gap-0.5 rounded-[10px] border border-panel-border! bg-panel-elevated p-0.5 min-[769px]:flex">
+									<div className="relative hidden items-center gap-0.5 rounded-lg border border-white/[0.08] bg-[#21262d] p-0.5 min-[769px]:flex">
 										{(["master", "total"] as const).map((scope) => {
 											const active = bandwidthScope === scope;
 											return (
@@ -992,7 +927,7 @@ const HistoryModal: FC<{
 																ease: [0.22, 1, 0.36, 1],
 																duration: 0.22,
 															}}
-															className="pointer-events-none absolute inset-0 rounded-[8px] bg-panel-accent shadow-[0_1px_4px_color-mix(in_srgb,var(--rb-panel-accent)_35%,transparent)]"
+															className="pointer-events-none absolute inset-0 rounded-md bg-cyan-500 shadow-sm"
 														/>
 													)}
 													<Button
@@ -1006,10 +941,10 @@ const HistoryModal: FC<{
 														variant="ghost"
 														size="xs"
 														className={cn(
-															"relative z-10 h-6 rounded-[8px] bg-transparent! px-2.5 text-[11px] font-semibold transition-colors",
+															"relative z-10 h-6 rounded-md bg-transparent! px-2.5 text-[11px] font-semibold transition-colors",
 															active
 																? "text-white! min-[769px]:hover:text-white!"
-																: "text-panel-text-secondary min-[769px]:hover:text-panel-text",
+																: "text-[#8b949e] min-[769px]:hover:text-white",
 														)}
 													>
 														{t(`dashboard.system.bandwidthScope.${scope}`)}
@@ -1024,7 +959,7 @@ const HistoryModal: FC<{
 
 						<div
 							dir="ltr"
-							className="relative min-h-[300px] w-full rounded-[16px] border border-panel-border! bg-panel-elevated/35 p-2 sm:p-3 [&_.apexcharts-canvas]:[flex-direction:ltr]! [&_.apexcharts-legend]:flex! [&_.apexcharts-legend]:justify-center! [&_.apexcharts-legend]:gap-4! [&_.apexcharts-tooltip]:border-none! [&_.apexcharts-tooltip]:bg-transparent! [&_.apexcharts-tooltip]:shadow-none! [&_.apexcharts-yaxis-label]:[flex-direction:ltr]!"
+							className="relative min-h-[300px] w-full rounded-xl border border-white/[0.08] bg-[#0d1117]/60 p-2 sm:p-3 [&_.apexcharts-canvas]:[flex-direction:ltr]! [&_.apexcharts-legend]:flex! [&_.apexcharts-legend]:justify-center! [&_.apexcharts-legend]:gap-4! [&_.apexcharts-tooltip]:border-none! [&_.apexcharts-tooltip]:bg-transparent! [&_.apexcharts-tooltip]:shadow-none! [&_.apexcharts-yaxis-label]:[flex-direction:ltr]!"
 						>
 							<AnimatePresence>
 								{isSwitchingInterval && (
@@ -1102,6 +1037,7 @@ const ResourceCard: FC<{
 	onHistory?: () => void;
 	historyLabel?: string;
 	isRTL?: boolean;
+	iconVariant?: "cyan" | "teal" | "purple" | "amber";
 }> = ({
 	label,
 	icon,
@@ -1116,34 +1052,54 @@ const ResourceCard: FC<{
 	onHistory,
 	historyLabel,
 	isRTL = false,
+	iconVariant = "teal",
 }) => {
-	const { handleMouseMove, handleMouseLeave } = useCardProximity();
 	const safe = clampPercent(percent);
-	const criticalColor =
+	const barColor =
 		safe >= 90
-			? "#ef4444"
-			: safe >= 75
-				? "#f59e0b"
-				: "var(--rb-panel-accent)";
+			? "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]"
+			: safe >= 70
+				? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
+				: "bg-teal-500 shadow-[0_0_8px_rgba(45,212,191,0.5)]";
+
+	const topAccentColor = {
+		cyan: "via-cyan-500/40",
+		teal: "via-teal-500/40",
+		purple: "via-purple-500/40",
+		amber: "via-amber-500/40",
+	}[iconVariant];
+
+	const variantClass = {
+		cyan: "badge-soft-cyan text-cyan-400",
+		teal: "badge-soft-teal text-teal-400",
+		purple: "badge-soft-purple text-purple-400",
+		amber: "badge-soft-amber text-amber-400",
+	}[iconVariant];
 
 	return (
 		<article
-			onMouseMove={handleMouseMove}
-			onMouseLeave={handleMouseLeave}
-			style={{ "--rb-spotlight-size": "420px" } as CSSProperties}
-			className="rb-stat-card flex flex-col justify-between p-4 sm:p-5"
+			className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-white/[0.08] bg-[#161b22] p-4 sm:p-5 shadow-sm transition-all duration-200 hover:border-white/[0.16]"
 		>
-			<div aria-hidden="true" className="rb-stat-spotlight" />
+			{/* Remnawave Top Glow Accent */}
+			<div
+				className={cn(
+					"pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent to-transparent",
+					topAccentColor,
+				)}
+			/>
+
 			<div className="relative z-[1] w-full">
 				<div className="mb-3 flex items-center justify-between gap-2">
 					<div className="flex min-w-0 items-center gap-2.5">
 						<span
-							data-rb-icon=""
-							className="flex size-8 shrink-0 items-center justify-center rounded-[10px] bg-panel-elevated text-panel-text-secondary"
+							className={cn(
+								"flex size-8 shrink-0 items-center justify-center rounded-xl transition-transform duration-200 group-hover:scale-105 [&_svg]:size-4",
+								variantClass,
+							)}
 						>
 							{icon}
 						</span>
-						<p className="truncate text-[13px] font-semibold text-panel-text-secondary">
+						<p className="truncate text-xs font-semibold text-[#8b949e]">
 							{label}
 						</p>
 					</div>
@@ -1151,25 +1107,23 @@ const ResourceCard: FC<{
 						<button
 							type="button"
 							onClick={onHistory}
-							data-rb-swap=""
-							data-rb-swap-text=""
-							className="relative inline-flex h-[22px] shrink-0 cursor-pointer items-center justify-center rounded-full bg-panel-elevated px-2.5 text-[11px] font-semibold text-panel-text-secondary select-none outline-none transition-transform duration-150 focus-visible:ring-2 focus-visible:ring-panel-accent/50 active:scale-[0.97] after:absolute after:-inset-2.5 after:content-['']"
+							className="relative inline-flex h-[22px] shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/[0.08] bg-[#21262d] px-2.5 text-[11px] font-medium text-[#8b949e] select-none outline-none transition-all duration-150 hover:border-white/[0.18] hover:text-white focus-visible:ring-2 focus-visible:ring-cyan-500/50 active:scale-[0.97]"
 						>
 							{historyLabel}
 						</button>
 					)}
 				</div>
 
-				<div className="mb-1 flex flex-nowrap items-baseline justify-start gap-1.5">
+				<div className="mb-1 flex flex-nowrap items-baseline justify-start gap-1.5 font-mono">
 					{totalValue ? (
 						<div
 							dir="ltr"
 							className="flex items-baseline gap-1.5 [unicode-bidi:isolate]"
 						>
-							<p className="text-[20px] leading-[1.1] font-extrabold tracking-[-0.02em] text-panel-text tabular-nums sm:text-[22px]">
+							<p className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-white tabular-nums">
 								{value}
 							</p>
-							<p className="text-[13px] font-semibold text-panel-text-muted tabular-nums">
+							<p className="font-mono text-xs font-semibold text-[#8b949e] tabular-nums">
 								/ {totalValue}
 							</p>
 						</div>
@@ -1177,24 +1131,19 @@ const ResourceCard: FC<{
 						<div className="flex flex-wrap items-baseline gap-1.5">
 							<p
 								dir="ltr"
-								className="text-[20px] leading-[1.1] font-extrabold tracking-[-0.02em] text-panel-text tabular-nums [unicode-bidi:isolate] sm:text-[22px]"
+								className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-white tabular-nums [unicode-bidi:isolate]"
 							>
 								{value}
 							</p>
 							{metaValue !== undefined && metaUnit && (
 								<div
 									dir={isRTL ? "rtl" : "ltr"}
-									className="flex items-center gap-1 [unicode-bidi:isolate]"
+									className="flex items-center gap-1 font-mono text-xs font-medium text-[#8b949e] [unicode-bidi:isolate]"
 								>
-									<p
-										dir="ltr"
-										className="text-[12px] font-semibold text-panel-text-muted tabular-nums [unicode-bidi:isolate]"
-									>
-										{metaValue}
+									<p dir="ltr" className="tabular-nums">
+										({metaValue}
 									</p>
-									<p className="text-[12px] font-semibold text-panel-text-muted">
-										{metaUnit}
-									</p>
+									<p>{metaUnit})</p>
 								</div>
 							)}
 						</div>
@@ -1205,10 +1154,11 @@ const ResourceCard: FC<{
 			</div>
 
 			<div className="relative z-[1] mt-3.5 w-full">
-				<div className="mb-1.5 flex items-center justify-between">
+				<div className="mb-1.5 flex items-center justify-between font-mono text-[11px]">
+					<span className="font-semibold text-[#8b949e]">Utilization</span>
 					<p
 						dir="ltr"
-						className="text-[11px] font-bold text-panel-text-secondary tabular-nums [unicode-bidi:isolate]"
+						className="font-bold text-white tabular-nums [unicode-bidi:isolate]"
 					>
 						{formatPercent(safe)}
 					</p>
@@ -1218,22 +1168,22 @@ const ResourceCard: FC<{
 					aria-valuenow={Math.round(safe)}
 					aria-valuemin={0}
 					aria-valuemax={100}
-					data-rb-progress=""
-					className="h-[6px] w-full overflow-hidden rounded-full bg-panel-elevated"
+					className="h-1.5 w-full overflow-hidden rounded-full bg-[#21262d]"
 				>
 					<div
-						className="h-full rounded-full"
+						className={cn(
+							"h-full rounded-full transition-all duration-300",
+							barColor,
+						)}
 						style={{
 							width: `${safe}%`,
-							backgroundColor: criticalColor,
-							color: criticalColor,
 						}}
 					/>
 				</div>
 				{(footerLeft || footerRight) && (
 					<div
 						dir={isRTL ? "rtl" : "ltr"}
-						className="mt-2.5 flex items-center justify-between gap-2 border-t border-panel-border/70! pt-2 text-[11px] font-medium text-panel-text-muted tabular-nums [unicode-bidi:isolate]"
+						className="mt-2.5 flex items-center justify-between gap-2 border-t border-white/[0.06] pt-2 font-mono text-[11px] text-[#8b949e] tabular-nums [unicode-bidi:isolate]"
 					>
 						<p className="truncate">{footerLeft}</p>
 						<p className="truncate">{footerRight}</p>
@@ -1253,7 +1203,7 @@ const StatRow: FC<{
 	tagColor?: string;
 	helper?: string;
 }> = ({ label, value, dimLabel, accent, tag, tagColor, helper }) => (
-	<div className="flex items-center justify-between gap-3 border-b border-panel-border/80! py-2.5 last:border-b-0">
+	<div className="flex items-center justify-between gap-3 border-b border-white/[0.06] py-2.5 last:border-b-0">
 		<div className="flex min-w-0 flex-nowrap items-center gap-2.5">
 			{tagColor && (
 				<span
@@ -1267,7 +1217,7 @@ const StatRow: FC<{
 			<p
 				className={cn(
 					"truncate text-[13px] font-semibold",
-					dimLabel ? "text-panel-text-muted" : "text-panel-text-secondary",
+					dimLabel ? "text-[#8b949e]" : "text-[#b1bac4]",
 				)}
 			>
 				{label}
@@ -1275,9 +1225,7 @@ const StatRow: FC<{
 			{tag && (
 				<span
 					dir="ltr"
-					data-rb-swap=""
-					data-rb-swap-text=""
-					className="inline-flex items-center justify-center rounded-full bg-panel-elevated px-2 py-0.5 text-[10px] font-bold text-panel-text-secondary tabular-nums [unicode-bidi:isolate]"
+					className="font-mono inline-flex items-center justify-center rounded-full border border-white/[0.08] bg-[#21262d] px-2 py-0.5 text-[10px] font-bold text-[#b1bac4] tabular-nums [unicode-bidi:isolate]"
 				>
 					{tag.endsWith("%") ? `${tag.slice(0, -1)}%` : tag}
 				</span>
@@ -1287,8 +1235,8 @@ const StatRow: FC<{
 			<p
 				dir="ltr"
 				className={cn(
-					"text-[13px] font-bold tabular-nums [unicode-bidi:isolate]",
-					accent ? "text-panel-accent" : "text-panel-text",
+					"font-mono text-[13px] font-bold tabular-nums [unicode-bidi:isolate]",
+					accent ? "text-cyan-400" : "text-white",
 				)}
 			>
 				{typeof value === "number" ? formatNumberValue(value) : value}
@@ -1296,7 +1244,7 @@ const StatRow: FC<{
 			{helper && (
 				<p
 					dir="ltr"
-					className="text-[10px] font-medium text-panel-text-muted tabular-nums [unicode-bidi:isolate]"
+					className="font-mono text-[10px] font-medium text-[#8b949e] tabular-nums [unicode-bidi:isolate]"
 				>
 					{helper}
 				</p>
@@ -1320,28 +1268,22 @@ const SectionCard: FC<{
 	headerClassName,
 	contentClassName,
 }) => {
-	const { handleMouseMove, handleMouseLeave } = useCardProximity();
-
 	return (
 		<article
-			onMouseMove={noHover ? undefined : handleMouseMove}
-			onMouseLeave={noHover ? undefined : handleMouseLeave}
-			style={{ "--rb-spotlight-size": "550px" } as CSSProperties}
 			className={cn(
-				"rb-stat-card flex h-full flex-col",
-				noHover && "hover:border-panel-border!",
+				"relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.08] bg-[#161b22] shadow-sm transition-all duration-200",
+				!noHover && "hover:border-white/[0.16]",
 			)}
 		>
-			{!noHover && <div aria-hidden="true" className="rb-stat-spotlight" />}
 			{(title || action) && (
 				<div
 					className={cn(
-						"relative z-[1] flex flex-wrap items-center justify-between gap-2.5 border-b border-panel-border! px-4 py-3.5 sm:px-5 min-[769px]:px-6",
+						"relative z-[1] flex flex-wrap items-center justify-between gap-2.5 border-b border-white/[0.08] px-4 py-3.5 sm:px-5 min-[769px]:px-6",
 						headerClassName,
 					)}
 				>
 					{title && (
-						<div className="min-w-0 text-[13px] font-bold tracking-[-0.01em] text-panel-text">
+						<div className="min-w-0 text-[13px] font-bold tracking-tight text-white">
 							{title}
 						</div>
 					)}
@@ -1414,22 +1356,37 @@ const SpeedItem: FC<{
 	icon: ReactNode;
 	label: string;
 	value: string;
-}> = ({ icon, label, value }) => (
-	<div className="flex items-center justify-between gap-3">
+	direction?: "in" | "out";
+}> = ({ icon, label, value, direction = "in" }) => (
+	<div
+		className={cn(
+			"flex items-center justify-between rounded-lg p-2.5 sm:p-3 transition-colors",
+			direction === "in"
+				? "border border-teal-500/15 bg-teal-500/[0.04]"
+				: "border border-cyan-500/15 bg-cyan-500/[0.04]",
+		)}
+	>
 		<div className="flex min-w-0 items-center gap-2.5">
 			<span
-				data-rb-icon=""
-				className="flex size-7 shrink-0 items-center justify-center rounded-[10px] bg-panel-elevated text-panel-text-secondary"
+				className={cn(
+					"flex size-7 shrink-0 items-center justify-center rounded-lg [&_svg]:size-3.5",
+					direction === "in"
+						? "badge-soft-teal text-teal-400"
+						: "badge-soft-cyan text-cyan-400",
+				)}
 			>
 				{icon}
 			</span>
-			<p className="truncate text-[13px] font-semibold text-panel-text-secondary">
+			<p className="truncate text-xs font-medium text-[#b1bac4]">
 				{label}
 			</p>
 		</div>
 		<p
 			dir="ltr"
-			className="shrink-0 text-[13px] font-bold tracking-[-0.01em] text-panel-text tabular-nums [unicode-bidi:isolate]"
+			className={cn(
+				"shrink-0 font-mono text-sm font-bold tabular-nums [unicode-bidi:isolate]",
+				direction === "in" ? "text-teal-400" : "text-cyan-400",
+			)}
 		>
 			{value}
 		</p>
@@ -1712,7 +1669,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 				>
 					<h1
 						ref={overviewTitleRef}
-						className="shrink-0 text-[18px] font-bold tracking-[-0.02em] whitespace-nowrap text-panel-text min-[769px]:text-[20px]"
+						className="shrink-0 text-[18px] font-bold tracking-tight whitespace-nowrap text-white min-[769px]:text-[20px]"
 					>
 						{t("dashboard.system.overview")}
 					</h1>
@@ -1726,29 +1683,32 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 						)}
 					>
 						<span
-							style={{
-								animation: isHealthy
-									? "livePulse 3.5s ease-in-out infinite"
-									: "none",
-								boxShadow: isHealthy
-									? "0 0 5px rgba(34, 197, 94, 0.4)"
-									: "0 0 5px rgba(239, 68, 68, 0.4)",
-							}}
 							className={cn(
-								"size-[7px] shrink-0 rounded-full",
-								isHealthy ? "bg-[#22c55e]" : "bg-[#ef4444]",
+								"inline-flex items-center gap-2 rounded-full px-2.5 py-0.5 text-xs font-semibold",
+								isHealthy
+									? "badge-soft-teal text-teal-300"
+									: "badge-soft-red text-red-300",
 							)}
-						/>
-						<span className="text-[12px] font-semibold text-panel-text-secondary">
-							{hasXrayError
-								? t("diagnostics.statusError")
-								: systemData.xray_running
-									? t("dashboard.system.statusRunning")
-									: t("dashboard.system.statusStopped")}
+						>
+							<span
+								className={cn(
+									"size-2 shrink-0 rounded-full",
+									isHealthy
+										? "bg-[#22c55e] shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse"
+										: "bg-[#ef4444] shadow-[0_0_8px_rgba(239,68,68,0.6)]",
+								)}
+							/>
+							<span>
+								{hasXrayError
+									? t("diagnostics.statusError")
+									: systemData.xray_running
+										? t("dashboard.system.statusRunning")
+										: t("dashboard.system.statusStopped")}
+							</span>
 						</span>
 
 						{systemData.os && (
-							<span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-panel-text-secondary">
+							<span className="inline-flex items-center gap-1.5 font-mono text-xs text-[#8b949e]">
 								<span>·</span>
 								<span dir="ltr" className="[unicode-bidi:isolate]">
 									{systemData.os}
@@ -1757,7 +1717,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 						)}
 
 						{exactVersion && exactVersion !== "-" && (
-							<span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-panel-text-secondary tabular-nums">
+							<span className="inline-flex items-center gap-1.5 font-mono text-xs text-[#8b949e] tabular-nums">
 								<span>·</span>
 								<span dir="ltr" className="[unicode-bidi:isolate]">
 									{exactVersion}
@@ -1782,6 +1742,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 				<ResourceCard
 					label={t("dashboard.system.cpuUsage")}
 					icon={<Cpu className="size-4" />}
+					iconVariant="cyan"
 					value={formatPercent(systemData.cpu_usage)}
 					percent={systemData.cpu_usage}
 					metaValue={formatNumberValue(systemData.cpu_cores)}
@@ -1790,7 +1751,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 						systemData.load_avg && systemData.load_avg.length >= 3 ? (
 							<div
 								dir={isRTL ? "rtl" : "ltr"}
-								className="flex items-center gap-1.5 text-[11px] font-medium text-panel-text-muted"
+								className="flex items-center gap-1.5 font-mono text-[11px] font-medium text-[#8b949e]"
 							>
 								<span>{t("loadAverage")}:</span>
 								<span
@@ -1814,6 +1775,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 				<ResourceCard
 					label={t("dashboard.system.memoryUsage")}
 					icon={<Server className="size-4" />}
+					iconVariant="teal"
 					value={formatBytes(systemData.memory.current, 1)}
 					totalValue={formatBytes(systemData.memory.total, 1)}
 					percent={systemData.memory.percent}
@@ -1826,6 +1788,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 				<ResourceCard
 					label={t("dashboard.system.swapUsage")}
 					icon={<Database className="size-4" />}
+					iconVariant="purple"
 					value={formatBytes(systemData.swap.current, 1)}
 					totalValue={formatBytes(systemData.swap.total, 1)}
 					percent={systemData.swap.percent}
@@ -1836,6 +1799,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 				<ResourceCard
 					label={t("dashboard.system.diskUsage")}
 					icon={<HardDrive className="size-4" />}
+					iconVariant="amber"
 					value={formatBytes(systemData.disk.current, 1)}
 					totalValue={formatBytes(systemData.disk.total, 1)}
 					percent={systemData.disk.percent}
@@ -1850,13 +1814,10 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 					headerClassName="flex-nowrap items-center justify-between gap-2 px-3.5 sm:px-5 min-[769px]:px-6"
 					title={
 						<div className="flex min-w-0 items-center gap-2 sm:gap-2.5">
-							<span
-								data-rb-icon=""
-								className="flex size-6 shrink-0 items-center justify-center rounded-[8px] bg-panel-elevated text-panel-text-secondary sm:size-7 sm:rounded-[9px]"
-							>
+							<span className="badge-soft-cyan flex size-6 shrink-0 items-center justify-center rounded-lg text-cyan-400 sm:size-7 sm:rounded-xl [&_svg]:size-3.5">
 								<Signal className="size-3.5" />
 							</span>
-							<span className="truncate text-[12px] sm:text-[13px]">
+							<span className="truncate text-[12px] sm:text-[13px] font-bold text-white">
 								{t("dashboard.system.bandwidthSpeed")}
 							</span>
 						</div>
@@ -1864,16 +1825,13 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 					action={
 						<div className="flex shrink-0 flex-nowrap items-center gap-1.5 sm:gap-2">
 							{canSeeGlobal && (
-								<div
-									data-rb-swap=""
-									className="relative flex h-[22px] shrink-0 items-center gap-0.5 rounded-[9px] bg-panel-elevated p-[1.5px]"
-								>
+								<div className="relative flex h-[24px] shrink-0 items-center gap-0.5 rounded-lg border border-white/[0.08] bg-[#21262d] p-0.5">
 									{(["master", "total"] as const).map((scope) => {
 										const active = bandwidthScope === scope;
 										return (
 											<div
 												key={scope}
-												className="relative flex h-[19px] items-center"
+												className="relative flex h-[20px] items-center"
 											>
 												{active && (
 													<motion.div
@@ -1883,7 +1841,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 															ease: [0.16, 1, 0.3, 1],
 															duration: 0.22,
 														}}
-														className="pointer-events-none absolute inset-0 z-[1] rounded-[7px] border border-panel-accent! bg-panel-accent shadow-[0_1px_4px_color-mix(in_srgb,var(--rb-panel-accent)_35%,transparent)]"
+														className="pointer-events-none absolute inset-0 z-[1] rounded-md bg-cyan-500 shadow-[0_1px_4px_rgba(6,182,212,0.35)]"
 													/>
 												)}
 												<Button
@@ -1897,10 +1855,10 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 													variant="ghost"
 													size="xs"
 													className={cn(
-														"relative z-[2] h-[19px] min-h-0 rounded-[7px] bg-transparent! px-1.5 text-[10px] font-semibold leading-none transition-colors active:scale-[0.97] sm:px-2 sm:text-[10.5px]",
+														"relative z-[2] h-[20px] min-h-0 rounded-md bg-transparent! px-2 text-[10.5px] font-semibold leading-none transition-colors active:scale-[0.97]",
 														active
 															? "text-white! min-[769px]:hover:text-white!"
-															: "text-panel-text-secondary min-[769px]:hover:text-panel-text",
+															: "text-[#8b949e] min-[769px]:hover:text-white",
 													)}
 												>
 													<span
@@ -1920,22 +1878,22 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 							<button
 								type="button"
 								onClick={() => openHistory("network")}
-								data-rb-swap=""
-								data-rb-swap-text=""
-								className="relative inline-flex h-[22px] shrink-0 cursor-pointer items-center justify-center rounded-full bg-panel-elevated px-2 text-[10.5px] font-semibold text-panel-text-secondary select-none outline-none transition-transform duration-150 focus-visible:ring-2 focus-visible:ring-panel-accent/50 active:scale-[0.97] sm:px-2.5 sm:text-[11px] after:absolute after:-inset-2.5 after:content-['']"
+								className="relative inline-flex h-[24px] shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/[0.08] bg-[#21262d] px-2.5 text-[11px] font-medium text-[#8b949e] select-none outline-none transition-all duration-150 hover:border-white/[0.18] hover:text-white focus-visible:ring-2 focus-visible:ring-cyan-500/50 active:scale-[0.97]"
 							>
 								{t("dashboard.system.viewHistory")}
 							</button>
 						</div>
 					}
 				>
-					<div className="flex flex-col gap-3">
+					<div className="flex flex-col gap-2.5">
 						<SpeedItem
+							direction="in"
 							icon={<ArrowDownLeft className="size-3.5" />}
 							label={t("dashboard.system.incomingSpeed")}
 							value={`${formatBytes(showTotalBandwidth ? (systemData.total_incoming_bandwidth_speed ?? 0) : systemData.incoming_bandwidth_speed)}/s`}
 						/>
 						<SpeedItem
+							direction="out"
 							icon={<ArrowUpRight className="size-3.5" />}
 							label={t("dashboard.system.outgoingSpeed")}
 							value={`${formatBytes(showTotalBandwidth ? (systemData.total_outgoing_bandwidth_speed ?? 0) : systemData.outgoing_bandwidth_speed)}/s`}
@@ -1946,48 +1904,43 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 				<SectionCard
 					title={
 						<div className="flex items-center gap-2.5">
-							<span
-								data-rb-icon=""
-								className="flex size-7 shrink-0 items-center justify-center rounded-[9px] bg-panel-elevated text-panel-text-secondary"
-							>
+							<span className="badge-soft-teal flex size-7 shrink-0 items-center justify-center rounded-xl text-teal-400 [&_svg]:size-3.5">
 								<Clock className="size-3.5" />
 							</span>
-							<span>{t("dashboard.system.uptime")}</span>
+							<span className="text-[13px] font-bold text-white">{t("dashboard.system.uptime")}</span>
 						</div>
 					}
 				>
-					<div className="flex flex-col gap-3">
-						<div className="flex items-center justify-between gap-3">
+					<div className="flex flex-col gap-2.5">
+						<div className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-[#21262d]/50 p-2.5 sm:p-3">
 							<div className="flex min-w-0 items-center gap-2.5">
-								<span
-									data-rb-icon=""
-									className="flex size-7 shrink-0 items-center justify-center rounded-[10px] bg-panel-elevated text-panel-text-secondary"
-								>
+								<span className="badge-soft-teal flex size-7 shrink-0 items-center justify-center rounded-lg text-teal-400 [&_svg]:size-3.5">
 									<Server className="size-3.5" />
 								</span>
-								<p className="truncate text-[13px] font-semibold text-panel-text-secondary">
+								<p className="truncate text-xs font-medium text-[#b1bac4]">
 									{t("dashboard.system.systemUptime")}
 								</p>
 							</div>
-							{formatLocalizedDuration(systemData.uptime_seconds, t, isRTL)}
+							<div className="font-mono text-xs font-semibold text-white">
+								{formatLocalizedDuration(systemData.uptime_seconds, t, isRTL)}
+							</div>
 						</div>
-						<div className="flex items-center justify-between gap-3">
+						<div className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-[#21262d]/50 p-2.5 sm:p-3">
 							<div className="flex min-w-0 items-center gap-2.5">
-								<span
-									data-rb-icon=""
-									className="flex size-7 shrink-0 items-center justify-center rounded-[10px] bg-panel-elevated text-panel-text-secondary"
-								>
+								<span className="badge-soft-cyan flex size-7 shrink-0 items-center justify-center rounded-lg text-cyan-400 [&_svg]:size-3.5">
 									<Database className="size-3.5" />
 								</span>
-								<p className="truncate text-[13px] font-semibold text-panel-text-secondary">
+								<p className="truncate text-xs font-medium text-[#b1bac4]">
 									{t("dashboard.system.panelUptime")}
 								</p>
 							</div>
-							{formatLocalizedDuration(
-								systemData.panel_uptime_seconds,
-								t,
-								isRTL,
-							)}
+							<div className="font-mono text-xs font-semibold text-white">
+								{formatLocalizedDuration(
+									systemData.panel_uptime_seconds,
+									t,
+									isRTL,
+								)}
+							</div>
 						</div>
 					</div>
 				</SectionCard>
@@ -1997,22 +1950,17 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 				noHover
 				title={
 					<div className="flex items-center gap-2.5">
-						<span
-							data-rb-icon=""
-							className="flex size-7 shrink-0 items-center justify-center rounded-[9px] bg-panel-elevated text-panel-text-secondary"
-						>
+						<span className="badge-soft-cyan flex size-7 shrink-0 items-center justify-center rounded-xl text-cyan-400 [&_svg]:size-3.5">
 							<Cpu className="size-3.5" />
 						</span>
-						<span>{t("dashboard.system.panelUsage")}</span>
+						<span className="text-[13px] font-bold text-white">{t("dashboard.system.panelUsage")}</span>
 					</div>
 				}
 				action={
 					<button
 						type="button"
 						onClick={() => openHistory("panel")}
-						data-rb-swap=""
-						data-rb-swap-text=""
-						className="relative inline-flex h-[22px] shrink-0 cursor-pointer items-center justify-center rounded-full bg-panel-elevated px-2.5 text-[11px] font-semibold text-panel-text-secondary select-none outline-none transition-transform duration-150 focus-visible:ring-2 focus-visible:ring-panel-accent/50 active:scale-[0.97] after:absolute after:-inset-2.5 after:content-['']"
+						className="relative inline-flex h-[24px] shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/[0.08] bg-[#21262d] px-2.5 text-[11px] font-medium text-[#8b949e] select-none outline-none transition-all duration-150 hover:border-white/[0.18] hover:text-white focus-visible:ring-2 focus-visible:ring-cyan-500/50 active:scale-[0.97]"
 					>
 						{t("dashboard.system.viewHistory")}
 					</button>
@@ -2022,6 +1970,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 					<ResourceCard
 						label={t("dashboard.system.panelCpuUsage")}
 						icon={<Cpu className="size-4" />}
+						iconVariant="cyan"
 						value={formatPercent(systemData.panel_cpu_percent)}
 						percent={systemData.panel_cpu_percent}
 						metaValue={formatNumberValue(systemData.app_threads)}
@@ -2033,6 +1982,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 					<ResourceCard
 						label={t("dashboard.system.panelMemoryUsage")}
 						icon={<Server className="size-4" />}
+						iconVariant="teal"
 						value={formatBytes(systemData.app_memory, 1)}
 						totalValue={formatBytes(systemData.memory.total, 1)}
 						percent={systemData.panel_memory_percent}
@@ -2046,10 +1996,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 			<SectionCard
 				title={
 					<div className="flex items-center gap-2.5">
-						<span
-							data-rb-icon=""
-							className="flex size-7 shrink-0 items-center justify-center rounded-[9px] bg-panel-elevated text-panel-text-secondary"
-						>
+						<span className="badge-soft-purple flex size-7 shrink-0 items-center justify-center rounded-lg text-purple-400">
 							<Users className="size-3.5" />
 						</span>
 						<span>{t("dashboard.users")}</span>
@@ -2059,7 +2006,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 					canSeeGlobal ? (
 						<div
 							data-rb-swap=""
-							className="relative flex items-center gap-0.5 rounded-[10px] bg-panel-elevated p-0.5"
+							className="relative flex items-center gap-0.5 rounded-lg border border-white/[0.08] bg-[#21262d] p-0.5"
 						>
 							{(
 								[
@@ -2078,7 +2025,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 													ease: [0.16, 1, 0.3, 1],
 													duration: 0.22,
 												}}
-												className="pointer-events-none absolute inset-0 z-[1] rounded-[8px] border border-panel-accent! bg-panel-accent shadow-[0_1px_4px_color-mix(in_srgb,var(--rb-panel-accent)_35%,transparent)]"
+												className="pointer-events-none absolute inset-0 z-[1] rounded-md border border-cyan-500/40 bg-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.25)]"
 											/>
 										)}
 										<Button
@@ -2087,10 +2034,10 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 											variant="ghost"
 											size="xs"
 											className={cn(
-												"relative z-[2] h-[22px] rounded-[8px] bg-transparent! px-2.5 text-[11px] font-semibold transition-colors active:scale-[0.97]",
+												"relative z-[2] h-[22px] rounded-md bg-transparent! px-2.5 text-[11px] font-semibold transition-colors active:scale-[0.97]",
 												active
-													? "text-white! min-[769px]:hover:text-white!"
-													: "text-panel-text-secondary min-[769px]:hover:text-panel-text",
+													? "text-cyan-400! min-[769px]:hover:text-cyan-300!"
+													: "text-[#8b949e] min-[769px]:hover:text-white",
 											)}
 										>
 											{tab.label}
@@ -2204,10 +2151,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 				<SectionCard
 					title={
 						<div className="flex items-center gap-2.5">
-							<span
-								data-rb-icon=""
-								className="flex size-7 shrink-0 items-center justify-center rounded-[9px] bg-panel-elevated text-panel-text-secondary"
-							>
+							<span className="badge-soft-amber flex size-7 shrink-0 items-center justify-center rounded-lg text-amber-400">
 								<ShieldCheck className="size-3.5" />
 							</span>
 							<span>{t("dashboard.admins")}</span>

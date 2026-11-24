@@ -30,9 +30,10 @@ export const RowActionButton = forwardRef<HTMLButtonElement, RowActionButtonProp
 					aria-label={label}
 					className={cn(
 						buttonVariants({ variant: "ghost", size: "icon-sm" }),
+						"rounded-lg transition-colors",
 						danger
-							? "text-panel-danger hover:bg-panel-danger/10 hover:text-panel-danger"
-							: "text-panel-text-secondary hover:bg-whiteAlpha-100 hover:text-panel-text",
+							? "text-red-400 hover:bg-red-500/15 hover:text-red-300"
+							: "text-[#8b949e] hover:bg-white/[0.08] hover:text-white data-[state=open]:bg-cyan-500/15 data-[state=open]:text-cyan-400 data-[state=open]:border data-[state=open]:border-cyan-500/30",
 						className,
 					)}
 					{...props}

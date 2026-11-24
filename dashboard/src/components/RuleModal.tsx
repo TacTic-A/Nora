@@ -376,21 +376,21 @@ export const RuleModal: FC<RuleModalProps> = ({
 
 	return (
 		<Dialog open={isOpen} onOpenChange={(next) => { if (!next) handleClose(); }}>
-			<DialogContent className="flex max-h-[min(860px,calc(100dvh-8rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-3xl max-md:inset-x-3 max-md:w-auto max-md:top-[4.5rem] max-md:bottom-24 max-md:max-h-none max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0">
+			<DialogContent className="flex max-h-[min(860px,calc(100dvh-8rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-3xl rounded-[20px] border border-white/[0.08] bg-[#161b22] text-white shadow-2xl max-md:inset-x-3 max-md:w-auto max-md:top-[4.5rem] max-md:bottom-24 max-md:max-h-none max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0">
 				<form onSubmit={handleSave} className="flex min-h-0 flex-1 flex-col">
-					<DialogHeader className="flex-row items-center gap-3 border-b px-5 py-3.5 pe-12 text-start sm:text-start">
-						<div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+					<DialogHeader className="flex-row items-center gap-3 border-b border-white/[0.08] bg-[#161b22]/95 px-5 py-3.5 pe-12 text-start sm:text-start backdrop-blur-md">
+						<div className="flex size-9 shrink-0 items-center justify-center rounded-xl badge-soft-cyan text-cyan-400">
 							<Route className="size-4" />
 						</div>
 						<div className="min-w-0">
-							<DialogTitle className="truncate text-base">{title}</DialogTitle>
-							<DialogDescription className="truncate">{t("pages.xray.Routings")}</DialogDescription>
+							<DialogTitle className="truncate text-base font-semibold text-white tracking-tight">{title}</DialogTitle>
+							<DialogDescription className="truncate text-xs text-[#8b949e]">{t("pages.xray.Routings")}</DialogDescription>
 						</div>
 					</DialogHeader>
 
 					<Tabs value={tab} onValueChange={handleTabChange} className="flex min-h-0 flex-1 flex-col">
-						<div className="border-b px-5 pt-2.5 pb-2.5">
-							<TabsList className="w-full">
+						<div className="border-b border-white/[0.08] px-5 pt-2.5 pb-2.5">
+							<TabsList className="w-full bg-[#0d1117] border border-white/[0.08] p-1">
 								<TabsTrigger value="form">{t("form")}</TabsTrigger>
 								<TabsTrigger value="json">{t("json")}</TabsTrigger>
 								<TabsTrigger value="propagate">{t("pages.xray.propagate.tab")}</TabsTrigger>
@@ -729,7 +729,7 @@ export const RuleModal: FC<RuleModalProps> = ({
 							</TabsContent>
 							<TabsContent value="json" className="mt-0">
 							<div className="flex flex-col gap-4">
-								<div className="h-[420px] overflow-hidden rounded-lg border">
+								<div className="h-[420px] overflow-hidden rounded-lg border border-white/[0.08] bg-[#0d1117]">
 									<JsonEditor json={jsonData} canonicalContext="routingRule" onChange={handleJsonChange} />
 								</div>
 								{jsonError ? <p className="text-sm text-destructive">{jsonError}</p> : null}
@@ -748,11 +748,11 @@ export const RuleModal: FC<RuleModalProps> = ({
 						</div>
 					</Tabs>
 
-					<DialogFooter className="flex-row flex-wrap items-center justify-end gap-2 border-t px-5 py-3">
+					<DialogFooter className="sticky bottom-0 z-20 flex-row flex-wrap items-center justify-end gap-2 border-t border-white/[0.08] bg-[#161b22]/95 px-5 py-3 backdrop-blur-md">
 						<Button onClick={handleClose} variant="outline" size="sm">
 							{t("cancel")}
 						</Button>
-						<Button type="submit" size="sm" loading={isSubmitting}>
+						<Button type="submit" size="sm" variant="soft-cyan" loading={isSubmitting}>
 							{mode === "edit" ? t("pages.xray.rules.edit") : t("pages.xray.rules.add")}
 						</Button>
 					</DialogFooter>

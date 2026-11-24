@@ -227,7 +227,7 @@ export const UsersFilterBar: FC = () => {
 					</TooltipTrigger>
 <TooltipContent>{t("users.searchHelp")}</TooltipContent>
 </Tooltip>
-				} className="rounded-full border-panel-border! bg-panel-elevated focus-visible:border-primary-400! focus-visible:bg-panel-surface rb-users-search-input" />
+				} className="rounded-lg border-white/[0.08] bg-[#161b22] text-white focus-visible:border-cyan-500/50 focus-visible:bg-[#21262d] rb-users-search-input" />
 			<DataTableSortMenu
 				options={userSortOptions}
 				sorting={userSorting}
@@ -238,18 +238,18 @@ export const UsersFilterBar: FC = () => {
 			<Popover>
 				<PopoverTrigger asChild>
 					<div className="relative shrink-0">
-						<Button aria-label={t("filters.advancedButton")} variant="outline" className={cn("size-9 p-0", "rounded-full w-9 h-9")}>{<FilterIcon />}</Button>
+						<Button aria-label={t("filters.advancedButton")} variant="outline" className={cn("size-9 p-0", "rounded-lg w-9 h-9 border-white/[0.08] bg-[#161b22] text-[#8b949e] hover:bg-[#21262d] hover:text-white")}>{<FilterIcon />}</Button>
 						{hasClearableFilters && (
-							<Badge className="top-[-4px] rounded-full absolute end-[-4px] text-[0.6rem] px-1.5 pointer-events-none rb-users-filter-badge">
+							<Badge className="top-[-4px] rounded-full absolute end-[-4px] text-[0.6rem] px-1.5 pointer-events-none badge-soft-cyan text-cyan-400 border border-cyan-500/30 font-mono font-bold rb-users-filter-badge">
 								{formatChipCount(activeFilterTotal, locale)}
 							</Badge>
 						)}
 					</div>
 				</PopoverTrigger>
-				<PopoverContent collisionPadding={12} className="border-light-border! min-w-[260px]! max-h-[var(--radix-popover-content-available-height)] overflow-y-auto">
+				<PopoverContent collisionPadding={12} className="bg-[#21262d] border border-white/10 rounded-xl shadow-2xl p-1.5 backdrop-blur-md min-w-[260px]! max-h-[var(--radix-popover-content-available-height)] overflow-y-auto">
 					
 					
-					<div className={cn("p-3 font-semibold", "font-semibold")}>
+					<div className="p-3 text-xs font-semibold uppercase tracking-wider text-[#8b949e] border-b border-white/[0.06]">
 						{t("filters.advancedTitle")}
 					</div>
 					<div className="p-3">
@@ -257,12 +257,12 @@ export const UsersFilterBar: FC = () => {
 							{ADVANCED_FILTER_OPTIONS.filter(
 								(option) => option.key !== "top_speed" || canViewTraffic,
 							).map((option) => (
-								<label key={option.key} className="flex cursor-pointer items-center gap-2 text-sm"><Checkbox checked={activeFilters.includes(option.key)} onCheckedChange={() => toggleAdvancedFilter(option.key)} /><span>{getFilterLabel(option.key)}</span></label>
+								<label key={option.key} className="flex cursor-pointer items-center gap-2 text-sm text-[#c9d1d9] hover:text-white transition-colors"><Checkbox checked={activeFilters.includes(option.key)} onCheckedChange={() => toggleAdvancedFilter(option.key)} /><span>{getFilterLabel(option.key)}</span></label>
 							))}
 						</div>
 						<div className="flex flex-col gap-3 mt-3">
 							<div>
-								<p className="text-[0.875rem] font-semibold mb-1">
+								<p className="text-xs font-semibold text-[#8b949e] uppercase tracking-wider mb-1">
 									{t("filters.advanced.serviceLabel")}
 								</p>
 								<Select
@@ -281,7 +281,7 @@ export const UsersFilterBar: FC = () => {
 							</div>
 							{hasPrivilegedRole && (
 								<div>
-									<p className="text-[0.875rem] font-semibold mb-1">
+									<p className="text-xs font-semibold text-[#8b949e] uppercase tracking-wider mb-1">
 										{t("filters.advanced.adminLabel")}
 									</p>
 									<Select
@@ -315,7 +315,7 @@ export const UsersFilterBar: FC = () => {
 								}
 							/>
 						</div>
-						<Button onClick={clearAdvancedFilters} disabled={!hasClearableFilters} variant="ghost" size="sm" className="mt-3 w-full">
+						<Button onClick={clearAdvancedFilters} disabled={!hasClearableFilters} variant="ghost" size="sm" className="mt-3 w-full text-xs text-[#8b949e] hover:text-white">
 							{t("filters.advancedClear")}
 						</Button>
 					</div>

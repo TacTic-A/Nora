@@ -2814,7 +2814,7 @@ export const IntegrationSettingsPage = () => {
 					}}
 				>
 					<DialogContent className={cn(
-							"flex max-h-[min(860px,calc(100dvh-4rem))] flex-col gap-0 overflow-hidden p-0 max-md:inset-x-3 max-md:w-auto max-md:top-[4.5rem] max-md:bottom-24 max-md:max-h-none max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0",
+							"flex max-h-[min(860px,calc(100dvh-4rem))] flex-col gap-0 overflow-hidden p-0 rounded-[20px] border border-white/[0.08] bg-[#161b22] text-white shadow-2xl max-md:inset-x-3 max-md:w-auto max-md:top-[4.5rem] max-md:bottom-24 max-md:max-h-none max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0",
 							certificateForm.provider === "manual" ? "sm:max-w-3xl" : "sm:max-w-xl",
 						)}>
 						<form
@@ -2824,19 +2824,19 @@ export const IntegrationSettingsPage = () => {
 							}}
 							className="flex min-h-0 flex-1 flex-col"
 						>
-							<DialogHeader className="flex-row items-center gap-3 border-b px-5 py-3.5 pe-12 text-start sm:text-start">
-								<div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+							<DialogHeader className="flex-row items-center gap-3 border-b border-white/[0.08] bg-[#161b22]/95 px-5 py-3.5 pe-12 text-start sm:text-start backdrop-blur-md">
+								<div className="flex size-9 shrink-0 items-center justify-center rounded-xl badge-soft-cyan text-cyan-400">
 									<ShieldCheck className="size-4" />
 								</div>
 								<div className="min-w-0">
-									<DialogTitle className="truncate text-base">{t("settings.subscriptions.getNewSSL")}</DialogTitle>
-									<DialogDescription className="truncate">{t("settings.subscriptions.certificateTitle")}</DialogDescription>
+									<DialogTitle className="truncate text-base font-semibold text-white tracking-tight">{t("settings.subscriptions.getNewSSL")}</DialogTitle>
+									<DialogDescription className="truncate text-xs text-[#8b949e]">{t("settings.subscriptions.certificateTitle")}</DialogDescription>
 								</div>
 							</DialogHeader>
 							<div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
 								<div className="flex flex-col gap-5">
-									<Alert className="rounded-lg">
-										<Info className="size-4" aria-hidden="true" />
+									<Alert className="rounded-xl border border-white/[0.08] bg-[#0d1117] text-[#8b949e]">
+										<Info className="size-4 text-cyan-400" aria-hidden="true" />
 										<p className="text-[0.875rem]">
 											{t("settings.subscriptions.certificateSNIHint")}
 										</p>
@@ -2966,11 +2966,11 @@ export const IntegrationSettingsPage = () => {
 									) : null}
 								</div>
 							</div>
-							<DialogFooter className="flex-row flex-wrap items-center justify-end gap-2 border-t px-5 py-3">
+							<DialogFooter className="sticky bottom-0 z-20 flex-row flex-wrap items-center justify-end gap-2 border-t border-white/[0.08] bg-[#161b22]/95 px-5 py-3 backdrop-blur-md">
 								<Button onClick={() => setCertificateDialogOpen(false)} disabled={isCertificateMutationLoading} variant="outline" size="sm">
 									{t("cancel")}
 								</Button>
-								<Button type="submit" size="sm" loading={isCertificateMutationLoading}>
+								<Button type="submit" size="sm" variant="soft-cyan" loading={isCertificateMutationLoading}>
 									{certificateForm.provider === "manual"
 										? t("settings.subscriptions.importAction")
 										: t("settings.subscriptions.issueAction")}

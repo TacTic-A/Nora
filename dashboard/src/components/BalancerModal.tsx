@@ -3,7 +3,7 @@ import { Field, FieldDescription, FieldError, FieldLabel } from "components/ui/f
 import { Input } from "components/ui/input";
 import { Button } from "components/ui/button";
 import { Dialog } from "components/ui/dialog";
-import { Plus, TriangleAlert, X } from "lucide-react";
+import { Plus, Scale, TriangleAlert, X } from "lucide-react";
 import { Checkbox } from "components/ui/checkbox";
 import {
 	cleanLeastLoadSettings,
@@ -358,7 +358,7 @@ export const BalancerModal: FC<BalancerModalProps> = ({
 		<Dialog open={isOpen} onOpenChange={(open) => { if (!open) (onClose)(); }}>
 			
 			<XrayModalContent className="mx-3 sm:max-w-2xl">
-				<XrayModalHeader>
+				<XrayModalHeader icon={<Scale className="size-4" />} subtitle={t("pages.xray.balancers")}>
 					{mode === "edit"
 						? t("pages.xray.balancer.editBalancer")
 						: t("pages.xray.balancer.addBalancer")}
@@ -367,11 +367,13 @@ export const BalancerModal: FC<BalancerModalProps> = ({
 				<form onSubmit={onSubmitInternal}>
 					<XrayModalBody>
 						<Tabs value={tab} onValueChange={handleTabChange}>
-							<TabsList>
-								<TabsTrigger value="form">{t("form")}</TabsTrigger>
-								<TabsTrigger value="json">{t("json")}</TabsTrigger>
-								<TabsTrigger value="propagate">{t("pages.xray.propagate.tab")}</TabsTrigger>
-							</TabsList>
+							<div className="mb-4">
+								<TabsList className="w-full bg-[#0d1117] border border-white/[0.08] p-1">
+									<TabsTrigger value="form">{t("form")}</TabsTrigger>
+									<TabsTrigger value="json">{t("json")}</TabsTrigger>
+									<TabsTrigger value="propagate">{t("pages.xray.propagate.tab")}</TabsTrigger>
+								</TabsList>
+							</div>
 							
 								<TabsContent value="form" className="px-0">
 									<div className="flex flex-col gap-3 items-stretch">
@@ -506,7 +508,7 @@ export const BalancerModal: FC<BalancerModalProps> = ({
 								</TabsContent>
 								<TabsContent value="json" className="px-0">
 								<div className="flex flex-col gap-4">
-									<div className="h-[420px] overflow-hidden rounded-lg border">
+									<div className="h-[420px] overflow-hidden rounded-lg border border-white/[0.08] bg-[#0d1117]">
 										<JsonEditor json={jsonData} onChange={handleJsonChange} />
 									</div>
 									{jsonError ? <p className="text-sm text-destructive">{jsonError}</p> : null}
@@ -526,10 +528,10 @@ export const BalancerModal: FC<BalancerModalProps> = ({
 						</Tabs>
 					</XrayModalBody>
 					<XrayModalFooter className="justify-end">
-						<Button onClick={onClose} variant="outline">
+						<Button onClick={onClose} variant="outline" size="sm">
 							{t("cancel")}
 						</Button>
-						<Button type="submit" disabled={!isValid} size="sm">
+						<Button type="submit" disabled={!isValid} size="sm" variant="soft-cyan">
 							{mode === "edit"
 								? t("pages.xray.balancer.editBalancer")
 								: t("pages.xray.balancer.addBalancer")}

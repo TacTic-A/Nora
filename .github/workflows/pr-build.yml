@@ -64,5 +64,4 @@ jobs:
           platforms: linux/amd64
           push: false
           tags: |
-            rebeccapanel/rebecca:pr-${{ github.event.pull_request.number }}
-            ghcr.io/rebeccapanel/rebecca:pr-${{ github.event.pull_request.number }}
+            ghcr.io/${{ github.repository_owner }}/nora:pr-${{ github.event.pull_request.number }}

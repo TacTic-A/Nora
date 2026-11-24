@@ -42,13 +42,13 @@ const STATUS_ORDER: OverviewStatusKey[] = [
 	"disabled",
 ];
 
-/* Same palette the old pills used (green/orange/yellow/red/teal). */
+/* Remnawave cyber-minimalist status tones */
 const STATUS_TONE: Record<OverviewStatusKey, string> = {
-	active: "bg-panel-success",
-	expired: "bg-panel-danger",
-	limited: "bg-panel-warning",
-	on_hold: "bg-panel-info",
-	disabled: "bg-panel-text-muted/60",
+	active: "bg-teal-400 shadow-[0_0_8px_rgba(45,212,191,0.5)]",
+	expired: "bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.5)]",
+	limited: "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]",
+	on_hold: "bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.5)]",
+	disabled: "bg-[#484f58]",
 };
 
 /**
@@ -108,13 +108,13 @@ export function UsersOverviewBand({
 			className={
 				bare
 					? "grid grid-cols-2 gap-x-4 gap-y-4 p-4 md:grid-cols-[minmax(0,14rem)_minmax(0,0.9fr)_minmax(0,1.2fr)_minmax(0,13rem)] md:gap-0"
-					: "grid grid-cols-2 gap-x-4 gap-y-4 rounded-xl border border-panel-border bg-panel-surface p-4 md:grid-cols-[minmax(0,14rem)_minmax(0,0.9fr)_minmax(0,1.2fr)_minmax(0,13rem)] md:gap-0"
+					: "grid grid-cols-2 gap-x-4 gap-y-4 rounded-xl border border-white/[0.08] bg-[#161b22] p-4 shadow-md md:grid-cols-[minmax(0,14rem)_minmax(0,0.9fr)_minmax(0,1.2fr)_minmax(0,13rem)] md:gap-0"
 			}
 			aria-label={t("usersStatusBreakdown")}
 		>
 			{/* Total, against the admin's user cap when the panel reports one. */}
 			<div className="order-1 col-span-1 flex flex-col justify-between gap-2 md:pe-6">
-				<span className="text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-panel-text-muted">
+				<span className="text-xs font-semibold uppercase tracking-wider text-[#8b949e]">
 					{t("usersTable.total")}
 				</span>
 				<div>
@@ -122,32 +122,32 @@ export function UsersOverviewBand({
 						<OverviewLink
 							label={t("usersTable.total")}
 							onSelect={() => onSelect({ kind: "all" })}
-							className="rb-tabular text-[1.75rem] font-semibold leading-none tracking-tight text-panel-text"
+							className="rb-tabular font-mono text-[1.75rem] font-bold leading-none tracking-tight text-white hover:text-cyan-400"
 						>
 							{count(total, locale)}
 						</OverviewLink>
 						{usersLimit ? (
-							<span className="rb-tabular text-xs text-panel-text-muted">
+							<span className="rb-tabular font-mono text-xs text-[#8b949e]">
 								/ {count(usersLimit, locale)}
 							</span>
 						) : null}
 					</div>
 					{limitPercent !== null ? (
 						<div className="mt-2 space-y-1">
-							<div className="h-1 overflow-hidden rounded-full bg-panel-border">
+							<div className="h-1.5 overflow-hidden rounded-full bg-white/[0.08]">
 								<div
-									className="h-full rounded-full bg-panel-accent transition-[width] duration-500"
+									className="h-full rounded-full bg-cyan-400 transition-[width] duration-500 shadow-[0_0_8px_rgba(34,211,238,0.5)]"
 									style={{ width: `${limitPercent}%` }}
 								/>
 							</div>
-							<p className="rb-tabular flex items-baseline gap-1 text-[0.625rem] text-panel-text-muted">
+							<p className="rb-tabular font-mono flex items-baseline gap-1 text-[0.625rem] text-[#8b949e]">
 								<span>{percent(limitPercent, locale)}%</span>
 								<span>/</span>
 								<span>{count(usersLimit, locale)}</span>
 							</p>
 						</div>
 					) : (
-						<p className="mt-2 text-[0.625rem] text-panel-text-muted">
+						<p className="mt-2 text-xs text-[#8b949e]">
 							{t("users")}
 						</p>
 					)}
@@ -155,7 +155,7 @@ export function UsersOverviewBand({
 			</div>
 
 			{/* Live state. */}
-			<div className="order-3 col-span-2 grid grid-cols-2 content-start gap-x-4 gap-y-3 border-t border-panel-border! pt-4 md:order-2 md:col-span-1 md:flex md:flex-col md:justify-between md:gap-3 md:border-s md:border-t-0 md:px-6 md:pt-0">
+			<div className="order-3 col-span-2 grid grid-cols-2 content-start gap-x-4 gap-y-3 border-t border-white/[0.06] pt-4 md:order-2 md:col-span-1 md:flex md:flex-col md:justify-between md:gap-3 md:border-s md:border-t-0 md:border-white/[0.06] md:px-6 md:pt-0">
 				{[
 					{ key: "online", label: t("onlineStatus.online"), value: online, tone: "bg-panel-accent" },
 					{ key: "active", label: t("status.active"), value: active, tone: "bg-panel-success" },
@@ -171,15 +171,15 @@ export function UsersOverviewBand({
 					>
 						<div className="flex items-center gap-1.5">
 							<span className={`size-1.5 rounded-full ${row.tone}`} />
-							<span className="text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-panel-text-muted">
+							<span className="text-xs font-semibold uppercase tracking-wider text-[#8b949e]">
 								{row.label}
 							</span>
 						</div>
 						<div className="mt-1 flex items-baseline gap-2">
-							<span className="rb-tabular text-lg font-semibold leading-none text-panel-text">
+							<span className="rb-tabular font-mono text-lg font-bold leading-none text-white">
 								{count(row.value, locale)}
 							</span>
-							<span className="rb-tabular flex items-baseline gap-1 text-[0.625rem] text-panel-text-muted">
+							<span className="rb-tabular font-mono flex items-baseline gap-1 text-[0.625rem] text-[#8b949e]">
 								<span>{percent(share(row.value, totals || total || 1), locale)}%</span>
 								<span>{t("users")}</span>
 							</span>
@@ -189,16 +189,16 @@ export function UsersOverviewBand({
 			</div>
 
 			{/* Distribution across statuses. */}
-			<div className="order-4 col-span-2 flex flex-col justify-center gap-2 border-t border-panel-border! pt-4 md:order-3 md:col-span-1 md:border-s md:border-t-0 md:px-6 md:pt-0">
+			<div className="order-4 col-span-2 flex flex-col justify-center gap-2 border-t border-white/[0.06] pt-4 md:order-3 md:col-span-1 md:border-s md:border-t-0 md:border-white/[0.06] md:px-6 md:pt-0">
 				<div className="flex items-center justify-between">
-					<span className="text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-panel-text-muted">
+					<span className="text-xs font-semibold uppercase tracking-wider text-[#8b949e]">
 						{t("usersStatusBreakdown")}
 					</span>
-					<span className="rb-tabular text-[0.6875rem] text-panel-text-muted">
+					<span className="rb-tabular font-mono text-xs text-[#8b949e]">
 						{count(totals, locale)}
 					</span>
 				</div>
-				<div className="flex h-1.5 w-full gap-px overflow-hidden rounded-full bg-panel-border">
+				<div className="flex h-1.5 w-full gap-px overflow-hidden rounded-full bg-white/[0.08]">
 					{STATUS_ORDER.map((key) => {
 						const value = breakdown[key] ?? 0;
 						if (!value) return null;
@@ -219,11 +219,11 @@ export function UsersOverviewBand({
 							label={t(`status.${key}`)}
 							active={selection.status === key}
 							onSelect={() => onSelect({ kind: "status", status: key })}
-							className="flex items-center gap-1.5 text-[0.6875rem] text-panel-text-secondary"
+							className="flex items-center gap-1.5 text-xs text-[#c9d1d9] hover:text-white"
 						>
 							<span className={`size-1.5 rounded-full ${STATUS_TONE[key]}`} />
 							{t(`status.${key}`)}
-							<span className="rb-tabular ms-auto font-medium text-panel-text">
+							<span className="rb-tabular font-mono ms-auto font-medium text-white">
 								{count(breakdown[key] ?? 0, locale)}
 							</span>
 						</OverviewLink>
@@ -232,8 +232,8 @@ export function UsersOverviewBand({
 			</div>
 
 			{/* Traffic total plus the per-user average. */}
-			<div className="order-2 col-span-1 flex flex-col justify-between gap-2 md:order-4 md:col-span-1 md:border-s md:border-panel-border md:ps-6">
-				<span className="text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-panel-text-muted">
+			<div className="order-2 col-span-1 flex flex-col justify-between gap-2 md:order-4 md:col-span-1 md:border-s md:border-white/[0.06] md:ps-6">
+				<span className="text-xs font-semibold uppercase tracking-wider text-[#8b949e]">
 					{usageLabel ?? t("usersTable.listUsage")}
 				</span>
 				<div>
@@ -241,7 +241,7 @@ export function UsersOverviewBand({
 						label={usageLabel ?? t("usersTable.listUsage")}
 						active={selection.usage}
 						onSelect={() => onSelect({ kind: "usage" })}
-						className="rb-tabular block w-full text-[1.75rem] font-semibold leading-none tracking-tight text-panel-text"
+						className="rb-tabular font-mono block w-full text-[1.75rem] font-bold leading-none tracking-tight text-white hover:text-cyan-400"
 					>
 						<span dir="ltr" style={{ unicodeBidi: "isolate" }}>
 							{usage === null ? "—" : formatBytes(usage)}

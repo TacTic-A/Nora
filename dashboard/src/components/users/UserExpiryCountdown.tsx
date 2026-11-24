@@ -86,14 +86,14 @@ export const UserExpiryCountdown: FC<UserExpiryCountdownProps> = ({
 
 	if (status === "on_hold" || !expire || remaining === null) {
 		return (
-			<p className="text-[1.25rem] font-semibold leading-[1] text-panel-text-muted"><span aria-hidden="true">∞</span><span className="sr-only">{t("unlimited")}</span></p>
+			<p className="font-mono text-sm font-semibold leading-[1] text-[#8b949e]"><span aria-hidden="true">∞</span><span className="sr-only">{t("unlimited")}</span></p>
 		);
 	}
 
 	const urgency = status === "expired" ? "expired" : getUrgency(remaining);
 
 	return (
-		<p data-urgency={urgency} style={{ color: URGENCY_COLORS[urgency] }} dir="auto" className={cn("text-[0.875rem] font-semibold truncate", urgency === "expired" ? "uppercase" : "", "rb-user-expiry-countdown")}>
+		<p data-urgency={urgency} style={{ color: URGENCY_COLORS[urgency] }} dir="auto" className={cn("text-xs font-semibold font-mono tabular-nums truncate", urgency === "expired" ? "uppercase" : "", "rb-user-expiry-countdown")}>
 			{urgency === "expired"
 				? t("status.expired")
 				: isLiveCountdown

@@ -22,8 +22,9 @@ import { DataSizeField } from "components/ui/data-size-field";
 import { NumberField } from "components/ui/number-field";
 import { SegmentedControl } from "components/ui/segmented-control";
 import { Switch as UiSwitch } from "components/ui/switch";
+import { SectionCard } from "components/ui/section-card";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Server, Download, Copy, Eye, EyeOff } from "lucide-react";
+import { Server, Download, Copy, Eye, EyeOff, Globe, KeyRound, Network } from "lucide-react";
 import {
 	getNodeDefaultValues,
 	NodeSchema,
@@ -353,217 +354,237 @@ export const NodeFormModal: FC<NodeFormModalProps> = ({
 			}}
 		>
 			<DialogContent
-				className="flex max-h-[min(680px,calc(100dvh-10rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl max-md:inset-x-3 max-md:w-auto max-md:top-[4.5rem] max-md:bottom-24 max-md:max-h-none max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0"
+				className="flex max-h-[min(840px,calc(100dvh-3rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-4xl lg:max-w-5xl rounded-[20px] border border-white/[0.08] bg-[#161b22] text-white shadow-2xl max-md:inset-x-3 max-md:w-auto max-md:top-[3rem] max-md:bottom-16 max-md:max-h-none max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0"
 			>
 				<form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
-					<DialogHeader className="flex-row items-center gap-3 border-b px-5 py-3.5 pe-12 text-start sm:text-start">
-						<div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
-							<Server className="size-4" />
+					<DialogHeader className="sticky top-0 z-20 flex-row items-center gap-3 border-b border-white/[0.06] bg-[#161b22]/95 backdrop-blur-md px-6 py-4 pe-12 text-start sm:text-start">
+						<div className="flex size-9 shrink-0 items-center justify-center rounded-xl badge-soft-cyan text-cyan-400 [&_svg]:size-5">
+							<Server className="size-5" />
 						</div>
 						<div className="min-w-0">
-							<DialogTitle className="truncate text-base">
+							<DialogTitle className="truncate text-base font-semibold text-white tracking-tight">
 								{isAddMode ? t("nodes.addNewNoraNode") : t("nodes.editNode")}
 							</DialogTitle>
 							{!isAddMode && node?.name ? (
-								<DialogDescription className="truncate"><AppleEmojiText>{node.name}</AppleEmojiText></DialogDescription>
+								<DialogDescription className="truncate text-xs text-[#8b949e]"><AppleEmojiText>{node.name}</AppleEmojiText></DialogDescription>
 							) : null}
 						</div>
 					</DialogHeader>
 
-					<div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
-						<div className="flex flex-col gap-6">
+					<div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+						<div className="flex flex-col gap-5">
 							{!isAddMode && nodeCertificateValue ? (
-								<section className="rounded-lg border bg-card/40 p-3.5">
-									<div className="flex flex-wrap items-center justify-between gap-2">
-										<p className="text-sm font-semibold">{t("nodes.certificate")}</p>
-										<div className="flex flex-wrap items-center gap-1.5">
-											<Button onClick={handleCopyNodeCertificate} variant="outline" size="xs">{<CopyIconStyled />}
-												{nodeCertificateCopied ? t("copied") : t("copy")}
-											</Button>
-											<Button onClick={handleDownloadNodeCertificate} variant="outline" size="xs">{<DownloadIconStyled />}
-												{t("nodes.download-certificate")}
-											</Button>
-											<Tooltip>
-<TooltipTrigger asChild>
-												<Button aria-label={t(showCertificate ? "nodes.hide-certificate" : "nodes.show-certificate")} onClick={() => setShowCertificate((prev) => !prev)} variant="ghost" size="xs" className="size-7 p-0">
-													{showCertificate ? <EyeSlashIconStyled /> : <EyeIconStyled />}
+								<SectionCard.Root>
+									<SectionCard.Header icon={<SectionCard.Icon variant="amber"><KeyRound className="size-4" /></SectionCard.Icon>}>
+										<div className="flex flex-wrap items-center justify-between gap-2 w-full">
+											<div>
+												<SectionCard.Title>{t("nodes.certificate")}</SectionCard.Title>
+												<SectionCard.Description>Node install bundle PEM certificate and private key</SectionCard.Description>
+											</div>
+											<div className="flex flex-wrap items-center gap-1.5">
+												<Button onClick={handleCopyNodeCertificate} variant="outline" size="xs">
+													<CopyIconStyled />
+													{nodeCertificateCopied ? t("copied") : t("copy")}
 												</Button>
-											</TooltipTrigger>
-<TooltipContent>{t(showCertificate ? "nodes.hide-certificate" : "nodes.show-certificate")}</TooltipContent>
-</Tooltip>
+												<Button onClick={handleDownloadNodeCertificate} variant="outline" size="xs">
+													<DownloadIconStyled />
+													{t("nodes.download-certificate")}
+												</Button>
+												<Tooltip>
+													<TooltipTrigger asChild>
+														<Button aria-label={t(showCertificate ? "nodes.hide-certificate" : "nodes.show-certificate")} onClick={() => setShowCertificate((prev) => !prev)} variant="ghost" size="xs" className="size-7 p-0">
+															{showCertificate ? <EyeSlashIconStyled /> : <EyeIconStyled />}
+														</Button>
+													</TooltipTrigger>
+													<TooltipContent>{t(showCertificate ? "nodes.hide-certificate" : "nodes.show-certificate")}</TooltipContent>
+												</Tooltip>
+											</div>
 										</div>
-									</div>
-									<Collapsible open={showCertificate}><CollapsibleContent forceMount className="data-[state=closed]:hidden">
-										<div className="mt-3 max-h-[220px] overflow-auto rounded-md border bg-muted/40 p-3 font-mono text-[0.75rem] break-all">
-											{nodeCertificateValue}
-										</div>
-									</CollapsibleContent></Collapsible>
-								</section>
+									</SectionCard.Header>
+									<Collapsible open={showCertificate}>
+										<CollapsibleContent forceMount className="data-[state=closed]:hidden">
+											<div className="mt-3 max-h-[220px] overflow-auto rounded-lg border border-white/10 bg-[#0d1117] p-3 font-mono text-xs text-white selection:bg-cyan-500/30 break-all">
+												{nodeCertificateValue}
+											</div>
+										</CollapsibleContent>
+									</Collapsible>
+								</SectionCard.Root>
 							) : null}
 
-							<section className="flex flex-col gap-4">
-								<p className="text-sm font-semibold">{t("nodes.connectionSettings")}</p>
-								{isAddMode ? (
-									<CheckRow checked disabled onChange={() => undefined}>
-										{t("nodes.certInfoOption")}
-									</CheckRow>
-								) : null}
-								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-									<FormField label={t("nodes.nodeName")} error={getInputError(errors?.name)}>
-										<Controller
-											control={form.control}
-											name="name"
-											render={({ field }) => (
-												<EmojiShortcodeInput
-													ref={field.ref}
-													value={field.value ?? ""}
-													onChange={field.onChange}
-													onBlur={field.onBlur}
-													placeholder="Nora-S2"
-													maxLength={120}
-													aria-invalid={Boolean(errors?.name) || undefined}
-												/>
-											)}
-										/>
-									</FormField>
-									<FormField label={t("nodes.nodeAddress")} error={getInputError(errors?.address)}>
-										<UiInput placeholder="192.168.1.1 or 2001:db8::1" aria-invalid={Boolean(errors?.address) || undefined} {...form.register("address")} />
-									</FormField>
-									<FormField label={t("nodes.controlPort")} error={getInputError(errors?.port)}>
-										<Controller
-											control={form.control}
-											name="port"
-											render={({ field }) => (
-												<NumberField
-													inputMode="numeric"
-													min={1}
-													max={65535}
-													placeholder="62050"
-													doneLabel={t("common.done")}
-													value={field.value === undefined || field.value === null ? "" : String(field.value)}
-													onChange={(raw) => field.onChange(raw)}
-													invalid={Boolean(errors?.port)}
-												/>
-											)}
-										/>
-									</FormField>
-									<FormField label={t("nodes.usageCoefficient")} error={getInputError(errors?.usage_coefficient)}>
-										<Controller
-											control={form.control}
-											name="usage_coefficient"
-											render={({ field }) => (
-												<NumberField
-													inputMode="decimal"
-													step={0.01}
-													min={0}
-													placeholder="1"
-													doneLabel={t("common.done")}
-													value={field.value === undefined || field.value === null ? "" : String(field.value)}
-													onChange={(raw) => field.onChange(raw)}
-													invalid={Boolean(errors?.usage_coefficient)}
-												/>
-											)}
-										/>
-									</FormField>
-									<FormField label={t("nodes.dataLimitField")} description={t("nodes.dataLimitHint")} error={getInputError(errors?.data_limit)}>
-										<Controller
-											control={form.control}
-											name="data_limit"
-											render={({ field }) => (
-												<DataSizeField
-													placeholder={t("nodes.dataLimitPlaceholder")}
-													valueGb={field.value === undefined || field.value === null ? "" : String(field.value)}
-													onChangeGb={(next) => field.onChange(next.trim() === "" ? null : Number(next))}
-													invalid={Boolean(errors?.data_limit)}
-												/>
-											)}
-										/>
-									</FormField>
-								</div>
-								<FormField label={t("tags.title")}>
-									<TagsSelect value={tags} onChange={setTags} options={knownNodeTags.map((item) => item.tag)} />
-								</FormField>
-								<FormField label={t("fields.note")} error={getInputError(errors?.note)}>
-									<Textarea rows={3} maxLength={500} {...form.register("note")} />
-								</FormField>
-
-								<label htmlFor="node-use-proxy" className="flex items-center justify-between gap-4 rounded-lg border bg-card/40 px-3 py-2.5 text-sm font-medium">
-									{t("nodes.useProxy")}
-									<Controller
-										control={form.control}
-										name="proxy_enabled"
-										render={({ field }) => (
-											<UiSwitch id="node-use-proxy" checked={Boolean(field.value)} onCheckedChange={(next) => field.onChange(next)} />
-										)}
-									/>
-								</label>
-							</section>
-
-							{proxyEnabled ? (
-								<section className="flex flex-col gap-4 rounded-lg border p-4">
-									<p className="text-sm font-semibold">{t("nodes.proxySettings")}</p>
-									<FormField label={t("nodes.proxyType")} error={getInputError(errors?.proxy_type)}>
-										<Controller
-											control={form.control}
-											name="proxy_type"
-											render={({ field }) => (
-												<SegmentedControl<string>
-													label={t("nodes.proxyType")}
-													value={field.value ?? ""}
-													options={proxyTypeOptions}
-													onChange={(next) => field.onChange(next)}
-												/>
-											)}
-										/>
-									</FormField>
+							<SectionCard.Root>
+								<SectionCard.Header icon={<SectionCard.Icon variant="cyan"><Network className="size-4" /></SectionCard.Icon>}>
+									<SectionCard.Title>{t("nodes.connectionSettings")}</SectionCard.Title>
+									<SectionCard.Description>Host address, control port, and throughput limits</SectionCard.Description>
+								</SectionCard.Header>
+								<SectionCard.Content>
+									{isAddMode ? (
+										<CheckRow checked disabled onChange={() => undefined}>
+											{t("nodes.certInfoOption")}
+										</CheckRow>
+									) : null}
 									<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-										<FormField label={t("nodes.proxyHost")} error={getInputError(errors?.proxy_host)}>
-											<UiInput placeholder="proxy.example.com" aria-invalid={Boolean(errors?.proxy_host) || undefined} {...form.register("proxy_host")} />
-										</FormField>
-										<FormField label={t("nodes.proxyPort")} error={getInputError(errors?.proxy_port)}>
+										<FormField label={t("nodes.nodeName")} error={getInputError(errors?.name)}>
 											<Controller
 												control={form.control}
-												name="proxy_port"
+												name="name"
+												render={({ field }) => (
+													<EmojiShortcodeInput
+														ref={field.ref}
+														value={field.value ?? ""}
+														onChange={field.onChange}
+														onBlur={field.onBlur}
+														placeholder="Nora-S2"
+														maxLength={120}
+														aria-invalid={Boolean(errors?.name) || undefined}
+													/>
+												)}
+											/>
+										</FormField>
+										<FormField label={t("nodes.nodeAddress")} error={getInputError(errors?.address)}>
+											<UiInput placeholder="192.168.1.1 or 2001:db8::1" className="font-mono" aria-invalid={Boolean(errors?.address) || undefined} {...form.register("address")} />
+										</FormField>
+										<FormField label={t("nodes.controlPort")} error={getInputError(errors?.port)}>
+											<Controller
+												control={form.control}
+												name="port"
 												render={({ field }) => (
 													<NumberField
 														inputMode="numeric"
 														min={1}
 														max={65535}
-														placeholder="8080"
+														placeholder="62050"
 														doneLabel={t("common.done")}
 														value={field.value === undefined || field.value === null ? "" : String(field.value)}
-														onChange={(raw) => field.onChange(raw.trim() === "" ? null : raw)}
-														invalid={Boolean(errors?.proxy_port)}
+														onChange={(raw) => field.onChange(raw)}
+														invalid={Boolean(errors?.port)}
+													/>
+												)}
+											/>
+										</FormField>
+										<FormField label={t("nodes.usageCoefficient")} error={getInputError(errors?.usage_coefficient)}>
+											<Controller
+												control={form.control}
+												name="usage_coefficient"
+												render={({ field }) => (
+													<NumberField
+														inputMode="decimal"
+														step={0.01}
+														min={0}
+														placeholder="1"
+														doneLabel={t("common.done")}
+														value={field.value === undefined || field.value === null ? "" : String(field.value)}
+														onChange={(raw) => field.onChange(raw)}
+														invalid={Boolean(errors?.usage_coefficient)}
+													/>
+												)}
+											/>
+										</FormField>
+										<FormField label={t("nodes.dataLimitField")} description={t("nodes.dataLimitHint")} error={getInputError(errors?.data_limit)} className="md:col-span-2">
+											<Controller
+												control={form.control}
+												name="data_limit"
+												render={({ field }) => (
+													<DataSizeField
+														placeholder={t("nodes.dataLimitPlaceholder")}
+														valueGb={field.value === undefined || field.value === null ? "" : String(field.value)}
+														onChangeGb={(next) => field.onChange(next.trim() === "" ? null : Number(next))}
+														invalid={Boolean(errors?.data_limit)}
 													/>
 												)}
 											/>
 										</FormField>
 									</div>
-									<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-										<FormField label={t("nodes.proxyUsername")} error={getInputError(errors?.proxy_username)}>
-											<UiInput placeholder="user" {...form.register("proxy_username")} />
+									<FormField label={t("tags.title")}>
+										<TagsSelect value={tags} onChange={setTags} options={knownNodeTags.map((item) => item.tag)} />
+									</FormField>
+									<FormField label={t("fields.note")} error={getInputError(errors?.note)}>
+										<Textarea rows={3} maxLength={500} {...form.register("note")} />
+									</FormField>
+
+									<label htmlFor="node-use-proxy" className="flex items-center justify-between gap-4 rounded-lg border border-white/10 bg-[#0d1117] px-3.5 py-2.5 text-sm font-medium text-white transition-colors">
+										<span>{t("nodes.useProxy")}</span>
+										<Controller
+											control={form.control}
+											name="proxy_enabled"
+											render={({ field }) => (
+												<UiSwitch id="node-use-proxy" checked={Boolean(field.value)} onCheckedChange={(next) => field.onChange(next)} />
+											)}
+										/>
+									</label>
+								</SectionCard.Content>
+							</SectionCard.Root>
+
+							{proxyEnabled ? (
+								<SectionCard.Root>
+									<SectionCard.Header icon={<SectionCard.Icon variant="teal"><Globe className="size-4" /></SectionCard.Icon>}>
+										<SectionCard.Title>{t("nodes.proxySettings")}</SectionCard.Title>
+										<SectionCard.Description>{t("nodes.proxyHint") || "Upstream proxy routing for node communications"}</SectionCard.Description>
+									</SectionCard.Header>
+									<SectionCard.Content>
+										<FormField label={t("nodes.proxyType")} error={getInputError(errors?.proxy_type)}>
+											<Controller
+												control={form.control}
+												name="proxy_type"
+												render={({ field }) => (
+													<SegmentedControl<string>
+														label={t("nodes.proxyType")}
+														value={field.value ?? ""}
+														options={proxyTypeOptions}
+														onChange={(next) => field.onChange(next)}
+													/>
+												)}
+											/>
 										</FormField>
-										<FormField label={t("nodes.proxyPassword")} error={getInputError(errors?.proxy_password)}>
-											<UiInput type="password" placeholder="••••••••" {...form.register("proxy_password")} />
-										</FormField>
-									</div>
-									<p className="text-xs text-muted-foreground">{t("nodes.proxyHint")}</p>
-								</section>
+										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+											<FormField label={t("nodes.proxyHost")} error={getInputError(errors?.proxy_host)}>
+												<UiInput placeholder="proxy.example.com" className="font-mono" aria-invalid={Boolean(errors?.proxy_host) || undefined} {...form.register("proxy_host")} />
+											</FormField>
+											<FormField label={t("nodes.proxyPort")} error={getInputError(errors?.proxy_port)}>
+												<Controller
+													control={form.control}
+													name="proxy_port"
+													render={({ field }) => (
+														<NumberField
+															inputMode="numeric"
+															min={1}
+															max={65535}
+															placeholder="8080"
+															doneLabel={t("common.done")}
+															value={field.value === undefined || field.value === null ? "" : String(field.value)}
+															onChange={(raw) => field.onChange(raw.trim() === "" ? null : raw)}
+															invalid={Boolean(errors?.proxy_port)}
+														/>
+													)}
+												/>
+											</FormField>
+										</div>
+										<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+											<FormField label={t("nodes.proxyUsername")} error={getInputError(errors?.proxy_username)}>
+												<UiInput placeholder="user" className="font-mono" {...form.register("proxy_username")} />
+											</FormField>
+											<FormField label={t("nodes.proxyPassword")} error={getInputError(errors?.proxy_password)}>
+												<UiInput type="password" placeholder="••••••••" className="font-mono" {...form.register("proxy_password")} />
+											</FormField>
+										</div>
+									</SectionCard.Content>
+								</SectionCard.Root>
 							) : null}
 						</div>
 					</div>
 
-					<DialogFooter className="flex-row flex-wrap items-center justify-end gap-2 border-t px-5 py-3">
+					<DialogFooter className="sticky bottom-0 z-20 flex-row flex-wrap items-center justify-end gap-2 border-t border-white/[0.08] bg-[#161b22]/95 backdrop-blur-md px-6 py-3.5">
 						<Button onClick={handleClose} variant="outline" size="sm">
 							{t("cancel")}
 						</Button>
-						<div className="w-full sm:w-[180px]"><AnimatedSubmitButton
-							status={submitStatus}
-							idleContent={isAddMode ? t("nodes.addNode") : t("nodes.editNode")}
-							successLabel={t("userDialog.submitSuccess")}
-							disabled={isLoading}
-							type="submit"
-						/></div>
+						<div className="w-full sm:w-[180px]">
+							<AnimatedSubmitButton
+								status={submitStatus}
+								idleContent={isAddMode ? t("nodes.addNode") : t("nodes.editNode")}
+								successLabel={t("userDialog.submitSuccess")}
+								disabled={isLoading}
+								type="submit"
+							/>
+						</div>
 					</DialogFooter>
 				</form>
 			</DialogContent>

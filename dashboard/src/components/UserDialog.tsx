@@ -2,7 +2,7 @@ import { toast } from "components/ui/sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type SubmitStatus, useSubmitTimers } from "hooks/useSubmitTimers";
 import dayjs from "dayjs";
-import { Ban, Check, ChevronDown, Copy, LoaderCircle, Pencil, Plus, QrCode, RotateCcw, Sparkles, Trash2, UserPlus } from "lucide-react";
+import { Activity, Ban, Calendar, Check, ChevronDown, Copy, Key, LoaderCircle, Pencil, Plus, QrCode, RefreshCw, RotateCcw, Sliders, Sparkles, Trash2, User as UserIcon, UserPlus } from "lucide-react";
 import { type FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Controller, type Resolver, useForm, useWatch } from "react-hook-form";
 import ReactApexChart from "react-apexcharts";
@@ -12,6 +12,7 @@ import { z } from "zod";
 import { buttonVariants } from "components/ui/button";
 import { Alert, AlertDescription } from "components/ui/alert";
 import { Badge } from "components/ui/badge";
+import { SectionCard } from "components/ui/section-card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "components/ui/collapsible";
 import { DateTimeField } from "components/ui/date-time-field";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "components/ui/dialog";
@@ -1060,545 +1061,590 @@ export const UserDialog: FC<UserDialogProps> = () => {
 	};
 
 	const detailsTab = (
-		<div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+		<div className="flex flex-col gap-4">
 			{statusNotice ? (
-				<Alert className="sm:col-span-2">
+				<Alert>
 					<AlertDescription>{statusNotice}</AlertDescription>
 				</Alert>
 			) : null}
 			{isEditing && isServiceManagedUser ? (
-				<Alert className="sm:col-span-2">
+				<Alert>
 					<AlertDescription>
 						{t("userDialog.serviceManagedNotice", { service: editingUser?.service_name ?? "" })}
 					</AlertDescription>
 				</Alert>
 			) : null}
 			{userManagementLocked ? (
-				<Alert variant="destructive" className="sm:col-span-2">
+				<Alert variant="destructive">
 					<AlertDescription>{t("userDialog.managementLocked")}</AlertDescription>
 				</Alert>
 			) : null}
 			{showServiceSelector && !servicesLoading && !hasServices ? (
-				<Alert variant="destructive" className="sm:col-span-2">
+				<Alert variant="destructive">
 					<AlertDescription>
 						{`${t("userDialog.noServicesAvailable")} ${t("userDialog.createServiceToManage")}`}
 					</AlertDescription>
 				</Alert>
 			) : null}
 
-			<FormField
-				label={t("username")}
-				htmlFor="user-username"
-				error={errors.username?.message}
-				description={`${usernameValue?.length ?? 0}/32`}
-				className={cn(!isEditing && "sm:col-span-2")}
-			>
-				<div className="relative">
-					<Input
-						id="user-username"
-						dir={isRTL ? "rtl" : "ltr"}
-						disabled={disabled || isEditing}
-						aria-invalid={!!errors.username || undefined}
-						className={cn(!isEditing && "pe-10")}
-						{...form.register("username")}
-					/>
-					{!isEditing ? (
-						<button
-							type="button"
-							aria-label={t("userDialog.generateUsername")}
-							title={t("userDialog.generateUsername")}
-							disabled={disabled || randomUsernameLoading}
-							onClick={createRandomUsername}
-							className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "absolute inset-y-0.5 end-0.5")}
-						>
-							{randomUsernameLoading ? (
-								<LoaderCircle className="size-4 animate-spin" />
-							) : (
-								<Sparkles className="size-4" />
-							)}
-						</button>
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+				{/* LEFT COLUMN */}
+				<div className="flex flex-col gap-4">
+					{/* Card 1: User Identity & Status */}
+					<SectionCard.Root>
+						<SectionCard.Header icon={<SectionCard.Icon variant="cyan"><UserIcon className="size-4" /></SectionCard.Icon>}>
+							<SectionCard.Title>{t("userDialog.identity") || "User Identity"}</SectionCard.Title>
+							<SectionCard.Description>{t("userDialog.identityDesc") || "Primary identifier and account status"}</SectionCard.Description>
+						</SectionCard.Header>
+						<SectionCard.Content>
+							<FormField
+								label={t("username")}
+								htmlFor="user-username"
+								error={errors.username?.message}
+								description={`${usernameValue?.length ?? 0}/32`}
+							>
+								<div className="relative">
+									<Input
+										id="user-username"
+										dir={isRTL ? "rtl" : "ltr"}
+										disabled={disabled || isEditing}
+										aria-invalid={!!errors.username || undefined}
+										className={cn(!isEditing && "pe-10")}
+										{...form.register("username")}
+									/>
+									{!isEditing ? (
+										<button
+											type="button"
+											aria-label={t("userDialog.generateUsername")}
+											title={t("userDialog.generateUsername")}
+											disabled={disabled || randomUsernameLoading}
+											onClick={createRandomUsername}
+											className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "absolute inset-y-0.5 end-0.5")}
+										>
+											{randomUsernameLoading ? (
+												<LoaderCircle className="size-4 animate-spin" />
+											) : (
+												<Sparkles className="size-4" />
+											)}
+										</button>
+									) : null}
+								</div>
+							</FormField>
+
+							{isEditing ? (
+								<FormField label={t("status")}>
+									<div className="flex h-9 items-center justify-between rounded-lg border border-white/10 bg-[#0d1117] px-3">
+										<Badge variant="outline" className="badge-soft-cyan text-cyan-300 border-transparent">{t(`status.${userStatus}`)}</Badge>
+										<Controller
+											name="status"
+											control={form.control}
+											render={({ field }) => (
+												<Switch
+													aria-label={t("status")}
+													checked={field.value === "active"}
+													disabled={disabled}
+													onCheckedChange={(checked) => field.onChange(checked ? "active" : "disabled")}
+												/>
+											)}
+										/>
+									</div>
+								</FormField>
+							) : null}
+						</SectionCard.Content>
+					</SectionCard.Root>
+
+					{/* Card 2: Expiry & Service Plan */}
+					<SectionCard.Root>
+						<SectionCard.Header icon={<SectionCard.Icon variant="amber"><Calendar className="size-4" /></SectionCard.Icon>}>
+							<SectionCard.Title>{t("userDialog.expirySection") || "Access & Expiry"}</SectionCard.Title>
+							<SectionCard.Description>{t("userDialog.expirySectionDesc") || "Validity period, on-hold duration, and service plan"}</SectionCard.Description>
+						</SectionCard.Header>
+						<SectionCard.Content>
+							<div className="flex min-w-0 flex-col gap-2">
+								<Label>{isOnHold ? t("expires.days") : t("userDialog.expiryDate")}</Label>
+								<div className="flex items-start gap-2">
+									<div className="min-w-0 flex-1">
+										{isOnHold ? (
+											<Controller
+												control={form.control}
+												name="on_hold_expire_duration"
+												render={({ field }) => (
+													<UnitInput
+														value={field.value ? String(field.value) : ""}
+														unit={DAYS_UNIT} integer
+														disabled={disabled}
+														invalid={!!errors.on_hold_expire_duration}
+														onChange={(raw) => {
+															form.setValue("expire", null);
+															if (!raw) {
+																field.onChange(null);
+																return;
+															}
+															if (!isDecimalDraft(raw)) return;
+															const parsed = Number(raw);
+															if (Number.isNaN(parsed) || parsed < 0) return;
+															field.onChange(Math.round(parsed));
+														}}
+													/>
+												)}
+											/>
+										) : (
+											<Controller
+												name="expire"
+												control={form.control}
+												render={({ field }) => {
+													const selectedDate = field.value ? dayjs.unix(field.value).toDate() : null;
+													const handleDateChange = (next: Date | null) => {
+														form.setValue("on_hold_expire_duration", null, { shouldDirty: false });
+														field.onChange(next ? dayjs(next).utc().unix() : null);
+													};
+													return (
+														<>
+															<DateTimeField
+																id="user-expire"
+																value={selectedDate}
+																onChange={handleDateChange}
+																placeholder={t("dateTimePicker.selectDate")}
+																disabled={disabled}
+																minDate={new Date()}
+																quickSelects={quickExpiryOptions.map((option) => ({
+																	label: option.label,
+																	onClick: () => handleDateChange(addQuickExpiry(selectedDate, option.amount, option.unit)),
+																}))}
+															/>
+															{expireHelperText ? <p className="mt-1 text-xs text-[#8b949e]">{expireHelperText}</p> : null}
+															{errors.expire?.message ? (
+																<p role="alert" className="mt-1 text-xs text-destructive">
+																	{errors.expire.message}
+																</p>
+															) : null}
+														</>
+													);
+												}}
+											/>
+										)}
+									</div>
+									<button
+										type="button"
+										disabled={disabled}
+										onClick={toggleOnHold}
+										className={buttonVariants({ variant: isOnHold ? "default" : "outline" })}
+									>
+										{t("onHold.button")}
+									</button>
+								</div>
+								{isOnHold ? (
+									<div className="grid grid-cols-6 gap-1 [&>button]:w-full [&>button]:px-0">
+										{ON_HOLD_QUICK_DAYS.map((days) => (
+											<button
+												key={days}
+												type="button"
+												disabled={disabled}
+												onClick={() => {
+													form.setValue("expire", null);
+													form.setValue("on_hold_expire_duration", days, { shouldDirty: true, shouldValidate: true });
+												}}
+												className={buttonVariants({ variant: "outline", size: "sm" })}
+											>
+												{days}D
+											</button>
+										))}
+									</div>
+								) : null}
+								{isOnHold && errors.on_hold_expire_duration?.message ? (
+									<p role="alert" className="text-xs text-destructive">
+										{errors.on_hold_expire_duration.message}
+									</p>
+								) : null}
+							</div>
+
+							{showServiceSelector ? (
+								<FormField
+									label={t("userDialog.selectServiceLabel")}
+									description={
+										selectedService ? (
+											<span className="flex flex-col gap-0.5">
+												{selectedService.description ? <span>{selectedService.description}</span> : null}
+												<span>
+													{t("userDialog.serviceSummary", {
+														hosts: selectedService.host_count,
+														users: selectedService.user_count,
+													})}
+												</span>
+											</span>
+										) : undefined
+									}
+								>
+									<Select
+										value={selectedServiceId ? String(selectedServiceId) : ""}
+										onValueChange={(value) => setSelectedServiceId(Number(value))}
+										disabled={serviceSelectionDisabled || servicesLoading}
+									>
+										<SelectTrigger id="user-service" aria-label={t("userDialog.selectServiceLabel")}>
+											<SelectValue placeholder={t("userDialog.selectService")} />
+										</SelectTrigger>
+										<SelectContent>
+											{services.map((service) => {
+												const isBroken = service.broken === true || service.has_hosts === false;
+												return (
+													<SelectItem key={service.id} value={String(service.id)} disabled={isBroken}>
+														<SelectItemText>{service.name}</SelectItemText>
+														{service.description ? (
+															<span className="line-clamp-2 text-xs text-[#8b949e]">{service.description}</span>
+														) : null}
+														<span className="text-xs text-[#8b949e]">
+															{t("userDialog.serviceSummary", { hosts: service.host_count, users: service.user_count })}
+															{isBroken ? ` · ${t("userDialog.brokenService")}` : ""}
+														</span>
+													</SelectItem>
+												);
+											})}
+										</SelectContent>
+									</Select>
+								</FormField>
+							) : null}
+
+							{dataLimitSet ? (
+								<Controller
+									control={form.control}
+									name="data_limit_reset_strategy"
+									render={({ field }) => (
+										<FormField label={t("userDialog.periodicUsageReset")}>
+											<Select
+												value={field.value}
+												onValueChange={field.onChange}
+												disabled={disabled || !canConfigurePeriodicUsageReset}
+											>
+												<SelectTrigger id="user-reset">
+													<SelectValue />
+												</SelectTrigger>
+												<SelectContent>
+													{resetStrategy.map((strategy) => (
+														<SelectItem key={strategy.value} value={strategy.value}>
+															<SelectItemText>{t(`userDialog.resetStrategy${strategy.title}`)}</SelectItemText>
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+										</FormField>
+									)}
+								/>
+							) : null}
+						</SectionCard.Content>
+					</SectionCard.Root>
+
+					{/* Card 3: Security & Credentials */}
+					{hasExistingKey && canSetCustomKey ? (
+						<SectionCard.Root>
+							<SectionCard.Header icon={<SectionCard.Icon variant="purple"><Key className="size-4" /></SectionCard.Icon>}>
+								<SectionCard.Title>{t("userDialog.securitySection") || "Security & Credentials"}</SectionCard.Title>
+								<SectionCard.Description>{t("userDialog.securitySectionDesc") || "Custom credential key configuration"}</SectionCard.Description>
+							</SectionCard.Header>
+							<SectionCard.Content>
+								<Controller
+									name="manual_key_entry"
+									control={form.control}
+									render={({ field }) => (
+										<label className="flex items-center justify-between gap-3 text-sm">
+											<span>{t("userDialog.allowManualKeyEntry")}</span>
+											<Switch checked={field.value} disabled={disabled} onCheckedChange={(checked) => field.onChange(checked)} />
+										</label>
+									)}
+								/>
+								{manualKeyEntryEnabled ? (
+									<Controller
+										name="credential_key"
+										control={form.control}
+										render={({ field }) => (
+											<FormField
+												label={t("userDialog.credentialKeyLabel")}
+												description={t("userDialog.manualKeyHelper")}
+												error={errors.credential_key?.message}
+											>
+												<Input
+													placeholder="35e4e39c7d5c4f4b8b71558e4f37ff53"
+													maxLength={32}
+													dir="ltr"
+													className="font-mono text-xs"
+													value={field.value ?? ""}
+													disabled={disabled}
+													onChange={(event) => field.onChange(event.target.value)}
+												/>
+											</FormField>
+										)}
+									/>
+								) : null}
+							</SectionCard.Content>
+						</SectionCard.Root>
 					) : null}
 				</div>
-			</FormField>
 
-			{isEditing ? (
-				<FormField label={t("status")}>
-					<div className="flex h-9 items-center justify-between rounded-md border px-3">
-						<Badge variant="outline">{t(`status.${userStatus}`)}</Badge>
-						<Controller
-							name="status"
-							control={form.control}
-							render={({ field }) => (
-								<Switch
-									aria-label={t("status")}
-									checked={field.value === "active"}
-									disabled={disabled}
-									onCheckedChange={(checked) => field.onChange(checked ? "active" : "disabled")}
-								/>
-							)}
-						/>
-					</div>
-				</FormField>
-			) : null}
-
-			<Controller
-				control={form.control}
-				name="data_limit"
-				render={({ field }) => (
-					<FormField
-						label={t("userDialog.dataLimit")}
-						className={cn(!ipLimitEditable && "sm:col-span-2")}
-						description={remainingDataInfo ? `${t("userDialog.remainingDataLabel")}: ${remainingDataInfo}` : undefined}
-						error={errors.data_limit?.message}
-					>
-						<DataSizeField
-							id="user-data-limit"
-							valueGb={field.value ? String(field.value) : ""}
-							onChangeGb={(raw) => field.onChange(raw)}
-							disabled={disabled}
-							invalid={!!errors.data_limit}
-						/>
-					</FormField>
-				)}
-			/>
-
-			{ipLimitEditable ? (
-				<Controller
-					control={form.control}
-					name="ip_limit"
-					rules={{
-						validate: (value) => {
-							if (value === null || value === undefined) return true;
-							if (typeof value !== "number" || Number.isNaN(value)) return t("userDialog.ipLimitValidation");
-							return value >= 0 ? true : t("userDialog.ipLimitValidation");
-						},
-					}}
-					render={({ field }) => (
-						<FormField label={t("userDialog.ipLimitLabel")} error={errors.ip_limit?.message}>
-							<NumberField
-								id="user-ip-limit" inputMode="numeric"
-								placeholder={t("userDialog.remainingDataUnlimited")}
-								value={typeof field.value === "number" && field.value > 0 ? String(field.value) : ""}
-								disabled={disabled}
-								invalid={!!errors.ip_limit}
-								onChange={(raw) => {
-									const trimmed = raw.trim();
-									if (!trimmed || trimmed === "-") {
-										field.onChange(null);
-										return;
-									}
-									const parsed = Number(trimmed);
-									if (Number.isNaN(parsed)) return;
-									field.onChange(parsed < 0 ? 0 : Math.floor(parsed));
-								}}
-							/>
-						</FormField>
-					)}
-				/>
-			) : null}
-
-			{speedLimitEditable ? (
-				<Controller
-					control={form.control}
-					name="speed_limit"
-					render={({ field }) => (
-						<FormField label={t("userDialog.speedLimitLabel")} error={errors.speed_limit?.message}>
-							<UnitInput
-								value={typeof field.value === "number" && field.value > 0 ? String(field.value) : ""}
-								onChange={(raw) => {
-									const parsed = Number(raw.trim());
-									field.onChange(Number.isFinite(parsed) && parsed > 0 ? Math.round(parsed * 100) / 100 : null);
-								}}
-								unit={SPEED_UNIT}
-								disabled={disabled}
-								invalid={!!errors.speed_limit}
-							/>
-						</FormField>
-					)}
-				/>
-			) : null}
-
-			<div className={cn("flex min-w-0 flex-col gap-2", !speedLimitEditable && "sm:col-span-2")}>
-				<Label>{isOnHold ? t("expires.days") : t("userDialog.expiryDate")}</Label>
-				<div className="flex items-start gap-2">
-					<div className="min-w-0 flex-1">
-						{isOnHold ? (
+				{/* RIGHT COLUMN */}
+				<div className="flex flex-col gap-4">
+					{/* Card 4: Traffic & Limits */}
+					<SectionCard.Root>
+						<SectionCard.Header icon={<SectionCard.Icon variant="teal"><Activity className="size-4" /></SectionCard.Icon>}>
+							<SectionCard.Title>{t("userDialog.trafficSection") || "Traffic & Limits"}</SectionCard.Title>
+							<SectionCard.Description>{t("userDialog.trafficSectionDesc") || "Data transfer limits and network throttling"}</SectionCard.Description>
+						</SectionCard.Header>
+						<SectionCard.Content>
 							<Controller
 								control={form.control}
-								name="on_hold_expire_duration"
+								name="data_limit"
 								render={({ field }) => (
-									<UnitInput
-										value={field.value ? String(field.value) : ""}
-										unit={DAYS_UNIT} integer
-										disabled={disabled}
-										invalid={!!errors.on_hold_expire_duration}
-										onChange={(raw) => {
-											form.setValue("expire", null);
-											if (!raw) {
-												field.onChange(null);
-												return;
-											}
-											if (!isDecimalDraft(raw)) return;
-											const parsed = Number(raw);
-											if (Number.isNaN(parsed) || parsed < 0) return;
-											field.onChange(Math.round(parsed));
-										}}
-									/>
+									<FormField
+										label={t("userDialog.dataLimit")}
+										description={remainingDataInfo ? `${t("userDialog.remainingDataLabel")}: ${remainingDataInfo}` : undefined}
+										error={errors.data_limit?.message}
+									>
+										<DataSizeField
+											id="user-data-limit"
+											valueGb={field.value ? String(field.value) : ""}
+											onChangeGb={(raw) => field.onChange(raw)}
+											disabled={disabled}
+											invalid={!!errors.data_limit}
+										/>
+									</FormField>
 								)}
 							/>
-						) : (
-							<Controller
-								name="expire"
-								control={form.control}
-								render={({ field }) => {
-									const selectedDate = field.value ? dayjs.unix(field.value).toDate() : null;
-									const handleDateChange = (next: Date | null) => {
-										form.setValue("on_hold_expire_duration", null, { shouldDirty: false });
-										field.onChange(next ? dayjs(next).utc().unix() : null);
-									};
-									return (
-										<>
-											<DateTimeField
-												id="user-expire"
-												value={selectedDate}
-												onChange={handleDateChange}
-												placeholder={t("dateTimePicker.selectDate")}
+
+							{ipLimitEditable ? (
+								<Controller
+									control={form.control}
+									name="ip_limit"
+									rules={{
+										validate: (value) => {
+											if (value === null || value === undefined) return true;
+											if (typeof value !== "number" || Number.isNaN(value)) return t("userDialog.ipLimitValidation");
+											return value >= 0 ? true : t("userDialog.ipLimitValidation");
+										},
+									}}
+									render={({ field }) => (
+										<FormField label={t("userDialog.ipLimitLabel")} error={errors.ip_limit?.message}>
+											<NumberField
+												id="user-ip-limit" inputMode="numeric"
+												placeholder={t("userDialog.remainingDataUnlimited")}
+												value={typeof field.value === "number" && field.value > 0 ? String(field.value) : ""}
 												disabled={disabled}
-												minDate={new Date()}
-												quickSelects={quickExpiryOptions.map((option) => ({
-													label: option.label,
-													onClick: () => handleDateChange(addQuickExpiry(selectedDate, option.amount, option.unit)),
-												}))}
+												invalid={!!errors.ip_limit}
+												onChange={(raw) => {
+													const trimmed = raw.trim();
+													if (!trimmed || trimmed === "-") {
+														field.onChange(null);
+														return;
+													}
+													const parsed = Number(trimmed);
+													if (Number.isNaN(parsed)) return;
+													field.onChange(parsed < 0 ? 0 : Math.floor(parsed));
+												}}
 											/>
-											{expireHelperText ? <p className="mt-1 text-xs text-muted-foreground">{expireHelperText}</p> : null}
-											{errors.expire?.message ? (
-												<p role="alert" className="mt-1 text-xs text-destructive">
-													{errors.expire.message}
-												</p>
-											) : null}
-										</>
-									);
+										</FormField>
+									)}
+								/>
+							) : null}
+
+							{speedLimitEditable ? (
+								<Controller
+									control={form.control}
+									name="speed_limit"
+									render={({ field }) => (
+										<FormField label={t("userDialog.speedLimitLabel")} error={errors.speed_limit?.message}>
+											<UnitInput
+												value={typeof field.value === "number" && field.value > 0 ? String(field.value) : ""}
+												onChange={(raw) => {
+													const parsed = Number(raw.trim());
+													field.onChange(Number.isFinite(parsed) && parsed > 0 ? Math.round(parsed * 100) / 100 : null);
+												}}
+												unit={SPEED_UNIT}
+												disabled={disabled}
+												invalid={!!errors.speed_limit}
+											/>
+										</FormField>
+									)}
+								/>
+							) : null}
+						</SectionCard.Content>
+					</SectionCard.Root>
+
+					{/* Card 5: Auto-Renewal Rules */}
+					<SectionCard.Root>
+						<SectionCard.Header icon={<SectionCard.Icon variant="blue"><RefreshCw className="size-4" /></SectionCard.Icon>}>
+							<SectionCard.Title>{t("autoRenew.title") || "Auto-Renewal Rules"}</SectionCard.Title>
+							<SectionCard.Description>{t("userDialog.autoRenewDesc") || "Rules for automated subscription renewal"}</SectionCard.Description>
+						</SectionCard.Header>
+						<SectionCard.Content>
+							<Collapsible
+								open={autoRenewOpen}
+								onOpenChange={(open) => {
+									setAutoRenewOpen(open);
+									if (open) scrollBodyToEnd();
 								}}
-							/>
-						)}
-					</div>
-					<button
-						type="button"
-						disabled={disabled}
-						onClick={toggleOnHold}
-						className={buttonVariants({ variant: isOnHold ? "default" : "outline" })}
-					>
-						{t("onHold.button")}
-					</button>
-				</div>
-				{isOnHold ? (
-					<div className="grid grid-cols-6 gap-1 [&>button]:w-full [&>button]:px-0">
-						{ON_HOLD_QUICK_DAYS.map((days) => (
-							<button
-								key={days}
-								type="button"
-								disabled={disabled}
-								onClick={() => {
-									form.setValue("expire", null);
-									form.setValue("on_hold_expire_duration", days, { shouldDirty: true, shouldValidate: true });
-								}}
-								className={buttonVariants({ variant: "outline", size: "sm" })}
+								className="flex flex-col gap-3"
 							>
-								{days}D
-							</button>
-						))}
-					</div>
-				) : null}
-				{isOnHold && errors.on_hold_expire_duration?.message ? (
-					<p role="alert" className="text-xs text-destructive">
-						{errors.on_hold_expire_duration.message}
-					</p>
-				) : null}
+								<CollapsibleTrigger className="flex items-center gap-2 text-sm font-medium">
+									{t("autoRenew.title")}
+									{autoRenewRules.length > 0 ? <Badge variant="secondary" className="badge-soft-cyan text-cyan-300">{autoRenewRules.length}</Badge> : null}
+									<ChevronDown className={cn("size-4 transition-transform", autoRenewOpen && "rotate-180")} />
+								</CollapsibleTrigger>
+								<CollapsibleContent className="flex flex-col gap-3">
+									{autoRenewRules.length === 0 && !ruleDraft ? (
+										<p className="text-sm text-[#8b949e]">{t("autoRenew.empty")}</p>
+									) : null}
+									{autoRenewRules.map((rule, idx) => {
+										const dayText = deriveDaysFromSeconds(rule.expire);
+										return (
+											<div key={rule.id} className="flex flex-col gap-1">
+												<div className="flex items-center justify-between gap-2 rounded-lg border border-white/10 bg-[#0d1117] px-3 py-2 text-sm">
+													<span>
+														{rule.dataLimit !== null && rule.dataLimit !== undefined
+															? `${rule.dataLimit} ${DATA_UNIT}`
+															: t("userDialog.autoRenewUnlimited")}{" "}
+														· {dayText !== null ? `${dayText} ${DAYS_UNIT}` : t("userDialog.autoRenewUnlimited")}
+													</span>
+													<div className="flex items-center">
+														<button
+															type="button"
+															aria-label={t("edit")}
+															disabled={disabled}
+															onClick={() => startRuleDraft(idx)}
+															className={buttonVariants({ variant: "ghost", size: "icon-sm" })}
+														>
+															<Pencil />
+														</button>
+														<button
+															type="button"
+															aria-label={t("delete")}
+															disabled={disabled}
+															onClick={() => deleteRule(idx)}
+															className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-destructive")}
+														>
+															<Trash2 />
+														</button>
+													</div>
+												</div>
+												{idx > 0 ? <p className="text-xs text-[#8b949e]">{t("autoRenew.queuedNote")}</p> : null}
+											</div>
+										);
+									})}
+
+									{ruleDraft ? (
+										<div className="grid grid-cols-1 gap-3 rounded-lg border border-white/10 bg-[#0d1117] p-3 sm:grid-cols-2">
+											<FormField label={t("userDialog.autoRenewDataLimit")}>
+												<UnitInput
+													value={ruleDraft.data}
+													unit={DATA_UNIT}
+													disabled={disabled}
+													onChange={(raw) => {
+														if (raw === "" || isDecimalDraft(raw)) setRuleDraft((draft) => draft && { ...draft, data: raw });
+													}}
+												/>
+											</FormField>
+											<FormField label={t("userDialog.autoRenewTimeLimit")}>
+												<UnitInput
+													value={ruleDraft.days}
+													unit={DAYS_UNIT} integer
+													disabled={disabled}
+													onChange={(raw) => {
+														if (raw === "" || isDecimalDraft(raw)) setRuleDraft((draft) => draft && { ...draft, days: raw });
+													}}
+												/>
+											</FormField>
+											<div className="flex flex-wrap gap-2 sm:col-span-2">
+												<button
+													type="button"
+													disabled={disabled}
+													onClick={() => setRuleDraft((draft) => draft && { ...draft, addRemaining: !draft.addRemaining })}
+													className={buttonVariants({ variant: ruleDraft.addRemaining ? "default" : "outline", size: "sm" })}
+												>
+													{ruleDraft.addRemaining
+														? t("userDialog.nextPlanAddRemainingTraffic")
+														: t("userDialog.autoRenewResetUsage")}
+												</button>
+												<button
+													type="button"
+													disabled={disabled}
+													onClick={() => setRuleDraft((draft) => draft && { ...draft, fireOnEither: !draft.fireOnEither })}
+													className={buttonVariants({ variant: ruleDraft.fireOnEither ? "default" : "outline", size: "sm" })}
+												>
+													{t("userDialog.nextPlanFireOnEither")}
+												</button>
+											</div>
+											<div className="flex justify-end gap-2 sm:col-span-2">
+												<button
+													type="button"
+													onClick={() => setRuleDraft(null)}
+													className={buttonVariants({ variant: "outline", size: "sm" })}
+												>
+													{t("cancel")}
+												</button>
+												<button type="button" disabled={disabled} onClick={saveRuleDraft} className={buttonVariants({ variant: "soft-cyan", size: "sm" })}>
+													{ruleDraft.index !== null ? t("save") : t("add")}
+												</button>
+											</div>
+										</div>
+									) : (
+										<button
+											type="button"
+											disabled={disabled}
+											onClick={() => startRuleDraft(null)}
+											className={cn(buttonVariants({ variant: "outline", size: "sm" }), "self-start")}
+										>
+											<Plus />
+											{t("add")}
+										</button>
+									)}
+								</CollapsibleContent>
+							</Collapsible>
+						</SectionCard.Content>
+					</SectionCard.Root>
+
+					{/* Card 6: Additional Metadata & Contacts */}
+					<SectionCard.Root>
+						<SectionCard.Header icon={<SectionCard.Icon variant="gray"><Sliders className="size-4" /></SectionCard.Icon>}>
+							<SectionCard.Title>{t("otherInfo.title") || "Additional Metadata & Contacts"}</SectionCard.Title>
+							<SectionCard.Description>{t("userDialog.metadataDesc") || "Labels, administrative notes, and contact methods"}</SectionCard.Description>
+						</SectionCard.Header>
+						<SectionCard.Content>
+							<FormField label={t("groups.group")}>
+								<Controller
+									control={form.control}
+									name="group_id"
+									render={({ field }) => (
+										<GroupSelect type="user" value={field.value ?? null} onChange={field.onChange} />
+									)}
+								/>
+							</FormField>
+							<FormField label={t("tags.title")}>
+								<Controller
+									control={form.control}
+									name="tags"
+									render={({ field }) => (
+										<TagsSelect
+											value={field.value ?? []}
+											onChange={field.onChange}
+											options={knownUserTags.map((item) => item.tag)}
+										/>
+									)}
+								/>
+							</FormField>
+							<FormField label={t("fields.note")} error={errors.note?.message}>
+								<Textarea {...form.register("note")} />
+							</FormField>
+							<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+								<FormField label={t("fields.telegramId")} error={errors.telegram_id?.message}>
+									<Input dir="ltr" {...form.register("telegram_id")} />
+								</FormField>
+								<FormField label={t("fields.contactNumber")} error={errors.contact_number?.message}>
+									<Input dir="ltr" {...form.register("contact_number")} />
+								</FormField>
+							</div>
+						</SectionCard.Content>
+					</SectionCard.Root>
+				</div>
 			</div>
 
-			{showServiceSelector ? (
-				<FormField
-					label={t("userDialog.selectServiceLabel")}
-					className={cn(!dataLimitSet && "sm:col-span-2")}
-					description={
-						selectedService ? (
-							<span className="flex flex-col gap-0.5">
-								{selectedService.description ? <span>{selectedService.description}</span> : null}
-								<span>
-									{t("userDialog.serviceSummary", {
-										hosts: selectedService.host_count,
-										users: selectedService.user_count,
-									})}
-								</span>
-							</span>
-						) : undefined
-					}
-				>
-					<Select
-						value={selectedServiceId ? String(selectedServiceId) : ""}
-						onValueChange={(value) => setSelectedServiceId(Number(value))}
-						disabled={serviceSelectionDisabled || servicesLoading}
-					>
-						<SelectTrigger id="user-service" aria-label={t("userDialog.selectServiceLabel")}>
-							<SelectValue placeholder={t("userDialog.selectService")} />
-						</SelectTrigger>
-						<SelectContent>
-							{services.map((service) => {
-								const isBroken = service.broken === true || service.has_hosts === false;
-								return (
-									<SelectItem key={service.id} value={String(service.id)} disabled={isBroken}>
-										<SelectItemText>{service.name}</SelectItemText>
-										{service.description ? (
-											<span className="line-clamp-2 text-xs text-muted-foreground">{service.description}</span>
-										) : null}
-										<span className="text-xs text-muted-foreground">
-											{t("userDialog.serviceSummary", { hosts: service.host_count, users: service.user_count })}
-											{isBroken ? ` · ${t("userDialog.brokenService")}` : ""}
-										</span>
-									</SelectItem>
-								);
-							})}
-						</SelectContent>
-					</Select>
-				</FormField>
-			) : null}
-
-			{dataLimitSet ? (
-				<Controller
-					control={form.control}
-					name="data_limit_reset_strategy"
-					render={({ field }) => (
-						<FormField label={t("userDialog.periodicUsageReset")} className={cn(!showServiceSelector && "sm:col-span-2")}>
-							<Select
-								value={field.value}
-								onValueChange={field.onChange}
-								disabled={disabled || !canConfigurePeriodicUsageReset}
-							>
-								<SelectTrigger id="user-reset">
-									<SelectValue />
-								</SelectTrigger>
-								<SelectContent>
-									{resetStrategy.map((strategy) => (
-										<SelectItem key={strategy.value} value={strategy.value}>
-											<SelectItemText>{t(`userDialog.resetStrategy${strategy.title}`)}</SelectItemText>
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</FormField>
-					)}
-				/>
-			) : null}
-
-			{hasExistingKey && canSetCustomKey ? (
-				<div className="flex flex-col gap-2 sm:col-span-2">
-					<Controller
-						name="manual_key_entry"
-						control={form.control}
-						render={({ field }) => (
-							<label className="flex items-center justify-between gap-3 text-sm">
-								<span>{t("userDialog.allowManualKeyEntry")}</span>
-								<Switch checked={field.value} disabled={disabled} onCheckedChange={(checked) => field.onChange(checked)} />
-							</label>
-						)}
-					/>
-					{manualKeyEntryEnabled ? (
-						<Controller
-							name="credential_key"
-							control={form.control}
-							render={({ field }) => (
-								<FormField
-									label={t("userDialog.credentialKeyLabel")}
-									description={t("userDialog.manualKeyHelper")}
-									error={errors.credential_key?.message}
-								>
-									<Input
-										placeholder="35e4e39c7d5c4f4b8b71558e4f37ff53"
-										maxLength={32}
-										dir="ltr"
-										value={field.value ?? ""}
-										disabled={disabled}
-										onChange={(event) => field.onChange(event.target.value)}
-									/>
-								</FormField>
-							)}
-						/>
-					) : null}
-				</div>
-			) : null}
-
-			<Collapsible
-				open={autoRenewOpen}
-				onOpenChange={(open) => {
-					setAutoRenewOpen(open);
-					if (open) scrollBodyToEnd();
-				}}
-				className="flex flex-col gap-3 sm:col-span-2"
-			>
-				<CollapsibleTrigger className="flex items-center gap-2 text-sm font-medium">
-					{t("autoRenew.title")}
-					{autoRenewRules.length > 0 ? <Badge variant="secondary">{autoRenewRules.length}</Badge> : null}
-					<ChevronDown className={cn("size-4 transition-transform", autoRenewOpen && "rotate-180")} />
-				</CollapsibleTrigger>
-				<CollapsibleContent className="flex flex-col gap-3">
-					{autoRenewRules.length === 0 && !ruleDraft ? (
-						<p className="text-sm text-muted-foreground">{t("autoRenew.empty")}</p>
-					) : null}
-					{autoRenewRules.map((rule, idx) => {
-						const dayText = deriveDaysFromSeconds(rule.expire);
-						return (
-							<div key={rule.id} className="flex flex-col gap-1">
-								<div className="flex items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm">
-									<span>
-										{rule.dataLimit !== null && rule.dataLimit !== undefined
-											? `${rule.dataLimit} ${DATA_UNIT}`
-											: t("userDialog.autoRenewUnlimited")}{" "}
-										· {dayText !== null ? `${dayText} ${DAYS_UNIT}` : t("userDialog.autoRenewUnlimited")}
-									</span>
-									<div className="flex items-center">
-										<button
-											type="button"
-											aria-label={t("edit")}
-											disabled={disabled}
-											onClick={() => startRuleDraft(idx)}
-											className={buttonVariants({ variant: "ghost", size: "icon-sm" })}
-										>
-											<Pencil />
-										</button>
-										<button
-											type="button"
-											aria-label={t("delete")}
-											disabled={disabled}
-											onClick={() => deleteRule(idx)}
-											className={cn(buttonVariants({ variant: "ghost", size: "icon-sm" }), "text-destructive")}
-										>
-											<Trash2 />
-										</button>
-									</div>
-								</div>
-								{idx > 0 ? <p className="text-xs text-muted-foreground">{t("autoRenew.queuedNote")}</p> : null}
-							</div>
-						);
-					})}
-
-					{ruleDraft ? (
-						<div className="grid grid-cols-1 gap-3 rounded-md border p-3 sm:grid-cols-2">
-							<FormField label={t("userDialog.autoRenewDataLimit")}>
-								<UnitInput
-									value={ruleDraft.data}
-									unit={DATA_UNIT}
-									disabled={disabled}
-									onChange={(raw) => {
-										if (raw === "" || isDecimalDraft(raw)) setRuleDraft((draft) => draft && { ...draft, data: raw });
-									}}
-								/>
-							</FormField>
-							<FormField label={t("userDialog.autoRenewTimeLimit")}>
-								<UnitInput
-									value={ruleDraft.days}
-									unit={DAYS_UNIT} integer
-									disabled={disabled}
-									onChange={(raw) => {
-										if (raw === "" || isDecimalDraft(raw)) setRuleDraft((draft) => draft && { ...draft, days: raw });
-									}}
-								/>
-							</FormField>
-							<div className="flex flex-wrap gap-2 sm:col-span-2">
-								<button
-									type="button"
-									disabled={disabled}
-									onClick={() => setRuleDraft((draft) => draft && { ...draft, addRemaining: !draft.addRemaining })}
-									className={buttonVariants({ variant: ruleDraft.addRemaining ? "default" : "outline", size: "sm" })}
-								>
-									{ruleDraft.addRemaining
-										? t("userDialog.nextPlanAddRemainingTraffic")
-										: t("userDialog.autoRenewResetUsage")}
-								</button>
-								<button
-									type="button"
-									disabled={disabled}
-									onClick={() => setRuleDraft((draft) => draft && { ...draft, fireOnEither: !draft.fireOnEither })}
-									className={buttonVariants({ variant: ruleDraft.fireOnEither ? "default" : "outline", size: "sm" })}
-								>
-									{t("userDialog.nextPlanFireOnEither")}
-								</button>
-							</div>
-							<div className="flex justify-end gap-2 sm:col-span-2">
-								<button
-									type="button"
-									onClick={() => setRuleDraft(null)}
-									className={buttonVariants({ variant: "outline", size: "sm" })}
-								>
-									{t("cancel")}
-								</button>
-								<button type="button" disabled={disabled} onClick={saveRuleDraft} className={buttonVariants({ size: "sm" })}>
-									{ruleDraft.index !== null ? t("save") : t("add")}
-								</button>
-							</div>
-						</div>
-					) : (
-						<button
-							type="button"
-							disabled={disabled}
-							onClick={() => startRuleDraft(null)}
-							className={cn(buttonVariants({ variant: "outline", size: "sm" }), "self-start")}
-						>
-							<Plus />
-							{t("add")}
-						</button>
-					)}
-				</CollapsibleContent>
-			</Collapsible>
-
-			<Collapsible
-				open={otherInfoOpen}
-				onOpenChange={(open) => {
-					setOtherInfoOpen(open);
-					if (open) scrollBodyToEnd();
-				}}
-				className="flex flex-col gap-3 sm:col-span-2"
-			>
-				<CollapsibleTrigger className="flex items-center gap-2 text-sm font-medium">
-					{t("otherInfo.title")}
-					<ChevronDown className={cn("size-4 transition-transform", otherInfoOpen && "rotate-180")} />
-				</CollapsibleTrigger>
-				<CollapsibleContent className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-					<FormField label={t("groups.group")}>
-						<Controller
-							control={form.control}
-							name="group_id"
-							render={({ field }) => (
-								<GroupSelect type="user" value={field.value ?? null} onChange={field.onChange} />
-							)}
-						/>
-					</FormField>
-					<FormField label={t("tags.title")}>
-						<Controller
-							control={form.control}
-							name="tags"
-							render={({ field }) => (
-								<TagsSelect
-									value={field.value ?? []}
-									onChange={field.onChange}
-									options={knownUserTags.map((item) => item.tag)}
-								/>
-							)}
-						/>
-					</FormField>
-					<FormField label={t("fields.note")} className="sm:col-span-2" error={errors.note?.message}>
-						<Textarea {...form.register("note")} />
-					</FormField>
-					<FormField label={t("fields.telegramId")} error={errors.telegram_id?.message}>
-						<Input dir="ltr" {...form.register("telegram_id")} />
-					</FormField>
-					<FormField label={t("fields.contactNumber")} error={errors.contact_number?.message}>
-						<Input dir="ltr" {...form.register("contact_number")} />
-					</FormField>
-				</CollapsibleContent>
-			</Collapsible>
-
 			{error ? (
-				<Alert variant="destructive" className="sm:col-span-2">
+				<Alert variant="destructive">
 					<AlertDescription>{error}</AlertDescription>
 				</Alert>
 			) : null}
@@ -1724,17 +1770,17 @@ export const UserDialog: FC<UserDialogProps> = () => {
 		>
 			<DialogContent
 				dir={isRTL ? "rtl" : "ltr"}
-				className="flex max-h-[min(640px,calc(100dvh-10rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-xl max-md:inset-x-3 max-md:w-auto max-md:top-[4.5rem] max-md:bottom-24 max-md:max-h-none max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0"
+				className="flex max-h-[min(840px,calc(100dvh-3rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-4xl lg:max-w-5xl rounded-[20px] border border-white/[0.08] bg-[#161b22] text-white shadow-2xl max-md:inset-x-3 max-md:w-auto max-md:top-[3rem] max-md:bottom-16 max-md:max-h-none max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0"
 			>
 				<form onSubmit={form.handleSubmit(submit)} className="flex min-h-0 flex-1 flex-col">
-					<DialogHeader className="flex-row items-center gap-3 border-b px-5 py-3.5 pe-12 text-start sm:text-start">
-						<div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+					<DialogHeader className="sticky top-0 z-20 flex-row items-center gap-3 border-b border-white/[0.06] bg-[#161b22]/95 backdrop-blur-md px-6 py-4 pe-12 text-start sm:text-start">
+						<div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary badge-soft-cyan text-cyan-400">
 							{isEditing ? <Pencil className="size-4" /> : <UserPlus className="size-4" />}
 						</div>
 						<div className="min-w-0">
-							<DialogTitle className="truncate text-base">{title}</DialogTitle>
+							<DialogTitle className="truncate text-base font-semibold text-white tracking-tight">{title}</DialogTitle>
 							{isEditing && hasPrivilegedRole && editingUser?.admin_username ? (
-								<DialogDescription className="truncate">
+								<DialogDescription className="truncate text-xs text-[#8b949e]">
 									{t("userDialog.createdBy")}: {editingUser.admin_username}
 								</DialogDescription>
 							) : null}
@@ -1743,8 +1789,8 @@ export const UserDialog: FC<UserDialogProps> = () => {
 
 					<Tabs value={tab} onValueChange={handleTabChange} className="flex min-h-0 flex-1 flex-col">
 						{isEditing ? (
-							<div className="border-b px-5 pt-2.5 pb-2.5">
-								<TabsList className="w-full">
+							<div className="border-b border-white/[0.06] px-6 pt-3 pb-3 bg-white/[0.01]">
+								<TabsList className="w-full bg-[#0d1117] border border-white/[0.08] p-1">
 									<TabsTrigger value="details">{t("details")}</TabsTrigger>
 									{canViewTraffic ? <TabsTrigger value="usage">{t("userDialog.tabs.usage")}</TabsTrigger> : null}
 									<TabsTrigger value="links">{t("userDialog.tabs.links")}</TabsTrigger>
@@ -1752,7 +1798,7 @@ export const UserDialog: FC<UserDialogProps> = () => {
 							</div>
 						) : null}
 
-						<div ref={bodyRef} className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+						<div ref={bodyRef} className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
 							{limitReached ? (
 								<Alert variant="destructive" className="mb-4">
 									<AlertDescription>
@@ -1775,7 +1821,7 @@ export const UserDialog: FC<UserDialogProps> = () => {
 						</div>
 					</Tabs>
 
-					<DialogFooter className="flex-row flex-wrap items-center justify-between gap-2 border-t px-5 py-3">
+					<DialogFooter className="sticky bottom-0 z-20 flex-row flex-wrap items-center justify-between gap-2 border-t border-white/[0.08] bg-[#161b22]/95 backdrop-blur-md px-6 py-3.5">
 						<div className="flex flex-wrap items-center gap-1.5">
 							{isEditing && canDeleteUsersVisible ? (
 								<DeleteConfirmDialog
@@ -1811,20 +1857,30 @@ export const UserDialog: FC<UserDialogProps> = () => {
 							) : null}
 						</div>
 
-						<button type="submit" disabled={submitDisabled} className={cn(buttonVariants({ size: "sm" }), "ms-auto")}>
-							{submitStatus === "success" ? (
-								<>
-									<Check />
-									{t("userDialog.submitSuccess")}
-								</>
-							) : loading ? (
-								t("loading")
-							) : isEditing ? (
-								t("userDialog.editUser")
-							) : (
-								t("createUser")
-							)}
-						</button>
+						<div className="flex items-center gap-2 ms-auto">
+							<button
+								type="button"
+								onClick={onClose}
+								disabled={loading}
+								className={buttonVariants({ variant: "outline", size: "sm" })}
+							>
+								{t("cancel")}
+							</button>
+							<button type="submit" disabled={submitDisabled} className={cn(buttonVariants({ variant: "soft-cyan", size: "sm" }))}>
+								{submitStatus === "success" ? (
+									<>
+										<Check />
+										{t("userDialog.submitSuccess")}
+									</>
+								) : loading ? (
+									t("loading")
+								) : isEditing ? (
+									t("userDialog.editUser")
+								) : (
+									t("createUser")
+								)}
+							</button>
+						</div>
 					</DialogFooter>
 				</form>
 			</DialogContent>

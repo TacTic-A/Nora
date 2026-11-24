@@ -43,11 +43,11 @@ export const SystemDiagnostics = ({
 		<section
 			role="alert"
 			aria-live="polite"
-			className="flex flex-col gap-3 rounded-[20px] border border-red-500/25 bg-red-500/6 p-4 min-[769px]:p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+			className="flex flex-col gap-3 rounded-xl border border-red-500/30 bg-red-950/20 p-4 min-[769px]:p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
 		>
 			<div className="flex items-center justify-between gap-2">
 				<div className="flex items-center gap-2.5">
-					<span className="flex size-8 shrink-0 items-center justify-center rounded-[10px] bg-red-500/15 text-red-400">
+					<span className="badge-soft-red flex size-8 shrink-0 items-center justify-center rounded-xl text-red-400">
 						<TriangleAlert className="size-4" aria-hidden="true" />
 					</span>
 					<p className="text-[13px] font-bold text-red-400">
@@ -56,14 +56,14 @@ export const SystemDiagnostics = ({
 				</div>
 				<span
 					dir="ltr"
-					className="inline-flex items-center justify-center rounded-full border border-red-500/25 bg-red-500/12 px-2.5 py-0.5 text-[11px] font-bold text-red-400 tabular-nums [unicode-bidi:isolate]"
+					className="badge-soft-red inline-flex items-center justify-center rounded-full px-2.5 py-0.5 font-mono text-[11px] font-bold text-red-400 tabular-nums [unicode-bidi:isolate]"
 				>
 					{visibleIssues.length}
 				</span>
 			</div>
 
 			{Boolean(error) && (
-				<Alert variant="destructive" className="rounded-[14px]">
+				<Alert variant="destructive" className="rounded-xl border border-red-500/30 bg-red-950/30">
 					<CircleAlert className="size-4" aria-hidden="true" />
 					<p className="text-[12px] font-medium">{getAPIErrorMessage(error)}</p>
 				</Alert>
@@ -79,7 +79,7 @@ export const SystemDiagnostics = ({
 							to={diagnosticHref(issue)}
 							aria-label={`${issue.resource}: ${issue.message}`}
 							className={cn(
-								"group block rounded-[14px] border border-panel-border! bg-panel-surface/90 p-3.5 no-underline transition-[border-color,background-color] duration-200 min-[769px]:hover:border-panel-border-strong! min-[769px]:hover:bg-panel-elevated focus-visible:outline-2 focus-visible:outline-panel-accent",
+								"group block rounded-xl border border-white/[0.08] bg-[#161b22] p-3.5 no-underline transition-all duration-200 hover:border-red-500/30 hover:bg-[#21262d] focus-visible:outline-2 focus-visible:outline-cyan-500",
 							)}
 						>
 							<div className="flex flex-wrap items-center justify-between gap-2 mb-2">
@@ -93,24 +93,24 @@ export const SystemDiagnostics = ({
 											issue.resource_type,
 										)}
 									</Badge>
-									<span className="text-[12px] font-bold text-panel-text">
+									<span className="text-[12px] font-bold text-white">
 										{issue.resource}
 									</span>
 									<span
 										dir="ltr"
-										className="text-[11px] font-medium text-panel-text-muted tabular-nums [unicode-bidi:isolate]"
+										className="font-mono text-[11px] font-medium text-[#8b949e] tabular-nums [unicode-bidi:isolate]"
 									>
 										{issue.target_id}
 									</span>
 								</div>
-								<span className="inline-flex items-center gap-1 text-[11px] font-semibold text-panel-accent">
+								<span className="inline-flex items-center gap-1 text-[11px] font-semibold text-cyan-400 group-hover:text-cyan-300">
 									<span>{t("diagnostics.openSection")}</span>
 									<ArrowUpRight className="size-3.5" aria-hidden="true" />
 								</span>
 							</div>
 							<p
 								dir="auto"
-								className="font-mono text-[12px] leading-relaxed text-panel-text-secondary whitespace-pre-wrap [word-break:break-word]"
+								className="font-mono text-[12px] leading-relaxed text-[#b1bac4] whitespace-pre-wrap [word-break:break-word]"
 							>
 								{issue.message}
 							</p>

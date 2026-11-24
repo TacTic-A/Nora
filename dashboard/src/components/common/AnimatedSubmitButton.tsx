@@ -52,9 +52,9 @@ export const AnimatedSubmitButton: FC<AnimatedSubmitButtonProps> = ({
 	const isCompact = status === "loading" || status === "error";
 	const targetWidth = status === "success" ? successWidth : isCompact ? compactWidth : "100%";
 	const buttonBg =
-		status === "success" ? "bg-green-500" : status === "error" ? "bg-red-500" : "bg-primary-500";
+		status === "success" ? "bg-emerald-500" : status === "error" ? "bg-red-500" : "bg-cyan-500";
 	const buttonHoverBg =
-		status === "success" ? "hover:bg-green-500" : status === "error" ? "hover:bg-red-500" : "hover:bg-primary-600";
+		status === "success" ? "hover:bg-emerald-600" : status === "error" ? "hover:bg-red-600" : "hover:bg-cyan-600";
 
 	const content = (() => {
 		if (status === "loading") {

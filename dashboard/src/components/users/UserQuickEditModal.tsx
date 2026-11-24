@@ -1,9 +1,8 @@
 import { Button } from "components/ui/button";
 import { Field, FieldLabel } from "components/ui/field";
 import { toast } from "components/ui/sonner";
-import { CircleAlert, CircleCheck, Info, TriangleAlert } from "lucide-react";
+import { Activity, Calendar } from "lucide-react";
 import { cn } from "lib/cn";
-
 
 import { NumericInput } from "components/common/NumericInput";
 import { DateTimePicker } from "components/DateTimePicker";
@@ -81,57 +80,63 @@ export const UserQuickEditModal: FC = () => {
 	const isDataLimit = field === "data_limit";
 
 	return (
-		<AppDialog open={Boolean(quickEditUser)} onClose={onClose} size="sm" title={
+		<AppDialog
+			open={Boolean(quickEditUser)}
+			onClose={onClose}
+			size="sm"
+			icon={isDataLimit ? <Activity className="size-4" /> : <Calendar className="size-4" />}
+			iconVariant={isDataLimit ? "teal" : "amber"}
+			title={
 				isDataLimit
 					? t("usersTable.setDataLimit")
 					: t("usersTable.setExpiry")
-			} contentProps={{ className: "mx-3" }} footerProps={{ className: "gap-3" }} footer={
+			}
+			subtitle={user ? user.username : undefined}
+			contentProps={{ className: "mx-3" }}
+			footerProps={{ className: "gap-3" }}
+			footer={
 				<>
 					<Button onClick={onClose} disabled={loading} variant="outline" size="sm">
 						{t("cancel")}
 					</Button>
-					<Button onClick={save} size="sm" loading={loading}>
+					<Button onClick={save} size="sm" variant="soft-cyan" loading={loading}>
 						{t("save")}
 					</Button>
 				</>
-			}>
-					<div className="flex flex-col items-stretch gap-3">
-						{user && (
-							<p dir="ltr" className="text-[0.875rem] text-panel-text-muted">
-								{user.username}
-							</p>
-						)}
-						{isDataLimit ? (
-							<Field>
-								<FieldLabel>{t("userDialog.dataLimit")}</FieldLabel>
-								<div className="relative flex w-full items-center">
-									<NumericInput
-										min={0}
-										step={1}
-										value={limitGb}
-										onChange={(valueAsString) => setLimitGb(valueAsString)}
-									/>
-									<div className="flex items-center rounded-e-md border border-s-0 border-input bg-muted px-3 text-sm">GB</div>
-								</div>
-								<p className="text-[0.75rem] text-panel-text-muted mt-1">
-									{t("usersTable.unlimitedHint")}
-								</p>
-							</Field>
-						) : (
-							<Field>
-								<FieldLabel>{t("usersTable.expire")}</FieldLabel>
-								<DateTimePicker
-									value={expireDate}
-									onChange={setExpireDate}
-									minDate={new Date()}
-									placeholder={t("usersTable.setExpiry")}
-								/>
-								<p className="text-[0.75rem] text-panel-text-muted mt-1">
-									{t("usersTable.expiryClearHint")}
-								</p>
-							</Field>
-						)}
-					</div>
+			}
+		>
+			<div className="flex flex-col items-stretch gap-4">
+				{isDataLimit ? (
+					<Field>
+						<FieldLabel>{t("userDialog.dataLimit")}</FieldLabel>
+						<div className="relative flex w-full items-center">
+							<NumericInput
+								min={0}
+								step={1}
+								value={limitGb}
+								onChange={(valueAsString) => setLimitGb(valueAsString)}
+							/>
+							<div className="flex h-9 items-center rounded-e-md border border-s-0 border-white/10 bg-white/[0.04] px-3 text-xs text-[#8b949e] font-mono">GB</div>
+						</div>
+						<p className="text-[0.75rem] text-[#8b949e] mt-1">
+							{t("usersTable.unlimitedHint")}
+						</p>
+					</Field>
+				) : (
+					<Field>
+						<FieldLabel>{t("usersTable.expire")}</FieldLabel>
+						<DateTimePicker
+							value={expireDate}
+							onChange={setExpireDate}
+							minDate={new Date()}
+							placeholder={t("usersTable.setExpiry")}
+						/>
+						<p className="text-[0.75rem] text-[#8b949e] mt-1">
+							{t("usersTable.expiryClearHint")}
+						</p>
+					</Field>
+				)}
+			</div>
 		</AppDialog>
 	);
 };

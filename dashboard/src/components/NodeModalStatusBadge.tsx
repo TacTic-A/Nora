@@ -26,19 +26,30 @@ export const NodeModalStatusBadge: FC<UserStatusProps> = ({
 	const { t } = useTranslation();
 	const dateInfo = relativeExpiryDate(expiryDate);
 	const Icon = statusColors[userStatus].icon;
+	const toneClassValue = {
+		active: "badge-soft-teal",
+		connected: "badge-soft-teal",
+		connecting: "badge-soft-amber",
+		expired: "badge-soft-red",
+		limited: "badge-soft-amber",
+		on_hold: "badge-soft-purple",
+		disabled: "badge-soft-gray",
+		error: "badge-soft-red",
+	}[userStatus as string] ?? toneClass(statusColors[userStatus].statusColor);
+
 	return (
 		<>
-			<Badge className={cn(toneClass(statusColors[userStatus].statusColor), cn("rounded-full inline-flex px-3 py-1 items-center justify-center flex-nowrap leading-[1] whitespace-nowrap max-w-full", compact ? "gap-x-1" : "gap-x-2", compact ? "min-w-[64px]!" : "min-w-[72px]!", "rb-status-badge"))}>
+			<Badge className={cn(toneClassValue, "rounded-full inline-flex px-3 py-1 items-center justify-center flex-nowrap leading-[1] whitespace-nowrap max-w-full font-semibold transition-all", compact ? "gap-x-1 min-w-[64px]!" : "gap-x-2 min-w-[72px]!", "rb-status-badge")}>
 				<Icon className={cn("shrink-0", compact ? "w-3" : "w-4")} />
 				{showDetail && (
-					<p className={cn("capitalize font-medium tracking-[0] whitespace-nowrap text-center", compact ? "text-[.7rem]" : "text-[.875rem]", compact ? "leading-[1rem]" : "leading-[1.25rem]", "rb-status-badge-text")}>
+					<p className={cn("capitalize font-semibold tracking-[0] whitespace-nowrap text-center", compact ? "text-[.7rem] leading-[1rem]" : "text-xs leading-[1.25rem]", "rb-status-badge-text")}>
 						{userStatus && t(`nodeModal.status.${userStatus}`)}
 						{extraText && `: ${extraText}`}
 					</p>
 				)}
 			</Badge>
 			{showDetail && expiryDate && (
-				<p className="inline-block text-[0.75rem] font-medium ms-2 text-gray-600 dark:text-gray-400">
+				<p className="inline-block text-xs font-mono ms-2 text-[#8b949e]">
 					{t(dateInfo.status, { time: dateInfo.time })}
 				</p>
 			)}

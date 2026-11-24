@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-NORA_REPO="${NORA_REPO:-norapanel/Nora}"
+NORA_REPO="${NORA_REPO:-TacTic-A/Nora}"
 NORA_REF="${NORA_REF:-master}"
 SCRIPT_URL="${NORA_SCRIPT_URL:-https://raw.githubusercontent.com/${NORA_REPO}/${NORA_REF}/scripts/nora/nora.sh}"
 

@@ -228,19 +228,19 @@ export const AdminPermissionsEditor = ({
 	return (
 		<div className="flex flex-col gap-6">
 			<div className="flex flex-row gap-2 justify-between items-center">
-				<p className="font-semibold">
+				<p className="text-sm font-semibold text-white tracking-tight">
 					{t("admins.permissions.userCapabilities")}
 				</p>
 				{showReset && onReset && (
-					<Button onClick={onReset} disabled={isReadOnly} variant="ghost" size="xs">
+					<Button onClick={onReset} disabled={isReadOnly} variant="ghost" size="xs" className="text-[#8b949e] hover:text-white hover:bg-white/[0.08]">
 						{t("admins.permissions.resetToDefaults")}
 					</Button>
 				)}
 			</div>
 			<div className={cn("grid gap-3", gridColumns)}>
 				{userPermissionKeys.map(({ key, label }) => (
-					<div key={key} className="flex flex-row gap-2 justify-between items-center border rounded-md px-3 py-2 min-w-0!">
-						<p className="text-[0.875rem] flex-1 min-w-0! leading-[1.375]">
+					<div key={key} className="flex flex-row gap-3 justify-between items-center rounded-lg border border-white/[0.08] bg-[#161b22] px-3.5 py-2.5 min-w-0! transition-colors hover:border-white/[0.15]">
+						<p className="text-sm font-medium text-white flex-1 min-w-0! leading-[1.375]">
 							{t(label)}
 						</p>
 						<Switch checked={Boolean(value.users[key])} disabled={isReadOnly} onCheckedChange={(checked: boolean) => updatePermissions("users", key, checked)} className="shrink-0" />
@@ -319,11 +319,11 @@ export const AdminPermissionsEditor = ({
 				</Field>
 {!hideExtendedSections && (
 				<div className="flex flex-col gap-3">
-					<p className="font-semibold">{t("admins.sudo.title")}</p>
+					<p className="text-sm font-semibold text-white tracking-tight">{t("admins.sudo.title")}</p>
 					<div className={cn("grid gap-3", gridColumns)}>
 						{sudoPermissionKeys.map(({ key, label }) => (
-							<div key={key} className="flex flex-row gap-2 justify-between items-center border rounded-md px-3 py-2 min-w-0!">
-								<p className="text-[0.875rem] flex-1 min-w-0!">
+							<div key={key} className="flex flex-row gap-3 justify-between items-center rounded-lg border border-white/[0.08] bg-[#161b22] px-3.5 py-2.5 min-w-0! transition-colors hover:border-white/[0.15]">
+								<p className="text-sm font-medium text-white flex-1 min-w-0!">
 									{t(label)}
 								</p>
 								<Switch checked={Boolean(value.sudo?.[key])} disabled={isReadOnly} onCheckedChange={(checked: boolean) => updatePermissions("sudo", key, checked)} />
@@ -334,13 +334,13 @@ export const AdminPermissionsEditor = ({
 			)}
 			{!hideExtendedSections && (
 				<div className="flex flex-col gap-3">
-					<p className="font-semibold">
+					<p className="text-sm font-semibold text-white tracking-tight">
 						{t("admins.permissions.manageAdminsTitle")}
 					</p>
 					<div className={cn("grid gap-3", gridColumns)}>
 						{adminManagementKeys.map(({ key, label }) => (
-							<div key={key} className="flex flex-row gap-2 justify-between items-center border rounded-md px-3 py-2 min-w-0!">
-								<p className="text-[0.875rem] flex-1 min-w-0! leading-[1.375]">
+							<div key={key} className="flex flex-row gap-3 justify-between items-center rounded-lg border border-white/[0.08] bg-[#161b22] px-3.5 py-2.5 min-w-0! transition-colors hover:border-white/[0.15]">
+								<p className="text-sm font-medium text-white flex-1 min-w-0! leading-[1.375]">
 									{t(label)}
 								</p>
 								<Switch checked={Boolean(value.admin_management[key])} disabled={isReadOnly} onCheckedChange={(checked: boolean) => updatePermissions(
@@ -355,13 +355,13 @@ export const AdminPermissionsEditor = ({
 			)}
 			{!hideExtendedSections && (
 				<div className="flex flex-col gap-3">
-					<p className="font-semibold">
+					<p className="text-sm font-semibold text-white tracking-tight">
 						{t("admins.permissions.sectionAccess")}
 					</p>
 					<div className={cn("grid gap-3", gridColumns)}>
 						{sectionPermissionKeys.map(({ key, label }) => (
-							<div key={key} className="flex flex-row gap-2 justify-between items-center border rounded-md px-3 py-2 min-w-0!">
-								<p className="text-[0.875rem] flex-1 min-w-0! leading-[1.375]">
+							<div key={key} className="flex flex-row gap-3 justify-between items-center rounded-lg border border-white/[0.08] bg-[#161b22] px-3.5 py-2.5 min-w-0! transition-colors hover:border-white/[0.15]">
+								<p className="text-sm font-medium text-white flex-1 min-w-0! leading-[1.375]">
 									{t(label)}
 								</p>
 								<Switch checked={Boolean(value.sections[key])} disabled={isReadOnly} onCheckedChange={(checked: boolean) => updatePermissions("sections", key, checked)} className="shrink-0" />
@@ -371,11 +371,11 @@ export const AdminPermissionsEditor = ({
 				</div>
 			)}
 			<div className="flex flex-col gap-3">
-				<p className="font-semibold">{t("admins.permissions.self.title")}</p>
+				<p className="text-sm font-semibold text-white tracking-tight">{t("admins.permissions.self.title")}</p>
 				<div className={cn("grid gap-3", gridColumns)}>
 					{selfPermissionKeys.map(({ key, label }) => (
-						<div key={key} className="flex flex-row gap-2 justify-between items-center border rounded-md px-3 py-2 min-w-0!">
-							<p className="text-[0.875rem] flex-1 min-w-0! leading-[1.375]">
+						<div key={key} className="flex flex-row gap-3 justify-between items-center rounded-lg border border-white/[0.08] bg-[#161b22] px-3.5 py-2.5 min-w-0! transition-colors hover:border-white/[0.15]">
+							<p className="text-sm font-medium text-white flex-1 min-w-0! leading-[1.375]">
 								{t(label)}
 							</p>
 							<Switch checked={Boolean(value.self_permissions?.[key])} disabled={isReadOnly} onCheckedChange={(checked: boolean) => updatePermissions(

@@ -888,7 +888,7 @@ export function DataTable<TData>({
 											if (event.key !== "Enter" && event.key !== " ") return;
 											event.preventDefault();
 											toggleExpanded();
-										}} className={cn(canExpand ? "cursor-pointer" : "cursor-default", "rb-resource-card")}>
+										}} className={cn(canExpand ? "cursor-pointer" : "cursor-default", "rb-resource-card rounded-xl border border-white/[0.08] bg-[#161b22] p-3.5 shadow-md relative transition-all duration-150 hover:border-white/[0.15]")}>
 										<div className="flex flex-row items-center gap-2.5 min-w-0! rb-resource-card-main">
 											{enableSelection && (
 												<div className="flex items-center shrink-0">
@@ -921,7 +921,7 @@ export function DataTable<TData>({
 											</div>
 										</div>
 										{(isExpanded || hasExpandedRow) && (
-											<div className="rb-resource-expanded">
+											<div className="rb-resource-expanded bg-[#1b2027]/70 border-t border-white/[0.06] rounded-b-xl -mx-3.5 -mb-3.5 p-3.5 mt-2.5">
 												<div data-density={compactDetails ? "compact" : undefined} className="rb-resource-details">
 													{detailColumns.map((column) => (
 														<div key={`${row.id}-${column.id}`} className="rb-resource-meta">
@@ -968,9 +968,9 @@ export function DataTable<TData>({
 					{state}
 				</div>
 			) : (
-				<div className="rb-data-table-wrap">
+				<div className="rb-data-table-wrap relative w-full overflow-x-auto rounded-xl border border-white/[0.08] bg-[#161b22] shadow-xl">
 					<table aria-label={ariaLabel} {...resolvedTableProps} className={cn("w-full border-separate border-spacing-0", tableClassNameValue)}>
-						<thead className="rb-data-table-head">
+						<thead className="rb-data-table-head bg-[#1b2027] border-b border-white/[0.08]">
 							{table.getHeaderGroups().map((headerGroup) => (
 								<tr key={headerGroup.id}>
 									{headerGroup.headers.map((header) => {
@@ -1011,7 +1011,7 @@ export function DataTable<TData>({
 													isSelectColumn || headerAlign === "center"
 														? "true"
 														: undefined
-												} {...config?.headerProps} className={cn("bg-panel-elevated px-6 py-3 text-start text-[0.75rem] font-bold uppercase leading-4 tracking-wider text-panel-text", [
+												} {...config?.headerProps} className={cn("bg-[#1b2027] px-4 py-3 text-start text-xs font-semibold uppercase tracking-wider text-[#8b949e]", [
 													isSelectColumn ? "rb-select-cell" : "",
 													isActionsColumn ? "rb-actions-cell" : "",
 													config?.isPrimary ? "rb-primary-cell" : "",
@@ -1036,7 +1036,7 @@ export function DataTable<TData>({
 														)}
 													</span>
 													{sorted && (
-														<span className="text-[10px] text-panel-text-muted">
+														<span className="text-xs text-cyan-400 font-bold">
 															{sorted === "desc" ? "↓" : "↑"}
 														</span>
 													)}
@@ -1066,7 +1066,7 @@ export function DataTable<TData>({
 													: undefined
 											} onClick={() => onRowClick?.(row.original)} onContextMenu={(event) =>
 												handleTableContextMenu(event, row.original)
-											} className={cn(onRowClick ? "cursor-pointer" : "cursor-default", "rb-data-table-row")}>
+											} className={cn(onRowClick ? "cursor-pointer" : "cursor-default", "rb-data-table-row border-b border-white/[0.06] transition-colors duration-150 hover:bg-[#21262d]/60 data-[selected=true]:bg-cyan-500/10")}>
 											{row.getVisibleCells().map((cell) => {
 												const config = cell.column.columnDef.meta as
 													| DataTableColumn<TData>
@@ -1103,11 +1103,11 @@ export function DataTable<TData>({
 															isSelectColumn || cellAlign === "center"
 																? "true"
 																: undefined
-														}    {...config?.cellProps} className={cn("px-6 py-4 text-[0.875rem] leading-5 text-panel-text", [
+														}    {...config?.cellProps} className={cn("px-4 py-3 text-sm text-[#c9d1d9] align-middle", [
 															isSelectColumn ? "rb-select-cell" : "",
 															isActionsColumn ? "rb-actions-cell" : "",
-															config?.isPrimary ? "rb-primary-cell" : "",
-															config?.isMeta ? "rb-meta-cell" : "",
+															config?.isPrimary ? "rb-primary-cell text-white font-medium" : "",
+															config?.isMeta ? "rb-meta-cell text-xs text-[#8b949e]" : "",
 														].filter(Boolean).join(" "))}>
 														{isSelectColumn || isActionsColumn ? (
 															flexRender(
@@ -1170,13 +1170,13 @@ export function DataTable<TData>({
 						<DropdownMenuContent data-rb-context-menu="" onClick={(event) => event.stopPropagation()} onContextMenu={(event) => {
 								event.preventDefault();
 								event.stopPropagation();
-							}} className="min-w-[220px]! max-w-[calc(100vw_-_24px)] max-h-[min(50vh,_360px)] overflow-y-auto overflow-x-hidden overscroll-contain z-[2500]">
+							}} className="min-w-[220px]! max-w-[calc(100vw_-_24px)] max-h-[min(50vh,_360px)] overflow-y-auto overflow-x-hidden overscroll-contain z-[2500] rounded-xl bg-[#21262d] border border-white/10 p-1.5 shadow-2xl backdrop-blur-md">
 							{orderRowActions(contextMenuActions).map((action) => (
 								<DropdownMenuItem key={action.id} disabled={action.disabled} onSelect={(event) => {
 											event.stopPropagation();
 											closeContextMenu();
 											action.onClick?.();
-										}} className={toneClass(action.color ?? (action.isDanger ? "red.400" : undefined))}>
+										}} className={cn("px-2.5 py-1.5 rounded-lg text-sm font-medium text-[#c9d1d9] hover:bg-white/[0.08] hover:text-white transition-colors cursor-pointer flex items-center gap-2", action.isDanger ? "text-red-400 hover:bg-red-500/15 hover:text-red-300 focus:bg-red-500/15 focus:text-red-300" : toneClass(action.color ?? undefined))}>
 										{action.icon}{action.label}
 									</DropdownMenuItem>
 							))}

@@ -321,12 +321,14 @@ export const DashboardBackupControls: FC<DashboardBackupControlsProps> = ({
 				<DialogContent
 					dir={isRTL ? "rtl" : "ltr"}
 					showCloseButton={false}
-					className="flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-1.5rem)] max-w-[460px] flex-col gap-0 overflow-hidden rounded-[20px] border border-panel-border! bg-panel-surface p-0 text-panel-text shadow-[0_24px_64px_-12px_rgba(0,0,0,0.48)] sm:w-full sm:max-w-[460px]"
+					className="flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-1.5rem)] max-w-[460px] flex-col gap-0 overflow-hidden rounded-[20px] border border-white/[0.08] bg-[#161b22] p-0 text-white shadow-2xl sm:w-full sm:max-w-[460px]"
 				>
-					<DialogHeader className="flex flex-row items-center justify-between gap-3 border-b border-panel-border/70! px-5 py-3.5 text-start">
-						<div className="flex min-w-0 items-center gap-2.5">
-							<Upload className="size-4 shrink-0 text-panel-text-secondary" />
-							<DialogTitle className="truncate text-[14px] font-bold tracking-[-0.01em] text-panel-text">
+					<DialogHeader className="flex flex-row items-center justify-between gap-3 border-b border-white/[0.08] bg-[#161b22]/95 px-5 py-3.5 text-start backdrop-blur-md">
+						<div className="flex min-w-0 items-center gap-3">
+							<div className="flex size-9 shrink-0 items-center justify-center rounded-xl badge-soft-cyan text-cyan-400">
+								<Upload className="size-4" />
+							</div>
+							<DialogTitle className="truncate text-base font-semibold tracking-tight text-white">
 								{t("dashboard.backup.import")}
 							</DialogTitle>
 							<DialogDescription className="sr-only">
@@ -340,7 +342,7 @@ export const DashboardBackupControls: FC<DashboardBackupControlsProps> = ({
 							disabled={importMutation.isPending}
 							onClick={closeDialog}
 							aria-label={t("close")}
-							className="size-8 shrink-0 rounded-[10px] text-panel-text-muted transition-[background-color,color,transform] duration-150 active:scale-[0.95] min-[769px]:hover:bg-panel-elevated min-[769px]:hover:text-panel-text"
+							className="size-8 shrink-0 rounded-lg text-[#8b949e] hover:bg-white/[0.08] hover:text-white"
 						>
 							<X className="size-4" />
 						</Button>
@@ -532,14 +534,13 @@ export const DashboardBackupControls: FC<DashboardBackupControlsProps> = ({
 						</div>
 					</div>
 
-					<DialogFooter className="flex flex-row items-center justify-end gap-2 border-t border-panel-border/70! px-5 py-3.5">
+					<DialogFooter className="flex flex-row items-center justify-end gap-2 border-t border-white/[0.08] bg-[#161b22]/95 px-5 py-3.5 backdrop-blur-md">
 						<Button
 							type="button"
 							onClick={closeDialog}
 							disabled={importMutation.isPending}
-							variant="ghost"
+							variant="outline"
 							size="sm"
-							className="h-9 rounded-[12px] px-4 text-[12px] font-semibold text-panel-text-muted hover:bg-transparent dark:hover:bg-transparent active:scale-[0.97] min-[769px]:hover:bg-panel-elevated min-[769px]:hover:text-panel-text"
 						>
 							{importStage === "completed" ? t("close") : t("cancel")}
 						</Button>
@@ -551,7 +552,6 @@ export const DashboardBackupControls: FC<DashboardBackupControlsProps> = ({
 								variant="destructive"
 								size="sm"
 								loading={importMutation.isPending}
-								className="h-9 rounded-[12px] px-4 text-[12px] font-semibold active:scale-[0.97]"
 							>
 								<Upload className="size-3.5" />
 								<span>{t("dashboard.backup.import")}</span>
@@ -570,12 +570,14 @@ export const DashboardBackupControls: FC<DashboardBackupControlsProps> = ({
 				<DialogContent
 					dir={isRTL ? "rtl" : "ltr"}
 					showCloseButton={false}
-					className="flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-1.5rem)] max-w-[420px] flex-col gap-0 overflow-hidden rounded-[20px] border border-panel-border! bg-panel-surface p-0 text-panel-text shadow-[0_24px_64px_-12px_rgba(0,0,0,0.48)] sm:w-full sm:max-w-[420px]"
+					className="flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-1.5rem)] max-w-[420px] flex-col gap-0 overflow-hidden rounded-[20px] border border-white/[0.08] bg-[#161b22] p-0 text-white shadow-2xl sm:w-full sm:max-w-[420px]"
 				>
-					<DialogHeader className="flex flex-row items-center justify-between gap-3 border-b border-panel-border/70! px-5 py-3.5 text-start">
-						<div className="flex min-w-0 items-center gap-2.5">
-							<Download className="size-4 shrink-0 text-panel-text-secondary" />
-							<DialogTitle className="truncate text-[14px] font-bold tracking-[-0.01em] text-panel-text">
+					<DialogHeader className="flex flex-row items-center justify-between gap-3 border-b border-white/[0.08] bg-[#161b22]/95 px-5 py-3.5 text-start backdrop-blur-md">
+						<div className="flex min-w-0 items-center gap-3">
+							<div className="flex size-9 shrink-0 items-center justify-center rounded-xl badge-soft-cyan text-cyan-400">
+								<Download className="size-4" />
+							</div>
+							<DialogTitle className="truncate text-base font-semibold tracking-tight text-white">
 								{t("dashboard.backup.exportTitle")}
 							</DialogTitle>
 							<DialogDescription className="sr-only">
@@ -589,7 +591,7 @@ export const DashboardBackupControls: FC<DashboardBackupControlsProps> = ({
 							disabled={exportMutation.isPending}
 							onClick={closeDialog}
 							aria-label={t("close")}
-							className="size-8 shrink-0 rounded-[10px] text-panel-text-muted transition-[background-color,color,transform] duration-150 active:scale-[0.95] min-[769px]:hover:bg-panel-elevated min-[769px]:hover:text-panel-text"
+							className="size-8 shrink-0 rounded-lg text-[#8b949e] hover:bg-white/[0.08] hover:text-white"
 						>
 							<X className="size-4" />
 						</Button>
@@ -781,14 +783,13 @@ export const DashboardBackupControls: FC<DashboardBackupControlsProps> = ({
 						</div>
 					</div>
 
-					<DialogFooter className="flex flex-row items-center justify-end gap-2 border-t border-panel-border/70! px-5 py-3.5">
+					<DialogFooter className="flex flex-row items-center justify-end gap-2 border-t border-white/[0.08] bg-[#161b22]/95 px-5 py-3.5 backdrop-blur-md">
 						<Button
 							type="button"
 							onClick={closeDialog}
 							disabled={exportMutation.isPending}
-							variant="ghost"
+							variant="outline"
 							size="sm"
-							className="h-9 rounded-[12px] px-4 text-[12px] font-semibold text-panel-text-muted hover:bg-transparent dark:hover:bg-transparent active:scale-[0.97] min-[769px]:hover:bg-panel-elevated min-[769px]:hover:text-panel-text"
 						>
 							{exportDone ? t("close") : t("cancel")}
 						</Button>
@@ -796,8 +797,8 @@ export const DashboardBackupControls: FC<DashboardBackupControlsProps> = ({
 							type="button"
 							onClick={() => exportMutation.mutate(exportScope)}
 							size="sm"
+							variant="soft-cyan"
 							loading={exportMutation.isPending}
-							className="h-9 rounded-[12px] px-4 text-[12px] font-semibold active:scale-[0.97]"
 						>
 							<Download className="size-3.5" />
 							<span>{t("dashboard.backup.download")}</span>

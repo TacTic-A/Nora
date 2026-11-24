@@ -27,8 +27,8 @@ var (
 
 var (
 	// PanelUpdateRepo and NodeUpdateRepo are the repositories updates are read from.
-	PanelUpdateRepo = firstEnv("NORA_UPDATE_REPO", firstEnv("NORA_UPDATE_REPO", "norapanel/Nora"))
-	NodeUpdateRepo  = firstEnv("NORA_NODE_UPDATE_REPO", firstEnv("NORA_NODE_UPDATE_REPO", "norapanel/Nora-node"))
+	PanelUpdateRepo = firstEnv("NORA_UPDATE_REPO", "TacTic-A/Nora")
+	NodeUpdateRepo  = firstEnv("NORA_NODE_UPDATE_REPO", "TacTic-A/Nora-node")
 )
 
 // versionSwitchFloor is the first stable panel release that runs database schema v60.
@@ -156,7 +156,7 @@ func (s *MaintenanceService) Info(ctx context.Context) (MaintenanceInfo, error) 
 	return MaintenanceInfo{
 		Panel:      panel,
 		Node:       nil,
-		NodeUpdate: s.Updates.Status(ctx, "norapanel/Nora-node", nil, ""),
+		NodeUpdate: s.Updates.Status(ctx, NodeUpdateRepo, nil, ""),
 	}, nil
 }
 
@@ -1001,7 +1001,7 @@ func (c *GitHubUpdateChecker) buildDevVersionsFromWorkflow(ctx context.Context, 
 }
 
 func (c *GitHubUpdateChecker) latestDev(ctx context.Context, repo string) (*ReleaseInfo, error) {
-	if strings.EqualFold(strings.TrimSpace(repo), "norapanel/Nora-node") {
+	if strings.EqualFold(strings.TrimSpace(repo), NodeUpdateRepo) || strings.EqualFold(strings.TrimSpace(repo), "norapanel/Nora-node") {
 		if info := c.latestNodeDevBinary(ctx, repo); info != nil {
 			return info, nil
 		}

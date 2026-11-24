@@ -53,23 +53,23 @@ export const UserUsageBar: FC<UserUsageBarProps> = ({
 	const percentLabel = isUnlimited ? "∞" : `${Math.round(percent)}%`;
 
 	const track = (
-		<div className="flex-[1_1_auto] min-w-0! rb-user-usage-track">
+		<div className="flex-[1_1_auto] min-w-0! h-1.5 rounded-sm bg-white/[0.08] overflow-hidden rb-user-usage-track">
 			<div style={{
 					width: fillWidth,
 					backgroundImage: usageToneGradients[tone],
-				}} className="rb-user-usage-fill" />
+				}} className="h-full rounded-sm transition-all duration-300 rb-user-usage-fill" />
 		</div>
 	);
 
 	if (variant === "compact") {
 		return (
-			<div data-tone={tone} data-variant={variant} className="flex flex-col gap-1 w-full max-w-full justify-center overflow-hidden rb-user-usage">
+			<div data-tone={tone} data-variant={variant} className="flex flex-col gap-1 w-full max-w-full justify-center overflow-hidden rb-user-usage font-mono tabular-nums">
 				{track}
-				<div dir="ltr" className="flex flex-row items-center justify-between gap-2 text-[0.75rem] w-full min-w-0! whitespace-nowrap">
+				<div dir="ltr" className="flex flex-row items-center justify-between gap-2 text-xs w-full min-w-0! whitespace-nowrap text-[#c9d1d9]">
 					<p className="truncate min-w-0! [unicode-bidi:isolate] rb-user-usage-pair">
 						{formatUsagePair(used, total)}
 					</p>
-					<p className="shrink-0 rb-user-usage-percent">
+					<p className="shrink-0 text-[#8b949e] rb-user-usage-percent">
 						{percentLabel}
 					</p>
 				</div>
@@ -79,13 +79,13 @@ export const UserUsageBar: FC<UserUsageBarProps> = ({
 
 	if (variant === "stacked") {
 		return (
-			<div data-tone={tone} data-variant={variant} dir="ltr" className="flex flex-col gap-1 w-full min-w-0! rb-user-usage">
+			<div data-tone={tone} data-variant={variant} dir="ltr" className="flex flex-col gap-1 w-full min-w-0! rb-user-usage font-mono tabular-nums">
 				{track}
-				<div className="flex items-center justify-between gap-3 h-[16px] text-[0.75rem] whitespace-nowrap">
+				<div className="flex items-center justify-between gap-3 h-[16px] text-xs whitespace-nowrap text-[#c9d1d9]">
 					<p className="truncate rb-user-usage-pair">
 						{formatBytes(used)}
 					</p>
-					<p className={cn("text-panel-text-muted truncate", isUnlimited ? "text-[1rem]" : "", "rb-user-usage-pair")}>
+					<p className={cn("text-[#8b949e] truncate", isUnlimited ? "text-sm" : "", "rb-user-usage-pair")}>
 						{isUnlimited ? "∞" : formatBytes(total)}
 					</p>
 				</div>
@@ -100,23 +100,23 @@ export const UserUsageBar: FC<UserUsageBarProps> = ({
 	// the left and lifetime usage on the right, wrapping gracefully if the
 	// column gets too narrow to fit both on one line.
 	return (
-		<div data-tone={tone} data-variant={variant} className="flex flex-col gap-0.5 w-full max-w-full overflow-hidden rb-user-usage">
-			<div className="flex items-center gap-0 w-full min-w-0!">
+		<div data-tone={tone} data-variant={variant} className="flex flex-col gap-1 w-full max-w-full overflow-hidden rb-user-usage font-mono tabular-nums">
+			<div className="flex items-center gap-1.5 w-full min-w-0!">
 				{track}
-				<p dir="ltr" style={{ flex: `0 0 ${PERCENT_SLOT_WIDTH}` }} className="text-start rb-user-usage-percent">
+				<p dir="ltr" style={{ flex: `0 0 ${PERCENT_SLOT_WIDTH}` }} className="text-start text-xs font-semibold text-white rb-user-usage-percent">
 					{percentLabel}
 				</p>
 			</div>
 			<div className="flex items-center w-full min-w-0! gap-2">
-				<div dir="ltr" className="flex items-center flex-[1_1_auto] min-w-0! flex-wrap gap-x-3 gap-y-0.5 text-[0.75rem]">
-					<p className="truncate min-w-0! flex-[0_1_auto] text-start [unicode-bidi:isolate] rb-user-usage-pair">
+				<div dir="ltr" className="flex items-center flex-[1_1_auto] min-w-0! flex-wrap gap-x-3 gap-y-0.5 text-xs text-[#8b949e]">
+					<p className="truncate min-w-0! flex-[0_1_auto] text-start text-[#c9d1d9] [unicode-bidi:isolate] rb-user-usage-pair">
 						{formatUsagePair(used, total)}
 						{resetLabel ? ` · ${resetLabel}` : ""}
 					</p>
 					{lifetimeUsed !== undefined && (
-						<p className="text-panel-text-muted truncate shrink-0 ms-auto text-end [unicode-bidi:isolate]">
+						<p className="text-[#8b949e] truncate shrink-0 ms-auto text-end [unicode-bidi:isolate]">
 							{lifetimeLabel ? `${lifetimeLabel}: ` : ""}
-							<span className="font-semibold text-panel-text-secondary">
+							<span className="font-semibold text-white">
 								{formatBytes(lifetimeUsed)}
 							</span>
 						</p>

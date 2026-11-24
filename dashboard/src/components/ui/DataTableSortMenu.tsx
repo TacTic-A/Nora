@@ -68,8 +68,8 @@ export const DataTableSortMenu = ({
 	onSortingChange,
 }: DataTableSortMenuProps) => {
 	const { t } = useTranslation();
-	const mutedColor = "text-gray-500 dark:text-gray-400";
-	const hoverBg = "hover:bg-gray-100 dark:hover:bg-whiteAlpha-100";
+	const mutedColor = "text-[#8b949e]";
+	const hoverBg = "hover:bg-white/[0.05]";
 	const activeSort = sorting[0];
 
 	const directionLabels = (type: DataTableSortType): [string, string] => {
@@ -94,16 +94,16 @@ export const DataTableSortMenu = ({
 		<Popover>
 			<PopoverTrigger asChild>
 				<div className="relative inline-flex shrink-0">
-					<Button aria-label={t("dataTable.sortOptions", "Sort options")} variant="outline" size="sm" className={cn("size-8 p-0", "h-9 w-9 rounded-full")}>{<ArrowUpDown className="size-4" />}</Button>
+					<Button aria-label={t("dataTable.sortOptions", "Sort options")} variant="outline" size="sm" className={cn("size-8 p-0 rounded-lg border-white/[0.08] bg-[#161b22] text-[#8b949e] hover:bg-[#21262d] hover:text-white")}>{<ArrowUpDown className="size-4" />}</Button>
 					{activeSort ? (
-						<div className="top-[-2px] absolute end-[-2px] w-[8px] h-[8px] rounded-full bg-primary-400 pointer-events-none" />
+						<div className="top-[-2px] absolute end-[-2px] w-[8px] h-[8px] rounded-full bg-cyan-400 pointer-events-none shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
 					) : null}
 				</div>
 			</PopoverTrigger>
 			
-				<PopoverContent className="w-[300px] rounded-xl z-[2000]">
-					<div className={cn("p-3", "p-2")}>
-						<p className={cn("px-1 pb-1.5 text-[0.75rem] font-semibold", mutedColor)}>
+				<PopoverContent className="w-[300px] rounded-xl z-[2000] bg-[#21262d] border border-white/10 p-1.5 shadow-2xl backdrop-blur-md">
+					<div className="p-2">
+						<p className={cn("px-1 pb-1.5 text-xs font-semibold uppercase tracking-wider", mutedColor)}>
 							{t("sort.title", "Sort by")}
 						</p>
 						<div className="flex flex-col gap-0.5">
@@ -111,15 +111,15 @@ export const DataTableSortMenu = ({
 								const [ascLabel, descLabel] = directionLabels(option.type);
 								const isActive = activeSort?.id === option.id;
 								return (
-									<div key={option.id} className={cn("flex flex-row items-center justify-between gap-2 px-1.5 py-1 rounded-md", hoverBg)}>
-										<p className={cn("text-[0.75rem] truncate min-w-0!", isActive ? "font-semibold" : "font-medium")}>
+									<div key={option.id} className={cn("flex flex-row items-center justify-between gap-2 px-1.5 py-1 rounded-lg", hoverBg)}>
+										<p className={cn("text-xs truncate min-w-0!", isActive ? "font-semibold text-white" : "font-medium text-[#c9d1d9]")}>
 											{option.label}
 										</p>
 										<div className="flex flex-row items-center gap-1 shrink-0">
 											{[false, true].map((desc) => {
 												const selected = isActive && activeSort?.desc === desc;
 												return (
-													<Button key={String(desc)} aria-pressed={selected} onClick={() => applySort(option.id, desc)} size="xs" className="h-[22px] px-2 text-[0.75rem] font-medium rounded-full" variant={selected ? "default" : "outline"}>{createElement(desc ? ArrowDown : ArrowUp, { className: "size-3" })}
+													<Button key={String(desc)} aria-pressed={selected} onClick={() => applySort(option.id, desc)} size="xs" className={cn("h-[22px] px-2 text-xs font-mono font-medium rounded-lg", selected ? "bg-cyan-500/15 text-cyan-400 border border-cyan-500/30" : "border-white/[0.08] bg-transparent text-[#8b949e] hover:bg-white/[0.05] hover:text-white")} variant={selected ? "default" : "outline"}>{createElement(desc ? ArrowDown : ArrowUp, { className: "size-3" })}
 														{desc ? descLabel : ascLabel}
 													</Button>
 												);
@@ -130,7 +130,7 @@ export const DataTableSortMenu = ({
 							})}
 						</div>
 						{activeSort ? (
-							<Button onClick={() => onSortingChange([])} variant="ghost" size="xs" className="w-full mt-2">{<X className="size-3.5" />}
+							<Button onClick={() => onSortingChange([])} variant="ghost" size="xs" className="w-full mt-2 text-xs text-[#8b949e] hover:text-white">{<X className="size-3.5" />}
 								{t("sort.clear", "Clear sort")}
 							</Button>
 						) : null}

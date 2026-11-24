@@ -1479,30 +1479,30 @@ export const InboundFormModal: FC<Props> = ({
 				if (!next) onClose();
 			}}
 		>
-			<DialogContent className="flex max-h-[min(860px,calc(100dvh-8rem))] flex-col gap-0 overflow-clip p-0 sm:max-w-4xl max-md:inset-x-3 max-md:top-3 max-md:bottom-3 max-md:max-h-none max-md:w-auto max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0 inbound-form-modal">
+			<DialogContent className="flex max-h-[min(880px,calc(100dvh-4rem))] flex-col gap-0 overflow-clip p-0 sm:max-w-4xl lg:max-w-5xl rounded-[20px] border border-white/[0.08] bg-[#161b22] text-white shadow-2xl max-md:inset-x-3 max-md:top-3 max-md:bottom-3 max-md:max-h-none max-md:w-auto max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0 inbound-form-modal">
 				<Tabs value={String(activeTab)} onValueChange={(value) => setActiveTab(Number(value))} className="flex min-h-0 flex-1 flex-col">
-					<div className="flex flex-col gap-2 border-b bg-background px-4 pb-2 pt-3 pe-12 md:gap-3 md:px-5 md:pb-3 md:pt-4">
+					<div className="sticky top-0 z-20 flex flex-col gap-2 border-b border-white/[0.06] bg-[#161b22]/95 backdrop-blur-md px-6 pb-3 pt-4 pe-12 md:gap-3">
 						<div className="flex min-w-0 items-center gap-3">
-							<div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
-								<Network className="size-4" />
+							<div className="flex size-9 shrink-0 items-center justify-center rounded-xl badge-soft-cyan text-cyan-400 [&_svg]:size-5">
+								<Network className="size-5" />
 							</div>
 							<div className="min-w-0">
-								<DialogTitle className="truncate text-base font-semibold">
+								<DialogTitle className="truncate text-base font-semibold text-white tracking-tight">
 									{mode === "create" ? t("inbounds.add") : mode === "clone" ? t("inbounds.cloneTitle") : t("inbounds.edit")}
 								</DialogTitle>
-								<DialogDescription className="truncate text-xs text-muted-foreground">
+								<DialogDescription className="truncate text-xs text-[#8b949e]">
 									{protocolLabel(String(currentProtocol))}
 								</DialogDescription>
 							</div>
 						</div>
-						<TabsList className="grid w-full grid-cols-3">
+						<TabsList className="grid w-full grid-cols-3 bg-[#0d1117] border border-white/[0.08] p-1">
 							<TabsTrigger value="0">{t("form")}</TabsTrigger>
 							<TabsTrigger value="1">{t("json")}</TabsTrigger>
 							<TabsTrigger value="2">{t("inbounds.targets")}</TabsTrigger>
 						</TabsList>
 						{activeTab === 0 ? <InboundSectionNav containerRef={formBodyRef} resetKey={activeTab} /> : null}
 					</div>
-					<div ref={formBodyRef} className="min-h-0 flex-1 overflow-y-auto px-4 py-3 md:px-5 md:py-4">
+					<div ref={formBodyRef} className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
 							<TabsContent value="0" forceMount className="mt-0 data-[state=inactive]:hidden">
 								<div className="flex flex-col items-stretch gap-6">
 									<div className="flex flex-col gap-3 xray-dialog-section" data-form-section="basic" data-form-section-title={t("pages.outbound.basicSettings")}>
@@ -6773,7 +6773,7 @@ export const InboundFormModal: FC<Props> = ({
 							</TabsContent>
 					</div>
 				</Tabs>
-				<DialogFooter className="flex-row flex-wrap items-center justify-between gap-2 border-t px-5 py-3">
+				<DialogFooter className="sticky bottom-0 z-20 flex-row flex-wrap items-center justify-between gap-2 border-t border-white/[0.08] bg-[#161b22]/95 backdrop-blur-md px-6 py-3.5">
 					{isEditMode && onDelete ? (
 						<div className="flex flex-row flex-wrap items-center gap-2">
 							<DeleteConfirmDialog
@@ -6794,14 +6794,14 @@ export const InboundFormModal: FC<Props> = ({
 						</div>
 					) : null}
 					<div className="ms-auto flex flex-row flex-wrap items-center gap-2">
-						<button type="button" onClick={onClose} className={buttonVariants({ variant: "ghost", size: "sm" })}>
+						<button type="button" onClick={onClose} className={buttonVariants({ variant: "outline", size: "sm" })}>
 							{t("hostsPage.cancel")}
 						</button>
 						<button
 							type="button"
 							onClick={handleSubmit(submitForm)}
 							disabled={isSubmitting || hasBlockingErrorsWithJson}
-							className={buttonVariants({ size: "sm" })}
+							className={buttonVariants({ variant: "soft-cyan", size: "sm" })}
 						>
 							{isEditMode ? t("save") : isCloneMode ? t("inbounds.cloneSubmit") : t("create")}
 						</button>

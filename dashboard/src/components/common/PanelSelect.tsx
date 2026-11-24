@@ -330,18 +330,18 @@ export const PanelSelect = forwardRef<HTMLInputElement, PanelSelectProps>(
 		);
 		const buttonText = selectedLabels[0] || placeholder || "";
 
-		const borderColor = "border-input";
-		const focusBorderColor = "focus-within:border-ring";
-		const focusRing = "focus-within:ring-[3px] focus-within:ring-ring/50";
-		const hoverBorder = "";
-		const controlBg = "bg-transparent dark:bg-input/30";
-		const menuBg = "bg-white dark:bg-surface-dark";
-		const hoverBg = "hover:bg-blackAlpha-50 dark:hover:bg-whiteAlpha-100";
-		const selectedBg = "bg-primary-50 dark:bg-whiteAlpha-100";
-		const tagBg = "bg-primary-50 dark:bg-whiteAlpha-100";
-		const tagColor = "text-primary-700 dark:text-primary-200";
-		const mutedColor = "text-muted-foreground";
-		const invalidBorderColor = "border-red-500! dark:border-red-300!";
+		const borderColor = "border-white/10";
+		const focusBorderColor = "focus-within:border-cyan-400";
+		const focusRing = "focus-within:ring-[2px] focus-within:ring-cyan-400/25";
+		const hoverBorder = "hover:border-white/20";
+		const controlBg = "bg-[#0d1117]";
+		const menuBg = "bg-[#21262d] border border-white/10";
+		const hoverBg = "hover:bg-white/[0.08]";
+		const selectedBg = "bg-white/[0.08] text-cyan-400";
+		const tagBg = "badge-soft-cyan";
+		const tagColor = "text-cyan-300";
+		const mutedColor = "text-[#6e7681]";
+		const invalidBorderColor = "border-red-500! dark:border-red-400!";
 		const controlHeight = "min-h-9";
 		const disabledState = isDisabled || Boolean(disabled);
 		const resolvedBorderColor = isInvalid ? invalidBorderColor : borderColor;
@@ -471,7 +471,7 @@ export const PanelSelect = forwardRef<HTMLInputElement, PanelSelectProps>(
 			} = {},
 		) => {
 			const selected = Boolean(opts.selected);
-			const rowClass = cn("rounded-md text-sm min-h-[30px] px-2 py-1", selected ? selectedBg : "bg-transparent", opts.disabled ? "opacity-55" : "opacity-100", selected ? "hover:bg-primary-50 dark:hover:bg-whiteAlpha-100" : hoverBg);
+			const rowClass = cn("rounded-md text-sm min-h-[30px] px-2 py-1", selected ? selectedBg : "bg-transparent", opts.disabled ? "opacity-55" : "opacity-100", selected ? "hover:bg-white/[0.12]" : hoverBg);
 
 			if (mode === "single") {
 				return (
@@ -525,7 +525,7 @@ export const PanelSelect = forwardRef<HTMLInputElement, PanelSelectProps>(
 										</p>
 									</div>
 									{selected && mode === "single" && (
-										<div className="text-primary-500 shrink-0">
+										<div className="text-cyan-400 shrink-0">
 											<Check />
 										</div>
 									)}
@@ -534,7 +534,7 @@ export const PanelSelect = forwardRef<HTMLInputElement, PanelSelectProps>(
 												event.preventDefault();
 												event.stopPropagation();
 												removeValue(option.value);
-											}} className="rounded-full text-red-500 p-0.5 hover:bg-red-50 dark:hover:bg-whiteAlpha-100">
+											}} className="rounded-full text-red-400 p-0.5 hover:bg-white/[0.08]">
 											<X />
 										</button>
 									)}

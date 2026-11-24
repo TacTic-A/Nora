@@ -44,17 +44,17 @@ export const BulkActionBar: FC<BulkActionBarProps> = ({
 	const isVisible = selectedCount > 0 && !isModalOpenNow;
 
 	return (
-		<div data-visible={isVisible ? "true" : undefined} aria-hidden={!isVisible} {...props} className={cn(isRTL ? "end-[12px] md:end-[calc(var(--rb-sidebar-offset,_0px)_+_16px)] start-4" : "start-[12px] md:start-[calc(var(--rb-sidebar-offset,_0px)_+_16px)] end-4", "fixed bottom-[84px] md:bottom-[16px] z-40 bg-panel-surface border border-panel-border-strong! shadow-[0_-12px_30px_rgba(0,_0,_0,_0.28)] rounded-[6px] px-4 md:px-6 py-4 [transition:opacity_140ms_ease,_transform_140ms_ease,_border-color_140ms_ease,_background-color_140ms_ease]", isVisible ? "opacity-100" : "opacity-0", isVisible ? "[transform:translateY(0)]" : "[transform:translateY(10px)]", isVisible ? "pointer-events-auto" : "pointer-events-none", "rb-bulk-action-bar")}>
+		<div data-visible={isVisible ? "true" : undefined} aria-hidden={!isVisible} {...props} className={cn(isRTL ? "end-[12px] md:end-[calc(var(--rb-sidebar-offset,_0px)_+_16px)] start-4" : "start-[12px] md:start-[calc(var(--rb-sidebar-offset,_0px)_+_16px)] end-4", "fixed bottom-[84px] md:bottom-[16px] z-40 bg-[#161b22]/95 backdrop-blur-md border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-xl px-4 md:px-6 py-3.5 [transition:opacity_140ms_ease,_transform_140ms_ease,_border-color_140ms_ease,_background-color_140ms_ease]", isVisible ? "opacity-100" : "opacity-0", isVisible ? "[transform:translateY(0)]" : "[transform:translateY(10px)]", isVisible ? "pointer-events-auto" : "pointer-events-none", "rb-bulk-action-bar")}>
 			<div className="flex items-center justify-between gap-4 flex-wrap">
 				<div className="flex flex-row items-center gap-4">
-					<p className="font-extrabold tracking-[0] uppercase">
+					<p className="font-mono text-sm font-semibold text-white tracking-wide">
 						{selectedLabel ??
 								t("usersTable.selectedCount", {
 									count: selectedCount,
 								})}
 					</p>
 					{onClear && (
-						<Button onClick={onClear} variant="link" size="xs" className="text-panel-text-muted">
+						<Button onClick={onClear} variant="link" size="xs" className="text-xs text-[#8b949e] hover:text-white transition-colors">
 							{t("clear")}
 						</Button>
 					)}

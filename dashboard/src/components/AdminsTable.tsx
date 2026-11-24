@@ -79,44 +79,51 @@ const TrafficIcon = withClass(CirclePlus, "[stroke-width:2px] w-3 h-3");
 
 const AdminStatusBadge: FC<{ status: AdminStatus }> = ({ status }) => {
 	const { t } = useTranslation();
+	const isActive = status === AdminStatus.Active;
 
 	return (
-		<p className={cn("text-[0.875rem] font-semibold capitalize", status === AdminStatus.Active ? "text-green-400" : "text-red-400")}>
-			{status === AdminStatus.Active
-				? t("status.active")
-				: t("admins.disabledLabel")}
-		</p>
+		<span
+			data-slot="badge"
+			className={cn(
+				"inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold capitalize tracking-wide transition-all",
+				isActive ? "badge-soft-teal text-teal-400 border border-teal-500/30" : "badge-soft-red text-red-400 border border-red-500/30"
+			)}
+		>
+			{isActive ? t("status.active") : t("admins.disabledLabel")}
+		</span>
 	);
 };
 
 const AdminRoleBadge: FC<{ role: AdminRole }> = ({ role }) => {
 	const { t } = useTranslation();
-	const roleStyles = {
+	const roleMeta = {
 		[AdminRole.FullAccess]: {
-			color: "text-yellow-800",
-			darkColor: "dark:text-yellow-200",
+			badgeClass: "badge-soft-amber text-amber-400 border border-amber-500/30",
 			label: t("admins.roles.fullAccess"),
 		},
 		[AdminRole.Sudo]: {
-			color: "text-purple-800",
-			darkColor: "dark:text-purple-200",
+			badgeClass: "badge-soft-purple text-purple-300 border border-purple-500/30",
 			label: t("admins.roles.sudo"),
 		},
 		[AdminRole.Reseller]: {
-			color: "text-blue-800",
-			darkColor: "dark:text-blue-200",
+			badgeClass: "badge-soft-cyan text-cyan-400 border border-cyan-500/30",
 			label: t("admins.roles.reseller"),
 		},
 		[AdminRole.Standard]: {
-			color: "text-gray-800",
-			darkColor: "dark:text-gray-200",
+			badgeClass: "badge-soft-gray text-gray-400 border border-gray-500/30",
 			label: t("admins.roles.standard"),
 		},
 	}[role];
 
 	return (
-		<span className={cn(roleStyles.color, roleStyles.darkColor, "text-[0.75rem] font-medium")}>
-			{roleStyles.label}
+		<span
+			data-slot="badge"
+			className={cn(
+				"inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold tracking-wide transition-all",
+				roleMeta.badgeClass
+			)}
+		>
+			{roleMeta.label}
 		</span>
 	);
 };
@@ -660,7 +667,7 @@ export const AdminsTable: FC<AdminsTableProps> = ({
 				mobilePriority: 0,
 				mobileMetaLabel: t("username"),
 				cell: (admin) => (
-					<p dir="ltr" className="font-semibold truncate max-w-[10rem] [unicode-bidi:isolate] text-panel-text">
+					<p dir="ltr" className="font-medium text-white truncate max-w-[10rem] [unicode-bidi:isolate]">
 						{admin.username}
 					</p>
 				),
@@ -692,7 +699,7 @@ export const AdminsTable: FC<AdminsTableProps> = ({
 				mobilePriority: 3,
 				mobileMetaLabel: t("groups.group"),
 				cell: (admin) => (
-					<p className={cn("text-[0.875rem] truncate max-w-full", admin.group ? "text-panel-text" : "text-panel-text-muted")}>
+					<p className={cn("text-xs truncate max-w-full", admin.group ? "text-[#c9d1d9]" : "text-[#8b949e]")}>
 						{admin.group?.name ?? "–"}
 					</p>
 				),
@@ -734,9 +741,9 @@ export const AdminsTable: FC<AdminsTableProps> = ({
 				mobilePriority: 3,
 				mobileMetaLabel: t("admins.details.activeLabel"),
 				cell: (admin) => (
-					<p dir="ltr" className="text-[0.875rem] font-semibold [unicode-bidi:isolate]">
+					<p dir="ltr" className="text-xs font-semibold font-mono tabular-nums [unicode-bidi:isolate] text-white">
 						{formatCount(admin.active_users ?? 0, locale)}
-						<span className="text-panel-text-muted font-medium">
+						<span className="text-[#8b949e] font-medium">
 							/{formatCount(admin.users_count ?? 0, locale)}
 						</span>
 					</p>
@@ -754,7 +761,7 @@ export const AdminsTable: FC<AdminsTableProps> = ({
 				mobilePriority: 4,
 				mobileMetaLabel: t("admins.details.onlineLabel"),
 				cell: (admin) => (
-					<p className="text-[0.875rem] text-green-600 dark:text-green-400 font-semibold">
+					<p className="text-xs font-semibold font-mono tabular-nums text-teal-400">
 						{formatCount(admin.online_users ?? 0, locale)}
 					</p>
 				),
@@ -814,11 +821,11 @@ export const AdminsTable: FC<AdminsTableProps> = ({
 				cell: (admin) => {
 					const speed = adminSpeeds[String(admin.id)];
 					return (
-						<div dir="ltr" className="flex flex-col gap-0 whitespace-nowrap text-[0.75rem] [font-variant-numeric:tabular-nums] [unicode-bidi:isolate]">
+						<div dir="ltr" className="flex flex-col gap-0 whitespace-nowrap text-xs font-mono tabular-nums [unicode-bidi:isolate]">
 							<p className="text-teal-400">
 								↑ {formatBytes(speed?.upload_speed ?? 0)}/s
 							</p>
-							<p className="text-blue-400">
+							<p className="text-cyan-400">
 								↓ {formatBytes(speed?.download_speed ?? 0)}/s
 							</p>
 						</div>

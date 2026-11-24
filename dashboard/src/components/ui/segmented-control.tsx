@@ -23,7 +23,7 @@ export function SegmentedControl<T extends string>({
 		<div
 			role="radiogroup"
 			aria-label={label}
-			className="inline-flex w-fit max-w-full flex-wrap items-center gap-1 rounded-lg border bg-muted/40 p-1"
+			className="inline-flex w-fit max-w-full flex-wrap items-center gap-1 rounded-lg border border-white/[0.08] bg-[#0d1117] p-1"
 		>
 			{options.map((option) => {
 				const active = option.value === value;
@@ -38,8 +38,8 @@ export function SegmentedControl<T extends string>({
 						className={cn(
 							"h-7 min-w-14 flex-auto rounded-md px-3 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40",
 							active
-								? "bg-primary text-primary-foreground shadow-xs"
-								: "text-muted-foreground hover:bg-accent hover:text-foreground",
+								? "bg-[#21262d] text-white border border-white/[0.08] shadow-xs"
+								: "text-[#8b949e] hover:bg-white/[0.04] hover:text-white",
 						)}
 					>
 						{option.label}

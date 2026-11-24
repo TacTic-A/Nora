@@ -42,7 +42,7 @@ export function DataTableColumnMenu<TData>({
 			<Tooltip>
 <TooltipTrigger asChild>
 				<DropdownMenuTrigger asChild>
-					<Button aria-label={t("next.table.toggleColumns")} size="sm" variant="outline" className="h-9 w-9 rounded-full">
+					<Button aria-label={t("next.table.toggleColumns")} size="sm" variant="outline" className="h-9 w-9 rounded-lg border-white/[0.08] bg-[#161b22] text-[#8b949e] hover:bg-[#21262d] hover:text-white">
 						<SlidersHorizontal className="w-[16px]" />
 					</Button>
 				</DropdownMenuTrigger>
@@ -50,19 +50,19 @@ export function DataTableColumnMenu<TData>({
 <TooltipContent>{t("next.table.toggleColumns")}</TooltipContent>
 </Tooltip>
 			
-				<DropdownMenuContent className="z-[1800] min-w-[220px]! bg-panel-surface border-panel-border!">
+				<DropdownMenuContent className="z-[1800] min-w-[220px]! bg-[#21262d] border border-white/10 rounded-xl shadow-2xl p-1.5 backdrop-blur-md">
 					<div className="flex flex-col gap-2 px-3 py-2">
-						<p className="text-[0.75rem] text-panel-text-muted uppercase tracking-[0.08em]">
+						<p className="text-xs text-[#8b949e] uppercase font-semibold tracking-wider">
 							{t("next.table.toggleColumns")} · {visibleCount}/{choosable.length}
 						</p>
 						{choosable.map((column) => {
 							const id = `column-${column.id}`;
 							const checked = visibility[column.id] !== false;
 							return (
-								<label key={column.id} className="flex cursor-pointer items-center gap-2 text-sm"><Checkbox id={id} checked={checked} onCheckedChange={(checked: boolean) => onChange({
+								<label key={column.id} className="flex cursor-pointer items-center gap-2 text-sm text-[#c9d1d9] hover:text-white transition-colors py-1"><Checkbox id={id} checked={checked} onCheckedChange={(checked: boolean) => onChange({
 											...visibility,
 											[column.id]: checked,
-										})} /><span><span className="text-[0.875rem]">
+										})} /><span><span className="text-sm font-medium">
 										{column.menuLabel}
 									</span></span></label>
 							);

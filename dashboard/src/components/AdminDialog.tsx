@@ -1101,8 +1101,8 @@ export const AdminDialog: FC = () => {
 				</div>
 			</FormField>
 
-			<div className="flex flex-col gap-3 rounded-md border p-3 sm:col-span-2">
-				<span className="text-sm font-medium">{t("admins.limitsSection")}</span>
+			<div className="flex flex-col gap-3 rounded-xl border border-white/[0.08] bg-[#0d1117]/60 p-4 sm:col-span-2 transition-colors hover:border-white/[0.15]">
+				<span className="text-sm font-semibold text-white tracking-tight">{t("admins.limitsSection")}</span>
 				{!isFullAccessRole ? (
 					<CheckRow checked={usePerServiceTrafficLimits} onChange={(next) => setValue("use_service_traffic_limits", next, { shouldDirty: true })}>
 						{t("admins.usePerServiceTrafficLimits")}
@@ -1160,9 +1160,9 @@ export const AdminDialog: FC = () => {
 				) : null}
 			</div>
 
-			<div className="flex flex-col gap-3 rounded-md border p-3 sm:col-span-2">
+			<div className="flex flex-col gap-3 rounded-xl border border-white/[0.08] bg-[#0d1117]/60 p-4 sm:col-span-2 transition-colors hover:border-white/[0.15]">
 				<div className="flex items-center justify-between gap-3">
-					<span className="text-sm font-medium">{t("services.title")}</span>
+					<span className="text-sm font-semibold text-white tracking-tight">{t("services.title")}</span>
 					<Badge variant="secondary">
 						{selectedServices.length} / {serviceOptions.length}
 					</Badge>
@@ -1199,8 +1199,10 @@ export const AdminDialog: FC = () => {
 									aria-pressed={isSelected}
 									onClick={() => handleServiceToggle(service.id)}
 									className={cn(
-										"flex items-center justify-between gap-2 rounded-md border px-3 py-2 text-start transition-colors",
-										isSelected ? "border-primary bg-accent" : "hover:bg-accent/50",
+										"flex items-center justify-between gap-2 rounded-lg border px-3 py-2 text-start transition-colors",
+										isSelected
+											? "border-cyan-500/50 bg-cyan-500/10 text-cyan-300"
+											: "border-white/[0.08] bg-[#161b22] text-white hover:border-white/[0.15]",
 									)}
 								>
 									<span className="min-w-0">
@@ -1209,7 +1211,7 @@ export const AdminDialog: FC = () => {
 											{t("admins.serviceStats", { users: service.user_count ?? 0, hosts: service.host_count ?? 0 })}
 										</span>
 									</span>
-									{isSelected ? <Badge>{t("services.selected")}</Badge> : null}
+									{isSelected ? <Badge variant="secondary" className="bg-cyan-500/20 text-cyan-300 border-0">{t("services.selected")}</Badge> : null}
 								</button>
 							);
 						})
@@ -1282,26 +1284,26 @@ export const AdminDialog: FC = () => {
 		>
 			<DialogContent
 				dir={isRTL ? "rtl" : "ltr"}
-				className="flex max-h-[min(720px,calc(100dvh-10rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl max-md:inset-x-3 max-md:top-[4.5rem] max-md:bottom-24 max-md:max-h-none max-md:w-auto max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0"
+				className="flex max-h-[min(760px,calc(100dvh-6rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl rounded-[20px] border border-white/[0.08] bg-[#161b22] text-white shadow-2xl max-md:inset-x-3 max-md:top-[4.5rem] max-md:bottom-24 max-md:max-h-none max-md:w-auto max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0"
 			>
 				<form onSubmit={handleFormSubmit} className="flex min-h-0 flex-1 flex-col">
-					<DialogHeader className="flex-row items-center gap-3 border-b px-5 py-3.5 pe-12 text-start sm:text-start">
-						<div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+					<DialogHeader className="flex-row items-center gap-3 border-b border-white/[0.08] bg-[#161b22]/95 px-5 py-3.5 pe-12 text-start sm:text-start backdrop-blur-md">
+						<div className="flex size-9 shrink-0 items-center justify-center rounded-xl badge-soft-cyan text-cyan-400">
 							{mode === "create" ? <ShieldPlus className="size-4" /> : <UserPen className="size-4" />}
 						</div>
 						<div className="min-w-0">
-							<DialogTitle className="truncate text-base">
+							<DialogTitle className="truncate text-base font-semibold text-white tracking-tight">
 								{mode === "create" ? t("admins.addAdminTitle") : t("admins.editAdminTitle")}
 							</DialogTitle>
 							{mode === "edit" && admin ? (
-								<DialogDescription className="truncate">{admin.username}</DialogDescription>
+								<DialogDescription className="truncate text-xs text-[#8b949e]">{admin.username}</DialogDescription>
 							) : null}
 						</div>
 					</DialogHeader>
 
 					<Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as AdminDialogTab)} className="flex min-h-0 flex-1 flex-col">
-						<div className="border-b px-5 pt-2.5 pb-2.5">
-							<TabsList className="w-full">
+						<div className="border-b border-white/[0.08] px-5 pt-2.5 pb-2.5">
+							<TabsList className="w-full bg-[#0d1117] border border-white/[0.08] p-1">
 								<TabsTrigger value="details">{t("details")}</TabsTrigger>
 								<TabsTrigger value="permissions">{t("admins.permissionsTabLabel")}</TabsTrigger>
 								{mode === "edit" && admin ? <TabsTrigger value="history">{t("adminHistory.tab")}</TabsTrigger> : null}
@@ -1322,18 +1324,18 @@ export const AdminDialog: FC = () => {
 						</div>
 					</Tabs>
 
-					<DialogFooter className="flex-row flex-wrap items-center justify-between gap-2 border-t px-5 py-3">
+					<DialogFooter className="sticky bottom-0 z-20 flex-row flex-wrap items-center justify-between gap-2 border-t border-white/[0.08] bg-[#161b22]/95 px-5 py-3 backdrop-blur-md">
 						<button
 							type="button"
 							onClick={handleCloseAdminDialog}
-							className={buttonVariants({ variant: "ghost", size: "sm" })}
+							className={buttonVariants({ variant: "outline", size: "sm" })}
 						>
 							{t("cancel")}
 						</button>
 						<button
 							type="submit"
 							disabled={isSubmitting || submitStatus === "loading"}
-							className={cn(buttonVariants({ size: "sm" }), "ms-auto")}
+							className={cn(buttonVariants({ size: "sm" }), "ms-auto bg-cyan-500 hover:bg-cyan-600 text-white font-medium shadow-xs shadow-cyan-500/20")}
 						>
 							{submitLabel}
 						</button>
