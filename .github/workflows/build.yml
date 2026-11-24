@@ -67,7 +67,8 @@ jobs:
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           set -euo pipefail
-          tags="ghcr.io/${{ github.repository_owner }}/nora:latest"$'\n'"ghcr.io/${{ github.repository_owner }}/nora:${GITHUB_REF_NAME}"
+          owner_lower=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          tags="ghcr.io/${owner_lower}/nora:latest"$'\n'"ghcr.io/${owner_lower}/nora:${GITHUB_REF_NAME}"
           dockerhub_enabled=false
           if [[ -n "${DOCKERHUB_USERNAME}" && -n "${DOCKERHUB_TOKEN}" ]]; then
             dockerhub_enabled=true
@@ -94,7 +95,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          tags="ghcr.io/${{ github.repository_owner }}/nora:latest"$'\n'"ghcr.io/${{ github.repository_owner }}/nora:${GITHUB_REF_NAME}"
+          owner_lower=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          tags="ghcr.io/${owner_lower}/nora:latest"$'\n'"ghcr.io/${owner_lower}/nora:${GITHUB_REF_NAME}"
           if [[ "${{ steps.dockerhub_login.outcome }}" == "success" ]]; then
             tags="${tags}"$'\n'"${{ secrets.DOCKERHUB_USERNAME }}/nora:latest"$'\n'"${{ secrets.DOCKERHUB_USERNAME }}/nora:${GITHUB_REF_NAME}"
           fi
