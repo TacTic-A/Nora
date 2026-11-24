@@ -13,7 +13,7 @@ const buttonVariants = cva(
 				default:
 					"bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 active:scale-[0.98]",
 				primary:
-					"bg-cyan-500 text-white shadow-xs hover:bg-cyan-600 active:scale-[0.98] focus-visible:ring-cyan-500/50",
+					"bg-[var(--rb-panel-accent)] text-white shadow-xs hover:bg-[var(--rb-panel-accent-hover)] active:scale-[0.98] focus-visible:ring-[var(--rb-panel-accent)]/50",
 				destructive:
 					"bg-red-500/15 border border-red-500/30 text-[#f87171] shadow-xs hover:bg-red-500/25 active:scale-[0.98] focus-visible:ring-red-500/30",
 				outline:
@@ -23,7 +23,7 @@ const buttonVariants = cva(
 				ghost:
 					"text-[#b1bac4] hover:bg-white/[0.06] hover:text-white active:scale-[0.98]",
 				link:
-					"text-cyan-400 underline-offset-4 hover:underline active:scale-[0.98]",
+					"text-[var(--rb-panel-accent)] underline-offset-4 hover:underline active:scale-[0.98]",
 				soft:
 					"badge-soft-cyan hover:bg-cyan-500/25 active:scale-[0.98] shadow-xs",
 				"soft-cyan":

@@ -306,8 +306,8 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 							collapsed ? "ps-4 pe-4" : "ps-3 pe-2.5",
 							showAccentBar
 								? isRTL
-									? "bg-gradient-to-l from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-[3px] border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.12)]"
-									: "bg-gradient-to-r from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-[3px] border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.12)]"
+									? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
+									: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
 								: isGroupActive
 									? "bg-transparent font-bold text-[var(--rb-panel-text)]"
 									: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
@@ -316,7 +316,7 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 						<span
 							className={cn(
 								"inline-flex size-[18px] shrink-0 items-center justify-center transition-colors",
-								isGroupActive ? "text-cyan-400 drop-shadow-[0_0_6px_rgba(6,182,212,0.4)]" : "text-slate-400",
+								isGroupActive ? "text-[var(--rb-panel-accent)] drop-shadow-[0_0_6px_color-mix(in_srgb,var(--rb-panel-accent)_40%,transparent)]" : "text-slate-400",
 							)}
 						>
 							<GroupIcon className="size-[18px] shrink-0" />
@@ -385,17 +385,17 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 										"relative flex h-[34px] items-center gap-2.5 rounded-[10px] px-2.5 text-xs no-underline transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] min-[769px]:hover:bg-[var(--rb-panel-elevated)]",
 										subActive
 											? isRTL
-												? "bg-gradient-to-l from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-2 border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.12)]"
-												: "bg-gradient-to-r from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-2 border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.12)]"
+												? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-2 border-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
+												: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-2 border-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
 											: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
 									)}
 								>
-									<SubIcon className={cn("size-4 shrink-0", subActive ? "text-cyan-400" : "text-slate-400")} />
+									<SubIcon className={cn("size-4 shrink-0", subActive ? "text-[var(--rb-panel-accent)]" : "text-slate-400")} />
 									<span className="min-w-0 flex-1 truncate">{sub.title}</span>
 									{isNotif && unreadCount > 0 ? (
 										<span
 											dir="ltr"
-											className="inline-flex h-[17px] min-w-[17px]! shrink-0 items-center justify-center rounded-full bg-cyan-500 px-1 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
+											className="inline-flex h-[17px] min-w-[17px]! shrink-0 items-center justify-center rounded-full bg-[var(--rb-panel-accent)] px-1 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
 										>
 											{unreadCount > 99 ? "99+" : unreadCount}
 										</span>
@@ -434,20 +434,20 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 											"relative flex h-[34px] items-center gap-2.5 rounded-[10px] px-2.5 text-xs no-underline transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none select-none active:scale-[0.98] min-[769px]:hover:bg-[var(--rb-panel-elevated)]",
 											subActive
 												? isRTL
-													? "bg-gradient-to-l from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-2 border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.12)]"
-													: "bg-gradient-to-r from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-2 border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.12)]"
+													? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-2 border-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
+													: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-2 border-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
 												: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
 										)}
 									>
 										{subActive ? (
-											<span className="pointer-events-none absolute -inset-s-[11.5px] top-1/2 h-3.5 w-[2px] -translate-y-1/2 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.6)]" />
+											<span className="pointer-events-none absolute -inset-s-[11.5px] top-1/2 h-3.5 w-[2px] -translate-y-1/2 rounded-full bg-[var(--rb-panel-accent)] shadow-[0_0_6px_color-mix(in_srgb,var(--rb-panel-accent)_60%,transparent)]" />
 										) : null}
-										<SubIcon className={cn("size-4 shrink-0", subActive ? "text-cyan-400" : "text-slate-400")} />
+										<SubIcon className={cn("size-4 shrink-0", subActive ? "text-[var(--rb-panel-accent)]" : "text-slate-400")} />
 										<span className="min-w-0 flex-1 truncate">{sub.title}</span>
 										{isNotif && unreadCount > 0 ? (
 											<span
 												dir="ltr"
-												className="inline-flex h-[17px] min-w-[17px]! shrink-0 items-center justify-center rounded-full bg-cyan-500 px-1 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
+												className="inline-flex h-[17px] min-w-[17px]! shrink-0 items-center justify-center rounded-full bg-[var(--rb-panel-accent)] px-1 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
 											>
 												{unreadCount > 99 ? "99+" : unreadCount}
 											</span>
@@ -785,7 +785,7 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 												)}
 											>
 												<span className="flex items-center truncate px-3 text-[10.5px] font-bold tracking-[0.08em] uppercase text-[var(--rb-panel-text-muted)]">
-													<span className="inline-block h-[10px] w-[3px] rounded-[2px] bg-gradient-to-r from-cyan-400 to-teal-400 me-2 shrink-0" />
+													<span className="inline-block h-[10px] w-[3px] rounded-[2px] bg-[var(--rb-panel-accent)] me-2 shrink-0" />
 													{section.title}
 												</span>
 											</div>
@@ -819,15 +819,15 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 																			collapsed ? "ps-4 pe-4" : "ps-3 pe-2.5",
 																			isActive
 																				? isRTL
-																					? "bg-gradient-to-l from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-[3px] border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.12)]"
-																					: "bg-gradient-to-r from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-[3px] border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.12)]"
+																					? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
+																					: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
 																				: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
 																		)}
 																	>
 																		<span className="relative inline-flex size-[18px] shrink-0 items-center justify-center">
-																			<ItemIcon className={cn("size-[18px] transition-colors", isActive ? "text-cyan-400 drop-shadow-[0_0_6px_rgba(6,182,212,0.4)]" : "text-slate-400")} />
+																			<ItemIcon className={cn("size-[18px] transition-colors", isActive ? "text-[var(--rb-panel-accent)] drop-shadow-[0_0_6px_color-mix(in_srgb,var(--rb-panel-accent)_40%,transparent)]" : "text-slate-400")} />
 																			{showBadge && collapsed ? (
-																				<span className="absolute -top-1 -end-1 size-2 rounded-full border-[1.5px] border-[var(--rb-panel-sidebar)] bg-cyan-400" />
+																				<span className="absolute -top-1 -end-1 size-2 rounded-full border-[1.5px] border-[var(--rb-panel-sidebar)] bg-[var(--rb-panel-accent)]" />
 																			) : null}
 																		</span>
 

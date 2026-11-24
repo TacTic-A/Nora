@@ -59,7 +59,7 @@ const TAB_ICONS: Record<string, ElementType> = {
 };
 
 const DOCK_CYAN_TINT =
-	"bg-gradient-to-r from-cyan-500/20 via-cyan-500/15 to-cyan-500/20 border border-cyan-400/40 text-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.25)]";
+	"bg-gradient-to-r from-[var(--rb-panel-accent)]/20 via-[var(--rb-panel-accent)]/15 to-[var(--rb-panel-accent)]/20 border border-[var(--rb-panel-accent)]/40 text-[var(--rb-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--rb-panel-accent)_25%,transparent)]";
 
 const DOCK_SURFACE_CLASS =
 	"border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)]/95 backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.55)]";
@@ -615,7 +615,7 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 								const tabButtonClass = cn(
 									"relative z-[1] h-auto min-h-12 min-w-0 flex-1 select-none rounded-[16px] px-0 hover:bg-transparent focus:bg-transparent active:bg-transparent",
 									isActive
-										? "text-cyan-400"
+										? "text-[var(--rb-panel-accent)]"
 										: "text-slate-400",
 								);
 
@@ -641,20 +641,20 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 													className={cn(
 														"relative z-[1] size-5 transition-colors duration-200",
 														isSelected
-															? "text-cyan-400 drop-shadow-[0_0_6px_rgba(6,182,212,0.5)]"
+															? "text-[var(--rb-panel-accent)] drop-shadow-[0_0_6px_color-mix(in_srgb,var(--rb-panel-accent)_50%,transparent)]"
 															: "text-slate-400",
 													)}
 													strokeWidth={1.75}
 												/>
 												{item.key === "notifications" && unread > 0 ? (
-													<span className="absolute top-0.5 end-2 z-[2] size-2 rounded-full border border-[var(--rb-panel-surface)] bg-cyan-400" />
+													<span className="absolute top-0.5 end-2 z-[2] size-2 rounded-full border border-[var(--rb-panel-surface)] bg-[var(--rb-panel-accent)]" />
 												) : null}
 											</div>
 											<span
 												className={cn(
 													"max-w-full truncate px-1 text-center text-[10px] leading-[1.1] transition-colors duration-200",
 													isSelected
-														? "font-bold text-cyan-400"
+														? "font-bold text-[var(--rb-panel-accent)]"
 														: "font-medium text-slate-400",
 												)}
 											>
@@ -770,24 +770,24 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 																						"relative flex min-h-[38px] w-full items-center gap-2.5 overflow-hidden rounded-[12px] px-2.5 text-start text-[13px] transition-[background-color,color,transform] duration-150 outline-none select-none active:scale-[0.98] active:bg-[#21262d]",
 																						entrySelected
 																							? isRTL
-																								? "bg-gradient-to-l from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-[3px] border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.12)]"
-																								: "bg-gradient-to-r from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-[3px] border-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.12)]"
+																								? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
+																								: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
 																							: "bg-transparent font-medium text-slate-400",
 																					)}
 																				>
-																					<EntryIcon className={cn("size-[18px] shrink-0", entrySelected ? "text-cyan-400" : "text-slate-400")} />
+																					<EntryIcon className={cn("size-[18px] shrink-0", entrySelected ? "text-[var(--rb-panel-accent)]" : "text-slate-400")} />
 																					<span className="min-w-0 flex-1 truncate">
 																						{navEntry.title}
 																					</span>
 																					{isNotifEntry && unread > 0 ? (
 																						<span
 																							dir="ltr"
-																							className="inline-flex h-[18px] min-w-[18px] shrink-0 items-center justify-center rounded-full bg-cyan-500 px-1.5 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
+																							className="inline-flex h-[18px] min-w-[18px] shrink-0 items-center justify-center rounded-full bg-[var(--rb-panel-accent)] px-1.5 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
 																						>
 																							{unread > 99 ? "99+" : unread}
 																						</span>
 																					) : showBadge ? (
-																						<span className="inline-flex size-4 shrink-0 items-center justify-center rounded-full bg-cyan-500 text-slate-950 font-bold">
+																						<span className="inline-flex size-4 shrink-0 items-center justify-center rounded-full bg-[var(--rb-panel-accent)] text-slate-950 font-bold">
 																							<BellRing className="size-2.5" />
 																						</span>
 																					) : null}
@@ -837,8 +837,8 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 																						"relative flex min-h-[38px] w-full items-center justify-between gap-2.5 overflow-hidden rounded-[12px] px-2.5 text-start text-[13px] transition-[background-color,color,transform] duration-150 outline-none select-none active:scale-[0.98] active:bg-[#21262d]",
 																						isGroupActive && !isGroupOpen
 																							? isRTL
-																								? "bg-gradient-to-l from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-[3px] border-cyan-400"
-																								: "bg-gradient-to-r from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-[3px] border-cyan-400"
+																								? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)]"
+																								: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)]"
 																							: isGroupActive
 																								? "bg-transparent font-bold text-[#f0f6fc]"
 																								: "bg-transparent font-medium text-slate-400",
@@ -849,7 +849,7 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 																							className={cn(
 																								"size-[18px] shrink-0",
 																								isGroupActive &&
-																									"text-cyan-400",
+																									"text-[var(--rb-panel-accent)]",
 																							)}
 																						/>
 																						<span className="truncate">
@@ -915,15 +915,15 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 																												"relative flex min-h-[34px] w-full items-center gap-2.5 rounded-[10px] px-2.5 text-start text-xs transition-[background-color,color,transform] duration-150 outline-none select-none active:scale-[0.98] active:bg-[#21262d]",
 																												subSelected
 																													? isRTL
-																														? "bg-gradient-to-l from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-2 border-cyan-400"
-																														: "bg-gradient-to-r from-cyan-500/15 via-cyan-500/8 to-transparent font-bold text-cyan-400 border-s-2 border-cyan-400"
+																														? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-2 border-[var(--rb-panel-accent)]"
+																														: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-2 border-[var(--rb-panel-accent)]"
 																													: "bg-transparent font-medium text-slate-400",
 																											)}
 																										>
 																											{subSelected ? (
-																												<span className="pointer-events-none absolute -inset-s-[11.5px] top-1/2 h-3.5 w-[2px] -translate-y-1/2 rounded-full bg-cyan-400" />
+																												<span className="pointer-events-none absolute -inset-s-[11.5px] top-1/2 h-3.5 w-[2px] -translate-y-1/2 rounded-full bg-[var(--rb-panel-accent)]" />
 																											) : null}
-																											<SubIcon className={cn("size-4 shrink-0", subSelected ? "text-cyan-400" : "text-slate-400")} />
+																											<SubIcon className={cn("size-4 shrink-0", subSelected ? "text-[var(--rb-panel-accent)]" : "text-slate-400")} />
 																											<span className="min-w-0 flex-1 truncate">
 																												{sub.title}
 																											</span>
@@ -931,7 +931,7 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 																											unread > 0 ? (
 																												<span
 																													dir="ltr"
-																													className="inline-flex h-[17px] min-w-[17px] shrink-0 items-center justify-center rounded-full bg-cyan-500 px-1 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
+																													className="inline-flex h-[17px] min-w-[17px] shrink-0 items-center justify-center rounded-full bg-[var(--rb-panel-accent)] px-1 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
 																												>
 																													{unread > 99
 																														? "99+"

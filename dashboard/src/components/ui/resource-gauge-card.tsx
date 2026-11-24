@@ -44,7 +44,7 @@ export function ResourceGaugeCard({
 			? "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]"
 			: safePercent >= 70
 				? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
-				: "bg-teal-500 shadow-[0_0_8px_rgba(45,212,191,0.5)]";
+				: "bg-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_50%,transparent)]";
 
 	const topAccentColor = {
 		cyan: "via-cyan-500/40",

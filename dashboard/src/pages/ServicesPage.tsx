@@ -1755,7 +1755,7 @@ const ServicesPage: FC = () => {
 						</div>
 						<div className="flex shrink-0 items-center justify-end gap-1.5">
 							<Button aria-label={t("refresh")} onClick={() => void fetchServices(listFilters)} variant="ghost" size="sm" loading={isServicesLoading} className="size-8 p-0 text-[#8b949e] hover:bg-white/[0.08] hover:text-white rounded-lg">{<RefreshCw className="w-[16px]" />}</Button>
-							<Button onClick={openCreateDialog} size="sm" className="h-[36px] px-3 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white font-semibold">
+							<Button onClick={openCreateDialog} size="sm" className="h-[36px] px-3 rounded-lg bg-[var(--rb-panel-accent)] hover:bg-[var(--rb-panel-accent-hover)] text-white font-semibold">
 								<Plus className="w-[18px]" />
 								{t("services.addService")}
 							</Button>

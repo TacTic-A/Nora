@@ -74,6 +74,7 @@ const THEME_OPTIONS: Array<{
 ];
 
 const ACCENT_OPTIONS: AccentOption[] = [
+	{ key: "cyan", label: "Neon Cyan", color: "#06b6d4", hover: "#22d3ee" },
 	{ key: "blue", label: "Blue", color: "#2563eb", hover: "#3b82f6" },
 	{
 		key: "crimson",
@@ -205,13 +206,13 @@ const normalizeTheme = (value?: string | null): ThemeMode =>
 const normalizeAccent = (value?: string | null) =>
 	ACCENT_OPTIONS.some((option) => option.key === value)
 		? (value as string)
-		: "blue";
+		: "cyan";
 
 const getStoredAccent = () => {
 	try {
 		return normalizeAccent(localStorage.getItem(ACCENT_KEY));
 	} catch {
-		return "blue";
+		return "cyan";
 	}
 };
 

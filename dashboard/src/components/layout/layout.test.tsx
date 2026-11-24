@@ -284,7 +284,7 @@ describe("Milestone 2: Shell, Layout & Navigation", () => {
 			});
 
 			const cyberBars = container.querySelectorAll(
-				".bg-gradient-to-r.from-cyan-400.to-teal-400",
+				'[data-nav-section] span.inline-block.w-\\[3px\\]',
 			);
 			expect(cyberBars.length).toBeGreaterThan(0);
 		});

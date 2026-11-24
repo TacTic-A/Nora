@@ -9,7 +9,7 @@ function Checkbox({ className, checked, ...props }: React.ComponentProps<typeof 
 			data-slot="checkbox"
 			checked={checked}
 			className={cn(
-				"flex size-4.5 shrink-0 items-center justify-center rounded-md border border-[var(--rb-panel-border-strong)] bg-[var(--rb-panel-surface)] text-[var(--rb-panel-text)] shadow-xs outline-none transition-all focus-visible:ring-[2px] focus-visible:ring-cyan-400/25 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-cyan-500 data-[state=checked]:bg-cyan-500 data-[state=checked]:text-white data-[state=indeterminate]:border-cyan-500 data-[state=indeterminate]:bg-cyan-500 data-[state=indeterminate]:text-white",
+				"flex size-4.5 shrink-0 items-center justify-center rounded-md border border-[var(--rb-panel-border-strong)] bg-[var(--rb-panel-surface)] text-[var(--rb-panel-text)] shadow-xs outline-none transition-all focus-visible:ring-[2px] focus-visible:ring-[var(--rb-panel-accent)]/25 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-[var(--rb-panel-accent)] data-[state=checked]:bg-[var(--rb-panel-accent)] data-[state=checked]:text-white data-[state=indeterminate]:border-[var(--rb-panel-accent)] data-[state=indeterminate]:bg-[var(--rb-panel-accent)] data-[state=indeterminate]:text-white",
 				className,
 			)}
 			{...props}

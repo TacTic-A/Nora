@@ -1060,7 +1060,7 @@ const ResourceCard: FC<{
 			? "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]"
 			: safe >= 70
 				? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
-				: "bg-teal-500 shadow-[0_0_8px_rgba(45,212,191,0.5)]";
+				: "bg-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_50%,transparent)]";
 
 	const topAccentColor = {
 		cyan: "via-cyan-500/40",
@@ -1842,7 +1842,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 															ease: [0.16, 1, 0.3, 1],
 															duration: 0.22,
 														}}
-														className="pointer-events-none absolute inset-0 z-[1] rounded-md bg-cyan-500 shadow-[0_1px_4px_rgba(6,182,212,0.35)]"
+														className="pointer-events-none absolute inset-0 z-[1] rounded-md bg-[var(--rb-panel-accent)] shadow-[0_1px_4px_color-mix(in_srgb,var(--rb-panel-accent)_35%,transparent)]"
 													/>
 												)}
 												<Button
@@ -2026,7 +2026,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 													ease: [0.16, 1, 0.3, 1],
 													duration: 0.22,
 												}}
-												className="pointer-events-none absolute inset-0 z-[1] rounded-md border border-cyan-500/40 bg-cyan-500/20 shadow-[0_0_10px_rgba(6,182,212,0.25)]"
+												className="pointer-events-none absolute inset-0 z-[1] rounded-md border border-[var(--rb-panel-accent)]/40 bg-[var(--rb-panel-accent)]/20 shadow-[0_0_10px_color-mix(in_srgb,var(--rb-panel-accent)_25%,transparent)]"
 											/>
 										)}
 										<Button
@@ -2037,7 +2037,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 											className={cn(
 												"relative z-[2] h-[22px] rounded-md bg-transparent! px-2.5 text-[11px] font-semibold transition-colors active:scale-[0.97]",
 												active
-													? "text-cyan-400! min-[769px]:hover:text-cyan-300!"
+													? "text-[var(--rb-panel-accent)]! min-[769px]:hover:text-[var(--rb-panel-accent-hover)]!"
 													: "text-[#8b949e] min-[769px]:hover:text-white",
 											)}
 										>
