@@ -158,7 +158,7 @@ export const DashboardMaintenanceControls: FC<DashboardMaintenanceControlsProps>
 		queryKey: ["dashboard-maintenance-info"],
 		queryFn: () => fetch<MaintenanceInfo>("/maintenance/info", { timeout: 8000 }),
 		enabled: canMaintain || canBackUp,
-		refetchOnWindowFocus: false,
+		refetchOnWindowFocus: true,
 		staleTime: 60 * 1000,
 		refetchInterval: 2 * 60 * 1000,
 		retry: false,

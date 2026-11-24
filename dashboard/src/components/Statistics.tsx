@@ -1415,7 +1415,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 		queryKey: ["dashboard-maintenance-info"],
 		queryFn: () =>
 			fetch<MaintenanceInfo>("/maintenance/info", { timeout: 8000 }),
-		refetchOnWindowFocus: false,
+		refetchOnWindowFocus: true,
 		staleTime: 60 * 1000,
 		refetchInterval: 2 * 60 * 1000,
 		retry: false,
