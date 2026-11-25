@@ -1994,6 +1994,12 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 				</div>
 			</SectionCard>
 
+			<div
+				className={cn(
+					"rb-dashboard-grid-guard grid grid-cols-1 gap-3 min-[769px]:gap-4 items-stretch",
+					canSeeGlobal && systemData.admin_overview ? "min-[769px]:grid-cols-2" : "",
+				)}
+			>
 			<SectionCard
 				title={
 					<div className="flex items-center gap-2.5">
@@ -2191,6 +2197,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 					</div>
 				</SectionCard>
 			)}
+			</div>
 
 			<HistoryModal
 				open={Boolean(activeHistoryPayload)}

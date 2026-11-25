@@ -583,13 +583,38 @@ const removeReverseFromConfig = (config: any, reverse: ReverseRow) => {
 const SettingsSection: FC<{
 	title: string;
 	children: ReactNode;
-}> = ({ title, children }) => {
-	const headerBg = "bg-gray-50 dark:bg-whiteAlpha-100";
+	alwaysOpen?: boolean;
+	className?: string;
+}> = ({ title, children, alwaysOpen = false, className }) => {
+	const headerBg = "bg-gray-50/80 dark:bg-whiteAlpha-100/80";
 	const panelBg = "bg-white dark:bg-surface-dark";
 	const borderColor = "border-gray-200! dark:border-whiteAlpha-300!";
+
+	if (alwaysOpen) {
+		return (
+			<section
+				className={cn(
+					"border rounded-xl overflow-hidden flex flex-col shadow-xs",
+					borderColor,
+					panelBg,
+					className,
+				)}
+			>
+				<div className={cn("px-3.5 md:px-4 py-2.5 border-b", borderColor, headerBg)}>
+					<p className="font-semibold text-[0.875rem] md:text-[0.95rem] tracking-tight">
+						{title}
+					</p>
+				</div>
+				<div className="flex flex-col items-stretch gap-0 flex-1">
+					{children}
+				</div>
+			</section>
+		);
+	}
+
 	return (
 		<Accordion type="single" collapsible>
-			<AccordionItem value="section" className={cn("border rounded-md overflow-hidden", borderColor, panelBg)}>
+			<AccordionItem value="section" className={cn("border rounded-md overflow-hidden", borderColor, panelBg, className)}>
 					<AccordionTrigger className={cn("px-3 md:px-4 py-2.5", headerBg)}>
 						<div className="flex-1 text-start">
 							<p className="font-semibold text-[0.875rem] md:text-[1rem]">
@@ -618,7 +643,7 @@ const SettingRow: FC<{
 	const descriptionColor = "text-gray-500 dark:text-whiteAlpha-600";
 	const dividerColor = "border-t-gray-100! dark:border-t-whiteAlpha-200!";
 	return (
-		<div className={cn("grid grid-cols-[1fr] md:grid-cols-[minmax(220px,_32%)_1fr] gap-2 md:gap-4 px-3 md:px-4 py-3 border-t first:border-t-0 items-center", dividerColor)}>
+		<div className={cn("grid grid-cols-1 sm:grid-cols-[minmax(140px,_38%)_1fr] gap-2 sm:gap-3 px-3.5 md:px-4 py-2.5 border-t first:border-t-0 items-center", dividerColor)}>
 			<div className="min-w-0!">
 				<FieldLabel htmlFor={controlId} className={cn("text-[0.875rem] font-semibold", description ? "mb-1" : "mb-0", labelColor)}>
 					{label}
@@ -4226,9 +4251,9 @@ export const CoreSettingsPage: FC = () => {
 			<div className="mt-2 md:mt-3">
 				{activeTab === 0 && (
 					<div className="p-0 mt-3">
-						<div className="flex flex-col gap-4 items-stretch">
-							<div className="flex flex-col gap-3 items-stretch">
-								<SettingsSection title={t("pages.xray.serverIPs")}>
+						<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+							<div className="flex flex-col gap-4 items-stretch min-w-0">
+								<SettingsSection title={t("pages.xray.serverIPs")} alwaysOpen>
 									<SettingRow label="IPv4" controlId="server-ipv4">
 										{(_controlId) => (
 											<CompactTextWithCopy
@@ -4244,7 +4269,7 @@ export const CoreSettingsPage: FC = () => {
 										)}
 									</SettingRow>
 								</SettingsSection>
-								<SettingsSection title={t("pages.xray.generalConfigs")}>
+								<SettingsSection title={t("pages.xray.generalConfigs")} alwaysOpen>
 									<SettingRow
 										label={t("pages.xray.FreedomStrategy")}
 										controlId="freedom-domain-strategy"
@@ -4252,7 +4277,7 @@ export const CoreSettingsPage: FC = () => {
 										{(id) => (
 											<Select id={id} size="sm" value={freedomDomainStrategy} onChange={(event) =>
 													handleFreedomDomainStrategyChange(event.target.value)
-												} disabled={freedomOutboundIndex === -1} className="max-w-[220px]">
+												} disabled={freedomOutboundIndex === -1} className="w-full max-w-[240px]">
 												<option value="">{t("common.default")}</option>
 												{[
 													"AsIs",
@@ -4278,7 +4303,7 @@ export const CoreSettingsPage: FC = () => {
 												name="config.routing.domainStrategy"
 												control={form.control}
 												render={({ field }) => (
-													<Select {...field} id={id} size="sm" className="max-w-[220px]">
+													<Select {...field} id={id} size="sm" className="w-full max-w-[240px]">
 														{["AsIs", "IPIfNonMatch", "IPOnDemand"].map((s) => (
 															<option key={s} value={s}>
 																{s}
@@ -4304,18 +4329,18 @@ export const CoreSettingsPage: FC = () => {
 														value={field.value ?? ""}
 														onChange={(event) => field.onChange(event.target.value)}
 														placeholder="/path/to/routing.lua"
-														className="max-w-[320px]"
+														className="w-full max-w-[320px]"
 													/>
 												)}
 											/>
 										)}
 									</SettingRow>
 								</SettingsSection>
-								<SettingsSection title={t("pages.xray.warpRouting")}>
-									<div className="p-3 md:p-4">
+								<SettingsSection title={t("pages.xray.warpRouting")} alwaysOpen>
+									<div className="p-3.5 md:p-4">
 										<div className="flex flex-col items-stretch gap-3">
-											<div className="flex flex-row gap-2 justify-between items-center">
-												<p className={cn("text-[0.875rem]", warpDomainHelper)}>
+											<div className="flex flex-wrap gap-2 justify-between items-center">
+												<p className={cn("text-[0.875rem] flex-1 min-w-[180px]", warpDomainHelper)}>
 													{t("pages.xray.warpRoutingDesc")}
 												</p>
 												<Button onClick={onWarpOpen} variant="outline" size="sm" className="shrink-0">{<WarpIconStyled />}
@@ -4341,21 +4366,21 @@ export const CoreSettingsPage: FC = () => {
 													</div>
 												))}
 											</div>
-											<div className="flex flex-row items-center gap-3 flex-wrap">
+											<div className="flex flex-row items-center gap-2.5 flex-wrap">
 												<Select placeholder={t("core.select")} size="sm" value={warpOptionValue} onChange={(event) => {
 														const { value } = event.target;
 														if (value) {
 															handleWarpDomainAdd(value);
 														}
 														setWarpOptionValue("");
-													}} disabled={availableWarpOptions.length === 0} className="max-w-[240px]">
+													}} disabled={availableWarpOptions.length === 0} className="w-full sm:w-auto sm:max-w-[220px]">
 													{availableWarpOptions.map((option) => (
 														<option key={option.value} value={option.value}>
 															{option.label}
 														</option>
 													))}
 												</Select>
-												<div className="flex flex-row items-center gap-2 max-w-[320px] flex-1">
+												<div className="flex flex-row items-center gap-2 min-w-[200px] flex-1">
 													<Input value={warpCustomDomain} onChange={(event) =>
 															setWarpCustomDomain(event.target.value)
 														} />
@@ -4370,7 +4395,9 @@ export const CoreSettingsPage: FC = () => {
 										</div>
 									</div>
 								</SettingsSection>
-								<SettingsSection title={t("pages.xray.statistics")}>
+							</div>
+							<div className="flex flex-col gap-4 items-stretch min-w-0">
+								<SettingsSection title={t("pages.xray.statistics")} alwaysOpen>
 									<SettingRow
 										label={t("pages.xray.statsInboundUplink")}
 										controlId="stats-inbound-uplink"
@@ -4428,7 +4455,7 @@ export const CoreSettingsPage: FC = () => {
 										)}
 									</SettingRow>
 								</SettingsSection>
-								<SettingsSection title={t("pages.xray.logConfigs")}>
+								<SettingsSection title={t("pages.xray.logConfigs")} alwaysOpen>
 									<SettingRow
 										label={t("pages.xray.logLevel")}
 										controlId="log-level"
@@ -4438,7 +4465,7 @@ export const CoreSettingsPage: FC = () => {
 												name="config.log.loglevel"
 												control={form.control}
 												render={({ field }) => (
-													<Select {...field} id={id} size="sm" className="max-w-[220px]">
+													<Select {...field} id={id} size="sm" className="w-full max-w-[220px]">
 														{["none", "debug", "info", "warning", "error"].map(
 															(s) => (
 																<option key={s} value={s}>
@@ -4461,7 +4488,7 @@ export const CoreSettingsPage: FC = () => {
 													name="config.log.access"
 													control={form.control}
 													render={({ field }) => (
-														<Select {...field} id={id} size="sm" className="max-w-[220px]">
+														<Select {...field} id={id} size="sm" className="w-full sm:w-auto sm:max-w-[200px]">
 															<option value="">{t("common.empty")}</option>
 															{["none", DEFAULT_ACCESS_LOG_PATH].map((s) => (
 																<option key={s} value={s}>
@@ -4483,7 +4510,7 @@ export const CoreSettingsPage: FC = () => {
 																	: String(field.value)
 															} onChange={(e) =>
 																field.onChange(Number(e.target.value))
-															} className="max-w-[220px]">
+															} className="w-full sm:w-auto sm:max-w-[200px]">
 															{LOG_CLEANUP_INTERVAL_OPTIONS.map((option) => (
 																<option
 																	key={option.value}
@@ -4508,7 +4535,7 @@ export const CoreSettingsPage: FC = () => {
 													name="config.log.error"
 													control={form.control}
 													render={({ field }) => (
-														<Select {...field} id={id} size="sm" className="max-w-[220px]">
+														<Select {...field} id={id} size="sm" className="w-full sm:w-auto sm:max-w-[200px]">
 															<option value="">{t("common.empty")}</option>
 															{["none", DEFAULT_ERROR_LOG_PATH].map((s) => (
 																<option key={s} value={s}>
@@ -4530,7 +4557,7 @@ export const CoreSettingsPage: FC = () => {
 																	: String(field.value)
 															} onChange={(e) =>
 																field.onChange(Number(e.target.value))
-															} className="max-w-[220px]">
+															} className="w-full sm:w-auto sm:max-w-[200px]">
 															{LOG_CLEANUP_INTERVAL_OPTIONS.map((option) => (
 																<option
 																	key={option.value}
@@ -4554,7 +4581,7 @@ export const CoreSettingsPage: FC = () => {
 												name="config.log.maskAddress"
 												control={form.control}
 												render={({ field }) => (
-													<Select {...field} id={id} size="sm" className="max-w-[220px]">
+													<Select {...field} id={id} size="sm" className="w-full max-w-[220px]">
 														<option value="">{t("common.empty")}</option>
 														{["quarter", "half", "full"].map((s) => (
 															<option key={s} value={s}>
