@@ -572,7 +572,17 @@ export const NotificationMenuItem: FC<NotificationMenuItemProps> = ({
 	);
 };
 
-export const NotificationBell: FC = () => {
+export interface NotificationBellProps {
+	popoverSide?: "top" | "bottom" | "left" | "right";
+	popoverAlign?: "start" | "center" | "end";
+	className?: string;
+}
+
+export const NotificationBell: FC<NotificationBellProps> = ({
+	popoverSide,
+	popoverAlign,
+	className,
+}) => {
 	const { t, i18n } = useTranslation();
 	const navigate = useNavigate();
 	const context = useContext(NotificationContext);
@@ -609,7 +619,10 @@ export const NotificationBell: FC = () => {
 					size="sm"
 					data-header-notifications="true"
 					aria-label={t("notifications.bell.label")}
-					className="relative size-[34px] min-w-[34px]! rounded-[12px] border-panel-border! bg-panel-surface p-0 text-panel-text shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-panel-surface dark:hover:bg-input/30 active:scale-[0.96] min-[769px]:hover:border-panel-border-strong! min-[769px]:hover:bg-panel-elevated min-[769px]:dark:hover:bg-panel-elevated min-[769px]:hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]"
+					className={cn(
+						"relative size-[34px] min-w-[34px]! rounded-[12px] border-panel-border! bg-panel-surface p-0 text-panel-text shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-panel-surface dark:hover:bg-input/30 active:scale-[0.96] min-[769px]:hover:border-panel-border-strong! min-[769px]:hover:bg-panel-elevated min-[769px]:dark:hover:bg-panel-elevated min-[769px]:hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]",
+						className,
+					)}
 				>
 					<Bell className="size-4" strokeWidth={1.75} />
 					{unread > 0 ? (
@@ -619,7 +632,8 @@ export const NotificationBell: FC = () => {
 			</PopoverTrigger>
 			<PopoverContent
 				dir={isRTL ? "rtl" : "ltr"}
-				align={isRTL ? "start" : "end"}
+				side={popoverSide}
+				align={popoverAlign ?? (isRTL ? "start" : "end")}
 				sideOffset={8}
 				collisionPadding={12}
 				className="z-[9999] w-[min(368px,calc(100vw-24px))] max-w-[380px] max-h-[min(calc(var(--radix-popover-content-available-height,76dvh)-8px),calc(100dvh-24px))] overflow-y-auto overscroll-contain rounded-[20px] border border-panel-border! bg-panel-surface p-2.5 text-panel-text shadow-[0_20px_52px_-12px_rgba(0,0,0,0.42)]"

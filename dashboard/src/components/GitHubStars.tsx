@@ -5,8 +5,8 @@ import { Star } from "lucide-react";
 import { type FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 
-const GITHUB_REPO_URL = "https://github.com/norapanel/Nora";
-const GITHUB_API_URL = "https://api.github.com/repos/norapanel/Nora";
+const GITHUB_REPO_URL = "https://github.com/TacTic-A/Nora";
+const GITHUB_API_URL = "https://api.github.com/repos/TacTic-A/Nora";
 const STARS_CACHE_KEY = "nora-github-stars-cache-v1";
 const LEGACY_STARS_CACHE_KEY = "rb_github_stars";
 const STARS_CACHE_TTL_MS = 30 * 60 * 1000;
@@ -113,7 +113,7 @@ export const GitHubStars: FC<GitHubStarsProps> = memo(function GitHubStars({
 	const isIconOnly = !isDesktop || compact;
 
 	const { data: stars } = useQuery({
-		queryKey: ["github-stars", "norapanel/Nora"],
+		queryKey: ["github-stars", "TacTic-A/Nora"],
 		queryFn: fetchGitHubStars,
 		initialData: () => readCachedStars()?.count,
 		initialDataUpdatedAt: () => readCachedStars()?.timestamp ?? 0,

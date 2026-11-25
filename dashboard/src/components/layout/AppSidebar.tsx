@@ -14,7 +14,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useMediaQuery } from "hooks/useMediaQuery";
 import { cn } from "lib/cn";
 import { useColorMode } from "lib/color-mode";
-import { BellRing, ChevronDown, X } from "lucide-react";
+import {
+	BellRing,
+	ChevronDown,
+	PanelLeftClose,
+	PanelLeftOpen,
+	PanelRightClose,
+	PanelRightOpen,
+	X,
+} from "lucide-react";
 import {
 	type FC,
 	type MouseEvent as ReactMouseEvent,
@@ -36,7 +44,10 @@ import {
 	useNavSections,
 } from "./navConfig";
 import { SidebarSkeletonBody } from "./ShellSkeletons";
-import { useUnreadNotifications } from "../NotificationBell";
+import { UserProfileMenu } from "./UserProfileMenu";
+import { GitHubStars } from "../GitHubStars";
+import { HeaderCalendar } from "../HeaderCalendar";
+import { NotificationBell, useUnreadNotifications } from "../NotificationBell";
 import { SponsorCarousel } from "../SponsorCarousel";
 
 export interface AppSidebarProps {
@@ -47,6 +58,7 @@ export interface AppSidebarProps {
 	sidebarBanners?: SponsorAsset[];
 	inDrawer?: boolean;
 	onRequestExpand?: () => void;
+	onToggleCollapse?: () => void;
 }
 
 const resolveAssetUrl = (rawUrl?: string): string => {
@@ -75,6 +87,8 @@ interface SidebarLogoCarouselProps {
 	isRTL: boolean;
 	onNavigateRoot: () => void;
 	onRequestExpand?: () => void;
+	onToggleCollapse?: () => void;
+	toggleLabel?: string;
 }
 
 const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
@@ -86,6 +100,8 @@ const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
 		isRTL,
 		onNavigateRoot,
 		onRequestExpand,
+		onToggleCollapse,
+		toggleLabel,
 	}) {
 		const [activeIndex, setActiveIndex] = useState(0);
 		const [isPaused, setIsPaused] = useState(false);
@@ -122,6 +138,10 @@ const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
 
 		const handleClick = (e: ReactMouseEvent) => {
 			e.stopPropagation();
+			if (collapsed && !inDrawer && onToggleCollapse) {
+				onToggleCollapse();
+				return;
+			}
 			if (currentItem.isSponsor && currentItem.href) {
 				window.open(currentItem.href, "_blank", "noopener,noreferrer");
 			} else {
@@ -132,8 +152,11 @@ const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
 			}
 		};
 
+		const ExpandIcon = isRTL ? PanelRightOpen : PanelLeftOpen;
+		const showHoverExpand = collapsed && !inDrawer && Boolean(onToggleCollapse);
+
 		const logoGraphic = (
-			<div className="flex size-[30px] shrink-0 items-center justify-center">
+			<div className="relative flex size-[30px] shrink-0 items-center justify-center">
 				{currentItem.isSponsor ? (
 					<img
 						src={currentItem.src}
@@ -141,7 +164,10 @@ const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
 						draggable={false}
 						onDragStart={(e) => e.preventDefault()}
 						onContextMenu={(e) => e.preventDefault()}
-						className="pointer-events-none size-[30px] rounded-[8px] object-contain select-none [-webkit-user-drag:none]"
+						className={cn(
+							"pointer-events-none size-[30px] rounded-[8px] object-contain select-none [-webkit-user-drag:none] transition-opacity duration-150",
+							showHoverExpand && "group-hover/logo:opacity-0",
+						)}
 					/>
 				) : (
 					<img
@@ -153,11 +179,19 @@ const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
 								colorMode === "dark"
 									? "brightness(0) invert(1)"
 									: "brightness(0)",
-							transition: "filter 0.25s ease",
+							transition: "filter 0.25s ease, opacity 0.15s ease",
 						}}
-						className="pointer-events-none size-[30px] object-contain select-none [-webkit-user-drag:none]"
+						className={cn(
+							"pointer-events-none size-[30px] object-contain select-none [-webkit-user-drag:none]",
+							showHoverExpand && "group-hover/logo:opacity-0",
+						)}
 					/>
 				)}
+				{showHoverExpand ? (
+					<span className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-lg bg-[var(--nora-panel-elevated)] text-[var(--nora-panel-text)] opacity-0 transition-opacity duration-150 group-hover/logo:opacity-100">
+						<ExpandIcon className="size-[18px]" strokeWidth={1.75} />
+					</span>
+				) : null}
 			</div>
 		);
 
@@ -166,11 +200,12 @@ const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
 		return (
 			<button
 				type="button"
-				title={currentItem.label}
+				title={showHoverExpand ? toggleLabel : currentItem.label}
+				aria-label={showHoverExpand ? toggleLabel : currentItem.label}
 				onClick={handleClick}
 				onMouseEnter={() => setIsPaused(true)}
 				onMouseLeave={() => setIsPaused(false)}
-				className="relative flex h-[34px] min-w-0 flex-1 cursor-pointer items-center justify-start overflow-hidden text-start transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none select-none active:scale-[0.98]"
+				className="group/logo relative flex h-[34px] min-w-0 flex-1 cursor-pointer items-center justify-start overflow-hidden text-start transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none select-none active:scale-[0.98]"
 			>
 				<AnimatePresence mode="wait" initial={false}>
 					<motion.div
@@ -192,7 +227,7 @@ const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
 									sideOffset={10}
 									className="z-[2200] rounded-[10px] border border-[var(--nora-panel-border)] bg-[var(--nora-panel-elevated)] px-3 py-1.5 text-xs font-semibold text-[var(--nora-panel-text)] shadow-lg"
 								>
-									{currentItem.label}
+									{showHoverExpand ? toggleLabel : currentItem.label}
 								</TooltipContent>
 							</Tooltip>
 						) : (
@@ -527,6 +562,7 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 	sidebarBanners = [],
 	inDrawer = false,
 	onRequestExpand,
+	onToggleCollapse,
 }) {
 	const { t, i18n } = useTranslation();
 	const location = useLocation();
@@ -707,13 +743,13 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 						: collapsed
 							? "68px"
 							: `var(--rb-sidebar-width, ${dynamicSidebarWidth}px)`,
-					...(inDrawer ? {} : { [isRTL ? "right" : "left"]: 12 }),
+					...(inDrawer ? {} : { [isRTL ? "right" : "left"]: 0 }),
 				}}
 				className={cn(
 					"flex shrink-0 overflow-hidden bg-[var(--nora-panel-sidebar)] select-none [touch-action:manipulation]",
 					inDrawer
 						? "relative h-full max-h-full w-full"
-						: "fixed top-3 z-[200] h-[calc(100dvh-24px)] max-h-[calc(100dvh-24px)] rounded-[20px] border border-[var(--nora-panel-border)] shadow-[0_1px_2px_rgba(0,0,0,0.03),inset_0_1px_0_0_rgba(255,255,255,0.06)] transition-[width] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+						: "fixed top-0 bottom-0 z-[200] h-[100dvh] max-h-[100dvh] rounded-none border-y-0 border-s-0 border-e border-[var(--nora-panel-border)] transition-[width] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
 				)}
 			>
 				{loading ? (
@@ -728,7 +764,7 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 						<div
 							className={cn(
 								"-mx-2 mb-2 flex min-h-[48px] items-center justify-between border-b border-[var(--nora-panel-border)] py-2.5 ps-0",
-								inDrawer ? "pe-2.5" : "pe-0",
+								inDrawer ? "pe-2.5" : collapsed ? "pe-0" : "pe-2.5",
 							)}
 						>
 							<SidebarLogoCarousel
@@ -739,7 +775,35 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 								isRTL={isRTL}
 								onNavigateRoot={() => navigate("/")}
 								onRequestExpand={onRequestExpand}
+								onToggleCollapse={onToggleCollapse}
+								toggleLabel={t("a11y.toggleSidebar")}
 							/>
+
+							{!collapsed && !inDrawer && onToggleCollapse ? (
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<button
+											type="button"
+											aria-label={t("a11y.toggleSidebar")}
+											onClick={onToggleCollapse}
+											className="inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-[var(--nora-panel-text-muted)] transition-colors outline-none hover:bg-[var(--nora-panel-elevated)] hover:text-[var(--nora-panel-text)] active:scale-[0.94]"
+										>
+											{isRTL ? (
+												<PanelRightClose className="size-[18px]" strokeWidth={1.75} />
+											) : (
+												<PanelLeftClose className="size-[18px]" strokeWidth={1.75} />
+											)}
+										</button>
+									</TooltipTrigger>
+									<TooltipContent
+										side={isRTL ? "left" : "right"}
+										sideOffset={10}
+										className="z-[2200] rounded-[10px] border border-[var(--nora-panel-border)] bg-[var(--nora-panel-elevated)] px-3 py-1.5 text-xs font-semibold text-[var(--nora-panel-text)] shadow-lg"
+									>
+										{t("a11y.toggleSidebar")}
+									</TooltipContent>
+								</Tooltip>
+							) : null}
 
 							{inDrawer && onRequestExpand ? (
 								<button
@@ -904,6 +968,52 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 							inDrawer={inDrawer}
 							visible={bannerVisible}
 						/>
+
+						{!inDrawer ? (
+							<div
+								data-sidebar-footer="true"
+								className={cn(
+									"-mx-2 mt-auto shrink-0 border-t border-[var(--nora-panel-border)] px-2 pt-2.5 pb-2.5",
+									collapsed ? "flex flex-col items-center gap-1.5" : "flex flex-col gap-2",
+								)}
+							>
+								{collapsed ? (
+									<>
+										<HeaderCalendar
+											inSidebar
+											isCompact
+											popoverSide={isRTL ? "left" : "right"}
+											popoverAlign="end"
+										/>
+										<GitHubStars compact className="rounded-[10px]!" />
+										<NotificationBell
+											popoverSide={isRTL ? "left" : "right"}
+											popoverAlign="end"
+											className="rounded-[10px]!"
+										/>
+										<UserProfileMenu variant="sidebar" collapsed />
+									</>
+								) : (
+									<>
+										<div className="flex items-center gap-1.5">
+											<HeaderCalendar
+												inSidebar
+												popoverSide={isRTL ? "left" : "right"}
+												popoverAlign="end"
+												className="flex-1 min-w-0"
+											/>
+											<GitHubStars compact className="rounded-[10px]!" />
+											<NotificationBell
+												popoverSide={isRTL ? "left" : "right"}
+												popoverAlign="end"
+												className="rounded-[10px]!"
+											/>
+										</div>
+										<UserProfileMenu variant="sidebar" collapsed={false} />
+									</>
+								)}
+							</div>
+						) : null}
 					</div>
 				)}
 			</aside>

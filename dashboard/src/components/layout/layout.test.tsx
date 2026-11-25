@@ -259,7 +259,7 @@ describe("Milestone 2: Shell, Layout & Navigation", () => {
 	});
 
 	describe("AppSidebar", () => {
-		it("renders sidebar with panel surface and border", () => {
+		it("renders flush border-radius-free sidebar with panel surface and border", () => {
 			const { container } = render(<AppSidebar collapsed={false} />, {
 				wrapper: createWrapper(),
 			});
@@ -268,6 +268,9 @@ describe("Milestone 2: Shell, Layout & Navigation", () => {
 			expect(aside).toBeDefined();
 			expect(aside?.className).toContain("bg-[var(--nora-panel-sidebar)]");
 			expect(aside?.className).toContain("border-[var(--nora-panel-border)]");
+			expect(aside?.className).toContain("rounded-none");
+			expect(aside?.className).toContain("top-0");
+			expect(aside?.className).toContain("bottom-0");
 		});
 
 		it("displays Nora brand logo and title", () => {
@@ -276,6 +279,31 @@ describe("Milestone 2: Shell, Layout & Navigation", () => {
 			});
 
 			expect(screen.getByText("Nora")).toBeDefined();
+		});
+
+		it("renders collapse button next to Nora logo when expanded and calls onToggleCollapse", () => {
+			const onToggleCollapse = vi.fn();
+			render(
+				<AppSidebar collapsed={false} onToggleCollapse={onToggleCollapse} />,
+				{ wrapper: createWrapper() },
+			);
+
+			const toggleBtn = screen.getByLabelText("a11y.toggleSidebar");
+			toggleBtn.click();
+			expect(onToggleCollapse).toHaveBeenCalled();
+		});
+
+		it("renders footer controls (calendar, stars, notifications, profile) inside sidebar", () => {
+			const { container } = render(<AppSidebar collapsed={false} />, {
+				wrapper: createWrapper(),
+			});
+
+			const footer = container.querySelector('[data-sidebar-footer="true"]');
+			expect(footer).not.toBeNull();
+			expect(screen.getByTestId("header-calendar")).toBeDefined();
+			expect(screen.getByTestId("github-stars")).toBeDefined();
+			expect(screen.getByTestId("notification-bell")).toBeDefined();
+			expect(screen.getByText("admin")).toBeDefined();
 		});
 
 		it("renders section titles with cyber accent bars", () => {

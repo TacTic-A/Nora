@@ -91,6 +91,10 @@ const GREGORIAN_WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 export interface HeaderCalendarProps {
 	isCompact?: boolean;
 	inMenu?: boolean;
+	inSidebar?: boolean;
+	popoverSide?: "top" | "bottom" | "left" | "right";
+	popoverAlign?: "start" | "center" | "end";
+	className?: string;
 	isOpen?: boolean;
 	isPressing?: boolean;
 	onToggle?: () => void;
@@ -101,6 +105,10 @@ export const HeaderCalendar: FC<HeaderCalendarProps> = memo(
 	function HeaderCalendar({
 		isCompact = false,
 		inMenu = false,
+		inSidebar = false,
+		popoverSide,
+		popoverAlign,
+		className,
 		isOpen: controlledIsOpen,
 		isPressing = false,
 		onToggle: controlledOnToggle,
@@ -159,6 +167,15 @@ export const HeaderCalendar: FC<HeaderCalendarProps> = memo(
 			}
 			return formatter.format(today);
 		}, [displayLocale, today, isPersian]);
+
+		const shortDate = useMemo(() => {
+			const formatter = new Intl.DateTimeFormat(displayLocale, {
+				weekday: "short",
+				day: "numeric",
+				month: "short",
+			});
+			return formatter.format(today);
+		}, [displayLocale, today]);
 
 		const { monthLabel, days } = useMemo(
 			() =>
@@ -400,8 +417,13 @@ export const HeaderCalendar: FC<HeaderCalendarProps> = memo(
 						className={cn(
 							"h-[34px] border-panel-border! bg-panel-surface text-panel-text shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[background-color,border-color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-panel-surface dark:hover:bg-input/30 active:scale-[0.97] active:bg-panel-elevated min-[769px]:hover:border-panel-border-strong! min-[769px]:hover:bg-panel-elevated min-[769px]:dark:hover:bg-panel-elevated min-[769px]:hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]",
 							showText
-								? "w-auto min-w-0 rounded-[12px] px-3 gap-2"
-								: "size-[34px] min-w-[34px]! rounded-full px-0 min-[769px]:rounded-[12px]",
+								? inSidebar
+									? "w-full min-w-0 justify-start rounded-[10px] px-2.5 gap-2"
+									: "w-auto min-w-0 rounded-[12px] px-3 gap-2"
+								: inSidebar
+									? "size-[34px] min-w-[34px]! rounded-[10px] px-0"
+									: "size-[34px] min-w-[34px]! rounded-full px-0 min-[769px]:rounded-[12px]",
+							className,
 						)}
 					>
 						<CalendarDays
@@ -410,7 +432,7 @@ export const HeaderCalendar: FC<HeaderCalendarProps> = memo(
 						/>
 						{showText ? (
 							<span className="max-w-[300px] truncate text-xs font-semibold leading-normal text-panel-text">
-								{formattedDate}
+								{inSidebar ? shortDate : formattedDate}
 							</span>
 						) : null}
 					</Button>
@@ -418,7 +440,8 @@ export const HeaderCalendar: FC<HeaderCalendarProps> = memo(
 				<PopoverContent
 					dir={isRTL ? "rtl" : "ltr"}
 					data-header-calendar-content="true"
-					align={isRTL ? "start" : "end"}
+					side={popoverSide}
+					align={popoverAlign ?? (isRTL ? "start" : "end")}
 					sideOffset={8}
 					collisionPadding={12}
 					className="z-[9999] w-[min(308px,calc(100vw-24px))] max-w-[calc(100vw-16px)] max-h-[min(calc(var(--radix-popover-content-available-height,76dvh)-8px),calc(100dvh-24px))] overflow-y-auto overscroll-contain rounded-[20px] border border-panel-border! bg-panel-surface p-3.5 text-panel-text shadow-[0_20px_48px_rgba(0,0,0,0.32)] sm:w-fit sm:min-w-[296px]!"

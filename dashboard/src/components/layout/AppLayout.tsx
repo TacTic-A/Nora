@@ -322,8 +322,8 @@ function AppLayoutContent() {
 						"--rb-sidebar-offset": isMobile
 							? "0px"
 							: sidebarCollapsed
-								? "88px"
-								: "calc(var(--rb-sidebar-width, 240px) + 20px)",
+								? "68px"
+								: "var(--rb-sidebar-width, 240px)",
 					} as CSSProperties
 				}
 			>
@@ -335,6 +335,7 @@ function AppLayoutContent() {
 						sponsors={sponsorSidebarLogoItems}
 						sidebarBanners={sponsorSidebarBanners}
 						onRequestExpand={handleSidebarExpand}
+						onToggleCollapse={() => setSidebarCollapsed((prev) => !prev)}
 					/>
 				) : null}
 
@@ -346,30 +347,29 @@ function AppLayoutContent() {
 							isMobile || isRTL
 								? "0px"
 								: sidebarCollapsed
-									? "88px"
-									: "calc(var(--rb-sidebar-width, 240px) + 20px)",
+									? "68px"
+									: "var(--rb-sidebar-width, 240px)",
 						marginRight:
 							isMobile || !isRTL
 								? "0px"
 								: sidebarCollapsed
-									? "88px"
-									: "calc(var(--rb-sidebar-width, 240px) + 20px)",
+									? "68px"
+									: "var(--rb-sidebar-width, 240px)",
 					}}
 				>
-					<AppHeader
-						sidebarCollapsed={sidebarCollapsed}
-						onToggleSidebar={() => {
-							if (isMobile) sidebarDrawer.onOpen();
-							else setSidebarCollapsed(!sidebarCollapsed);
-						}}
-						isMobile={isMobile}
-						isShellLoading={isShellLoading}
-						breadcrumbItems={breadcrumbItems}
-						sponsorHeaderItems={sponsorHeaderItems}
-						mobileHeaderItems={mobileHeaderItems}
-						bannersVisible={bannersVisible}
-						onNavigate={(path) => navigate(path)}
-					/>
+					{isMobile ? (
+						<AppHeader
+							sidebarCollapsed={sidebarCollapsed}
+							onToggleSidebar={() => sidebarDrawer.onOpen()}
+							isMobile={isMobile}
+							isShellLoading={isShellLoading}
+							breadcrumbItems={breadcrumbItems}
+							sponsorHeaderItems={sponsorHeaderItems}
+							mobileHeaderItems={mobileHeaderItems}
+							bannersVisible={bannersVisible}
+							onNavigate={(path) => navigate(path)}
+						/>
+					) : null}
 
 					<main
 						ref={mainRef}
@@ -378,7 +378,7 @@ function AppLayoutContent() {
 								listScrollTop.current = event.currentTarget.scrollTop;
 							}
 						}}
-						className="min-h-0 flex-1 overflow-auto overscroll-contain bg-transparent p-3 pt-2.5 pb-[calc(env(safe-area-inset-bottom,0px)+88px)] min-[769px]:p-4 min-[769px]:pt-3 min-[769px]:pb-3"
+						className="min-h-0 flex-1 overflow-auto overscroll-contain bg-transparent p-3 pt-2.5 pb-[calc(env(safe-area-inset-bottom,0px)+88px)] min-[769px]:p-5"
 					>
 						<div className={cn("flex min-h-full flex-col", editorPageSection && "hidden")}>
 							<Outlet />
