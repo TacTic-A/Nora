@@ -884,7 +884,7 @@ export function DataTable<TData>({
 											if (event.key !== "Enter" && event.key !== " ") return;
 											event.preventDefault();
 											toggleExpanded();
-										}} className={cn(canExpand ? "cursor-pointer" : "cursor-default", "rb-resource-card rounded-xl border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] p-3.5 shadow-md relative transition-all duration-150 hover:border-[var(--rb-panel-border-strong)]")}>
+										}} className={cn(canExpand ? "cursor-pointer" : "cursor-default", "rb-resource-card rounded-xl border border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] p-3.5 shadow-md relative transition-all duration-150 hover:border-[var(--nora-panel-border-strong)]")}>
 										<div className="flex flex-row items-center gap-2.5 min-w-0! rb-resource-card-main">
 											{enableSelection && (
 												<div className="flex items-center shrink-0">
@@ -1007,7 +1007,7 @@ export function DataTable<TData>({
 													isSelectColumn || headerAlign === "center"
 														? "true"
 														: undefined
-												} {...config?.headerProps} className={cn("bg-transparent py-2.5 text-start text-xs font-semibold tracking-wider text-[var(--rb-panel-text-muted)] border-0 shadow-none select-none", isSelectColumn ? "px-2 text-center" : "px-3.5", [
+												} {...config?.headerProps} className={cn("bg-transparent py-2.5 text-start text-xs font-semibold tracking-wider text-[var(--nora-panel-text-muted)] border-0 shadow-none select-none", isSelectColumn ? "px-2 text-center" : "px-3.5", [
 													isSelectColumn ? "rb-select-cell" : "",
 													isActionsColumn ? "rb-actions-cell" : "",
 													config?.isPrimary ? "rb-primary-cell" : "",
@@ -1067,7 +1067,7 @@ export function DataTable<TData>({
 													: undefined
 											} onClick={() => onRowClick?.(row.original)} onContextMenu={(event) =>
 												handleTableContextMenu(event, row.original)
-											} className={cn(onRowClick ? "cursor-pointer" : "cursor-default", "rb-data-table-row border-b border-[var(--rb-panel-border)] transition-colors duration-150 hover:bg-[var(--rb-panel-row-hover)] data-[selected=true]:bg-cyan-500/10")}>
+											} className={cn(onRowClick ? "cursor-pointer" : "cursor-default", "rb-data-table-row border-b border-[var(--nora-panel-border)] transition-colors duration-150 hover:bg-[var(--nora-panel-row-hover)] data-[selected=true]:bg-cyan-500/10")}>
 											{row.getVisibleCells().map((cell) => {
 												const config = cell.column.columnDef.meta as
 													| DataTableColumn<TData>
@@ -1104,11 +1104,11 @@ export function DataTable<TData>({
 															isSelectColumn || cellAlign === "center"
 																? "true"
 																: undefined
-														}    {...config?.cellProps} className={cn("py-3 text-sm text-[var(--rb-panel-text-secondary)] align-middle", isSelectColumn ? "px-2 text-center" : "px-4", [
+														}    {...config?.cellProps} className={cn("py-3 text-sm text-[var(--nora-panel-text-secondary)] align-middle", isSelectColumn ? "px-2 text-center" : "px-4", [
 															isSelectColumn ? "rb-select-cell" : "",
 															isActionsColumn ? "rb-actions-cell" : "",
-															config?.isPrimary ? "rb-primary-cell text-[var(--rb-panel-text)] font-medium" : "",
-															config?.isMeta ? "rb-meta-cell text-xs text-[var(--rb-panel-text-muted)]" : "",
+															config?.isPrimary ? "rb-primary-cell text-[var(--nora-panel-text)] font-medium" : "",
+															config?.isMeta ? "rb-meta-cell text-xs text-[var(--nora-panel-text-muted)]" : "",
 														].filter(Boolean).join(" "))}>
 														{isSelectColumn ? (
 															<div className="flex items-center justify-center w-full">

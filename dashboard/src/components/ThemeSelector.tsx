@@ -221,8 +221,8 @@ const applyAccent = (accentKey: string) => {
 		ACCENT_OPTIONS.find((option) => option.key === accentKey) ??
 		ACCENT_OPTIONS[0];
 	const root = document.documentElement;
-	root.style.setProperty("--rb-panel-accent", accent.color);
-	root.style.setProperty("--rb-panel-accent-hover", accent.hover);
+	root.style.setProperty("--nora-panel-accent", accent.color);
+	root.style.setProperty("--nora-panel-accent-hover", accent.hover);
 	for (const [key, value] of Object.entries(generatePalette(accent.color))) {
 		root.style.setProperty(key, value);
 	}

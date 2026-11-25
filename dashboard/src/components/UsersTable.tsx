@@ -1013,7 +1013,7 @@ export const UsersTable: FC<UsersTableProps> = ({
 			mobilePriority: 11,
 			mobileMetaLabel: t("usersTable.createdAt"),
 			cell: (user) => (
-				<p dir="ltr" className="text-xs text-[var(--rb-panel-text-secondary)] font-mono tabular-nums">
+				<p dir="ltr" className="text-xs text-[var(--nora-panel-text-secondary)] font-mono tabular-nums">
 					{user.created_at ? dayjs(user.created_at).format("YYYY-MM-DD HH:mm") : "—"}
 				</p>
 			),
@@ -1777,7 +1777,7 @@ const EmptySection: FC<EmptySectionProps> = ({
 		onCreateUser(true);
 	};
 	return (
-		<div className="p-5 py-8 flex items-center flex-col gap-4 w-full border border-[var(--rb-panel-border)] rounded-xl bg-[var(--rb-panel-surface)] text-[var(--rb-panel-text)]">
+		<div className="p-5 py-8 flex items-center flex-col gap-4 w-full border border-[var(--nora-panel-border)] rounded-xl bg-[var(--nora-panel-surface)] text-[var(--nora-panel-text)]">
 			<EmptySectionIcon className={"dark:[&_path[fill='#fff']]:[fill:var(--color-gray-800)] dark:[&_path[fill='#f2f2f2']]:[fill:var(--color-gray-700)] dark:[&_path[fill='#e6e6e6']]:[fill:var(--color-gray-700)] dark:[&_path[fill='#ccc']]:[fill:var(--color-gray-700)] dark:[&_circle[fill='#3182CE']]:[fill:var(--color-primary-300)] light:[&_path[fill='#f2f2f2']]:[fill:var(--color-gray-300)] light:[&_path[fill='#e6e6e6']]:[fill:var(--color-gray-300)] light:[&_path[fill='#ccc']]:[fill:var(--color-gray-300)] light:[&_circle[fill='#3182CE']]:[fill:var(--color-primary-500)] max-h-[200px] max-w-[200px]"} />
 			<p className="font-medium text-gray-600 dark:text-gray-400">
 				{isFiltered ? t("usersTable.noUserMatched") : t("usersTable.noUser")}

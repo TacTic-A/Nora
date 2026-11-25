@@ -195,8 +195,8 @@ describe("Milestone 2: Shell, Layout & Navigation", () => {
 
 			const header = container.querySelector("header");
 			expect(header).toBeDefined();
-			expect(header?.className).toContain("bg-[var(--rb-panel-surface)]");
-			expect(header?.className).toContain("border-[var(--rb-panel-border)]");
+			expect(header?.className).toContain("bg-[var(--nora-panel-surface)]");
+			expect(header?.className).toContain("border-[var(--nora-panel-border)]");
 		});
 
 		it("renders breadcrumbs and triggers onNavigate on link click", () => {
@@ -266,8 +266,8 @@ describe("Milestone 2: Shell, Layout & Navigation", () => {
 
 			const aside = container.querySelector("aside");
 			expect(aside).toBeDefined();
-			expect(aside?.className).toContain("bg-[var(--rb-panel-sidebar)]");
-			expect(aside?.className).toContain("border-[var(--rb-panel-border)]");
+			expect(aside?.className).toContain("bg-[var(--nora-panel-sidebar)]");
+			expect(aside?.className).toContain("border-[var(--nora-panel-border)]");
 		});
 
 		it("displays Nora brand logo and title", () => {
@@ -299,7 +299,7 @@ describe("Milestone 2: Shell, Layout & Navigation", () => {
 
 			const dock = container.querySelector(".rb-mobile-dock");
 			expect(dock).toBeDefined();
-			expect(dock?.innerHTML).toContain("bg-[var(--rb-panel-surface)]/95");
+			expect(dock?.innerHTML).toContain("bg-[var(--nora-panel-surface)]/95");
 		});
 
 		it("renders navigation tabs in the mobile bottom dock", () => {

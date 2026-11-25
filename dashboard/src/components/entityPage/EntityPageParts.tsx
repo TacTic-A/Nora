@@ -38,7 +38,7 @@ export const readAccentColor = () => {
 	if (typeof document === "undefined") return "#2563eb";
 	return (
 		getComputedStyle(document.documentElement)
-			.getPropertyValue("--rb-panel-accent")
+			.getPropertyValue("--nora-panel-accent")
 			.trim() || "#2563eb"
 	);
 };

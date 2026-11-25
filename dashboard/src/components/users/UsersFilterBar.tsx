@@ -227,7 +227,7 @@ export const UsersFilterBar: FC = () => {
 					</TooltipTrigger>
 <TooltipContent>{t("users.searchHelp")}</TooltipContent>
 </Tooltip>
-				} className="rounded-lg border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] text-[var(--rb-panel-text)] focus-visible:border-cyan-500/50 focus-visible:bg-[var(--rb-panel-elevated)] rb-users-search-input" />
+				} className="rounded-lg border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] text-[var(--nora-panel-text)] focus-visible:border-cyan-500/50 focus-visible:bg-[var(--nora-panel-elevated)] rb-users-search-input" />
 			<DataTableSortMenu
 				options={userSortOptions}
 				sorting={userSorting}
@@ -238,7 +238,7 @@ export const UsersFilterBar: FC = () => {
 			<Popover>
 				<PopoverTrigger asChild>
 					<div className="relative shrink-0">
-						<Button aria-label={t("filters.advancedButton")} variant="outline" className={cn("size-9 p-0", "rounded-lg w-9 h-9 border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] text-[var(--rb-panel-text-muted)] hover:bg-[var(--rb-panel-elevated)] hover:text-[var(--rb-panel-text)]")}>{<FilterIcon />}</Button>
+						<Button aria-label={t("filters.advancedButton")} variant="outline" className={cn("size-9 p-0", "rounded-lg w-9 h-9 border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] text-[var(--nora-panel-text-muted)] hover:bg-[var(--nora-panel-elevated)] hover:text-[var(--nora-panel-text)]")}>{<FilterIcon />}</Button>
 						{hasClearableFilters && (
 							<Badge className="top-[-4px] rounded-full absolute end-[-4px] text-[0.6rem] px-1.5 pointer-events-none badge-soft-cyan text-cyan-400 border border-cyan-500/30 font-mono font-bold rb-users-filter-badge">
 								{formatChipCount(activeFilterTotal, locale)}
@@ -246,7 +246,7 @@ export const UsersFilterBar: FC = () => {
 						)}
 					</div>
 				</PopoverTrigger>
-				<PopoverContent collisionPadding={12} className="bg-[var(--rb-panel-surface)] border border-[var(--rb-panel-border)] text-[var(--rb-panel-text)] rounded-xl shadow-2xl p-1.5 backdrop-blur-md min-w-[260px]! max-h-[var(--radix-popover-content-available-height)] overflow-y-auto">
+				<PopoverContent collisionPadding={12} className="bg-[var(--nora-panel-surface)] border border-[var(--nora-panel-border)] text-[var(--nora-panel-text)] rounded-xl shadow-2xl p-1.5 backdrop-blur-md min-w-[260px]! max-h-[var(--radix-popover-content-available-height)] overflow-y-auto">
 					
 					
 					<div className="p-3 text-xs font-semibold uppercase tracking-wider text-[#8b949e] border-b border-white/[0.06]">

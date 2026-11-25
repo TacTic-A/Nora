@@ -311,7 +311,7 @@ export const HeaderCalendar: FC<HeaderCalendarProps> = memo(
 											className={cn(
 												"flex size-[34px] items-center justify-center rounded-[9px] text-xs transition-colors duration-150",
 												day.isToday
-													? "bg-panel-accent font-bold text-white shadow-[0_2px_8px_color-mix(in_srgb,var(--rb-panel-accent)_40%,transparent)]"
+													? "bg-panel-accent font-bold text-white shadow-[0_2px_8px_color-mix(in_srgb,var(--nora-panel-accent)_40%,transparent)]"
 													: cn(
 															"bg-transparent min-[769px]:hover:bg-panel-elevated",
 															isHoliday

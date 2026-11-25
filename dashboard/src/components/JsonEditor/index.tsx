@@ -316,11 +316,11 @@ export const JsonEditor = forwardRef<HTMLDivElement, JSONEditorProps>(
 			);
 		}, [validation, validationLabel]);
 
-		const borderColor = "border-[var(--rb-panel-border)]!";
-		const bg = "bg-[var(--rb-panel-surface)]";
-		const elevatedBg = "bg-[var(--rb-panel-elevated)]";
-		const textColor = "text-[var(--rb-panel-text)]";
-		const mutedColor = "text-[var(--rb-panel-text-muted)]";
+		const borderColor = "border-[var(--nora-panel-border)]!";
+		const bg = "bg-[var(--nora-panel-surface)]";
+		const elevatedBg = "bg-[var(--nora-panel-elevated)]";
+		const textColor = "text-[var(--nora-panel-text)]";
+		const mutedColor = "text-[var(--nora-panel-text-muted)]";
 
 		return (
 			<div ref={ref} style={{ minHeight: minHeight }} className={cn(cn("flex flex-col items-stretch border rounded-[10px] h-full overflow-hidden gap-0", bg, borderColor, textColor, "nora-json-editor"))}>

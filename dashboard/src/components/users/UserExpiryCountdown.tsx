@@ -52,7 +52,7 @@ const getUrgency = (remainingSeconds: number): Urgency => {
 };
 
 const URGENCY_COLORS: Record<Urgency, string> = {
-	none: "var(--rb-panel-text)",
+	none: "var(--nora-panel-text)",
 	soon: "var(--color-orange-400)",
 	urgent: "var(--color-red-400)",
 	expired: "var(--color-red-400)",

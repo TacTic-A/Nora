@@ -59,10 +59,10 @@ const TAB_ICONS: Record<string, ElementType> = {
 };
 
 const DOCK_CYAN_TINT =
-	"bg-gradient-to-r from-[var(--rb-panel-accent)]/20 via-[var(--rb-panel-accent)]/15 to-[var(--rb-panel-accent)]/20 border border-[var(--rb-panel-accent)]/40 text-[var(--rb-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--rb-panel-accent)_25%,transparent)]";
+	"bg-gradient-to-r from-[var(--nora-panel-accent)]/20 via-[var(--nora-panel-accent)]/15 to-[var(--nora-panel-accent)]/20 border border-[var(--nora-panel-accent)]/40 text-[var(--nora-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--nora-panel-accent)_25%,transparent)]";
 
 const DOCK_SURFACE_CLASS =
-	"border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)]/95 backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.55)]";
+	"border border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)]/95 backdrop-blur-md shadow-[0_12px_32px_rgba(0,0,0,0.55)]";
 
 type BottomNavItem = {
 	key: string;
@@ -527,7 +527,7 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 					showCloseButton={false}
 					data-side={isRTL ? "right" : "left"}
 					className={cn(
-						"rb-sidebar-drawer h-[100dvh] max-h-[100dvh] w-[min(320px,86vw)]! max-w-[min(320px,86vw)]! gap-0 bg-[var(--rb-panel-sidebar)] p-0 shadow-[0_24px_64px_rgba(0,0,0,0.55)] will-change-transform border-[var(--rb-panel-border)]",
+						"rb-sidebar-drawer h-[100dvh] max-h-[100dvh] w-[min(320px,86vw)]! max-w-[min(320px,86vw)]! gap-0 bg-[var(--nora-panel-sidebar)] p-0 shadow-[0_24px_64px_rgba(0,0,0,0.55)] will-change-transform border-[var(--nora-panel-border)]",
 						isRTL
 							? "rounded-s-[24px] border-s border-e-0"
 							: "rounded-e-[24px] border-e border-s-0",
@@ -551,15 +551,15 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 			{/* iOS PWA Add-To-Home Prompt */}
 			{showIosPrompt ? (
 				<div className="fixed inset-x-0 bottom-[86px] z-[2000] px-4 sm:bottom-[90px]">
-					<div className="flex items-center gap-3 rounded-[20px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] px-4 py-3 shadow-lg">
-						<span className="flex size-8 items-center justify-center rounded-full bg-[var(--rb-panel-elevated)] text-[var(--rb-panel-text)]">
+					<div className="flex items-center gap-3 rounded-[20px] border border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] px-4 py-3 shadow-lg">
+						<span className="flex size-8 items-center justify-center rounded-full bg-[var(--nora-panel-elevated)] text-[var(--nora-panel-text)]">
 							<Share className="size-4" />
 						</span>
 						<div className="flex-1">
-							<p className="text-sm font-semibold text-[var(--rb-panel-text)]">
+							<p className="text-sm font-semibold text-[var(--nora-panel-text)]">
 								{t("pwa.ios.title")}
 							</p>
-							<p className="text-xs text-[var(--rb-panel-text-muted)]">
+							<p className="text-xs text-[var(--nora-panel-text-muted)]">
 								{t("pwa.ios.body")}
 							</p>
 						</div>
@@ -615,7 +615,7 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 								const tabButtonClass = cn(
 									"relative z-[1] h-auto min-h-12 min-w-0 flex-1 select-none rounded-[16px] px-0 hover:bg-transparent focus:bg-transparent active:bg-transparent",
 									isActive
-										? "text-[var(--rb-panel-accent)]"
+										? "text-[var(--nora-panel-accent)]"
 										: "text-slate-400",
 								);
 
@@ -641,20 +641,20 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 													className={cn(
 														"relative z-[1] size-5 transition-colors duration-200",
 														isSelected
-															? "text-[var(--rb-panel-accent)] drop-shadow-[0_0_6px_color-mix(in_srgb,var(--rb-panel-accent)_50%,transparent)]"
+															? "text-[var(--nora-panel-accent)] drop-shadow-[0_0_6px_color-mix(in_srgb,var(--nora-panel-accent)_50%,transparent)]"
 															: "text-slate-400",
 													)}
 													strokeWidth={1.75}
 												/>
 												{item.key === "notifications" && unread > 0 ? (
-													<span className="absolute top-0.5 end-2 z-[2] size-2 rounded-full border border-[var(--rb-panel-surface)] bg-[var(--rb-panel-accent)]" />
+													<span className="absolute top-0.5 end-2 z-[2] size-2 rounded-full border border-[var(--nora-panel-surface)] bg-[var(--nora-panel-accent)]" />
 												) : null}
 											</div>
 											<span
 												className={cn(
 													"max-w-full truncate px-1 text-center text-[10px] leading-[1.1] transition-colors duration-200",
 													isSelected
-														? "font-bold text-[var(--rb-panel-accent)]"
+														? "font-bold text-[var(--nora-panel-accent)]"
 														: "font-medium text-slate-400",
 												)}
 											>
@@ -770,24 +770,24 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 																						"relative flex min-h-[38px] w-full items-center gap-2.5 overflow-hidden rounded-[12px] px-2.5 text-start text-[13px] transition-[background-color,color,transform] duration-150 outline-none select-none active:scale-[0.98] active:bg-[#21262d]",
 																						entrySelected
 																							? isRTL
-																								? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
-																								: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
+																								? "bg-gradient-to-l from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-[3px] border-[var(--nora-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--nora-panel-accent)_12%,transparent)]"
+																								: "bg-gradient-to-r from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-[3px] border-[var(--nora-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--nora-panel-accent)_12%,transparent)]"
 																							: "bg-transparent font-medium text-slate-400",
 																					)}
 																				>
-																					<EntryIcon className={cn("size-[18px] shrink-0", entrySelected ? "text-[var(--rb-panel-accent)]" : "text-slate-400")} />
+																					<EntryIcon className={cn("size-[18px] shrink-0", entrySelected ? "text-[var(--nora-panel-accent)]" : "text-slate-400")} />
 																					<span className="min-w-0 flex-1 truncate">
 																						{navEntry.title}
 																					</span>
 																					{isNotifEntry && unread > 0 ? (
 																						<span
 																							dir="ltr"
-																							className="inline-flex h-[18px] min-w-[18px] shrink-0 items-center justify-center rounded-full bg-[var(--rb-panel-accent)] px-1.5 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
+																							className="inline-flex h-[18px] min-w-[18px] shrink-0 items-center justify-center rounded-full bg-[var(--nora-panel-accent)] px-1.5 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
 																						>
 																							{unread > 99 ? "99+" : unread}
 																						</span>
 																					) : showBadge ? (
-																						<span className="inline-flex size-4 shrink-0 items-center justify-center rounded-full bg-[var(--rb-panel-accent)] text-slate-950 font-bold">
+																						<span className="inline-flex size-4 shrink-0 items-center justify-center rounded-full bg-[var(--nora-panel-accent)] text-slate-950 font-bold">
 																							<BellRing className="size-2.5" />
 																						</span>
 																					) : null}
@@ -837,8 +837,8 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 																						"relative flex min-h-[38px] w-full items-center justify-between gap-2.5 overflow-hidden rounded-[12px] px-2.5 text-start text-[13px] transition-[background-color,color,transform] duration-150 outline-none select-none active:scale-[0.98] active:bg-[#21262d]",
 																						isGroupActive && !isGroupOpen
 																							? isRTL
-																								? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)]"
-																								: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)]"
+																								? "bg-gradient-to-l from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-[3px] border-[var(--nora-panel-accent)]"
+																								: "bg-gradient-to-r from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-[3px] border-[var(--nora-panel-accent)]"
 																							: isGroupActive
 																								? "bg-transparent font-bold text-[#f0f6fc]"
 																								: "bg-transparent font-medium text-slate-400",
@@ -849,7 +849,7 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 																							className={cn(
 																								"size-[18px] shrink-0",
 																								isGroupActive &&
-																									"text-[var(--rb-panel-accent)]",
+																									"text-[var(--nora-panel-accent)]",
 																							)}
 																						/>
 																						<span className="truncate">
@@ -915,15 +915,15 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 																												"relative flex min-h-[34px] w-full items-center gap-2.5 rounded-[10px] px-2.5 text-start text-xs transition-[background-color,color,transform] duration-150 outline-none select-none active:scale-[0.98] active:bg-[#21262d]",
 																												subSelected
 																													? isRTL
-																														? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-2 border-[var(--rb-panel-accent)]"
-																														: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-2 border-[var(--rb-panel-accent)]"
+																														? "bg-gradient-to-l from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-2 border-[var(--nora-panel-accent)]"
+																														: "bg-gradient-to-r from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-2 border-[var(--nora-panel-accent)]"
 																													: "bg-transparent font-medium text-slate-400",
 																											)}
 																										>
 																											{subSelected ? (
-																												<span className="pointer-events-none absolute -inset-s-[11.5px] top-1/2 h-3.5 w-[2px] -translate-y-1/2 rounded-full bg-[var(--rb-panel-accent)]" />
+																												<span className="pointer-events-none absolute -inset-s-[11.5px] top-1/2 h-3.5 w-[2px] -translate-y-1/2 rounded-full bg-[var(--nora-panel-accent)]" />
 																											) : null}
-																											<SubIcon className={cn("size-4 shrink-0", subSelected ? "text-[var(--rb-panel-accent)]" : "text-slate-400")} />
+																											<SubIcon className={cn("size-4 shrink-0", subSelected ? "text-[var(--nora-panel-accent)]" : "text-slate-400")} />
 																											<span className="min-w-0 flex-1 truncate">
 																												{sub.title}
 																											</span>
@@ -931,7 +931,7 @@ export const MobileNav: FC<MobileNavProps> = memo(function MobileNav({
 																											unread > 0 ? (
 																												<span
 																													dir="ltr"
-																													className="inline-flex h-[17px] min-w-[17px] shrink-0 items-center justify-center rounded-full bg-[var(--rb-panel-accent)] px-1 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
+																													className="inline-flex h-[17px] min-w-[17px] shrink-0 items-center justify-center rounded-full bg-[var(--nora-panel-accent)] px-1 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
 																												>
 																													{unread > 99
 																														? "99+"

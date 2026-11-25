@@ -55,7 +55,7 @@ const STATUS_TONE: Record<OverviewStatusKey, string> = {
  * The users overview card, rebuilt with Tailwind on the panel's own tokens.
  *
  * This is the first screen of the Chakra → Tailwind migration: no Chakra
- * component, no `sx`, no emotion. Every colour comes from `--rb-panel-*`, so it
+ * component, no `sx`, no emotion. Every colour comes from `--nora-panel-*`, so it
  * matches the rest of the dashboard exactly, and logical utilities keep RTL
  * identical to LTR.
  */
@@ -108,13 +108,13 @@ export function UsersOverviewBand({
 			className={
 				bare
 					? "grid grid-cols-2 gap-x-4 gap-y-4 p-4 md:grid-cols-[minmax(0,14rem)_minmax(0,0.9fr)_minmax(0,1.2fr)_minmax(0,13rem)] md:gap-0"
-					: "grid grid-cols-2 gap-x-4 gap-y-4 rounded-xl border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] p-4 shadow-md md:grid-cols-[minmax(0,14rem)_minmax(0,0.9fr)_minmax(0,1.2fr)_minmax(0,13rem)] md:gap-0"
+					: "grid grid-cols-2 gap-x-4 gap-y-4 rounded-xl border border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] p-4 shadow-md md:grid-cols-[minmax(0,14rem)_minmax(0,0.9fr)_minmax(0,1.2fr)_minmax(0,13rem)] md:gap-0"
 			}
 			aria-label={t("usersStatusBreakdown")}
 		>
 			{/* Total, against the admin's user cap when the panel reports one. */}
 			<div className="order-1 col-span-1 flex flex-col justify-between gap-2 md:pe-6">
-				<span className="text-xs font-semibold uppercase tracking-wider text-[var(--rb-panel-text-muted)]">
+				<span className="text-xs font-semibold uppercase tracking-wider text-[var(--nora-panel-text-muted)]">
 					{t("usersTable.total")}
 				</span>
 				<div>
@@ -122,32 +122,32 @@ export function UsersOverviewBand({
 						<OverviewLink
 							label={t("usersTable.total")}
 							onSelect={() => onSelect({ kind: "all" })}
-							className="rb-tabular font-mono text-[1.75rem] font-bold leading-none tracking-tight text-[var(--rb-panel-text)] hover:text-cyan-400"
+							className="rb-tabular font-mono text-[1.75rem] font-bold leading-none tracking-tight text-[var(--nora-panel-text)] hover:text-cyan-400"
 						>
 							{count(total, locale)}
 						</OverviewLink>
 						{usersLimit ? (
-							<span className="rb-tabular font-mono text-xs text-[var(--rb-panel-text-muted)]">
+							<span className="rb-tabular font-mono text-xs text-[var(--nora-panel-text-muted)]">
 								/ {count(usersLimit, locale)}
 							</span>
 						) : null}
 					</div>
 					{limitPercent !== null ? (
 						<div className="mt-2 space-y-1">
-							<div className="h-1.5 overflow-hidden rounded-full bg-[var(--rb-panel-elevated)]">
+							<div className="h-1.5 overflow-hidden rounded-full bg-[var(--nora-panel-elevated)]">
 								<div
 									className="h-full rounded-full bg-cyan-400 transition-[width] duration-500 shadow-[0_0_8px_rgba(34,211,238,0.5)]"
 									style={{ width: `${limitPercent}%` }}
 								/>
 							</div>
-							<p className="rb-tabular font-mono flex items-baseline gap-1 text-[0.625rem] text-[var(--rb-panel-text-muted)]">
+							<p className="rb-tabular font-mono flex items-baseline gap-1 text-[0.625rem] text-[var(--nora-panel-text-muted)]">
 								<span>{percent(limitPercent, locale)}%</span>
 								<span>/</span>
 								<span>{count(usersLimit, locale)}</span>
 							</p>
 						</div>
 					) : (
-						<p className="mt-2 text-xs text-[var(--rb-panel-text-muted)]">
+						<p className="mt-2 text-xs text-[var(--nora-panel-text-muted)]">
 							{t("users")}
 						</p>
 					)}
@@ -155,7 +155,7 @@ export function UsersOverviewBand({
 			</div>
 
 			{/* Live state. */}
-			<div className="order-3 col-span-2 grid grid-cols-2 content-start gap-x-4 gap-y-3 border-t border-[var(--rb-panel-border)] pt-4 md:order-2 md:col-span-1 md:flex md:flex-col md:justify-between md:gap-3 md:border-s md:border-t-0 md:border-[var(--rb-panel-border)] md:px-6 md:pt-0">
+			<div className="order-3 col-span-2 grid grid-cols-2 content-start gap-x-4 gap-y-3 border-t border-[var(--nora-panel-border)] pt-4 md:order-2 md:col-span-1 md:flex md:flex-col md:justify-between md:gap-3 md:border-s md:border-t-0 md:border-[var(--nora-panel-border)] md:px-6 md:pt-0">
 				{[
 					{ key: "online", label: t("onlineStatus.online"), value: online, tone: "bg-panel-accent" },
 					{ key: "active", label: t("status.active"), value: active, tone: "bg-panel-success" },
@@ -171,15 +171,15 @@ export function UsersOverviewBand({
 					>
 						<div className="flex items-center gap-1.5">
 							<span className={`size-1.5 rounded-full ${row.tone}`} />
-							<span className="text-xs font-semibold uppercase tracking-wider text-[var(--rb-panel-text-muted)]">
+							<span className="text-xs font-semibold uppercase tracking-wider text-[var(--nora-panel-text-muted)]">
 								{row.label}
 							</span>
 						</div>
 						<div className="mt-1 flex items-baseline gap-2">
-							<span className="rb-tabular font-mono text-lg font-bold leading-none text-[var(--rb-panel-text)]">
+							<span className="rb-tabular font-mono text-lg font-bold leading-none text-[var(--nora-panel-text)]">
 								{count(row.value, locale)}
 							</span>
-							<span className="rb-tabular font-mono flex items-baseline gap-1 text-[0.625rem] text-[var(--rb-panel-text-muted)]">
+							<span className="rb-tabular font-mono flex items-baseline gap-1 text-[0.625rem] text-[var(--nora-panel-text-muted)]">
 								<span>{percent(share(row.value, totals || total || 1), locale)}%</span>
 								<span>{t("users")}</span>
 							</span>
@@ -189,16 +189,16 @@ export function UsersOverviewBand({
 			</div>
 
 			{/* Distribution across statuses. */}
-			<div className="order-4 col-span-2 flex flex-col justify-center gap-2 border-t border-[var(--rb-panel-border)] pt-4 md:order-3 md:col-span-1 md:border-s md:border-t-0 md:border-[var(--rb-panel-border)] md:px-6 md:pt-0">
+			<div className="order-4 col-span-2 flex flex-col justify-center gap-2 border-t border-[var(--nora-panel-border)] pt-4 md:order-3 md:col-span-1 md:border-s md:border-t-0 md:border-[var(--nora-panel-border)] md:px-6 md:pt-0">
 				<div className="flex items-center justify-between">
-					<span className="text-xs font-semibold uppercase tracking-wider text-[var(--rb-panel-text-muted)]">
+					<span className="text-xs font-semibold uppercase tracking-wider text-[var(--nora-panel-text-muted)]">
 						{t("usersStatusBreakdown")}
 					</span>
-					<span className="rb-tabular font-mono text-xs text-[var(--rb-panel-text-muted)]">
+					<span className="rb-tabular font-mono text-xs text-[var(--nora-panel-text-muted)]">
 						{count(totals, locale)}
 					</span>
 				</div>
-				<div className="flex h-1.5 w-full gap-px overflow-hidden rounded-full bg-[var(--rb-panel-elevated)]">
+				<div className="flex h-1.5 w-full gap-px overflow-hidden rounded-full bg-[var(--nora-panel-elevated)]">
 					{STATUS_ORDER.map((key) => {
 						const value = breakdown[key] ?? 0;
 						if (!value) return null;
@@ -219,11 +219,11 @@ export function UsersOverviewBand({
 							label={t(`status.${key}`)}
 							active={selection.status === key}
 							onSelect={() => onSelect({ kind: "status", status: key })}
-							className="flex items-center gap-1.5 text-xs text-[var(--rb-panel-text-secondary)] hover:text-[var(--rb-panel-text)]"
+							className="flex items-center gap-1.5 text-xs text-[var(--nora-panel-text-secondary)] hover:text-[var(--nora-panel-text)]"
 						>
 							<span className={`size-1.5 rounded-full ${STATUS_TONE[key]}`} />
 							{t(`status.${key}`)}
-							<span className="rb-tabular font-mono ms-auto font-medium text-[var(--rb-panel-text)]">
+							<span className="rb-tabular font-mono ms-auto font-medium text-[var(--nora-panel-text)]">
 								{count(breakdown[key] ?? 0, locale)}
 							</span>
 						</OverviewLink>
@@ -232,8 +232,8 @@ export function UsersOverviewBand({
 			</div>
 
 			{/* Traffic total plus the per-user average. */}
-			<div className="order-2 col-span-1 flex flex-col justify-between gap-2 md:order-4 md:col-span-1 md:border-s md:border-[var(--rb-panel-border)] md:ps-6">
-				<span className="text-xs font-semibold uppercase tracking-wider text-[var(--rb-panel-text-muted)]">
+			<div className="order-2 col-span-1 flex flex-col justify-between gap-2 md:order-4 md:col-span-1 md:border-s md:border-[var(--nora-panel-border)] md:ps-6">
+				<span className="text-xs font-semibold uppercase tracking-wider text-[var(--nora-panel-text-muted)]">
 					{usageLabel ?? t("usersTable.listUsage")}
 				</span>
 				<div>
@@ -241,7 +241,7 @@ export function UsersOverviewBand({
 						label={usageLabel ?? t("usersTable.listUsage")}
 						active={selection.usage}
 						onSelect={() => onSelect({ kind: "usage" })}
-						className="rb-tabular font-mono block w-full text-[1.75rem] font-bold leading-none tracking-tight text-[var(--rb-panel-text)] hover:text-cyan-400"
+						className="rb-tabular font-mono block w-full text-[1.75rem] font-bold leading-none tracking-tight text-[var(--nora-panel-text)] hover:text-cyan-400"
 					>
 						<span dir="ltr" style={{ unicodeBidi: "isolate" }}>
 							{usage === null ? "—" : formatBytes(usage)}

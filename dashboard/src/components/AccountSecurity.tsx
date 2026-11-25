@@ -83,7 +83,7 @@ const parseSessionClient = (userAgent = ""): SessionClient => {
 		os = {
 			name: /ipad/i.test(ua) ? "iPadOS" : "iOS",
 			icon: FaApple,
-			color: "var(--rb-panel-text)",
+			color: "var(--nora-panel-text)",
 		};
 	} else if (/android/i.test(ua)) {
 		os = {
@@ -95,7 +95,7 @@ const parseSessionClient = (userAgent = ""): SessionClient => {
 		os = {
 			name: "macOS",
 			icon: FaApple,
-			color: "var(--rb-panel-text)",
+			color: "var(--nora-panel-text)",
 		};
 	} else if (/linux/i.test(ua)) {
 		os = { name: "Linux", icon: FaLinux, color: "#FCC624" };

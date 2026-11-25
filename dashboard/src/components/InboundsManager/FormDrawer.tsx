@@ -1479,23 +1479,23 @@ export const InboundFormModal: FC<Props> = ({
 				if (!next) onClose();
 			}}
 		>
-			<DialogContent className="flex h-[min(880px,calc(100dvh-3.5rem))] max-h-[calc(100dvh-2rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-4xl lg:max-w-5xl rounded-[20px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] text-[var(--rb-panel-text)] shadow-2xl max-md:inset-x-3 max-md:top-3 max-md:bottom-3 max-md:h-auto max-md:max-h-none max-md:w-auto max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0 inbound-form-modal">
+			<DialogContent className="flex h-[min(880px,calc(100dvh-3.5rem))] max-h-[calc(100dvh-2rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-4xl lg:max-w-5xl rounded-[20px] border border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] text-[var(--nora-panel-text)] shadow-2xl max-md:inset-x-3 max-md:top-3 max-md:bottom-3 max-md:h-auto max-md:max-h-none max-md:w-auto max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0 inbound-form-modal">
 				<Tabs value={String(activeTab)} onValueChange={(value) => setActiveTab(Number(value))} className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
-					<div className="shrink-0 flex flex-col gap-2 border-b border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)]/95 backdrop-blur-md px-6 pb-3 pt-4 pe-12 md:gap-3">
+					<div className="shrink-0 flex flex-col gap-2 border-b border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)]/95 backdrop-blur-md px-6 pb-3 pt-4 pe-12 md:gap-3">
 						<div className="flex min-w-0 items-center gap-3">
 							<div className="flex size-9 shrink-0 items-center justify-center rounded-xl badge-soft-cyan text-cyan-400 [&_svg]:size-5">
 								<Network className="size-5" />
 							</div>
 							<div className="min-w-0">
-								<DialogTitle className="truncate text-base font-semibold text-[var(--rb-panel-text)] tracking-tight">
+								<DialogTitle className="truncate text-base font-semibold text-[var(--nora-panel-text)] tracking-tight">
 									{mode === "create" ? t("inbounds.add") : mode === "clone" ? t("inbounds.cloneTitle") : t("inbounds.edit")}
 								</DialogTitle>
-								<DialogDescription className="truncate text-xs text-[var(--rb-panel-text-muted)]">
+								<DialogDescription className="truncate text-xs text-[var(--nora-panel-text-muted)]">
 									{protocolLabel(String(currentProtocol))}
 								</DialogDescription>
 							</div>
 						</div>
-						<TabsList className="grid w-full grid-cols-3 bg-[var(--canvas-subtle)] border border-[var(--rb-panel-border)] p-1">
+						<TabsList className="grid w-full grid-cols-3 bg-[var(--canvas-subtle)] border border-[var(--nora-panel-border)] p-1">
 							<TabsTrigger value="0">{t("form")}</TabsTrigger>
 							<TabsTrigger value="1">{t("json")}</TabsTrigger>
 							<TabsTrigger value="2">{t("inbounds.targets")}</TabsTrigger>
@@ -6773,7 +6773,7 @@ export const InboundFormModal: FC<Props> = ({
 							</TabsContent>
 					</div>
 				</Tabs>
-				<DialogFooter className="shrink-0 flex-row flex-wrap items-center justify-between gap-2 border-t border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] px-6 py-3.5">
+				<DialogFooter className="shrink-0 flex-row flex-wrap items-center justify-between gap-2 border-t border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] px-6 py-3.5">
 					{isEditMode && onDelete ? (
 						<div className="flex flex-row flex-wrap items-center gap-2">
 							<DeleteConfirmDialog

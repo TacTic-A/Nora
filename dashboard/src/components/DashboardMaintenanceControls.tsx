@@ -578,7 +578,7 @@ export const DashboardMaintenanceControls: FC<DashboardMaintenanceControlsProps>
 			variant="ghost"
 			size="sm"
 			loading={info.isFetching || builds.isFetching}
-			className="h-8 min-h-8 rounded-xl px-2.5 has-[>svg]:px-2.5 text-[12px] text-[var(--rb-panel-text-muted)] active:scale-[0.97] hover:bg-[var(--rb-panel-elevated)] hover:text-[var(--rb-panel-text)]"
+			className="h-8 min-h-8 rounded-xl px-2.5 has-[>svg]:px-2.5 text-[12px] text-[var(--nora-panel-text-muted)] active:scale-[0.97] hover:bg-[var(--nora-panel-elevated)] hover:text-[var(--nora-panel-text)]"
 		>
 			<RefreshCw className="size-3.5" />
 			<span>{t("refresh")}</span>

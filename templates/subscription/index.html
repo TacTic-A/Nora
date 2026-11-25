@@ -25,22 +25,22 @@
             color-scheme: dark;
             --rb-font-ltr: Inter, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
             --rb-font-rtl: "Arad", var(--rb-font-ltr);
-            --rb-panel-bg: #101010;
-            --rb-panel-main: #111111;
-            --rb-panel-sidebar: #2b2b2b;
-            --rb-panel-surface: #242424;
-            --rb-panel-elevated: #2f2f2f;
-            --rb-panel-border: #3a3a3a;
-            --rb-panel-border-strong: #4a4a4a;
-            --rb-panel-text: #f5f5f5;
-            --rb-panel-text-secondary: #b8b8b8;
-            --rb-panel-text-muted: #8a8a8a;
-            --rb-panel-accent: #e0003c;
-            --rb-panel-accent-hover: #f01446;
-            --rb-panel-success: #22c55e;
-            --rb-panel-warning: #f59e0b;
-            --rb-panel-danger: #ef4444;
-            --rb-panel-info: #2563eb;
+            --nora-panel-bg: #101010;
+            --nora-panel-main: #111111;
+            --nora-panel-sidebar: #2b2b2b;
+            --nora-panel-surface: #242424;
+            --nora-panel-elevated: #2f2f2f;
+            --nora-panel-border: #3a3a3a;
+            --nora-panel-border-strong: #4a4a4a;
+            --nora-panel-text: #f5f5f5;
+            --nora-panel-text-secondary: #b8b8b8;
+            --nora-panel-text-muted: #8a8a8a;
+            --nora-panel-accent: #e0003c;
+            --nora-panel-accent-hover: #f01446;
+            --nora-panel-success: #22c55e;
+            --nora-panel-warning: #f59e0b;
+            --nora-panel-danger: #ef4444;
+            --nora-panel-info: #2563eb;
             --rb-accent-rgb: 224, 0, 60;
             --primary-50: #ffe6ed;
             --primary-100: #ffb8c9;
@@ -56,30 +56,30 @@
 
         .rb-theme-light {
             color-scheme: light;
-            --rb-panel-bg: #f4f5f7;
-            --rb-panel-main: #f7f8fa;
-            --rb-panel-sidebar: #ffffff;
-            --rb-panel-surface: #ffffff;
-            --rb-panel-elevated: #eef0f3;
-            --rb-panel-border: #d8dce2;
-            --rb-panel-border-strong: #c2c8d0;
-            --rb-panel-text: #17191c;
-            --rb-panel-text-secondary: #4f5661;
-            --rb-panel-text-muted: #7a828e;
+            --nora-panel-bg: #f4f5f7;
+            --nora-panel-main: #f7f8fa;
+            --nora-panel-sidebar: #ffffff;
+            --nora-panel-surface: #ffffff;
+            --nora-panel-elevated: #eef0f3;
+            --nora-panel-border: #d8dce2;
+            --nora-panel-border-strong: #c2c8d0;
+            --nora-panel-text: #17191c;
+            --nora-panel-text-secondary: #4f5661;
+            --nora-panel-text-muted: #7a828e;
         }
 
         .rb-theme-dark {
             color-scheme: dark;
-            --rb-panel-bg: #101010;
-            --rb-panel-main: #111111;
-            --rb-panel-sidebar: #2b2b2b;
-            --rb-panel-surface: #242424;
-            --rb-panel-elevated: #2f2f2f;
-            --rb-panel-border: #3a3a3a;
-            --rb-panel-border-strong: #4a4a4a;
-            --rb-panel-text: #f5f5f5;
-            --rb-panel-text-secondary: #b8b8b8;
-            --rb-panel-text-muted: #8a8a8a;
+            --nora-panel-bg: #101010;
+            --nora-panel-main: #111111;
+            --nora-panel-sidebar: #2b2b2b;
+            --nora-panel-surface: #242424;
+            --nora-panel-elevated: #2f2f2f;
+            --nora-panel-border: #3a3a3a;
+            --nora-panel-border-strong: #4a4a4a;
+            --nora-panel-text: #f5f5f5;
+            --nora-panel-text-secondary: #b8b8b8;
+            --nora-panel-text-muted: #8a8a8a;
         }
 
         * {
@@ -92,8 +92,8 @@
 
         html {
             font-family: var(--rb-font-ltr);
-            background: var(--rb-panel-bg);
-            color: var(--rb-panel-text);
+            background: var(--nora-panel-bg);
+            color: var(--nora-panel-text);
         }
 
         html[dir="rtl"] {
@@ -106,8 +106,8 @@
             background:
                 radial-gradient(circle at top left, rgba(var(--rb-accent-rgb), 0.18), transparent 24rem),
                 radial-gradient(circle at bottom right, rgba(var(--rb-accent-rgb), 0.1), transparent 22rem),
-                linear-gradient(180deg, var(--rb-panel-main), var(--rb-panel-bg));
-            color: var(--rb-panel-text);
+                linear-gradient(180deg, var(--nora-panel-main), var(--nora-panel-bg));
+            color: var(--nora-panel-text);
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
         }
@@ -135,10 +135,10 @@
         }
 
         .rb-panel-card {
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 18px;
             background: rgba(17, 17, 17, 0.82);
-            background: color-mix(in srgb, var(--rb-panel-surface) 90%, transparent);
+            background: color-mix(in srgb, var(--nora-panel-surface) 90%, transparent);
             box-shadow: 0 22px 40px rgba(0, 0, 0, 0.16);
             backdrop-filter: blur(18px);
         }
@@ -160,7 +160,7 @@
 
         .rb-eyebrow {
             margin: 0 0 8px;
-            color: var(--rb-panel-text-muted);
+            color: var(--nora-panel-text-muted);
             font-size: 0.74rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -184,7 +184,7 @@
 
         .rb-subtitle {
             margin: 0;
-            color: var(--rb-panel-text-secondary);
+            color: var(--nora-panel-text-secondary);
             font-size: 0.98rem;
         }
 
@@ -195,15 +195,15 @@
             min-height: 30px;
             padding: 0 12px;
             border-radius: 999px;
-            border: 1px solid var(--rb-panel-border);
-            background: var(--rb-panel-elevated);
-            color: var(--rb-panel-text);
+            border: 1px solid var(--nora-panel-border);
+            background: var(--nora-panel-elevated);
+            color: var(--nora-panel-text);
             font-size: 0.82rem;
             font-weight: 700;
         }
 
         .rb-badge--service {
-            color: var(--rb-panel-accent);
+            color: var(--nora-panel-accent);
             border-color: rgba(var(--rb-accent-rgb), 0.42);
             background: rgba(var(--rb-accent-rgb), 0.1);
         }
@@ -225,17 +225,17 @@
             justify-content: center;
             width: 44px;
             height: 44px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 14px;
             background: rgba(255, 255, 255, 0.02);
-            color: var(--rb-panel-text);
+            color: var(--nora-panel-text);
             cursor: pointer;
             transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
         }
 
         .rb-toolbar-icon:hover {
-            background: var(--rb-panel-elevated);
-            border-color: var(--rb-panel-border-strong);
+            background: var(--nora-panel-elevated);
+            border-color: var(--nora-panel-border-strong);
             transform: translateY(-1px);
         }
 
@@ -246,9 +246,9 @@
             z-index: 30;
             min-width: 230px;
             padding: 8px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 16px;
-            background: var(--rb-panel-surface);
+            background: var(--nora-panel-surface);
             box-shadow: 0 18px 36px rgba(0, 0, 0, 0.22);
         }
 
@@ -264,12 +264,12 @@
         .rb-menu-section + .rb-menu-section {
             margin-top: 8px;
             padding-top: 8px;
-            border-top: 1px solid var(--rb-panel-border);
+            border-top: 1px solid var(--nora-panel-border);
         }
 
         .rb-menu-heading {
             padding: 4px 10px;
-            color: var(--rb-panel-text-muted);
+            color: var(--nora-panel-text-muted);
             font-size: 0.72rem;
             font-weight: 800;
             text-transform: uppercase;
@@ -286,13 +286,13 @@
             border: 0;
             border-radius: 12px;
             background: transparent;
-            color: var(--rb-panel-text);
+            color: var(--nora-panel-text);
             cursor: pointer;
             text-align: start;
         }
 
         .rb-menu-item:hover {
-            background: var(--rb-panel-elevated);
+            background: var(--nora-panel-elevated);
         }
 
         .rb-menu-item.is-active {
@@ -307,7 +307,7 @@
         }
 
         .rb-menu-check {
-            color: var(--rb-panel-accent);
+            color: var(--nora-panel-accent);
             font-size: 0.94rem;
             font-weight: 800;
             opacity: 0;
@@ -365,7 +365,7 @@
 
         .rb-label {
             margin: 0 0 6px;
-            color: var(--rb-panel-text-muted);
+            color: var(--nora-panel-text-muted);
             font-size: 0.78rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -425,7 +425,7 @@
 
         .rb-status-note {
             margin: 10px 0 0;
-            color: var(--rb-panel-text-secondary);
+            color: var(--nora-panel-text-secondary);
             font-size: 0.94rem;
         }
 
@@ -438,7 +438,7 @@
 
         .rb-metric {
             padding: 14px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 16px;
             background: rgba(255, 255, 255, 0.02);
         }
@@ -457,9 +457,9 @@
 
         .rb-usage-block {
             padding: 18px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 16px;
-            background: linear-gradient(180deg, rgba(var(--rb-accent-rgb), 0.08), transparent 120px), var(--rb-panel-main);
+            background: linear-gradient(180deg, rgba(var(--rb-accent-rgb), 0.08), transparent 120px), var(--nora-panel-main);
         }
 
         .rb-usage-row {
@@ -472,7 +472,7 @@
 
         .rb-usage-summary {
             margin: 0 0 12px;
-            color: var(--rb-panel-text-secondary);
+            color: var(--nora-panel-text-secondary);
             font-size: 0.92rem;
             line-height: 1.65;
         }
@@ -489,16 +489,16 @@
             height: 100%;
             width: 0;
             border-radius: inherit;
-            background: linear-gradient(90deg, var(--rb-panel-accent), var(--rb-panel-accent-hover));
+            background: linear-gradient(90deg, var(--nora-panel-accent), var(--nora-panel-accent-hover));
             transition: width 180ms ease;
         }
 
         .rb-account-block {
             margin-top: 16px;
             padding: 18px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 16px;
-            background: var(--rb-panel-main);
+            background: var(--nora-panel-main);
         }
 
         .rb-account-block .rb-label {
@@ -520,7 +520,7 @@
 
         .rb-subscription-url {
             margin: 4px 0 0;
-            color: var(--rb-panel-text-secondary);
+            color: var(--nora-panel-text-secondary);
             font-size: 0.94rem;
             white-space: nowrap;
             overflow: hidden;
@@ -549,9 +549,9 @@
             height: 38px;
             padding: 0 14px;
             border-radius: 12px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             background: transparent;
-            color: var(--rb-panel-text);
+            color: var(--nora-panel-text);
             cursor: pointer;
             transition: transform 120ms ease, background-color 120ms ease, border-color 120ms ease, color 120ms ease;
         }
@@ -559,8 +559,8 @@
         .rb-button:hover,
         .rb-link-button:hover {
             transform: translateY(-1px);
-            background: var(--rb-panel-elevated);
-            border-color: var(--rb-panel-border-strong);
+            background: var(--nora-panel-elevated);
+            border-color: var(--nora-panel-border-strong);
         }
 
         .rb-button:disabled {
@@ -571,12 +571,12 @@
 
         .rb-button--primary {
             border-color: rgba(var(--rb-accent-rgb), 0.42);
-            background: var(--rb-panel-accent);
+            background: var(--nora-panel-accent);
             color: #ffffff;
         }
 
         .rb-button--primary:hover {
-            background: var(--rb-panel-accent-hover);
+            background: var(--nora-panel-accent-hover);
             border-color: rgba(var(--rb-accent-rgb), 0.48);
         }
 
@@ -609,7 +609,7 @@
             border: 1px solid transparent;
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.04);
-            color: var(--rb-panel-text-secondary);
+            color: var(--nora-panel-text-secondary);
             cursor: pointer;
             transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
         }
@@ -625,9 +625,9 @@
         }
 
         .rb-icon-button:hover {
-            background: var(--rb-panel-elevated);
-            border-color: var(--rb-panel-border);
-            color: var(--rb-panel-text);
+            background: var(--nora-panel-elevated);
+            border-color: var(--nora-panel-border);
+            color: var(--nora-panel-text);
         }
 
         .rb-icon-button.is-copied {
@@ -668,7 +668,7 @@
 
         .rb-card-copy {
             margin: 6px 0 0;
-            color: var(--rb-panel-text-secondary);
+            color: var(--nora-panel-text-secondary);
             font-size: 0.92rem;
         }
 
@@ -679,14 +679,14 @@
             margin-bottom: 12px;
             padding: 0 12px;
             height: 42px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 14px;
-            background: var(--rb-panel-main);
+            background: var(--nora-panel-main);
         }
 
         .rb-search svg {
             flex: 0 0 auto;
-            color: var(--rb-panel-text-muted);
+            color: var(--nora-panel-text-muted);
         }
 
         .rb-search input {
@@ -694,11 +694,11 @@
             border: 0;
             outline: 0;
             background: transparent;
-            color: var(--rb-panel-text);
+            color: var(--nora-panel-text);
         }
 
         .rb-search input::placeholder {
-            color: var(--rb-panel-text-muted);
+            color: var(--nora-panel-text-muted);
         }
 
         .rb-protocol-tabs-wrap {
@@ -714,9 +714,9 @@
             flex-wrap: wrap;
             gap: 8px;
             padding: 6px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 18px;
-            background: var(--rb-panel-main);
+            background: var(--nora-panel-main);
         }
 
         .rb-protocol-tab {
@@ -730,13 +730,13 @@
             border: 1px solid transparent;
             border-radius: 14px;
             background: transparent;
-            color: var(--rb-panel-text);
+            color: var(--nora-panel-text);
             cursor: pointer;
             transition: background-color 120ms ease, border-color 120ms ease, transform 120ms ease;
         }
 
         .rb-protocol-tab:hover {
-            background: var(--rb-panel-elevated);
+            background: var(--nora-panel-elevated);
             transform: translateY(-1px);
         }
 
@@ -765,7 +765,7 @@
             padding: 0 10px;
             border-radius: 999px;
             background: rgba(255, 255, 255, 0.05);
-            color: var(--rb-panel-text);
+            color: var(--nora-panel-text);
             font-size: 0.8rem;
             font-weight: 800;
         }
@@ -785,15 +785,15 @@
             justify-content: space-between;
             gap: 12px;
             padding: 12px 14px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 14px;
-            background: var(--rb-panel-main);
+            background: var(--nora-panel-main);
             transition: border-color 120ms ease, background-color 120ms ease, transform 120ms ease;
         }
 
         .rb-config-item:hover {
-            border-color: var(--rb-panel-border-strong);
-            background: var(--rb-panel-elevated);
+            border-color: var(--nora-panel-border-strong);
+            background: var(--nora-panel-elevated);
             transform: translateY(-1px);
         }
 
@@ -836,7 +836,7 @@
             padding: 0 10px;
             border-radius: 999px;
             background: rgba(var(--rb-accent-rgb), 0.1);
-            color: var(--rb-panel-accent);
+            color: var(--nora-panel-accent);
             font-size: 0.74rem;
             font-weight: 800;
             text-transform: uppercase;
@@ -857,9 +857,9 @@
         .rb-empty {
             margin: 0;
             padding: 16px;
-            border: 1px dashed var(--rb-panel-border);
+            border: 1px dashed var(--nora-panel-border);
             border-radius: 14px;
-            color: var(--rb-panel-text-muted);
+            color: var(--nora-panel-text-muted);
             text-align: center;
         }
 
@@ -878,7 +878,7 @@
             align-items: center;
             gap: 10px;
             padding: 12px 0;
-            border-bottom: 1px solid var(--rb-panel-border);
+            border-bottom: 1px solid var(--nora-panel-border);
         }
 
         .rb-detail-list .rb-detail-row:nth-child(3),
@@ -888,13 +888,13 @@
         }
 
         .rb-detail-key {
-            color: var(--rb-panel-text-muted);
+            color: var(--nora-panel-text-muted);
             font-size: 0.82rem;
             font-weight: 700;
         }
 
         .rb-detail-value {
-            color: var(--rb-panel-text);
+            color: var(--nora-panel-text);
             font-weight: 600;
             text-align: end;
             word-break: break-word;
@@ -929,16 +929,16 @@
             justify-content: center;
             min-height: 36px;
             padding: 0 12px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 12px;
-            color: var(--rb-panel-text-secondary);
+            color: var(--nora-panel-text-secondary);
             transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
         }
 
         .rb-quick-links a:hover {
-            background: var(--rb-panel-elevated);
-            border-color: var(--rb-panel-border-strong);
-            color: var(--rb-panel-text);
+            background: var(--nora-panel-elevated);
+            border-color: var(--nora-panel-border-strong);
+            color: var(--nora-panel-text);
         }
 
         .rb-vpn-block {
@@ -948,9 +948,9 @@
 
         .rb-vpn-group {
             padding: 14px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 16px;
-            background: var(--rb-panel-main);
+            background: var(--nora-panel-main);
         }
 
         .rb-vpn-title {
@@ -966,7 +966,7 @@
             justify-content: space-between;
             gap: 10px;
             padding: 12px 0;
-            border-bottom: 1px solid var(--rb-panel-border);
+            border-bottom: 1px solid var(--nora-panel-border);
         }
 
         .rb-vpn-download:last-child {
@@ -982,7 +982,7 @@
         .rb-vpn-meta {
             display: block;
             margin-top: 4px;
-            color: var(--rb-panel-text-muted);
+            color: var(--nora-panel-text-muted);
             font-size: 0.84rem;
         }
 
@@ -998,10 +998,10 @@
             min-height: 180px;
             margin-top: 10px;
             padding: 10px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 12px;
-            background: var(--rb-panel-surface);
-            color: var(--rb-panel-text-secondary);
+            background: var(--nora-panel-surface);
+            color: var(--nora-panel-text-secondary);
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             font-size: 0.78rem;
             line-height: 1.55;
@@ -1016,7 +1016,7 @@
 
         .rb-credential-card {
             padding: 12px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 14px;
             background: rgba(255, 255, 255, 0.02);
         }
@@ -1038,14 +1038,14 @@
             gap: 10px;
             align-items: center;
             padding: 8px 10px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 12px;
-            background: var(--rb-panel-surface);
+            background: var(--nora-panel-surface);
         }
 
         .rb-credential-copy {
             min-width: 0;
-            color: var(--rb-panel-text-secondary);
+            color: var(--nora-panel-text-secondary);
             font-size: 0.83rem;
             word-break: break-word;
         }
@@ -1065,30 +1065,30 @@
         .rb-range-pill {
             min-height: 32px;
             padding: 0 12px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 999px;
             background: transparent;
-            color: var(--rb-panel-text-secondary);
+            color: var(--nora-panel-text-secondary);
             cursor: pointer;
         }
 
         .rb-range-pill:hover {
-            background: var(--rb-panel-elevated);
-            color: var(--rb-panel-text);
+            background: var(--nora-panel-elevated);
+            color: var(--nora-panel-text);
         }
 
         .rb-range-pill.is-active {
             border-color: rgba(var(--rb-accent-rgb), 0.42);
             background: rgba(var(--rb-accent-rgb), 0.12);
-            color: var(--rb-panel-text);
+            color: var(--nora-panel-text);
         }
 
         .rb-chart {
             min-height: 220px;
             padding: 16px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 16px;
-            background: var(--rb-panel-main);
+            background: var(--nora-panel-main);
         }
 
         .rb-chart-svg-wrap {
@@ -1104,12 +1104,12 @@
         }
 
         .rb-chart-gridline {
-            stroke: var(--rb-panel-border);
+            stroke: var(--nora-panel-border);
             stroke-width: 1;
         }
 
         .rb-chart-axis-label {
-            fill: var(--rb-panel-text-muted);
+            fill: var(--nora-panel-text-muted);
             font-size: 10px;
             direction: ltr;
         }
@@ -1121,7 +1121,7 @@
 
         .rb-chart-line {
             fill: none;
-            stroke: var(--rb-panel-accent);
+            stroke: var(--nora-panel-accent);
             stroke-width: 2.4;
             stroke-linecap: round;
             stroke-linejoin: round;
@@ -1134,7 +1134,7 @@
             justify-content: space-between;
             gap: 10px;
             margin-top: 14px;
-            color: var(--rb-panel-text-secondary);
+            color: var(--nora-panel-text-secondary);
             font-size: 0.88rem;
         }
 
@@ -1143,7 +1143,7 @@
             align-items: center;
             justify-content: center;
             min-height: 150px;
-            color: var(--rb-panel-text-muted);
+            color: var(--nora-panel-text-muted);
             text-align: center;
         }
 
@@ -1164,23 +1164,23 @@
             gap: 8px;
             min-height: 34px;
             padding: 0 12px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 999px;
             background: transparent;
-            color: var(--rb-panel-text-secondary);
+            color: var(--nora-panel-text-secondary);
             cursor: pointer;
             line-height: 1;
         }
 
         .rb-app-tab:hover {
-            background: var(--rb-panel-elevated);
-            color: var(--rb-panel-text);
+            background: var(--nora-panel-elevated);
+            color: var(--nora-panel-text);
         }
 
         .rb-app-tab.is-active {
             border-color: rgba(var(--rb-accent-rgb), 0.42);
             background: rgba(var(--rb-accent-rgb), 0.12);
-            color: var(--rb-panel-text);
+            color: var(--nora-panel-text);
         }
 
         .rb-os-icon {
@@ -1209,9 +1209,9 @@
             gap: 10px 12px;
             align-items: center;
             padding: 14px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 14px;
-            background: var(--rb-panel-main);
+            background: var(--nora-panel-main);
         }
 
         .rb-app-item--full {
@@ -1225,9 +1225,9 @@
             justify-content: center;
             width: 46px;
             height: 46px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 12px;
-            background: var(--rb-panel-elevated);
+            background: var(--nora-panel-elevated);
             overflow: hidden;
         }
 
@@ -1243,7 +1243,7 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            color: var(--rb-panel-text);
+            color: var(--nora-panel-text);
             font-size: 0.84rem;
             font-weight: 900;
             letter-spacing: 0;
@@ -1259,7 +1259,7 @@
         .rb-app-meta {
             display: block;
             margin-top: 4px;
-            color: var(--rb-panel-text-muted);
+            color: var(--nora-panel-text-muted);
             font-size: 0.84rem;
         }
 
@@ -1301,9 +1301,9 @@
             position: relative;
             width: min(420px, 100%);
             padding: 18px;
-            border: 1px solid var(--rb-panel-border-strong);
+            border: 1px solid var(--nora-panel-border-strong);
             border-radius: 20px;
-            background: var(--rb-panel-surface);
+            background: var(--nora-panel-surface);
             box-shadow: 0 28px 50px rgba(0, 0, 0, 0.28);
         }
 
@@ -1327,7 +1327,7 @@
         .rb-modal-subtitle {
             margin: 6px 0 0;
             overflow: hidden;
-            color: var(--rb-panel-text-secondary);
+            color: var(--nora-panel-text-secondary);
             font-size: 0.9rem;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -1341,7 +1341,7 @@
             aspect-ratio: 1 / 1;
             margin: 0 auto;
             padding: 10px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 16px;
             background: #ffffff;
         }
@@ -1349,10 +1349,10 @@
         .rb-modal-url {
             margin: 14px 0 0;
             padding: 10px 12px;
-            border: 1px solid var(--rb-panel-border);
+            border: 1px solid var(--nora-panel-border);
             border-radius: 12px;
-            background: var(--rb-panel-main);
-            color: var(--rb-panel-text-muted);
+            background: var(--nora-panel-main);
+            color: var(--nora-panel-text-muted);
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             font-size: 0.76rem;
             line-height: 1.5;
@@ -1381,8 +1381,8 @@
             padding: 12px 14px;
             border: 1px solid rgba(var(--rb-accent-rgb), 0.38);
             border-radius: 14px;
-            background: var(--rb-panel-surface);
-            color: var(--rb-panel-text);
+            background: var(--nora-panel-surface);
+            color: var(--nora-panel-text);
             box-shadow: 0 18px 36px rgba(0, 0, 0, 0.22);
         }
 
@@ -1486,7 +1486,7 @@
             }
 
             .rb-detail-list .rb-detail-row:nth-child(3) {
-                border-bottom: 1px solid var(--rb-panel-border);
+                border-bottom: 1px solid var(--nora-panel-border);
                 padding-bottom: 10px;
             }
 
@@ -2817,8 +2817,8 @@
                 var stored = readStorage(accentKey) || 'crimson';
                 var accent = accentMap[stored] || accentMap.crimson;
                 var rgb = hexToRgb(accent.color);
-                document.documentElement.style.setProperty('--rb-panel-accent', accent.color);
-                document.documentElement.style.setProperty('--rb-panel-accent-hover', accent.hover);
+                document.documentElement.style.setProperty('--nora-panel-accent', accent.color);
+                document.documentElement.style.setProperty('--nora-panel-accent-hover', accent.hover);
                 document.documentElement.style.setProperty('--rb-accent-rgb', rgb.r + ', ' + rgb.g + ', ' + rgb.b);
                 generatePalette(accent.color);
             }
@@ -3872,8 +3872,8 @@
 
                 var svg = '<svg class="rb-chart-svg" viewBox="0 0 ' + width + ' ' + height + '" preserveAspectRatio="none" role="img" aria-label="' + t('usageChartTitle') + '">' +
                     '<defs><linearGradient id="rbChartFill" x1="0" y1="0" x2="0" y2="1">' +
-                    '<stop offset="0%" stop-color="var(--rb-panel-accent)" stop-opacity="0.4"></stop>' +
-                    '<stop offset="100%" stop-color="var(--rb-panel-accent)" stop-opacity="0"></stop>' +
+                    '<stop offset="0%" stop-color="var(--nora-panel-accent)" stop-opacity="0.4"></stop>' +
+                    '<stop offset="100%" stop-color="var(--nora-panel-accent)" stop-opacity="0"></stop>' +
                     '</linearGradient></defs>' +
                     gridSvg +
                     '<path class="rb-chart-area" d="' + areaPath + '"></path>' +

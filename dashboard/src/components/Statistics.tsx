@@ -815,7 +815,7 @@ const HistoryModal: FC<{
 			<DialogContent
 				dir={isRTL ? "rtl" : "ltr"}
 				showCloseButton={false}
-				className="flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-1.5rem)] max-w-[780px] flex-col gap-0 overflow-hidden rounded-[20px] border border-white/[0.08] bg-[#161b22] p-0 text-[var(--rb-panel-text)] shadow-2xl sm:w-full sm:max-w-[780px]"
+				className="flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-1.5rem)] max-w-[780px] flex-col gap-0 overflow-hidden rounded-[20px] border border-white/[0.08] bg-[#161b22] p-0 text-[var(--nora-panel-text)] shadow-2xl sm:w-full sm:max-w-[780px]"
 			>
 				<DialogHeader className="flex flex-row items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-3.5 text-start min-[769px]:px-6">
 					<div className="flex min-w-0 items-center gap-2.5">
@@ -823,7 +823,7 @@ const HistoryModal: FC<{
 							<MetricIcon className="size-3.5" />
 						</span>
 						<div className="min-w-0">
-							<DialogTitle className="truncate text-[14px] font-bold tracking-tight text-[var(--rb-panel-text)]">
+							<DialogTitle className="truncate text-[14px] font-bold tracking-tight text-[var(--nora-panel-text)]">
 								{t("dashboard.history.modalTitle", {
 									metric: payload?.title ?? "",
 								})}
@@ -1060,7 +1060,7 @@ const ResourceCard: FC<{
 			? "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]"
 			: safe >= 70
 				? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
-				: "bg-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_50%,transparent)]";
+				: "bg-[var(--nora-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--nora-panel-accent)_50%,transparent)]";
 
 	const topAccentColor = {
 		cyan: "via-cyan-500/40",
@@ -1120,7 +1120,7 @@ const ResourceCard: FC<{
 							dir="ltr"
 							className="flex items-baseline gap-1.5 [unicode-bidi:isolate]"
 						>
-							<p className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-[var(--rb-panel-text)] tabular-nums">
+							<p className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-[var(--nora-panel-text)] tabular-nums">
 								{value}
 							</p>
 							<p className="font-mono text-xs font-semibold text-[#8b949e] tabular-nums">
@@ -1131,7 +1131,7 @@ const ResourceCard: FC<{
 						<div className="flex flex-wrap items-baseline gap-1.5">
 							<p
 								dir="ltr"
-								className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-[var(--rb-panel-text)] tabular-nums [unicode-bidi:isolate]"
+								className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-[var(--nora-panel-text)] tabular-nums [unicode-bidi:isolate]"
 							>
 								{value}
 							</p>
@@ -1158,7 +1158,7 @@ const ResourceCard: FC<{
 					<span className="font-semibold text-[#8b949e]">Utilization</span>
 					<p
 						dir="ltr"
-						className="font-bold text-[var(--rb-panel-text)] tabular-nums [unicode-bidi:isolate]"
+						className="font-bold text-[var(--nora-panel-text)] tabular-nums [unicode-bidi:isolate]"
 					>
 						{formatPercent(safe)}
 					</p>
@@ -1236,7 +1236,7 @@ const StatRow: FC<{
 				dir="ltr"
 				className={cn(
 					"font-mono text-[13px] font-bold tabular-nums [unicode-bidi:isolate]",
-					accent ? "text-cyan-400" : "text-[var(--rb-panel-text)]",
+					accent ? "text-cyan-400" : "text-[var(--nora-panel-text)]",
 				)}
 			>
 				{typeof value === "number" ? formatNumberValue(value) : value}
@@ -1283,7 +1283,7 @@ const SectionCard: FC<{
 					)}
 				>
 					{title && (
-						<div className="min-w-0 text-[13px] font-bold tracking-tight text-[var(--rb-panel-text)]">
+						<div className="min-w-0 text-[13px] font-bold tracking-tight text-[var(--nora-panel-text)]">
 							{title}
 						</div>
 					)}
@@ -1670,7 +1670,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 				>
 					<h1
 						ref={overviewTitleRef}
-						className="shrink-0 text-[18px] font-bold tracking-tight whitespace-nowrap text-[var(--rb-panel-text)] min-[769px]:text-[20px]"
+						className="shrink-0 text-[18px] font-bold tracking-tight whitespace-nowrap text-[var(--nora-panel-text)] min-[769px]:text-[20px]"
 					>
 						{t("dashboard.system.overview")}
 					</h1>
@@ -1818,7 +1818,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 							<span className="badge-soft-cyan flex size-6 shrink-0 items-center justify-center rounded-lg text-cyan-400 sm:size-7 sm:rounded-xl [&_svg]:size-3.5">
 								<Signal className="size-3.5" />
 							</span>
-							<span className="truncate text-[12px] sm:text-[13px] font-bold text-[var(--rb-panel-text)]">
+							<span className="truncate text-[12px] sm:text-[13px] font-bold text-[var(--nora-panel-text)]">
 								{t("dashboard.system.bandwidthSpeed")}
 							</span>
 						</div>
@@ -1842,7 +1842,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 															ease: [0.16, 1, 0.3, 1],
 															duration: 0.22,
 														}}
-														className="pointer-events-none absolute inset-0 z-[1] rounded-md bg-[var(--rb-panel-accent)] shadow-[0_1px_4px_color-mix(in_srgb,var(--rb-panel-accent)_35%,transparent)]"
+														className="pointer-events-none absolute inset-0 z-[1] rounded-md bg-[var(--nora-panel-accent)] shadow-[0_1px_4px_color-mix(in_srgb,var(--nora-panel-accent)_35%,transparent)]"
 													/>
 												)}
 												<Button
@@ -1908,7 +1908,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 							<span className="badge-soft-teal flex size-7 shrink-0 items-center justify-center rounded-xl text-teal-400 [&_svg]:size-3.5">
 								<Clock className="size-3.5" />
 							</span>
-							<span className="text-[13px] font-bold text-[var(--rb-panel-text)]">{t("dashboard.system.uptime")}</span>
+							<span className="text-[13px] font-bold text-[var(--nora-panel-text)]">{t("dashboard.system.uptime")}</span>
 						</div>
 					}
 				>
@@ -1922,7 +1922,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 									{t("dashboard.system.systemUptime")}
 								</p>
 							</div>
-							<div className="font-mono text-xs font-semibold text-[var(--rb-panel-text)]">
+							<div className="font-mono text-xs font-semibold text-[var(--nora-panel-text)]">
 								{formatLocalizedDuration(systemData.uptime_seconds, t, isRTL)}
 							</div>
 						</div>
@@ -1935,7 +1935,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 									{t("dashboard.system.panelUptime")}
 								</p>
 							</div>
-							<div className="font-mono text-xs font-semibold text-[var(--rb-panel-text)]">
+							<div className="font-mono text-xs font-semibold text-[var(--nora-panel-text)]">
 								{formatLocalizedDuration(
 									systemData.panel_uptime_seconds,
 									t,
@@ -1954,7 +1954,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 						<span className="badge-soft-cyan flex size-7 shrink-0 items-center justify-center rounded-xl text-cyan-400 [&_svg]:size-3.5">
 							<Cpu className="size-3.5" />
 						</span>
-						<span className="text-[13px] font-bold text-[var(--rb-panel-text)]">{t("dashboard.system.panelUsage")}</span>
+						<span className="text-[13px] font-bold text-[var(--nora-panel-text)]">{t("dashboard.system.panelUsage")}</span>
 					</div>
 				}
 				action={
@@ -2026,7 +2026,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 													ease: [0.16, 1, 0.3, 1],
 													duration: 0.22,
 												}}
-												className="pointer-events-none absolute inset-0 z-[1] rounded-md border border-[var(--rb-panel-accent)]/40 bg-[var(--rb-panel-accent)]/20 shadow-[0_0_10px_color-mix(in_srgb,var(--rb-panel-accent)_25%,transparent)]"
+												className="pointer-events-none absolute inset-0 z-[1] rounded-md border border-[var(--nora-panel-accent)]/40 bg-[var(--nora-panel-accent)]/20 shadow-[0_0_10px_color-mix(in_srgb,var(--nora-panel-accent)_25%,transparent)]"
 											/>
 										)}
 										<Button
@@ -2037,7 +2037,7 @@ export const Statistics: FC<ComponentPropsWithoutRef<"div">> = (props) => {
 											className={cn(
 												"relative z-[2] h-[22px] rounded-md bg-transparent! px-2.5 text-[11px] font-semibold transition-colors active:scale-[0.97]",
 												active
-													? "text-[var(--rb-panel-accent)]! min-[769px]:hover:text-[var(--rb-panel-accent-hover)]!"
+													? "text-[var(--nora-panel-accent)]! min-[769px]:hover:text-[var(--nora-panel-accent-hover)]!"
 													: "text-[#8b949e] min-[769px]:hover:text-white",
 											)}
 										>

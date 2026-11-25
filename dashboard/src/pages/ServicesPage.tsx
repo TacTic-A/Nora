@@ -1076,7 +1076,7 @@ const ServicesPage: FC = () => {
 				cell: (service) => (
 					<div className="flex flex-col gap-0.5 items-start text-start min-w-0!">
 						<div className="flex flex-row items-center gap-2 justify-start min-w-0! max-w-full">
-							<p className="font-medium text-[var(--rb-panel-text)] truncate">
+							<p className="font-medium text-[var(--nora-panel-text)] truncate">
 								{service.name}
 							</p>
 							{!service.has_hosts && (
@@ -1755,7 +1755,7 @@ const ServicesPage: FC = () => {
 						</div>
 						<div className="flex shrink-0 items-center justify-end gap-1.5">
 							<Button aria-label={t("refresh")} onClick={() => void fetchServices(listFilters)} variant="ghost" size="sm" loading={isServicesLoading} className="size-8 p-0 text-[#8b949e] hover:bg-white/[0.08] hover:text-white rounded-lg">{<RefreshCw className="w-[16px]" />}</Button>
-							<Button onClick={openCreateDialog} size="sm" className="h-[36px] px-3 rounded-lg bg-[var(--rb-panel-accent)] hover:bg-[var(--rb-panel-accent-hover)] text-white font-semibold">
+							<Button onClick={openCreateDialog} size="sm" className="h-[36px] px-3 rounded-lg bg-[var(--nora-panel-accent)] hover:bg-[var(--nora-panel-accent-hover)] text-white font-semibold">
 								<Plus className="w-[18px]" />
 								{t("services.addService")}
 							</Button>

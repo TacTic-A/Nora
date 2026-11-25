@@ -190,7 +190,7 @@ const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
 								<TooltipContent
 									side={isRTL ? "left" : "right"}
 									sideOffset={10}
-									className="z-[2200] rounded-[10px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-elevated)] px-3 py-1.5 text-xs font-semibold text-[var(--rb-panel-text)] shadow-lg"
+									className="z-[2200] rounded-[10px] border border-[var(--nora-panel-border)] bg-[var(--nora-panel-elevated)] px-3 py-1.5 text-xs font-semibold text-[var(--nora-panel-text)] shadow-lg"
 								>
 									{currentItem.label}
 								</TooltipContent>
@@ -201,7 +201,7 @@ const SidebarLogoCarousel: FC<SidebarLogoCarouselProps> = memo(
 						<span
 							aria-hidden={collapsed}
 							className={cn(
-								"min-w-0 flex-1 truncate pt-0.5 text-[17px] font-extrabold tracking-[-0.02em] text-[var(--rb-panel-text)] transition-opacity ease-out",
+								"min-w-0 flex-1 truncate pt-0.5 text-[17px] font-extrabold tracking-[-0.02em] text-[var(--nora-panel-text)] transition-opacity ease-out",
 								collapsed
 									? "pointer-events-none opacity-0 duration-150"
 									: "opacity-100 delay-[40ms] duration-200",
@@ -302,21 +302,21 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 							}
 						}}
 						className={cn(
-							"relative flex h-[38px] w-full cursor-pointer items-center justify-start gap-2.5 overflow-hidden rounded-[12px] text-[13px] transition-[padding,background-color,color,transform] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)] outline-none select-none active:scale-[0.98] min-[769px]:hover:bg-[var(--rb-panel-elevated)]",
+							"relative flex h-[38px] w-full cursor-pointer items-center justify-start gap-2.5 overflow-hidden rounded-[12px] text-[13px] transition-[padding,background-color,color,transform] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)] outline-none select-none active:scale-[0.98] min-[769px]:hover:bg-[var(--nora-panel-elevated)]",
 							collapsed ? "ps-4 pe-4" : "ps-3 pe-2.5",
 							showAccentBar
 								? isRTL
-									? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
-									: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
+									? "bg-gradient-to-l from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-[3px] border-[var(--nora-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--nora-panel-accent)_12%,transparent)]"
+									: "bg-gradient-to-r from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-[3px] border-[var(--nora-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--nora-panel-accent)_12%,transparent)]"
 								: isGroupActive
-									? "bg-transparent font-bold text-[var(--rb-panel-text)]"
-									: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
+									? "bg-transparent font-bold text-[var(--nora-panel-text)]"
+									: "bg-transparent font-medium text-[var(--nora-panel-text-muted)] min-[769px]:hover:text-[var(--nora-panel-text)]",
 						)}
 					>
 						<span
 							className={cn(
 								"inline-flex size-[18px] shrink-0 items-center justify-center transition-colors",
-								isGroupActive ? "text-[var(--rb-panel-accent)] drop-shadow-[0_0_6px_color-mix(in_srgb,var(--rb-panel-accent)_40%,transparent)]" : "text-slate-400",
+								isGroupActive ? "text-[var(--nora-panel-accent)] drop-shadow-[0_0_6px_color-mix(in_srgb,var(--nora-panel-accent)_40%,transparent)]" : "text-slate-400",
 							)}
 						>
 							<GroupIcon className="size-[18px] shrink-0" />
@@ -363,9 +363,9 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 						}
 					}}
 					onOpenAutoFocus={(e) => e.preventDefault()}
-					className="relative z-[2200] w-auto min-w-[196px]! rounded-[16px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] p-1.5 text-[var(--rb-panel-text)] shadow-[0_14px_34px_rgba(0,0,0,0.48)] select-none data-[state=closed]:duration-[75ms] before:pointer-events-auto before:absolute before:inset-y-0 before:w-4 before:content-[''] data-[side=right]:before:-left-4 data-[side=left]:before:-right-4"
+					className="relative z-[2200] w-auto min-w-[196px]! rounded-[16px] border border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] p-1.5 text-[var(--nora-panel-text)] shadow-[0_14px_34px_rgba(0,0,0,0.48)] select-none data-[state=closed]:duration-[75ms] before:pointer-events-auto before:absolute before:inset-y-0 before:w-4 before:content-[''] data-[side=right]:before:-left-4 data-[side=left]:before:-right-4"
 				>
-					<div className="mb-1 border-b border-[var(--rb-panel-border)] px-2.5 pt-1 pb-1.5 text-[11px] font-bold tracking-wider uppercase text-[var(--rb-panel-text-muted)]">
+					<div className="mb-1 border-b border-[var(--nora-panel-border)] px-2.5 pt-1 pb-1.5 text-[11px] font-bold tracking-wider uppercase text-[var(--nora-panel-text-muted)]">
 						{group.title}
 					</div>
 					<div className="flex flex-col gap-0.5">
@@ -382,20 +382,20 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 										onNavigate(sub.url, e);
 									}}
 									className={cn(
-										"relative flex h-[34px] items-center gap-2.5 rounded-[10px] px-2.5 text-xs no-underline transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] min-[769px]:hover:bg-[var(--rb-panel-elevated)]",
+										"relative flex h-[34px] items-center gap-2.5 rounded-[10px] px-2.5 text-xs no-underline transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] min-[769px]:hover:bg-[var(--nora-panel-elevated)]",
 										subActive
 											? isRTL
-												? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-2 border-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
-												: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-2 border-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
-											: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
+												? "bg-gradient-to-l from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-2 border-[var(--nora-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--nora-panel-accent)_12%,transparent)]"
+												: "bg-gradient-to-r from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-2 border-[var(--nora-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--nora-panel-accent)_12%,transparent)]"
+											: "bg-transparent font-medium text-[var(--nora-panel-text-muted)] min-[769px]:hover:text-[var(--nora-panel-text)]",
 									)}
 								>
-									<SubIcon className={cn("size-4 shrink-0", subActive ? "text-[var(--rb-panel-accent)]" : "text-slate-400")} />
+									<SubIcon className={cn("size-4 shrink-0", subActive ? "text-[var(--nora-panel-accent)]" : "text-slate-400")} />
 									<span className="min-w-0 flex-1 truncate">{sub.title}</span>
 									{isNotif && unreadCount > 0 ? (
 										<span
 											dir="ltr"
-											className="inline-flex h-[17px] min-w-[17px]! shrink-0 items-center justify-center rounded-full bg-[var(--rb-panel-accent)] px-1 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
+											className="inline-flex h-[17px] min-w-[17px]! shrink-0 items-center justify-center rounded-full bg-[var(--nora-panel-accent)] px-1 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
 										>
 											{unreadCount > 99 ? "99+" : unreadCount}
 										</span>
@@ -419,7 +419,7 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 					)}
 				>
 					<div className="min-h-0 overflow-hidden">
-						<div className="ms-[21px] flex flex-col gap-0.5 border-s border-[var(--rb-panel-border)] ps-2.5 pt-1 pb-0.5">
+						<div className="ms-[21px] flex flex-col gap-0.5 border-s border-[var(--nora-panel-border)] ps-2.5 pt-1 pb-0.5">
 							{visibleSubs.map((sub) => {
 								const subActive = isItemActive(sub.url);
 								const SubIcon = sub.icon;
@@ -431,23 +431,23 @@ const GroupNavRow: FC<GroupNavRowProps> = ({
 										to={sub.url}
 										onClick={(e) => onNavigate(sub.url, e)}
 										className={cn(
-											"relative flex h-[34px] items-center gap-2.5 rounded-[10px] px-2.5 text-xs no-underline transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none select-none active:scale-[0.98] min-[769px]:hover:bg-[var(--rb-panel-elevated)]",
+											"relative flex h-[34px] items-center gap-2.5 rounded-[10px] px-2.5 text-xs no-underline transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none select-none active:scale-[0.98] min-[769px]:hover:bg-[var(--nora-panel-elevated)]",
 											subActive
 												? isRTL
-													? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-2 border-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
-													: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-2 border-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
-												: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
+													? "bg-gradient-to-l from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-2 border-[var(--nora-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--nora-panel-accent)_12%,transparent)]"
+													: "bg-gradient-to-r from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-2 border-[var(--nora-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--nora-panel-accent)_12%,transparent)]"
+												: "bg-transparent font-medium text-[var(--nora-panel-text-muted)] min-[769px]:hover:text-[var(--nora-panel-text)]",
 										)}
 									>
 										{subActive ? (
-											<span className="pointer-events-none absolute -inset-s-[11.5px] top-1/2 h-3.5 w-[2px] -translate-y-1/2 rounded-full bg-[var(--rb-panel-accent)] shadow-[0_0_6px_color-mix(in_srgb,var(--rb-panel-accent)_60%,transparent)]" />
+											<span className="pointer-events-none absolute -inset-s-[11.5px] top-1/2 h-3.5 w-[2px] -translate-y-1/2 rounded-full bg-[var(--nora-panel-accent)] shadow-[0_0_6px_color-mix(in_srgb,var(--nora-panel-accent)_60%,transparent)]" />
 										) : null}
-										<SubIcon className={cn("size-4 shrink-0", subActive ? "text-[var(--rb-panel-accent)]" : "text-slate-400")} />
+										<SubIcon className={cn("size-4 shrink-0", subActive ? "text-[var(--nora-panel-accent)]" : "text-slate-400")} />
 										<span className="min-w-0 flex-1 truncate">{sub.title}</span>
 										{isNotif && unreadCount > 0 ? (
 											<span
 												dir="ltr"
-												className="inline-flex h-[17px] min-w-[17px]! shrink-0 items-center justify-center rounded-full bg-[var(--rb-panel-accent)] px-1 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
+												className="inline-flex h-[17px] min-w-[17px]! shrink-0 items-center justify-center rounded-full bg-[var(--nora-panel-accent)] px-1 text-[10px] font-bold text-slate-950 tabular-nums [unicode-bidi:isolate]"
 											>
 												{unreadCount > 99 ? "99+" : unreadCount}
 											</span>
@@ -710,10 +710,10 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 					...(inDrawer ? {} : { [isRTL ? "right" : "left"]: 12 }),
 				}}
 				className={cn(
-					"flex shrink-0 overflow-hidden bg-[var(--rb-panel-sidebar)] select-none [touch-action:manipulation]",
+					"flex shrink-0 overflow-hidden bg-[var(--nora-panel-sidebar)] select-none [touch-action:manipulation]",
 					inDrawer
 						? "relative h-full max-h-full w-full"
-						: "fixed top-3 z-[200] h-[calc(100dvh-24px)] max-h-[calc(100dvh-24px)] rounded-[20px] border border-[var(--rb-panel-border)] shadow-[0_1px_2px_rgba(0,0,0,0.03),inset_0_1px_0_0_rgba(255,255,255,0.06)] transition-[width] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+						: "fixed top-3 z-[200] h-[calc(100dvh-24px)] max-h-[calc(100dvh-24px)] rounded-[20px] border border-[var(--nora-panel-border)] shadow-[0_1px_2px_rgba(0,0,0,0.03),inset_0_1px_0_0_rgba(255,255,255,0.06)] transition-[width] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
 				)}
 			>
 				{loading ? (
@@ -727,7 +727,7 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 					>
 						<div
 							className={cn(
-								"-mx-2 mb-2 flex min-h-[48px] items-center justify-between border-b border-[var(--rb-panel-border)] py-2.5 ps-0",
+								"-mx-2 mb-2 flex min-h-[48px] items-center justify-between border-b border-[var(--nora-panel-border)] py-2.5 ps-0",
 								inDrawer ? "pe-2.5" : "pe-0",
 							)}
 						>
@@ -747,7 +747,7 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 									data-drawer-close="true"
 									aria-label={t("close")}
 									onClick={onRequestExpand}
-									className="inline-flex size-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-[var(--rb-panel-border)] bg-[var(--rb-panel-elevated)] text-[var(--rb-panel-text)] transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none active:scale-[0.92] min-[769px]:hover:bg-[var(--rb-panel-elevated)] min-[769px]:hover:text-[var(--rb-panel-text)]"
+									className="inline-flex size-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-[var(--nora-panel-border)] bg-[var(--nora-panel-elevated)] text-[var(--nora-panel-text)] transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none active:scale-[0.92] min-[769px]:hover:bg-[var(--nora-panel-elevated)] min-[769px]:hover:text-[var(--nora-panel-text)]"
 								>
 									<X className="size-4" />
 								</button>
@@ -784,8 +784,8 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 														: "mb-1.5 mt-0 max-h-[26px] opacity-100",
 												)}
 											>
-												<span className="flex items-center truncate px-3 text-[10.5px] font-bold tracking-[0.08em] uppercase text-[var(--rb-panel-text-muted)]">
-													<span className="inline-block h-[10px] w-[3px] rounded-[2px] bg-[var(--rb-panel-accent)] me-2 shrink-0" />
+												<span className="flex items-center truncate px-3 text-[10.5px] font-bold tracking-[0.08em] uppercase text-[var(--nora-panel-text-muted)]">
+													<span className="inline-block h-[10px] w-[3px] rounded-[2px] bg-[var(--nora-panel-accent)] me-2 shrink-0" />
 													{section.title}
 												</span>
 											</div>
@@ -815,19 +815,19 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 																		}}
 																		onClick={(e) => handleNavigate(item.url, e)}
 																		className={cn(
-																			"relative flex h-[38px] w-full items-center justify-start gap-2.5 overflow-hidden rounded-[12px] text-[13px] no-underline transition-[padding,background-color,color,transform] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)] outline-none select-none active:scale-[0.98] min-[769px]:hover:bg-[var(--rb-panel-elevated)]",
+																			"relative flex h-[38px] w-full items-center justify-start gap-2.5 overflow-hidden rounded-[12px] text-[13px] no-underline transition-[padding,background-color,color,transform] duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)] outline-none select-none active:scale-[0.98] min-[769px]:hover:bg-[var(--nora-panel-elevated)]",
 																			collapsed ? "ps-4 pe-4" : "ps-3 pe-2.5",
 																			isActive
 																				? isRTL
-																					? "bg-gradient-to-l from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
-																					: "bg-gradient-to-r from-[var(--rb-panel-accent)]/15 via-[var(--rb-panel-accent)]/8 to-transparent font-bold text-[var(--rb-panel-accent)] border-s-[3px] border-[var(--rb-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--rb-panel-accent)_12%,transparent)]"
-																				: "bg-transparent font-medium text-[var(--rb-panel-text-muted)] min-[769px]:hover:text-[var(--rb-panel-text)]",
+																					? "bg-gradient-to-l from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-[3px] border-[var(--nora-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--nora-panel-accent)_12%,transparent)]"
+																					: "bg-gradient-to-r from-[var(--nora-panel-accent)]/15 via-[var(--nora-panel-accent)]/8 to-transparent font-bold text-[var(--nora-panel-accent)] border-s-[3px] border-[var(--nora-panel-accent)] shadow-[0_0_12px_color-mix(in_srgb,var(--nora-panel-accent)_12%,transparent)]"
+																				: "bg-transparent font-medium text-[var(--nora-panel-text-muted)] min-[769px]:hover:text-[var(--nora-panel-text)]",
 																		)}
 																	>
 																		<span className="relative inline-flex size-[18px] shrink-0 items-center justify-center">
-																			<ItemIcon className={cn("size-[18px] transition-colors", isActive ? "text-[var(--rb-panel-accent)] drop-shadow-[0_0_6px_color-mix(in_srgb,var(--rb-panel-accent)_40%,transparent)]" : "text-slate-400")} />
+																			<ItemIcon className={cn("size-[18px] transition-colors", isActive ? "text-[var(--nora-panel-accent)] drop-shadow-[0_0_6px_color-mix(in_srgb,var(--nora-panel-accent)_40%,transparent)]" : "text-slate-400")} />
 																			{showBadge && collapsed ? (
-																				<span className="absolute -top-1 -end-1 size-2 rounded-full border-[1.5px] border-[var(--rb-panel-sidebar)] bg-[var(--rb-panel-accent)]" />
+																				<span className="absolute -top-1 -end-1 size-2 rounded-full border-[1.5px] border-[var(--nora-panel-sidebar)] bg-[var(--nora-panel-accent)]" />
 																			) : null}
 																		</span>
 
@@ -854,7 +854,7 @@ export const AppSidebar: FC<AppSidebarProps> = memo(function AppSidebar({
 																<TooltipContent
 																	side={isRTL ? "left" : "right"}
 																	sideOffset={10}
-																	className="z-[2200] rounded-[10px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-elevated)] px-3 py-1.5 text-xs font-semibold text-[var(--rb-panel-text)] shadow-lg"
+																	className="z-[2200] rounded-[10px] border border-[var(--nora-panel-border)] bg-[var(--nora-panel-elevated)] px-3 py-1.5 text-xs font-semibold text-[var(--nora-panel-text)] shadow-lg"
 																>
 																	{item.title}
 																</TooltipContent>

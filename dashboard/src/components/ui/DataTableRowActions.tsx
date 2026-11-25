@@ -62,17 +62,17 @@ export const RowActionsMenu: FC<RowActionsMenuProps> = ({ actions, label = "Acti
 				side="bottom"
 				align={isRtl ? "start" : "end"}
 				sideOffset={4}
+				avoidCollisions={false}
 				collisionPadding={16}
-				collisionBoundary={typeof document !== "undefined" ? [document.body] : undefined}
 				onClick={(event) => event.stopPropagation()}
-				className="min-w-[200px]! max-w-[calc(100vw_-_32px)] max-h-[min(65vh,_420px)] overflow-y-auto overflow-x-hidden overscroll-contain z-[13500] rounded-xl bg-[var(--rb-panel-surface)] border border-[var(--rb-panel-border)] p-1.5 shadow-2xl backdrop-blur-md text-[var(--rb-panel-text)]"
+				className="min-w-[200px]! max-w-[calc(100vw_-_32px)] max-h-[min(var(--radix-dropdown-menu-content-available-height,_65vh),_420px)] overflow-y-auto overflow-x-hidden overscroll-contain z-[13500] rounded-xl bg-[var(--nora-panel-surface)] border border-[var(--nora-panel-border)] p-1.5 shadow-2xl backdrop-blur-md text-[var(--nora-panel-text)]"
 			>
 				{orderedActions.map((action) => (
 					<DropdownMenuItem
 						key={action.id}
 						disabled={action.disabled}
 						className={cn(
-							"px-2.5 py-1.5 rounded-lg text-sm font-medium text-[var(--rb-panel-text-secondary)] hover:bg-[var(--rb-panel-elevated)] hover:text-[var(--rb-panel-text)] focus:bg-[var(--rb-panel-elevated)] focus:text-[var(--rb-panel-text)] transition-colors cursor-pointer flex items-center gap-2",
+							"px-2.5 py-1.5 rounded-lg text-sm font-medium text-[var(--nora-panel-text-secondary)] hover:bg-[var(--nora-panel-elevated)] hover:text-[var(--nora-panel-text)] focus:bg-[var(--nora-panel-elevated)] focus:text-[var(--nora-panel-text)] transition-colors cursor-pointer flex items-center gap-2",
 							action.isDanger
 								? "text-red-400 hover:bg-red-500/15 hover:text-red-300 focus:bg-red-500/15 focus:text-red-300"
 								: toneClass(action.color)

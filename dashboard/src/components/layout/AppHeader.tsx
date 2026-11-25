@@ -532,7 +532,7 @@ export const AppHeader: FC<AppHeaderProps> = ({
 				ref={headerRef}
 				dir={isRTL ? "rtl" : "ltr"}
 				className={cn(
-					"mx-3 mt-3 flex h-[52px] min-h-[52px] items-center justify-between gap-3 overflow-hidden rounded-[18px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] px-3 shadow-[0_1px_2px_rgba(0,0,0,0.03),inset_0_1px_0_0_rgba(255,255,255,0.06)] select-none min-[769px]:mx-4 min-[769px]:px-5",
+					"mx-3 mt-3 flex h-[52px] min-h-[52px] items-center justify-between gap-3 overflow-hidden rounded-[18px] border border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] px-3 shadow-[0_1px_2px_rgba(0,0,0,0.03),inset_0_1px_0_0_rgba(255,255,255,0.06)] select-none min-[769px]:mx-4 min-[769px]:px-5",
 					isShellLoading && "rb-skeleton-sweep",
 				)}
 			>
@@ -548,7 +548,7 @@ export const AppHeader: FC<AppHeaderProps> = ({
 								type="button"
 								aria-label={t("a11y.toggleSidebar")}
 								onClick={onToggleSidebar}
-								className="inline-flex size-[34px] min-w-[34px]! shrink-0 items-center justify-center rounded-full border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] text-[var(--rb-panel-text)] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none active:scale-[0.95] focus-visible:ring-2 focus-visible:ring-cyan-500/50 min-[769px]:rounded-[12px] min-[769px]:hover:border-[var(--rb-panel-border-strong)] min-[769px]:hover:bg-[var(--rb-panel-elevated)] min-[769px]:hover:text-[var(--rb-panel-text)] min-[769px]:hover:shadow-[0_4px_12px_rgba(0,0,0,0.24)]"
+								className="inline-flex size-[34px] min-w-[34px]! shrink-0 items-center justify-center rounded-full border border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] text-[var(--nora-panel-text)] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[background-color,border-color,color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none active:scale-[0.95] focus-visible:ring-2 focus-visible:ring-cyan-500/50 min-[769px]:rounded-[12px] min-[769px]:hover:border-[var(--nora-panel-border-strong)] min-[769px]:hover:bg-[var(--nora-panel-elevated)] min-[769px]:hover:text-[var(--nora-panel-text)] min-[769px]:hover:shadow-[0_4px_12px_rgba(0,0,0,0.24)]"
 							>
 								<AnimatedHamburger
 									isOpen={isMobile ? false : !sidebarCollapsed}
@@ -558,7 +558,7 @@ export const AppHeader: FC<AppHeaderProps> = ({
 
 							<span
 								aria-hidden="true"
-								className="mx-0.5 hidden h-4 w-px shrink-0 bg-[var(--rb-panel-border)] min-[769px]:block"
+								className="mx-0.5 hidden h-4 w-px shrink-0 bg-[var(--nora-panel-border)] min-[769px]:block"
 							/>
 
 							<Breadcrumb
@@ -1032,7 +1032,7 @@ export const AppHeader: FC<AppHeaderProps> = ({
 											}
 											aria-label={t("a11y.userMenu")}
 											className={cn(
-												"h-[34px] border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] text-[var(--rb-panel-text)] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[background-color,border-color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-[var(--rb-panel-elevated)] hover:border-[var(--rb-panel-border-strong)] active:scale-[0.97] min-[769px]:hover:shadow-[0_4px_12px_rgba(0,0,0,0.24)]",
+												"h-[34px] border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] text-[var(--nora-panel-text)] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-[background-color,border-color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-[var(--nora-panel-elevated)] hover:border-[var(--nora-panel-border-strong)] active:scale-[0.97] min-[769px]:hover:shadow-[0_4px_12px_rgba(0,0,0,0.24)]",
 												isMobile || profileCompact
 													? "w-[34px] min-w-[34px]! rounded-full px-0 min-[769px]:rounded-[12px]"
 													: "w-auto min-w-0 rounded-[12px] px-3",
@@ -1041,18 +1041,18 @@ export const AppHeader: FC<AppHeaderProps> = ({
 											<span className="flex items-center justify-center gap-2">
 												<span className="relative inline-flex shrink-0 items-center justify-center">
 													<CircleUser
-														className="size-4 text-[var(--rb-panel-text)]"
+														className="size-4 text-[var(--nora-panel-text)]"
 														strokeWidth={1.75}
 													/>
 													{isMobile && unread > 0 ? (
-														<span className="absolute -top-0.5 -end-0.5 size-2 rounded-full border-[1.5px] border-[var(--rb-panel-surface)] bg-cyan-400" />
+														<span className="absolute -top-0.5 -end-0.5 size-2 rounded-full border-[1.5px] border-[var(--nora-panel-surface)] bg-cyan-400" />
 													) : null}
 												</span>
 												{!(isMobile || profileCompact) ? (
 													<span
 														dir="ltr"
 														style={{ unicodeBidi: "isolate" }}
-														className="max-w-[140px] truncate text-xs font-semibold leading-normal text-[var(--rb-panel-text)]"
+														className="max-w-[140px] truncate text-xs font-semibold leading-normal text-[var(--nora-panel-text)]"
 													>
 														{userData.username}
 													</span>
@@ -1069,20 +1069,20 @@ export const AppHeader: FC<AppHeaderProps> = ({
 										data-profile-window="true"
 										data-profile-menu="true"
 										onOpenAutoFocus={(e) => e.preventDefault()}
-										className="z-[9999] w-[240px] min-w-[240px]! max-w-[240px] max-h-[min(calc(var(--radix-popover-content-available-height,76dvh)-8px),calc(100dvh-24px))] overflow-y-auto overscroll-contain rounded-[20px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] p-2 text-[var(--rb-panel-text)] shadow-[0_20px_48px_rgba(0,0,0,0.5)] select-none"
+										className="z-[9999] w-[240px] min-w-[240px]! max-w-[240px] max-h-[min(calc(var(--radix-popover-content-available-height,76dvh)-8px),calc(100dvh-24px))] overflow-y-auto overscroll-contain rounded-[20px] border border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] p-2 text-[var(--nora-panel-text)] shadow-[0_20px_48px_rgba(0,0,0,0.5)] select-none"
 									>
 										<div
 											dir={isRTL ? "rtl" : "ltr"}
-											className="mb-1.5 flex w-full items-center justify-start gap-3 rounded-[14px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-elevated)] p-2.5 text-start"
+											className="mb-1.5 flex w-full items-center justify-start gap-3 rounded-[14px] border border-[var(--nora-panel-border)] bg-[var(--nora-panel-elevated)] p-2.5 text-start"
 										>
-											<div className="flex size-8 shrink-0 items-center justify-center rounded-[10px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] text-[var(--rb-panel-text)]">
+											<div className="flex size-8 shrink-0 items-center justify-center rounded-[10px] border border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] text-[var(--nora-panel-text)]">
 												<CircleUser className="size-4" strokeWidth={1.75} />
 											</div>
 											<div className="flex min-w-0 flex-1 flex-col items-start text-start">
 												<span
 													dir="ltr"
 													style={{ unicodeBidi: "isolate" }}
-													className="max-w-full truncate text-[13px] font-bold text-[var(--rb-panel-text)]"
+													className="max-w-full truncate text-[13px] font-bold text-[var(--nora-panel-text)]"
 												>
 													{userData.username}
 												</span>
@@ -1146,10 +1146,10 @@ export const AppHeader: FC<AppHeaderProps> = ({
 															toggleProfileSubmenu("language");
 														}}
 														className={cn(
-															"flex h-[38px] w-full items-center justify-between gap-2.5 rounded-[12px] px-3 text-[13px] font-medium text-[var(--rb-panel-text)] transition-[background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none select-none active:scale-[0.97] active:bg-[var(--rb-panel-elevated)] focus-visible:bg-[var(--rb-panel-elevated)] min-[769px]:hover:bg-[var(--rb-panel-elevated)]",
+															"flex h-[38px] w-full items-center justify-between gap-2.5 rounded-[12px] px-3 text-[13px] font-medium text-[var(--nora-panel-text)] transition-[background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none select-none active:scale-[0.97] active:bg-[var(--nora-panel-elevated)] focus-visible:bg-[var(--nora-panel-elevated)] min-[769px]:hover:bg-[var(--nora-panel-elevated)]",
 															pressingProfileSubmenu === "language" ||
 																activeProfileSubmenu === "language"
-																? "bg-[var(--rb-panel-elevated)]"
+																? "bg-[var(--nora-panel-elevated)]"
 																: "bg-transparent",
 															pressingProfileSubmenu === "language" &&
 																"scale-[0.97]",
@@ -1157,7 +1157,7 @@ export const AppHeader: FC<AppHeaderProps> = ({
 													>
 														<span className="flex min-w-0 items-center gap-2.5">
 															<Languages
-																className="size-4 shrink-0 text-[var(--rb-panel-text)]"
+																className="size-4 shrink-0 text-[var(--nora-panel-text)]"
 																strokeWidth={1.75}
 															/>
 															<span className="truncate">
@@ -1180,7 +1180,7 @@ export const AppHeader: FC<AppHeaderProps> = ({
 													data-profile-window="true"
 													data-profile-submenu="true"
 													data-language-menu-list="true"
-													className="z-[10005] w-[min(220px,calc(100vw-24px))] min-w-[176px]! max-h-[min(calc(var(--radix-popover-content-available-height,72dvh)-8px),calc(100dvh-24px))] overflow-y-auto overscroll-contain rounded-[20px] border border-[var(--rb-panel-border)] bg-[var(--rb-panel-surface)] p-1.5 text-[var(--rb-panel-text)] shadow-[0_20px_48px_rgba(0,0,0,0.5)] select-none"
+													className="z-[10005] w-[min(220px,calc(100vw-24px))] min-w-[176px]! max-h-[min(calc(var(--radix-popover-content-available-height,72dvh)-8px),calc(100dvh-24px))] overflow-y-auto overscroll-contain rounded-[20px] border border-[var(--nora-panel-border)] bg-[var(--nora-panel-surface)] p-1.5 text-[var(--nora-panel-text)] shadow-[0_20px_48px_rgba(0,0,0,0.5)] select-none"
 												>
 													<div className="flex flex-col gap-0.5">
 														{languageItems.map(({ code, label, flag }) => {
@@ -1196,10 +1196,10 @@ export const AppHeader: FC<AppHeaderProps> = ({
 																		setActiveProfileSubmenu(null);
 																	}}
 																	className={cn(
-																		"flex h-9 w-full items-center justify-between gap-3 rounded-[10px] px-2.5 text-xs transition-[background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none active:scale-[0.98] focus-visible:bg-[var(--rb-panel-elevated)] min-[769px]:hover:bg-[var(--rb-panel-elevated)]",
+																		"flex h-9 w-full items-center justify-between gap-3 rounded-[10px] px-2.5 text-xs transition-[background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] outline-none active:scale-[0.98] focus-visible:bg-[var(--nora-panel-elevated)] min-[769px]:hover:bg-[var(--nora-panel-elevated)]",
 																		isActiveLang
-																			? "bg-[var(--rb-panel-elevated)] font-bold text-cyan-400"
-																			: "font-medium text-[var(--rb-panel-text-secondary)] min-[769px]:hover:text-[var(--rb-panel-text)]",
+																			? "bg-[var(--nora-panel-elevated)] font-bold text-cyan-400"
+																			: "font-medium text-[var(--nora-panel-text-secondary)] min-[769px]:hover:text-[var(--nora-panel-text)]",
 																	)}
 																>
 																	<span className="flex items-center gap-2.5">
@@ -1276,7 +1276,7 @@ export const AppHeader: FC<AppHeaderProps> = ({
 
 			<div
 				aria-hidden="true"
-				className="pointer-events-none absolute inset-x-0 -bottom-4 z-[99] h-4 bg-gradient-to-b from-[var(--rb-panel-bg)] to-transparent"
+				className="pointer-events-none absolute inset-x-0 -bottom-4 z-[99] h-4 bg-gradient-to-b from-[var(--nora-panel-bg)] to-transparent"
 			/>
 		</div>
 	);

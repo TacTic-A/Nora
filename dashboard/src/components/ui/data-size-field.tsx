@@ -62,7 +62,7 @@ export const DataSizeField: FC<DataSizeFieldProps> = ({ id, valueGb, onChangeGb,
 
 	const unitControl = (
 		<Select value={unit} onValueChange={(next) => changeUnit(next as SizeUnit)} disabled={disabled}>
-			<SelectTrigger className="h-full w-auto gap-1 rounded-none border-0 border-s border-[var(--rb-panel-border)] bg-[var(--rb-panel-elevated)]/50 ps-2 pe-1.5 text-xs text-[var(--rb-panel-text)] font-mono shadow-none focus-visible:ring-0">
+			<SelectTrigger className="h-full w-auto gap-1 rounded-none border-0 border-s border-[var(--nora-panel-border)] bg-[var(--nora-panel-elevated)]/50 ps-2 pe-1.5 text-xs text-[var(--nora-panel-text)] font-mono shadow-none focus-visible:ring-0">
 				<SelectValue />
 			</SelectTrigger>
 			<SelectContent>

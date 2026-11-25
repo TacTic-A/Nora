@@ -10,8 +10,8 @@ const SESSION_HINT_KEY = "rb-session-hint";
 export const resetAccentToDefault = () => {
 	if (typeof document !== "undefined") {
 		const root = document.documentElement;
-		root.style.removeProperty("--rb-panel-accent");
-		root.style.removeProperty("--rb-panel-accent-hover");
+		root.style.removeProperty("--nora-panel-accent");
+		root.style.removeProperty("--nora-panel-accent-hover");
 		for (let i = 50; i <= 900; i = i < 100 ? i + 50 : i + 100) {
 			root.style.removeProperty(`--primary-${i}`);
 		}

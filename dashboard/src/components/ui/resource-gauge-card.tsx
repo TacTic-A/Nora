@@ -44,7 +44,7 @@ export function ResourceGaugeCard({
 			? "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]"
 			: safePercent >= 70
 				? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
-				: "bg-[var(--rb-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--rb-panel-accent)_50%,transparent)]";
+				: "bg-[var(--nora-panel-accent)] shadow-[0_0_8px_color-mix(in_srgb,var(--nora-panel-accent)_50%,transparent)]";
 
 	const topAccentColor = {
 		cyan: "via-cyan-500/40",
@@ -110,7 +110,7 @@ export function ResourceGaugeCard({
 				<div className="mb-1 flex items-baseline gap-1.5 font-mono">
 					<span
 						dir="ltr"
-						className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-[var(--rb-panel-text)] tabular-nums [unicode-bidi:isolate]"
+						className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-[var(--nora-panel-text)] tabular-nums [unicode-bidi:isolate]"
 					>
 						{value}
 					</span>
@@ -144,7 +144,7 @@ export function ResourceGaugeCard({
 					<span className="font-semibold text-[#8b949e]">Utilization</span>
 					<span
 						dir="ltr"
-						className="font-bold text-[var(--rb-panel-text)] tabular-nums [unicode-bidi:isolate]"
+						className="font-bold text-[var(--nora-panel-text)] tabular-nums [unicode-bidi:isolate]"
 					>
 						{safePercent.toFixed(1)}%
 					</span>
