@@ -318,9 +318,7 @@ const ChangePasswordDialog: FC<{
 
 	const submit = async () => {
 		if (newPassword.length < 6) {
-			const msg = t("admins.validation.passwordMin");
-			setErrorMessage(msg);
-			toast.error(msg);
+			setErrorMessage(t("admins.validation.passwordMin"));
 			return;
 		}
 		setErrorMessage(null);
@@ -332,9 +330,7 @@ const ChangePasswordDialog: FC<{
 			setNewPassword("");
 			onClose();
 		} catch (error: unknown) {
-			const message = getAPIErrorMessage(error) || t("error");
-			setErrorMessage(message);
-			toast.error(message);
+			setErrorMessage(getAPIErrorMessage(error) || t("error"));
 		} finally {
 			setSubmitting(false);
 		}
