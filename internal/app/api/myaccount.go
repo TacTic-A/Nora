@@ -80,8 +80,12 @@ func (s *Server) handleMyAccountChangePassword(w http.ResponseWriter, r *http.Re
 		writeError(w, http.StatusBadRequest, err.Error())
 		return
 	}
-	if len(payload.CurrentPassword) < 1 || len(payload.NewPassword) < 6 {
-		writeError(w, http.StatusUnprocessableEntity, "current_password and new_password are required")
+	if len(payload.CurrentPassword) < 1 || len(payload.NewPassword) < 1 {
+		writeError(w, http.StatusUnprocessableEntity, "Current password and new password are required")
+		return
+	}
+	if len(payload.NewPassword) < 6 {
+		writeError(w, http.StatusUnprocessableEntity, "New password must be at least 6 characters")
 		return
 	}
 	err := s.withTx(r.Context(), func(tx *sql.Tx) error {

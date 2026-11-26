@@ -45,6 +45,7 @@ import type {
 } from "types/MyAccount";
 import { formatBytes } from "utils/formatByte";
 import { clearClientSession } from "utils/session";
+import { getAPIErrorMessage } from "service/http";
 
 dayjs.extend(utc);
 
@@ -296,16 +297,33 @@ const ChangePasswordDialog: FC<{
 	
 	const [currentPassword, setCurrentPassword] = useState("");
 	const [newPassword, setNewPassword] = useState("");
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [isSubmitting, setSubmitting] = useState(false);
+
+	useEffect(() => {
+		if (!open) {
+			setErrorMessage(null);
+		}
+	}, [open]);
 
 	const generatePassword = useCallback(() => {
 		const characters = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
 		const values = new Uint32Array(12);
 		window.crypto.getRandomValues(values);
 		setNewPassword(Array.from(values, (value) => characters[value % characters.length]).join(""));
+		setErrorMessage(null);
 	}, []);
 
+	const isTooShort = newPassword.length > 0 && newPassword.length < 6;
+
 	const submit = async () => {
+		if (newPassword.length < 6) {
+			const msg = t("admins.validation.passwordMin");
+			setErrorMessage(msg);
+			toast.error(msg);
+			return;
+		}
+		setErrorMessage(null);
 		setSubmitting(true);
 		try {
 			await onSubmit(currentPassword, newPassword);
@@ -313,8 +331,10 @@ const ChangePasswordDialog: FC<{
 			setCurrentPassword("");
 			setNewPassword("");
 			onClose();
-		} catch (error: any) {
-			toast.error(error?.detail || t("error"));
+		} catch (error: unknown) {
+			const message = getAPIErrorMessage(error) || t("error");
+			setErrorMessage(message);
+			toast.error(message);
 		} finally {
 			setSubmitting(false);
 		}
@@ -329,19 +349,45 @@ const ChangePasswordDialog: FC<{
 			footer={
 				<>
 					<Button onClick={onClose} variant="outline" size="sm">{t("cancel")}</Button>
-					<Button onClick={submit} disabled={!newPassword || !currentPassword} size="sm" loading={isSubmitting}>
+					<Button onClick={submit} disabled={!currentPassword || newPassword.length < 6} size="sm" loading={isSubmitting}>
 						{t("save")}
 					</Button>
 				</>
 			}
 		>
+			{errorMessage && (
+				<div
+					role="alert"
+					className="flex items-start gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-[0.8125rem] text-red-600 dark:text-red-300"
+				>
+					<CircleAlert className="mt-0.5 size-4 shrink-0" />
+					<span>{errorMessage}</span>
+				</div>
+			)}
 			<FormField label={t("myaccount.currentPassword")}>
-				<PasswordInput value={currentPassword} onChange={setCurrentPassword} autoComplete="current-password" />
+				<PasswordInput
+					value={currentPassword}
+					onChange={(val) => {
+						setCurrentPassword(val);
+						if (errorMessage) setErrorMessage(null);
+					}}
+					autoComplete="current-password"
+				/>
 			</FormField>
-			<FormField label={t("myaccount.newPassword")}>
+			<FormField
+				label={t("myaccount.newPassword")}
+				error={isTooShort ? t("admins.validation.passwordMin") : undefined}
+			>
 				<div className="flex flex-row items-stretch gap-2">
 					<div className="min-w-0 flex-1">
-						<PasswordInput value={newPassword} onChange={setNewPassword} autoComplete="new-password" />
+						<PasswordInput
+							value={newPassword}
+							onChange={(val) => {
+								setNewPassword(val);
+								if (errorMessage) setErrorMessage(null);
+							}}
+							autoComplete="new-password"
+						/>
 					</div>
 					<Button aria-label={t("admins.generatePassword")} onClick={generatePassword} variant="outline" className="size-9 p-0">
 						<Sparkles className="size-4" />
