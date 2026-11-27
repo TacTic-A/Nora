@@ -92,6 +92,8 @@ type recentActionListFilter struct {
 	Search         string
 	MatchCase      bool
 	MatchWholeWord bool
+	Category       string
+	ActorUsernames []string
 	ActionTypes    []string
 	ResourceTypes  []string
 	ResourceKey    string
@@ -493,7 +495,7 @@ func (s *Server) handleRecentActionsRoot(w http.ResponseWriter, r *http.Request)
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	actionTypes, resourceTypes, err := s.recentActionFilterOptions(r.Context(), includeAdmin)
+	actionTypes, resourceTypes, actorUsernames, err := s.recentActionFilterOptions(r.Context(), includeAdmin, filter.Category)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -501,6 +503,7 @@ func (s *Server) handleRecentActionsRoot(w http.ResponseWriter, r *http.Request)
 	response := map[string]any{
 		"actions": items, "next_before_id": nextBeforeID,
 		"action_types": actionTypes, "resource_types": resourceTypes,
+		"actor_usernames": actorUsernames,
 	}
 	if !useCursor {
 		response["total"] = total
@@ -549,6 +552,20 @@ func recentActionListFilterFromRequest(r *http.Request) (recentActionListFilter,
 	if err != nil {
 		return recentActionListFilter{}, err
 	}
+	actorValues, err := parse("actor")
+	if err != nil {
+		return recentActionListFilter{}, err
+	}
+	if len(actorValues) == 0 {
+		actorValues, err = parse("actor_username")
+		if err != nil {
+			return recentActionListFilter{}, err
+		}
+	}
+	category := strings.ToLower(strings.TrimSpace(r.URL.Query().Get("category")))
+	if category != "" && category != "system" && category != "admin_activity" {
+		return recentActionListFilter{}, fmt.Errorf("invalid category filter")
+	}
 	var createdFrom, createdBefore string
 	if raw := strings.TrimSpace(r.URL.Query().Get("day")); raw != "" {
 		day, err := time.Parse("2006-01-02", raw)
@@ -560,6 +577,7 @@ func recentActionListFilterFromRequest(r *http.Request) (recentActionListFilter,
 	}
 	return recentActionListFilter{
 		Search: search, MatchCase: matchCase, MatchWholeWord: matchWholeWord,
+		Category: category, ActorUsernames: actorValues,
 		ActionTypes:   actionTypes,
 		ResourceTypes: resourceTypes, Statuses: statuses,
 		CreatedFrom: createdFrom, CreatedBefore: createdBefore,
@@ -606,6 +624,13 @@ func (s *Server) listRecentActions(ctx context.Context, beforeID int64, limit in
 		}
 		addRecentActionListFilter(&clauses, &args, "action_type", filter.ActionTypes)
 		addRecentActionListFilter(&clauses, &args, "resource_type", filter.ResourceTypes)
+		addRecentActionListFilter(&clauses, &args, "actor_username", filter.ActorUsernames)
+		switch filter.Category {
+		case "admin_activity":
+			clauses = append(clauses, "resource_type IN ('user', 'admin')")
+		case "system":
+			clauses = append(clauses, "resource_type NOT IN ('user', 'admin')")
+		}
 		if filter.ResourceKey != "" {
 			clauses = append(clauses, "resource_key = ?")
 			args = append(args, filter.ResourceKey)
@@ -682,24 +707,45 @@ func addRecentActionListFilter(clauses *[]string, args *[]any, column string, va
 	*clauses = append(*clauses, column+" IN ("+strings.Join(markers, ",")+")")
 }
 
-func (s *Server) recentActionFilterOptions(ctx context.Context, includeAdmin bool) ([]string, []string, error) {
-	rows, err := s.db.QueryContext(ctx, `SELECT DISTINCT action_type, resource_type FROM recent_actions WHERE (? = 1 OR resource_type <> 'admin')`, includeAdmin)
+func (s *Server) recentActionFilterOptions(ctx context.Context, includeAdmin bool, category string) ([]string, []string, []string, error) {
+	where := "(? = 1 OR resource_type <> 'admin')"
+	switch category {
+	case "admin_activity":
+		where += " AND resource_type IN ('user', 'admin')"
+	case "system":
+		where += " AND resource_type NOT IN ('user', 'admin')"
+	}
+	rows, err := s.db.QueryContext(ctx, `SELECT DISTINCT action_type, resource_type, actor_username FROM recent_actions WHERE `+where, includeAdmin)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 	defer rows.Close()
 	actionSet := map[string]struct{}{}
 	resourceSet := map[string]struct{}{}
+	actorSet := map[string]struct{}{}
 	for rows.Next() {
-		var actionType, resourceType string
-		if err := rows.Scan(&actionType, &resourceType); err != nil {
-			return nil, nil, err
+		var actionType, resourceType, actorUsername string
+		if err := rows.Scan(&actionType, &resourceType, &actorUsername); err != nil {
+			return nil, nil, nil, err
 		}
 		actionSet[actionType] = struct{}{}
 		resourceSet[resourceType] = struct{}{}
+		if strings.TrimSpace(actorUsername) != "" {
+			actorSet[strings.TrimSpace(actorUsername)] = struct{}{}
+		}
 	}
 	if err := rows.Err(); err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
+	}
+	// Also include active admins from admins table when available so admins with no recent events yet appear in the filter.
+	if adminRows, err := s.db.QueryContext(ctx, `SELECT username FROM admins WHERE status != 'deleted'`); err == nil {
+		defer adminRows.Close()
+		for adminRows.Next() {
+			var username string
+			if scanErr := adminRows.Scan(&username); scanErr == nil && strings.TrimSpace(username) != "" {
+				actorSet[strings.TrimSpace(username)] = struct{}{}
+			}
+		}
 	}
 	actionTypes := make([]string, 0, len(actionSet))
 	for value := range actionSet {
@@ -709,9 +755,14 @@ func (s *Server) recentActionFilterOptions(ctx context.Context, includeAdmin boo
 	for value := range resourceSet {
 		resourceTypes = append(resourceTypes, value)
 	}
+	actorUsernames := make([]string, 0, len(actorSet))
+	for value := range actorSet {
+		actorUsernames = append(actorUsernames, value)
+	}
 	sort.Strings(actionTypes)
 	sort.Strings(resourceTypes)
-	return actionTypes, resourceTypes, nil
+	sort.Strings(actorUsernames)
+	return actionTypes, resourceTypes, actorUsernames, nil
 }
 
 func prepareRecentActionGroup(item *recentActionItem) {

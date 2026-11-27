@@ -113,6 +113,18 @@ export const AdminDetailsPanel = ({
 					value={String(admin.disabled_users ?? 0)}
 				/>
 				<ExpandedMeta
+					label={t("admins.details.unlimitedUsers")}
+					value={String(admin.unlimited_users_count ?? 0)}
+				/>
+				<ExpandedMeta
+					label={t("admins.details.limitedDataUsers")}
+					value={String(admin.limited_data_users_count ?? 0)}
+				/>
+				<ExpandedMeta
+					label={t("admins.details.deletedUsersCount")}
+					value={String(admin.deleted_users_count ?? 0)}
+				/>
+				<ExpandedMeta
 					label={t("admins.details.totalUsers")}
 					value={String(admin.users_count ?? 0)}
 				/>
@@ -123,12 +135,20 @@ export const AdminDetailsPanel = ({
 
 				<ExpandedHeading title={t("admins.details.dataSection")} />
 				<ExpandedMeta
+					label={t("admins.details.dataAllocated")}
+					value={formatBytes(admin.data_limit_allocated ?? 0, 2)}
+				/>
+				<ExpandedMeta
+					label={t("admins.details.recordedCreatedTraffic")}
+					value={formatBytes(createdTrafficBytes, 2)}
+				/>
+				<ExpandedMeta
 					label={t("admins.details.used")}
 					value={formatBytes(usedBytes, 2)}
 				/>
 				<ExpandedMeta
-					label={t("myaccount.createdTraffic")}
-					value={formatBytes(createdTrafficBytes, 2)}
+					label={t("admins.details.currentUsersUsed")}
+					value={formatBytes(admin.current_users_used_traffic ?? 0, 2)}
 				/>
 				<ExpandedMeta
 					label={t("admins.details.limit")}
@@ -143,6 +163,18 @@ export const AdminDetailsPanel = ({
 					value={formatBytesOrUnlimited(admin.lifetime_usage ?? null)}
 				/>
 				<ExpandedMeta
+					label={t("admins.details.unlimitedUsage")}
+					value={formatBytes(admin.unlimited_users_usage ?? 0, 2)}
+				/>
+				<ExpandedMeta
+					label={t("admins.details.disabledUsersUsage")}
+					value={formatBytes(admin.disabled_users_usage ?? 0, 2)}
+				/>
+				<ExpandedMeta
+					label={t("admins.details.disabledUsersDataLimit")}
+					value={formatBytes(admin.disabled_users_data_limit ?? 0, 2)}
+				/>
+				<ExpandedMeta
 					label={t("admins.details.trafficMode")}
 					value={trafficModeLabel}
 				/>
@@ -155,18 +187,42 @@ export const AdminDetailsPanel = ({
 					}
 				/>
 
-				<ExpandedHeading title={t("admins.details.allocationSection")} />
+				<ExpandedHeading title={t("admins.details.resetsAndDeletedSection")} />
 				<ExpandedMeta
-					label={t("admins.details.dataAllocated")}
-					value={formatBytes(admin.data_limit_allocated ?? 0, 2)}
+					label={t("admins.details.revokedSubUsers")}
+					value={String(admin.revoked_sub_users_count ?? 0)}
+				/>
+				<ExpandedMeta
+					label={t("admins.details.revokedSubUsersUsage")}
+					value={formatBytes(admin.revoked_sub_users_usage ?? 0, 2)}
+				/>
+				<ExpandedMeta
+					label={t("admins.details.revokedSubUsersDataLimit")}
+					value={formatBytes(admin.revoked_sub_users_data_limit ?? 0, 2)}
+				/>
+				<ExpandedMeta
+					label={t("admins.details.resetUsageAccounts")}
+					value={`${admin.reset_usage_users_count ?? 0} (${admin.reset_usage_count ?? 0}×)`}
 				/>
 				<ExpandedMeta
 					label={t("admins.details.resetVolume")}
 					value={formatBytes(admin.reset_bytes ?? 0, 2)}
 				/>
 				<ExpandedMeta
-					label={t("admins.details.unlimitedUsage")}
-					value={formatBytes(admin.unlimited_users_usage ?? 0, 2)}
+					label={t("admins.details.deletedUsersCount")}
+					value={String(admin.deleted_users_count ?? 0)}
+				/>
+				<ExpandedMeta
+					label={t("admins.details.deletedUnlimitedUsers")}
+					value={String(admin.deleted_unlimited_users_count ?? 0)}
+				/>
+				<ExpandedMeta
+					label={t("admins.details.deletedUsersUsedTraffic")}
+					value={formatBytes(admin.deleted_users_used_traffic ?? 0, 2)}
+				/>
+				<ExpandedMeta
+					label={t("admins.details.deletedUsersDataLimit")}
+					value={formatBytes(admin.deleted_users_data_limit ?? 0, 2)}
 				/>
 				<ExpandedMeta
 					label={t("admins.deletedUserUsage")}

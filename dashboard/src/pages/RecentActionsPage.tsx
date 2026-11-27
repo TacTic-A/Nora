@@ -17,6 +17,7 @@ import { JsonEditor } from "components/JsonEditor";
 import { Pagination } from "components/Pagination";
 import {
 	DataTable,
+	TabSystem,
 	type DataTableColumn,
 	type DataTableRowAction,
 } from "components/ui";
@@ -88,6 +89,7 @@ type RecentActionsResponse = {
 	next_before_id?: number | null;
 	action_types?: string[];
 	resource_types?: string[];
+	actor_usernames?: string[];
 };
 
 type RecentActionDetail = {
@@ -195,11 +197,43 @@ const recentActionLabelKeys: Record<string, string> = {
 	"node.service_restart": "recentActions.actions.nodeServiceRestarted",
 	"node.service_update": "recentActions.actions.nodeServiceUpdated",
 	"node.host_reboot": "recentActions.actions.nodeHostRebooted",
+	"user.create": "recentActions.actions.userCreated",
+	"user.update": "recentActions.actions.userUpdated",
+	"user.delete": "recentActions.actions.userDeleted",
+	"user.disable": "recentActions.actions.userDisabled",
+	"user.enable": "recentActions.actions.userEnabled",
+	"user.reset_usage": "recentActions.actions.userUsageReset",
+	"user.revoke_sub": "recentActions.actions.userSubscriptionRevoked",
+	"user.active_next": "recentActions.actions.userNextPlanActivated",
+	"user.bulk_delete_users": "recentActions.actions.userBulkDeleted",
+	"user.bulk_disable_users": "recentActions.actions.userBulkDisabled",
+	"user.bulk_activate_users": "recentActions.actions.userBulkActivated",
+	"user.bulk_increase_traffic": "recentActions.actions.userBulkIncreaseTraffic",
+	"user.bulk_decrease_traffic": "recentActions.actions.userBulkDecreaseTraffic",
+	"user.bulk_multiply_traffic": "recentActions.actions.userBulkMultiplyTraffic",
+	"user.bulk_divide_traffic": "recentActions.actions.userBulkDivideTraffic",
+	"user.bulk_extend_expire": "recentActions.actions.userBulkExtendExpire",
+	"user.bulk_reduce_expire": "recentActions.actions.userBulkReduceExpire",
+	"user.bulk_multiply_expire": "recentActions.actions.userBulkMultiplyExpire",
+	"user.bulk_divide_expire": "recentActions.actions.userBulkDivideExpire",
+	"user.bulk_cleanup_status": "recentActions.actions.userBulkCleanup",
+	"user.bulk_change_service": "recentActions.actions.userBulkChangeService",
+	"user.bulk_set_group": "recentActions.actions.userBulkSetGroup",
+	"user.bulk_clear_group": "recentActions.actions.userBulkClearGroup",
+	"user.bulk_add_tags": "recentActions.actions.userBulkAddTags",
+	"user.bulk_remove_tags": "recentActions.actions.userBulkRemoveTags",
+	"admin.usage_reset": "recentActions.actions.adminUsageReset",
+	"admin.deleted_usage_reset": "recentActions.actions.adminDeletedUsageReset",
+	"admin.disable_users": "recentActions.actions.adminDisableUsers",
+	"admin.activate_users": "recentActions.actions.adminActivateUsers",
+	"admin.api_key.create": "recentActions.actions.adminApiKeyCreate",
+	"admin.api_key.delete": "recentActions.actions.adminApiKeyDelete",
 };
 
 const recentActionResourceKeys = new Set([
 	"host",
 	"admin",
+	"user",
 	"node",
 	"inbound",
 	"outbound",
@@ -229,6 +263,30 @@ const recentActionFieldKeys = new Set([
 	"role",
 	"status",
 	"data_limit",
+	"used_traffic",
+	"users_usage",
+	"created_traffic",
+	"deleted_users_usage",
+	"data_limit_reset_strategy",
+	"on_hold_expire_duration",
+	"on_hold_timeout",
+	"service",
+	"ip_limit",
+	"speed_limit_kbps",
+	"auto_delete_in_days",
+	"inbounds",
+	"next_plans",
+	"subscription_credential",
+	"group",
+	"tags",
+	"note",
+	"telegram_id",
+	"contact_number",
+	"owner",
+	"affected_users",
+	"amount_gb",
+	"days",
+	"factor",
 	"users_limit",
 	"expire",
 	"traffic_limit_mode",
@@ -295,6 +353,7 @@ const actionTypeResource = (actionType: string) => {
 		case "outbound":
 		case "service":
 		case "admin":
+		case "user":
 		case "node":
 			return actionType.split(".")[0];
 		case "xray":
@@ -452,6 +511,11 @@ export const RecentActionsPage: FC = () => {
 		(userData.role === AdminRole.FullAccess ||
 			(userData.role === AdminRole.Sudo &&
 				Boolean(userData.permissions?.sudo?.[AdminSudoScope.Xray])));
+	const [activeTab, setActiveTab] = useState<"system" | "admin_activity">(() =>
+		typeof window !== "undefined" && window.location.hash === "#admin-activity"
+			? "admin_activity"
+			: "system",
+	);
 	const [pageIndex, setPageIndex] = useState(0);
 	const [pageSize, setPageSize] = useState(() =>
 		getRecentActionsPerPageLimitSize(),
@@ -460,6 +524,7 @@ export const RecentActionsPage: FC = () => {
 	const [search, setSearch] = useState("");
 	const [searchQuery, setSearchQuery] = useState("");
 	const [searchMatch, setSearchMatch] = useState(DEFAULT_SEARCH_MATCH_OPTIONS);
+	const [actorsFilter, setActorsFilter] = useState<string[]>([]);
 	const [actionTypesFilter, setActionTypesFilter] = useState<string[]>([]);
 	const [resourceTypesFilter, setResourceTypesFilter] = useState<string[]>([]);
 	const [statusesFilter, setStatusesFilter] = useState<string[]>([]);
@@ -468,6 +533,24 @@ export const RecentActionsPage: FC = () => {
 		setPageIndex(0);
 		setSelectedID(null);
 	}, []);
+	const switchTab = useCallback(
+		(nextTab: "system" | "admin_activity") => {
+			if (nextTab === activeTab) return;
+			setActiveTab(nextTab);
+			setActionTypesFilter([]);
+			setResourceTypesFilter([]);
+			setStatusesFilter([]);
+			resetPagination();
+			if (typeof window !== "undefined") {
+				window.history?.replaceState(
+					null,
+					"",
+					nextTab === "admin_activity" ? "#admin-activity" : "#system",
+				);
+			}
+		},
+		[activeTab, resetPagination],
+	);
 	const debouncedSearchChange = useMemo(
 		() =>
 			debounce((value: string) => {
@@ -485,10 +568,12 @@ export const RecentActionsPage: FC = () => {
 		const params = new URLSearchParams({
 			limit: String(pageSize),
 			offset: String(pageIndex * pageSize),
+			category: activeTab,
 		});
 		if (searchQuery) params.set("search", searchQuery);
 		addSearchMatchQuery(params, searchMatch);
 		if (dayFilter) params.set("day", dayFilter);
+		for (const value of actorsFilter) params.append("actor", value);
 		for (const value of actionTypesFilter) params.append("action_type", value);
 		for (const value of resourceTypesFilter)
 			params.append("resource_type", value);
@@ -496,6 +581,8 @@ export const RecentActionsPage: FC = () => {
 		return params.toString();
 	}, [
 		actionTypesFilter,
+		activeTab,
+		actorsFilter,
 		dayFilter,
 		pageIndex,
 		pageSize,
@@ -553,6 +640,12 @@ export const RecentActionsPage: FC = () => {
 			Array.from(new Set(actions.map((action) => action.resource_type))).sort(),
 		[actions, actionsQuery.data?.resource_types],
 	);
+	const actorUsernames = useMemo(
+		() =>
+			actionsQuery.data?.actor_usernames ??
+			Array.from(new Set(actions.map((action) => action.actor_username).filter(Boolean))).sort(),
+		[actions, actionsQuery.data?.actor_usernames],
+	);
 
 	const rollback = (action: RecentAction) => {
 		if (!window.confirm(t("recentActions.rollbackConfirm"))) return;
@@ -597,6 +690,11 @@ export const RecentActionsPage: FC = () => {
 								<p className="font-semibold truncate max-w-full">
 									{label}
 								</p>
+								{action.summary && action.summary !== label && (
+									<p className="text-[0.75rem] text-panel-text-muted truncate max-w-full">
+										{action.summary}
+									</p>
+								)}
 							</div>
 						</div>
 					);
@@ -631,18 +729,22 @@ export const RecentActionsPage: FC = () => {
 				mobileSummary: true,
 				cell: (action) => <ActionPreview preview={action.preview} />,
 			},
-			{
-				id: "status",
-				sortValue: (action) => action.rollback_status ?? "",
-				header: t("recentActions.columns.status"),
-				priority: "medium",
-				minWidth: "140px",
-				cell: (action) => (
-					<Badge className={toneClass(statusTone(action.rollback_status))}>
-						{t(`recentActions.status.${action.rollback_status}`)}
-					</Badge>
-				),
-			},
+			...(activeTab === "system"
+				? [
+						{
+							id: "status",
+							sortValue: (action: RecentAction) => action.rollback_status ?? "",
+							header: t("recentActions.columns.status"),
+							priority: "medium" as const,
+							minWidth: "140px",
+							cell: (action: RecentAction) => (
+								<Badge className={toneClass(statusTone(action.rollback_status))}>
+									{t(`recentActions.status.${action.rollback_status}`)}
+								</Badge>
+							),
+						},
+					]
+				: []),
 			{
 				id: "actor",
 				sortValue: (action) => action.actor_username ?? "",
@@ -673,7 +775,7 @@ export const RecentActionsPage: FC = () => {
 				),
 			},
 		],
-		[actionTypeLabel, t],
+		[actionTypeLabel, activeTab, t],
 	);
 	const rowActions = (
 		action: RecentAction,
@@ -781,7 +883,9 @@ export const RecentActionsPage: FC = () => {
 					{affectedResources.length > 0 && (
 						<div>
 							<p className="text-[0.875rem] text-panel-text-secondary mb-2">
-								{t("recentActions.affectedResources")}
+								{selectedAction?.resource_type === "user"
+									? t("recentActions.affectedUsers")
+									: t("recentActions.affectedResources")}
 							</p>
 							<div className="flex flex-row items-center gap-2 flex-wrap">
 								{affectedResources.map((resource) => (
@@ -880,65 +984,109 @@ export const RecentActionsPage: FC = () => {
 		unsupported: "bg-panel-warning",
 	};
 	const statusCount = (status: string) => actions.filter((action) => action.rollback_status === status).length;
-	const overview = {
-		total: { label: t("recentActions.title"), value: totalActions },
-		rows: [
-			{ key: "available", label: t("recentActions.status.available"), value: statusCount("available"), tone: statusTones.available },
-			{ key: "conflict", label: t("recentActions.status.conflict"), value: statusCount("conflict"), tone: statusTones.conflict },
-		],
-		distribution: {
-			label: t("recentActions.filters.status"),
-			segments: Object.keys(statusTones).map((status) => ({
-				key: status,
-				label: t(`recentActions.status.${status}`),
-				value: statusCount(status),
-				tone: statusTones[status],
-			})),
-		},
-		extra: { label: t("usersPage.filtered"), value: actions.length },
-	};
+	const resourceCount = (resource: string) => actions.filter((action) => action.resource_type === resource).length;
+	const overview =
+		activeTab === "admin_activity"
+			? {
+					total: { label: t("recentActions.tabs.adminActivity"), value: totalActions },
+					rows: [
+						{ key: "user", label: t("recentActions.resources.user"), value: resourceCount("user"), tone: "bg-panel-info" },
+						{ key: "admin", label: t("recentActions.resources.admin"), value: resourceCount("admin"), tone: "bg-panel-warning" },
+					],
+					distribution: {
+						label: t("recentActions.filters.resource"),
+						segments: [
+							{ key: "user", label: t("recentActions.resources.user"), value: resourceCount("user"), tone: "bg-panel-info" },
+							{ key: "admin", label: t("recentActions.resources.admin"), value: resourceCount("admin"), tone: "bg-panel-warning" },
+						],
+					},
+					extra: { label: t("usersPage.filtered"), value: actions.length },
+				}
+			: {
+					total: { label: t("recentActions.title"), value: totalActions },
+					rows: [
+						{ key: "available", label: t("recentActions.status.available"), value: statusCount("available"), tone: statusTones.available },
+						{ key: "conflict", label: t("recentActions.status.conflict"), value: statusCount("conflict"), tone: statusTones.conflict },
+					],
+					distribution: {
+						label: t("recentActions.filters.status"),
+						segments: Object.keys(statusTones).map((status) => ({
+							key: status,
+							label: t(`recentActions.status.${status}`),
+							value: statusCount(status),
+							tone: statusTones[status],
+						})),
+					},
+					extra: { label: t("usersPage.filtered"), value: actions.length },
+				};
 
 	return (
 		<div dir={i18n.dir(i18n.language)} className="flex flex-col gap-4 items-stretch pb-8 md:pb-16">
+			<TabSystem
+				tabs={[
+					{
+						value: "system",
+						label: t("recentActions.tabs.system"),
+						isActive: activeTab === "system",
+						onClick: () => switchTab("system"),
+					},
+					{
+						value: "admin_activity",
+						label: t("recentActions.tabs.adminActivity"),
+						isActive: activeTab === "admin_activity",
+						onClick: () => switchTab("admin_activity"),
+					},
+				]}
+				className="overflow-x-auto overflow-y-hidden max-w-full"
+			/>
 			<div className="border border-panel-border! bg-panel-surface rounded-xl overflow-hidden">
 				<OverviewBand total={overview.total} rows={overview.rows} distribution={overview.distribution} extra={overview.extra} locale={locale} />
 				<div className="border-t border-panel-border! p-3">
 					<div className="flex flex-col gap-2 md:flex-row md:items-center">
 						<div className="min-w-0 flex-1"><div className="grid grid-cols-2 gap-2 items-stretch xl:flex xl:flex-row">
-					<SearchInput containerProps={{ className: "col-span-2 w-full md:w-[340px]" }} value={search} onChange={(event) => {
+					<SearchInput containerProps={{ className: "col-span-2 w-full md:w-[300px]" }} value={search} onChange={(event) => {
 								setSearch(event.target.value);
 								debouncedSearchChange(event.target.value);
 							}} placeholder={t("recentActions.searchPlaceholder")} aria-label={t("recentActions.searchPlaceholder")} matchOptions={searchMatch} onMatchOptionsChange={(options) => {
 							setSearchMatch(options);
 							resetPagination();
 						}} />
+					<Select mode="multiple" size="sm" value={actorsFilter} onValueChange={(value) => {
+							setActorsFilter(Array.isArray(value) ? value : [value]);
+							resetPagination();
+						}} options={actorUsernames.map((username) => ({
+							label: username,
+							value: username,
+						}))} placeholder={t("recentActions.filters.allAdmins")} aria-label={t("recentActions.filters.admin")} className="w-full xl:w-[200px]" />
 					<Select mode="multiple" size="sm" value={actionTypesFilter} onValueChange={(value) => {
 							setActionTypesFilter(Array.isArray(value) ? value : [value]);
 							resetPagination();
 						}} options={actionTypes.map((type) => ({
 							label: actionTypeLabel(type),
 							value: type,
-						}))} placeholder={t("recentActions.filters.allActions")} aria-label={t("recentActions.filters.action")} className="w-full xl:w-[240px]" />
+						}))} placeholder={t("recentActions.filters.allActions")} aria-label={t("recentActions.filters.action")} className="w-full xl:w-[220px]" />
 					<Select mode="multiple" size="sm" value={resourceTypesFilter} onValueChange={(value) => {
 							setResourceTypesFilter(Array.isArray(value) ? value : [value]);
 							resetPagination();
 						}} options={resourceTypes.map((type) => ({
 							label: t(resourceTranslationKey(type)),
 							value: type,
-						}))} placeholder={t("recentActions.filters.allResources")} aria-label={t("recentActions.filters.resource")} className="w-full xl:w-[220px]" />
-					<Select mode="multiple" size="sm" value={statusesFilter} onValueChange={(value) => {
-							setStatusesFilter(Array.isArray(value) ? value : [value]);
-							resetPagination();
-						}} options={[
-							"available",
-							"undone",
-							"expired",
-							"conflict",
-							"unsupported",
-						].map((value) => ({
-							label: t(`recentActions.status.${value}`),
-							value,
-						}))} placeholder={t("recentActions.filters.allStatuses")} aria-label={t("recentActions.filters.status")} className="w-full xl:w-[190px]" />
+						}))} placeholder={t("recentActions.filters.allResources")} aria-label={t("recentActions.filters.resource")} className="w-full xl:w-[190px]" />
+					{activeTab === "system" && (
+						<Select mode="multiple" size="sm" value={statusesFilter} onValueChange={(value) => {
+								setStatusesFilter(Array.isArray(value) ? value : [value]);
+								resetPagination();
+							}} options={[
+								"available",
+								"undone",
+								"expired",
+								"conflict",
+								"unsupported",
+							].map((value) => ({
+								label: t(`recentActions.status.${value}`),
+								value,
+							}))} placeholder={t("recentActions.filters.allStatuses")} aria-label={t("recentActions.filters.status")} className="w-full xl:w-[180px]" />
+					)}
 					<Input type="date" value={dayFilter} onChange={(event) => {
 							setDayFilter(event.target.value);
 							resetPagination();

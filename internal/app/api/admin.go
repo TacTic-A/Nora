@@ -787,6 +787,13 @@ func (s *Server) bulkUpdateAdminUsers(ctx context.Context, actor adminapp.Admin,
 					return err
 				}
 			}
+			if len(userIDs) > 0 {
+				if err := s.recordRecentActionEventDetailsTx(ctx, tx, "admin.disable_users", "admin", target.Username, fmt.Sprintf("Disabled admin's users (%d users)", len(userIDs)), []recentActionValueChange{
+					{Field: "affected_users", Before: "0", After: fmt.Sprintf("%d", len(userIDs))},
+				}, nil); err != nil {
+					return err
+				}
+			}
 		case "activate":
 			userIDs, err := userIDsByAdminTx(ctx, tx, target.ID, "disabled")
 			if err != nil {
@@ -809,6 +816,13 @@ func (s *Server) bulkUpdateAdminUsers(ctx context.Context, actor adminapp.Admin,
 			}
 			for _, userID := range userIDs {
 				if err := enqueueNodeOperationTx(ctx, tx, "enable_user", nil, &userID, map[string]any{}); err != nil {
+					return err
+				}
+			}
+			if len(userIDs) > 0 {
+				if err := s.recordRecentActionEventDetailsTx(ctx, tx, "admin.activate_users", "admin", target.Username, fmt.Sprintf("Activated admin's users (%d users)", len(userIDs)), []recentActionValueChange{
+					{Field: "affected_users", Before: "0", After: fmt.Sprintf("%d", len(userIDs))},
+				}, nil); err != nil {
 					return err
 				}
 			}
@@ -844,8 +858,6 @@ func (s *Server) handleAdminUsageResetPath(w http.ResponseWriter, r *http.Reques
 			if _, err := tx.ExecContext(r.Context(), `INSERT INTO admin_usage_logs (admin_id, used_traffic_at_reset, created_traffic_at_reset, reset_at) VALUES (?, ?, ?, ?)`, target.ID, target.UsersUsage, target.CreatedTraffic, dbTimestamp(time.Now().UTC())); err != nil {
 				return err
 			}
-		}
-		if target.UsersUsage != 0 || target.CreatedTraffic != 0 {
 			zero := int64(0)
 			if err := s.recordRecentActionEventDetailsTx(r.Context(), tx, "admin.usage_reset", "admin", target.Username, "Reset admin usage", []recentActionValueChange{
 				{Field: "users_usage", Before: telegramapp.FormatOptionalBytes(&target.UsersUsage), After: telegramapp.FormatOptionalBytes(&zero)},
@@ -908,6 +920,14 @@ func (s *Server) handleDeletedUsersUsageReset(w http.ResponseWriter, r *http.Req
 		}
 		if err != nil {
 			return err
+		}
+		if target.DeletedUsersUsage != 0 {
+			zero := int64(0)
+			if err := s.recordRecentActionEventDetailsTx(r.Context(), tx, "admin.deleted_usage_reset", "admin", target.Username, "Reset deleted users usage credit", []recentActionValueChange{
+				{Field: "deleted_users_usage", Before: telegramapp.FormatOptionalBytes(&target.DeletedUsersUsage), After: telegramapp.FormatOptionalBytes(&zero)},
+			}, nil); err != nil {
+				return err
+			}
 		}
 		updated, err = adminByUsernameTx(r.Context(), tx, target.Username)
 		return err

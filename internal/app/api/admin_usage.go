@@ -414,23 +414,76 @@ func adminSortClause(value string, now time.Time) (string, []any) {
 }
 
 func addAdminCountsTx(ctx context.Context, tx *sql.Tx, adminID int64, response map[string]any) error {
-	statusCounts := map[string]int64{}
-	rows, err := tx.QueryContext(ctx, `SELECT status, COUNT(*) FROM users WHERE admin_id = ? AND status != ? GROUP BY status`, adminID, "deleted")
-	if err != nil {
+	var (
+		totalUsers                  int64
+		activeUsers                 int64
+		limitedUsers                int64
+		expiredUsers                int64
+		onHoldUsers                 int64
+		disabledUsers               int64
+		unlimitedUsersCount         int64
+		limitedDataUsersCount       int64
+		currentUsersUsedTraffic     int64
+		dataLimitAllocated          int64
+		unlimitedUsersUsage         int64
+		disabledUsersUsage          int64
+		disabledUsersDataLimit      int64
+		deletedUsersCount           int64
+		deletedUnlimitedUsersCount  int64
+		deletedUsersUsedTraffic     int64
+		deletedUsersDataLimit       int64
+		revokedSubUsersCount        int64
+		revokedSubUsersUsage        int64
+		revokedSubUsersDataLimit    int64
+	)
+	if err := tx.QueryRowContext(ctx, `
+SELECT
+	COUNT(CASE WHEN status != 'deleted' THEN 1 END),
+	COUNT(CASE WHEN status = 'active' THEN 1 END),
+	COUNT(CASE WHEN status = 'limited' THEN 1 END),
+	COUNT(CASE WHEN status = 'expired' THEN 1 END),
+	COUNT(CASE WHEN status = 'on_hold' THEN 1 END),
+	COUNT(CASE WHEN status = 'disabled' THEN 1 END),
+	COUNT(CASE WHEN status != 'deleted' AND COALESCE(data_limit, 0) <= 0 THEN 1 END),
+	COUNT(CASE WHEN status != 'deleted' AND COALESCE(data_limit, 0) > 0 THEN 1 END),
+	COALESCE(SUM(CASE WHEN status != 'deleted' THEN COALESCE(used_traffic, 0) ELSE 0 END), 0),
+	COALESCE(SUM(CASE WHEN status != 'deleted' AND COALESCE(data_limit, 0) > 0 THEN data_limit ELSE 0 END), 0),
+	COALESCE(SUM(CASE WHEN status != 'deleted' AND COALESCE(data_limit, 0) <= 0 THEN COALESCE(used_traffic, 0) ELSE 0 END), 0),
+	COALESCE(SUM(CASE WHEN status = 'disabled' THEN COALESCE(used_traffic, 0) ELSE 0 END), 0),
+	COALESCE(SUM(CASE WHEN status = 'disabled' AND COALESCE(data_limit, 0) > 0 THEN data_limit ELSE 0 END), 0),
+	COUNT(CASE WHEN status = 'deleted' THEN 1 END),
+	COUNT(CASE WHEN status = 'deleted' AND COALESCE(data_limit, 0) <= 0 THEN 1 END),
+	COALESCE(SUM(CASE WHEN status = 'deleted' THEN COALESCE(used_traffic, 0) ELSE 0 END), 0),
+	COALESCE(SUM(CASE WHEN status = 'deleted' AND COALESCE(data_limit, 0) > 0 THEN data_limit ELSE 0 END), 0),
+	COUNT(CASE WHEN sub_revoked_at IS NOT NULL THEN 1 END),
+	COALESCE(SUM(CASE WHEN sub_revoked_at IS NOT NULL THEN COALESCE(used_traffic, 0) ELSE 0 END), 0),
+	COALESCE(SUM(CASE WHEN sub_revoked_at IS NOT NULL AND COALESCE(data_limit, 0) > 0 THEN data_limit ELSE 0 END), 0)
+FROM users
+WHERE admin_id = ?`, adminID).Scan(
+		&totalUsers,
+		&activeUsers,
+		&limitedUsers,
+		&expiredUsers,
+		&onHoldUsers,
+		&disabledUsers,
+		&unlimitedUsersCount,
+		&limitedDataUsersCount,
+		&currentUsersUsedTraffic,
+		&dataLimitAllocated,
+		&unlimitedUsersUsage,
+		&disabledUsersUsage,
+		&disabledUsersDataLimit,
+		&deletedUsersCount,
+		&deletedUnlimitedUsersCount,
+		&deletedUsersUsedTraffic,
+		&deletedUsersDataLimit,
+		&revokedSubUsersCount,
+		&revokedSubUsersUsage,
+		&revokedSubUsersDataLimit,
+	); err != nil {
 		return err
 	}
-	for rows.Next() {
-		var status string
-		var count int64
-		if err := rows.Scan(&status, &count); err != nil {
-			_ = rows.Close()
-			return err
-		}
-		statusCounts[status] = count
-	}
-	if err := rows.Close(); err != nil {
-		return err
-	}
+
 	onlineCutoff := dbTimestamp(online.Cutoff(time.Now()))
 	onlineUsers := int64(0)
 	if err := tx.QueryRowContext(
@@ -444,17 +497,50 @@ func addAdminCountsTx(ctx context.Context, tx *sql.Tx, adminID int64, response m
 	).Scan(&onlineUsers); err != nil {
 		return err
 	}
-	total := int64(0)
-	for _, count := range statusCounts {
-		total += count
+
+	var (
+		resetUsageCount      int64
+		resetUsageUsersCount int64
+		resetBytes           int64
+	)
+	if err := tx.QueryRowContext(ctx, `
+SELECT
+	COUNT(*),
+	COUNT(DISTINCT ul.user_id),
+	COALESCE(SUM(ul.used_traffic_at_reset), 0)
+FROM user_usage_logs ul
+JOIN users u ON u.id = ul.user_id
+WHERE u.admin_id = ?`, adminID).Scan(&resetUsageCount, &resetUsageUsersCount, &resetBytes); err != nil {
+		lower := strings.ToLower(err.Error())
+		if !strings.Contains(lower, "no such table") && !strings.Contains(lower, "doesn't exist") {
+			return err
+		}
 	}
-	response["users_count"] = total
-	response["active_users"] = statusCounts["active"]
-	response["limited_users"] = statusCounts["limited"]
-	response["expired_users"] = statusCounts["expired"]
-	response["on_hold_users"] = statusCounts["on_hold"]
-	response["disabled_users"] = statusCounts["disabled"]
+
+	response["users_count"] = totalUsers
+	response["active_users"] = activeUsers
+	response["limited_users"] = limitedUsers
+	response["expired_users"] = expiredUsers
+	response["on_hold_users"] = onHoldUsers
+	response["disabled_users"] = disabledUsers
 	response["online_users"] = onlineUsers
+	response["unlimited_users_count"] = unlimitedUsersCount
+	response["limited_data_users_count"] = limitedDataUsersCount
+	response["current_users_used_traffic"] = currentUsersUsedTraffic
+	response["data_limit_allocated"] = dataLimitAllocated
+	response["unlimited_users_usage"] = unlimitedUsersUsage
+	response["disabled_users_usage"] = disabledUsersUsage
+	response["disabled_users_data_limit"] = disabledUsersDataLimit
+	response["deleted_users_count"] = deletedUsersCount
+	response["deleted_unlimited_users_count"] = deletedUnlimitedUsersCount
+	response["deleted_users_used_traffic"] = deletedUsersUsedTraffic
+	response["deleted_users_data_limit"] = deletedUsersDataLimit
+	response["revoked_sub_users_count"] = revokedSubUsersCount
+	response["revoked_sub_users_usage"] = revokedSubUsersUsage
+	response["revoked_sub_users_data_limit"] = revokedSubUsersDataLimit
+	response["reset_usage_users_count"] = resetUsageUsersCount
+	response["reset_usage_count"] = resetUsageCount
+	response["reset_bytes"] = resetBytes
 	return nil
 }
 

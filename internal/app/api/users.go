@@ -361,6 +361,9 @@ func (s *Server) handleUserCreate(w http.ResponseWriter, r *http.Request) {
 	if result.SpeedLimitChanged {
 		s.queueUserSpeedLimitSync(r.Context())
 	}
+	createdDetail := s.fetchUserAuditDetail(r.Context(), r, principal, result.Username)
+	createSummary, createChanges := buildUserCreateAudit(createdDetail, result)
+	s.recordBestEffortRecentAction(r.Context(), "user.create", "user", result.Username, createSummary, createChanges, nil)
 	createdReport := userReportForTelegram(result, principal.Context.Admin.Username, principal.Context.Admin.Username, raw)
 	s.telegramReports.UserCreated(r.Context(), createdReport)
 	s.enqueueWebhook(r.Context(), webhookUserEvent(webhookapp.ActionUserCreated, createdReport))
@@ -391,6 +394,7 @@ func (s *Server) handleUserUpdate(w http.ResponseWriter, r *http.Request, userna
 		writeLabelError(w, err)
 		return
 	}
+	beforeDetail := s.fetchUserAuditDetail(r.Context(), r, principal, username)
 	result, err := s.userService.UpdateUser(r.Context(), principal.Context.Admin, username, raw)
 	if err != nil {
 		writeUserMutationError(w, err)
@@ -401,6 +405,9 @@ func (s *Server) handleUserUpdate(w http.ResponseWriter, r *http.Request, userna
 	if result.SpeedLimitChanged {
 		s.queueUserSpeedLimitSync(r.Context())
 	}
+	afterDetail := s.fetchUserAuditDetail(r.Context(), r, principal, result.Username)
+	updateActionType, updateSummary, updateChanges := buildUserUpdateAudit(beforeDetail, afterDetail, result)
+	s.recordBestEffortRecentAction(r.Context(), updateActionType, "user", result.Username, updateSummary, updateChanges, nil)
 	report := userReportForTelegram(result, principal.Context.Admin.Username, principal.Context.Admin.Username, raw)
 	s.telegramReports.UserUpdated(r.Context(), report)
 	s.enqueueWebhook(r.Context(), webhookUserEvent(webhookapp.ActionUserUpdated, report))
@@ -417,6 +424,7 @@ func (s *Server) handleUserDelete(w http.ResponseWriter, r *http.Request, userna
 		writeError(w, http.StatusUnauthorized, "missing admin context")
 		return
 	}
+	beforeDetail := s.fetchUserAuditDetail(r.Context(), r, principal, username)
 	result, err := s.userService.DeleteUser(r.Context(), principal.Context.Admin, username)
 	if err != nil {
 		writeUserMutationError(w, err)
@@ -426,6 +434,8 @@ func (s *Server) handleUserDelete(w http.ResponseWriter, r *http.Request, userna
 	if result.SpeedLimitChanged {
 		s.queueUserSpeedLimitSync(r.Context())
 	}
+	deleteSummary, deleteChanges := buildUserDeleteAudit(beforeDetail, result)
+	s.recordBestEffortRecentAction(r.Context(), "user.delete", "user", result.Username, deleteSummary, deleteChanges, nil)
 	deletedReport := telegramapp.UserReport{
 		Username: result.Username,
 		Owner:    principal.Context.Admin.Username,
@@ -450,6 +460,7 @@ func (s *Server) handleUserMutationAction(w http.ResponseWriter, r *http.Request
 		writeError(w, http.StatusUnauthorized, "missing admin context")
 		return
 	}
+	beforeDetail := s.fetchUserAuditDetail(r.Context(), r, principal, username)
 	var (
 		result userapp.MutationResult
 		err    error
@@ -470,6 +481,48 @@ func (s *Server) handleUserMutationAction(w http.ResponseWriter, r *http.Request
 		return
 	}
 	s.kickUserNodeOperationsSoon(result.UserID)
+	switch suffix {
+	case "reset":
+		usedBefore := int64(0)
+		limitText := "Unlimited"
+		beforeStatus := result.Status
+		if beforeDetail != nil {
+			usedBefore = beforeDetail.UsedTraffic
+			limitText = formatAuditDataLimit(beforeDetail.DataLimit)
+			beforeStatus = beforeDetail.Status
+		}
+		usedText := formatAuditBytesValue(usedBefore)
+		changes := []recentActionValueChange{
+			{Field: "used_traffic", Before: usedText, After: "0 B", Delta: "-" + usedText},
+			{Field: "data_limit", Before: limitText, After: limitText},
+		}
+		if beforeStatus != result.Status {
+			changes = append(changes, recentActionValueChange{Field: "status", Before: beforeStatus, After: result.Status})
+		}
+		s.recordBestEffortRecentAction(r.Context(), "user.reset_usage", "user", result.Username, fmt.Sprintf("Reset usage (%s → 0 B)", usedText), changes, nil)
+	case "revoke_sub":
+		usedText := "0 B"
+		limitText := "Unlimited"
+		if beforeDetail != nil {
+			usedText = formatAuditBytesValue(beforeDetail.UsedTraffic)
+			limitText = formatAuditDataLimit(beforeDetail.DataLimit)
+		}
+		changes := []recentActionValueChange{
+			{Field: "subscription_credential", Before: "Active", After: "Revoked"},
+			{Field: "used_traffic", Before: usedText, After: usedText},
+			{Field: "data_limit", Before: limitText, After: limitText},
+		}
+		s.recordBestEffortRecentAction(r.Context(), "user.revoke_sub", "user", result.Username, fmt.Sprintf("Reset subscription (%s used / %s limit)", usedText, limitText), changes, nil)
+	case "active-next":
+		afterDetail := s.fetchUserAuditDetail(r.Context(), r, principal, result.Username)
+		_, nextSummary, nextChanges := buildUserUpdateAudit(beforeDetail, afterDetail, result)
+		if beforeDetail != nil && len(nextChanges) == 0 {
+			nextSummary = fmt.Sprintf("Activated next plan (%s used)", formatAuditBytesValue(beforeDetail.UsedTraffic))
+		} else {
+			nextSummary = "Activated next plan"
+		}
+		s.recordBestEffortRecentAction(r.Context(), "user.active_next", "user", result.Username, nextSummary, nextChanges, nil)
+	}
 	report := telegramapp.UserReport{
 		Username: result.Username,
 		Owner:    principal.Context.Admin.Username,
@@ -540,6 +593,10 @@ func (s *Server) handleBulkUsersAction(w http.ResponseWriter, r *http.Request, s
 		writeUserMutationError(w, err)
 		return
 	}
+	var preDeleteSnap bulkAuditSnapshot
+	if !payload.DryRun && (payload.Action == userapp.AdvancedUserActionDeleteUsers || payload.Action == userapp.AdvancedUserActionCleanupStatus) {
+		preDeleteSnap = s.snapshotBulkUsersAudit(r.Context(), targetAdmin, payload, nil)
+	}
 	// TODO: emit bulk users action report through the Go Telegram notifier.
 	result, err := s.userService.BulkUsersAction(r.Context(), principal.Context.Admin, payload, userapp.BulkUsersActionOptions{
 		TargetAdmin:    targetAdmin,
@@ -548,6 +605,23 @@ func (s *Server) handleBulkUsersAction(w http.ResponseWriter, r *http.Request, s
 	if err != nil {
 		writeUserMutationError(w, err)
 		return
+	}
+	if !payload.DryRun && result.Count > 0 {
+		snap := preDeleteSnap
+		if len(result.UserIDs) > 0 {
+			postSnap := s.snapshotBulkUsersAudit(r.Context(), targetAdmin, payload, result.UserIDs)
+			if len(postSnap.Usernames) > 0 {
+				snap = postSnap
+			}
+		}
+		bulkType, bulkSummary, bulkChanges := buildBulkAuditChanges(payload, result, snap, targetAdmin, serviceRouteID)
+		resourceKey := "bulk"
+		if targetAdmin != nil && strings.TrimSpace(targetAdmin.Username) != "" {
+			resourceKey = targetAdmin.Username
+		} else if len(snap.Usernames) == 1 {
+			resourceKey = snap.Usernames[0]
+		}
+		s.recordBestEffortRecentAction(r.Context(), bulkType, "user", resourceKey, bulkSummary, bulkChanges, snap.Usernames)
 	}
 	s.kickUserNodeOperationsSoon(result.UserIDs...)
 	writeJSON(w, http.StatusOK, result)
