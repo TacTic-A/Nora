@@ -485,13 +485,21 @@ const ActionPreview: FC<{ preview?: RecentActionPreview }> = ({ preview }) => {
 				</p>
 			)}
 			<div className="flex flex-row items-center gap-1.5 min-w-0! max-w-full">
-				<p className="text-red-300 line-through truncate">
-					{preview.before}
-				</p>
-				<p className="text-panel-text-muted">→</p>
-				<p className="text-green-300 truncate">
-					{preview.after}
-				</p>
+				{preview.before === preview.after ? (
+					<p className="text-panel-text font-medium truncate">
+						{preview.after}
+					</p>
+				) : (
+					<>
+						<p className="text-red-300 line-through truncate">
+							{preview.before}
+						</p>
+						<p className="text-panel-text-muted">→</p>
+						<p className="text-green-300 truncate">
+							{preview.after}
+						</p>
+					</>
+				)}
 				{preview.delta && (
 					<p className="text-panel-text-muted truncate">
 						({preview.delta})
@@ -867,11 +875,17 @@ export const RecentActionsPage: FC = () => {
 												? t(labelKey)
 												: change.field.replaceAll("_", " ")}
 										</p>
-										<p className="text-red-300 line-through">
-											{change.before}
-										</p>
-										<p className="text-panel-text-muted">→</p>
-										<p className="text-green-300">{change.after}</p>
+										{change.before === change.after ? (
+											<p className="text-panel-text font-medium">{change.after}</p>
+										) : (
+											<>
+												<p className="text-red-300 line-through">
+													{change.before}
+												</p>
+												<p className="text-panel-text-muted">→</p>
+												<p className="text-green-300">{change.after}</p>
+											</>
+										)}
 										{change.delta && (
 											<p className="text-panel-text-muted">({change.delta})</p>
 										)}

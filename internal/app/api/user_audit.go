@@ -279,6 +279,7 @@ func buildUserUpdateAudit(before *userapp.UserDetail, after *userapp.UserDetail,
 	add("telegram_id", formatOptionalText(before.TelegramID), formatOptionalText(after.TelegramID))
 	add("contact_number", formatOptionalText(before.ContactNumber), formatOptionalText(after.ContactNumber))
 
+	changedCount := len(changes)
 	owner := formatAuditOwner(after)
 	if owner == "" {
 		owner = formatAuditOwner(before)
@@ -289,6 +290,9 @@ func buildUserUpdateAudit(before *userapp.UserDetail, after *userapp.UserDetail,
 			beforeOwner = owner
 		}
 		changes = append(changes, recentActionValueChange{Field: "owner", Before: beforeOwner, After: owner})
+		if beforeOwner != owner {
+			changedCount++
+		}
 	}
 
 	actionType := "user.update"
@@ -299,8 +303,10 @@ func buildUserUpdateAudit(before *userapp.UserDetail, after *userapp.UserDetail,
 	} else if before.Status == "disabled" && (after.Status == "active" || after.Status == "on_hold") {
 		actionType = "user.enable"
 		summary = fmt.Sprintf("Enabled user (%s used / %s limit)", formatAuditBytesValue(after.UsedTraffic), afterLimit)
-	} else if len(changes) > 0 {
-		summary = fmt.Sprintf("Updated user (%d field changes)", len(changes))
+	} else if changedCount == 1 {
+		summary = "Updated user (1 field change)"
+	} else if changedCount > 1 {
+		summary = fmt.Sprintf("Updated user (%d field changes)", changedCount)
 	}
 	summary = appendOwnerSummary(summary, owner)
 	return actionType, summary, changes
