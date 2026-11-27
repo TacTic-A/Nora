@@ -140,6 +140,33 @@ func formatOptionalInt(v *int64) string {
 	return fmt.Sprintf("%d", *v)
 }
 
+func formatAuditSpeedLimit(kbps int64) string {
+	if kbps <= 0 {
+		return "Unlimited"
+	}
+	if kbps >= 1000 {
+		if kbps%1000 == 0 {
+			return fmt.Sprintf("%d Mbps", kbps/1000)
+		}
+		return strings.TrimRight(strings.TrimRight(fmt.Sprintf("%.2f", float64(kbps)/1000.0), "0"), ".") + " Mbps"
+	}
+	return fmt.Sprintf("%d Kbps", kbps)
+}
+
+func formatAuditOwner(detail *userapp.UserDetail) string {
+	if detail == nil || detail.AdminUsername == nil {
+		return ""
+	}
+	return strings.TrimSpace(*detail.AdminUsername)
+}
+
+func appendOwnerSummary(summary, owner string) string {
+	if owner == "" {
+		return summary
+	}
+	return fmt.Sprintf("%s · Owner: %s", summary, owner)
+}
+
 func formatOptionalText(v *string) string {
 	if v == nil || strings.TrimSpace(*v) == "" {
 		return "—"
@@ -154,15 +181,20 @@ func buildUserCreateAudit(detail *userapp.UserDetail, fallback userapp.MutationR
 		}
 	}
 	isUnlimited := detail.DataLimit == nil || *detail.DataLimit <= 0
+	owner := formatAuditOwner(detail)
 	summary := fmt.Sprintf("Created user (%s)", formatAuditDataLimit(detail.DataLimit))
 	if isUnlimited {
 		summary = "Created unlimited traffic user"
 	}
+	summary = appendOwnerSummary(summary, owner)
 	changes := []recentActionValueChange{
 		{Field: "status", Before: "—", After: detail.Status},
 		{Field: "data_limit", Before: "—", After: formatAuditDataLimit(detail.DataLimit)},
 		{Field: "expire", Before: "—", After: formatAuditExpire(detail.Expire)},
 		{Field: "service", Before: "—", After: formatAuditService(detail)},
+	}
+	if owner != "" {
+		changes = append(changes, recentActionValueChange{Field: "owner", Before: "—", After: owner})
 	}
 	if detail.DataLimitResetStrategy != "" && detail.DataLimitResetStrategy != "no_reset" {
 		changes = append(changes, recentActionValueChange{Field: "data_limit_reset_strategy", Before: "—", After: detail.DataLimitResetStrategy})
@@ -171,7 +203,7 @@ func buildUserCreateAudit(detail *userapp.UserDetail, fallback userapp.MutationR
 		changes = append(changes, recentActionValueChange{Field: "ip_limit", Before: "0", After: fmt.Sprintf("%d", detail.IPLimit)})
 	}
 	if detail.SpeedLimitKbps > 0 {
-		changes = append(changes, recentActionValueChange{Field: "speed_limit_kbps", Before: "0", After: fmt.Sprintf("%d Kbps", detail.SpeedLimitKbps)})
+		changes = append(changes, recentActionValueChange{Field: "speed_limit_kbps", Before: "Unlimited", After: formatAuditSpeedLimit(detail.SpeedLimitKbps)})
 	}
 	if detail.Flow != nil && strings.TrimSpace(*detail.Flow) != "" {
 		changes = append(changes, recentActionValueChange{Field: "flow", Before: "—", After: strings.TrimSpace(*detail.Flow)})
@@ -233,7 +265,7 @@ func buildUserUpdateAudit(before *userapp.UserDetail, after *userapp.UserDetail,
 	add("on_hold_timeout", formatOptionalText(before.OnHoldTimeout), formatOptionalText(after.OnHoldTimeout))
 	add("service", formatAuditService(before), formatAuditService(after))
 	add("ip_limit", fmt.Sprintf("%d", before.IPLimit), fmt.Sprintf("%d", after.IPLimit))
-	add("speed_limit_kbps", fmt.Sprintf("%d", before.SpeedLimitKbps), fmt.Sprintf("%d", after.SpeedLimitKbps))
+	add("speed_limit_kbps", formatAuditSpeedLimit(before.SpeedLimitKbps), formatAuditSpeedLimit(after.SpeedLimitKbps))
 	add("flow", formatOptionalText(before.Flow), formatOptionalText(after.Flow))
 	add("auto_delete_in_days", formatOptionalInt(before.AutoDeleteInDays), formatOptionalInt(after.AutoDeleteInDays))
 	add("inbounds", formatAuditInbounds(before.Inbounds), formatAuditInbounds(after.Inbounds))
@@ -247,6 +279,18 @@ func buildUserUpdateAudit(before *userapp.UserDetail, after *userapp.UserDetail,
 	add("telegram_id", formatOptionalText(before.TelegramID), formatOptionalText(after.TelegramID))
 	add("contact_number", formatOptionalText(before.ContactNumber), formatOptionalText(after.ContactNumber))
 
+	owner := formatAuditOwner(after)
+	if owner == "" {
+		owner = formatAuditOwner(before)
+	}
+	if owner != "" {
+		beforeOwner := formatAuditOwner(before)
+		if beforeOwner == "" {
+			beforeOwner = owner
+		}
+		changes = append(changes, recentActionValueChange{Field: "owner", Before: beforeOwner, After: owner})
+	}
+
 	actionType := "user.update"
 	summary := "Updated user"
 	if before.Status != "disabled" && after.Status == "disabled" {
@@ -258,6 +302,7 @@ func buildUserUpdateAudit(before *userapp.UserDetail, after *userapp.UserDetail,
 	} else if len(changes) > 0 {
 		summary = fmt.Sprintf("Updated user (%d field changes)", len(changes))
 	}
+	summary = appendOwnerSummary(summary, owner)
 	return actionType, summary, changes
 }
 
@@ -269,7 +314,8 @@ func buildUserDeleteAudit(before *userapp.UserDetail, fallback userapp.MutationR
 	}
 	usedText := formatAuditBytesValue(before.UsedTraffic)
 	limitText := formatAuditDataLimit(before.DataLimit)
-	summary := fmt.Sprintf("Deleted user (%s used / %s limit)", usedText, limitText)
+	owner := formatAuditOwner(before)
+	summary := appendOwnerSummary(fmt.Sprintf("Deleted user (%s used / %s limit)", usedText, limitText), owner)
 	changes := []recentActionValueChange{
 		{Field: "status", Before: before.Status, After: "deleted"},
 		{Field: "used_traffic", Before: usedText, After: "0 B", Delta: "-" + usedText},
@@ -358,6 +404,11 @@ func buildBulkAuditChanges(payload userapp.BulkUsersActionRequest, result userap
 	summary := fmt.Sprintf("Bulk %s (%d users)", strings.ReplaceAll(string(payload.Action), "_", " "), result.Count)
 	changes := []recentActionValueChange{
 		{Field: "affected_users", Before: "0", After: fmt.Sprintf("%d", result.Count)},
+	}
+	if targetAdmin != nil && strings.TrimSpace(targetAdmin.Username) != "" {
+		owner := strings.TrimSpace(targetAdmin.Username)
+		summary = appendOwnerSummary(summary, owner)
+		changes = append(changes, recentActionValueChange{Field: "owner", Before: owner, After: owner})
 	}
 	if snap.UsedTraffic > 0 {
 		changes = append(changes, recentActionValueChange{Field: "used_traffic", Before: formatAuditBytesValue(snap.UsedTraffic), After: formatAuditBytesValue(snap.UsedTraffic)})

@@ -3260,7 +3260,7 @@
 	"usersFilter.clearSearch": "Clear search",
 	"usersTable.addTrafficSuccess": "Traffic updated",
 	"usersTable.extendExpireSuccess": "Expiration extended",
-	"usersTable.enableUser": "Enable user",
+	"usersTable.enableUser": "فعال کردن کاربر",
 	"usersTable.noOnlineIps": "No online IPs found.",
 	"usersTable.bulkActionCount": "{{count}} users updated",
 	"usersTable.qrCode": "QR Code",

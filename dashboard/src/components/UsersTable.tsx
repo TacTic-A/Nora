@@ -319,7 +319,10 @@ export const UsersTable: FC<UsersTableProps> = ({
 			status: "success" | "error",
 			options?: { description?: string; duration?: number },
 		) =>
-			toast("", { description: options?.description, duration: options?.duration ?? 2500 }),
+			toast[status](title, {
+				description: options?.description,
+				duration: options?.duration ?? 2500,
+			}),
 		[toast],
 	);
 	const { userData } = useGetUser();

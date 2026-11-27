@@ -486,6 +486,7 @@ func (s *Server) handleUserMutationAction(w http.ResponseWriter, r *http.Request
 		usedBefore := int64(0)
 		limitText := "Unlimited"
 		beforeStatus := result.Status
+		owner := formatAuditOwner(beforeDetail)
 		if beforeDetail != nil {
 			usedBefore = beforeDetail.UsedTraffic
 			limitText = formatAuditDataLimit(beforeDetail.DataLimit)
@@ -496,13 +497,17 @@ func (s *Server) handleUserMutationAction(w http.ResponseWriter, r *http.Request
 			{Field: "used_traffic", Before: usedText, After: "0 B", Delta: "-" + usedText},
 			{Field: "data_limit", Before: limitText, After: limitText},
 		}
+		if owner != "" {
+			changes = append(changes, recentActionValueChange{Field: "owner", Before: owner, After: owner})
+		}
 		if beforeStatus != result.Status {
 			changes = append(changes, recentActionValueChange{Field: "status", Before: beforeStatus, After: result.Status})
 		}
-		s.recordBestEffortRecentAction(r.Context(), "user.reset_usage", "user", result.Username, fmt.Sprintf("Reset usage (%s → 0 B)", usedText), changes, nil)
+		s.recordBestEffortRecentAction(r.Context(), "user.reset_usage", "user", result.Username, appendOwnerSummary(fmt.Sprintf("Reset usage (%s → 0 B)", usedText), owner), changes, nil)
 	case "revoke_sub":
 		usedText := "0 B"
 		limitText := "Unlimited"
+		owner := formatAuditOwner(beforeDetail)
 		if beforeDetail != nil {
 			usedText = formatAuditBytesValue(beforeDetail.UsedTraffic)
 			limitText = formatAuditDataLimit(beforeDetail.DataLimit)
@@ -512,16 +517,23 @@ func (s *Server) handleUserMutationAction(w http.ResponseWriter, r *http.Request
 			{Field: "used_traffic", Before: usedText, After: usedText},
 			{Field: "data_limit", Before: limitText, After: limitText},
 		}
-		s.recordBestEffortRecentAction(r.Context(), "user.revoke_sub", "user", result.Username, fmt.Sprintf("Reset subscription (%s used / %s limit)", usedText, limitText), changes, nil)
+		if owner != "" {
+			changes = append(changes, recentActionValueChange{Field: "owner", Before: owner, After: owner})
+		}
+		s.recordBestEffortRecentAction(r.Context(), "user.revoke_sub", "user", result.Username, appendOwnerSummary(fmt.Sprintf("Reset subscription (%s used / %s limit)", usedText, limitText), owner), changes, nil)
 	case "active-next":
 		afterDetail := s.fetchUserAuditDetail(r.Context(), r, principal, result.Username)
+		owner := formatAuditOwner(afterDetail)
+		if owner == "" {
+			owner = formatAuditOwner(beforeDetail)
+		}
 		_, nextSummary, nextChanges := buildUserUpdateAudit(beforeDetail, afterDetail, result)
 		if beforeDetail != nil && len(nextChanges) == 0 {
 			nextSummary = fmt.Sprintf("Activated next plan (%s used)", formatAuditBytesValue(beforeDetail.UsedTraffic))
 		} else {
 			nextSummary = "Activated next plan"
 		}
-		s.recordBestEffortRecentAction(r.Context(), "user.active_next", "user", result.Username, nextSummary, nextChanges, nil)
+		s.recordBestEffortRecentAction(r.Context(), "user.active_next", "user", result.Username, appendOwnerSummary(nextSummary, owner), nextChanges, nil)
 	}
 	report := telegramapp.UserReport{
 		Username: result.Username,
