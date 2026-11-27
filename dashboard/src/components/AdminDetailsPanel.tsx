@@ -151,6 +151,10 @@ export const AdminDetailsPanel = ({
 					value={formatBytes(admin.current_users_used_traffic ?? 0, 2)}
 				/>
 				<ExpandedMeta
+					label={t("admins.details.totalAccountedConsumed")}
+					value={formatBytes(admin.total_accounted_consumed ?? 0, 2)}
+				/>
+				<ExpandedMeta
 					label={t("admins.details.limit")}
 					value={formatBytesOrUnlimited(dataLimitBytes, unlimitedLabel)}
 				/>

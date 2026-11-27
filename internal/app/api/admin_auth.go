@@ -307,6 +307,7 @@ func adminResponse(dbadmin adminapp.Admin) map[string]any {
 		"reset_usage_users_count":         nil,
 		"reset_usage_count":               nil,
 		"reset_bytes":                     nil,
+		"total_accounted_consumed":        nil,
 	}
 	if dbadmin.SubscriptionSettings == nil {
 		result["subscription_settings"] = map[string]any{}

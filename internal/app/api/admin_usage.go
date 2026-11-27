@@ -541,6 +541,7 @@ WHERE u.admin_id = ?`, adminID).Scan(&resetUsageCount, &resetUsageUsersCount, &r
 	response["reset_usage_users_count"] = resetUsageUsersCount
 	response["reset_usage_count"] = resetUsageCount
 	response["reset_bytes"] = resetBytes
+	response["total_accounted_consumed"] = currentUsersUsedTraffic + deletedUsersUsedTraffic + resetBytes
 	return nil
 }
 

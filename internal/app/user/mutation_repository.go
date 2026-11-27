@@ -565,6 +565,16 @@ func (r Repository) activeNextMutation(ctx context.Context, admin adminapp.Admin
 		return MutationResult{}, clientError(404, "User doesn't have next plan")
 	}
 	now := time.Now().UTC()
+	if plan.DataLimit > 0 {
+		if scope, ok := adminTrafficScope(admin, existing.ServiceID); ok && trafficScopeUsesCreatedTraffic(scope) {
+			if trafficScopeCreatedLimitWouldExceed(scope, plan.DataLimit) {
+				return MutationResult{}, permissionHTTPError(PermissionError{Detail: CreatedTrafficLimitExceededMessage})
+			}
+		}
+		if err := r.recordCreatedTrafficTx(ctx, tx, admin, existing.ServiceID, plan.DataLimit, "next_plan_activate", now); err != nil {
+			return MutationResult{}, err
+		}
+	}
 	newLimit := plan.DataLimit
 	if plan.IncreaseDataLimit {
 		newLimit = int64PtrValue(existing.DataLimit) + plan.DataLimit

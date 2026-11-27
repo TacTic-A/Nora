@@ -302,6 +302,7 @@
 	"admins.details.limitedDataUsers": "Limited traffic users",
 	"admins.details.recordedCreatedTraffic": "Recorded created traffic",
 	"admins.details.currentUsersUsed": "Current users consumed",
+	"admins.details.totalAccountedConsumed": "Total accounted consumed",
 	"admins.details.disabledUsersUsage": "Disabled users consumed",
 	"admins.details.disabledUsersDataLimit": "Disabled users allocated",
 	"admins.details.deletedUsersCount": "Deleted users",

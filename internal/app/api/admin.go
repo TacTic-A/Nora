@@ -831,6 +831,19 @@ func (s *Server) bulkUpdateAdminUsers(ctx context.Context, actor adminapp.Admin,
 	})
 }
 
+func ensureCanResetAdminUsage(actor adminapp.Admin, target adminapp.Admin) error {
+	if actor.Role == adminapp.RoleFullAccess {
+		return nil
+	}
+	if !canEditAdmins(actor) {
+		return statusError{status: http.StatusForbidden, detail: "You're not allowed"}
+	}
+	if strings.EqualFold(actor.Username, target.Username) {
+		return statusError{status: http.StatusForbidden, detail: "You're not allowed"}
+	}
+	return ensureCanManageAdmin(actor, target)
+}
+
 func (s *Server) handleAdminUsageResetPath(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
@@ -849,10 +862,8 @@ func (s *Server) handleAdminUsageResetPath(w http.ResponseWriter, r *http.Reques
 		if err != nil {
 			return err
 		}
-		if !strings.EqualFold(principal.Context.Admin.Username, target.Username) {
-			if err := ensureCanManageAdmin(principal.Context.Admin, target); err != nil {
-				return err
-			}
+		if err := ensureCanResetAdminUsage(principal.Context.Admin, target); err != nil {
+			return err
 		}
 		if target.UsersUsage != 0 || target.CreatedTraffic != 0 || serviceUsageNonZero(target.ServiceLimits) {
 			if _, err := tx.ExecContext(r.Context(), `INSERT INTO admin_usage_logs (admin_id, used_traffic_at_reset, created_traffic_at_reset, reset_at) VALUES (?, ?, ?, ?)`, target.ID, target.UsersUsage, target.CreatedTraffic, dbTimestamp(time.Now().UTC())); err != nil {
@@ -908,10 +919,8 @@ func (s *Server) handleDeletedUsersUsageReset(w http.ResponseWriter, r *http.Req
 		if err != nil {
 			return err
 		}
-		if !strings.EqualFold(principal.Context.Admin.Username, target.Username) {
-			if err := ensureCanManageAdmin(principal.Context.Admin, target); err != nil {
-				return err
-			}
+		if err := ensureCanResetAdminUsage(principal.Context.Admin, target); err != nil {
+			return err
 		}
 		if payload.ServiceID != nil {
 			_, err = tx.ExecContext(r.Context(), `UPDATE service_admins SET deleted_users_usage = 0 WHERE admin_id = ? AND service_id = ?`, target.ID, *payload.ServiceID)

@@ -205,6 +205,29 @@ func TestAdminsListDetailedUserMetricsAndRecentActionFiltersSQLite(t *testing.T)
 	assertMetric("reset_usage_users_count", 2)
 	assertMetric("reset_usage_count", 3)
 	assertMetric("reset_bytes", 1000)
+	assertMetric("total_accounted_consumed", 1950)
+
+	// Verify Standard admin cannot self-reset their own usage or deleted_users_usage.
+	sellerActor := adminapp.Admin{ID: 2, Username: "seller", Role: adminapp.RoleStandard}
+	sellerPrincipal := adminPrincipal{
+		ID:       sellerActor.ID,
+		Username: sellerActor.Username,
+		Role:     string(sellerActor.Role),
+		Context:  adminapp.EffectiveAdminContext{Admin: sellerActor, Source: adminapp.AuthSourceSession},
+	}
+	for _, path := range []string{"/api/admin/usage/reset/seller", "/api/admin/seller/deleted-users-usage/reset"} {
+		selfReq := httptest.NewRequest(http.MethodPost, path, nil)
+		selfReq = selfReq.WithContext(context.WithValue(selfReq.Context(), adminContextKey, sellerPrincipal))
+		selfRec := httptest.NewRecorder()
+		if path == "/api/admin/usage/reset/seller" {
+			server.handleAdminUsageResetPath(selfRec, selfReq)
+		} else {
+			server.handleDeletedUsersUsageReset(selfRec, selfReq, "seller")
+		}
+		if selfRec.Code != http.StatusForbidden {
+			t.Fatalf("standard admin self-reset %s status=%d, want 403", path, selfRec.Code)
+		}
+	}
 
 	if _, err := db.Exec(`INSERT INTO recent_actions (id, action_type, resource_type, resource_key, actor_admin_id, actor_username, auth_source, summary, after_hash, rollback_status, created_at) VALUES
 		(1, 'inbound.create', 'inbound', 'cdn', 1, 'owner', 'session', 'Created inbound', '', 'available', '2026-11-27 10:00:00'),

@@ -173,6 +173,7 @@ export type Admin = {
 	reset_usage_users_count?: number | null;
 	reset_usage_count?: number | null;
 	reset_bytes?: number | null;
+	total_accounted_consumed?: number | null;
 	lifetime_usage?: number | null;
 	require_2fa?: boolean;
 	totp_enabled?: boolean;

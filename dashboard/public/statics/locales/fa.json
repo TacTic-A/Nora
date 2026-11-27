@@ -310,6 +310,7 @@
 	"admins.details.limitedDataUsers": "کاربران دارای محدودیت حجم",
 	"admins.details.recordedCreatedTraffic": "ترافیک ساخته‌شده ثبت‌شده",
 	"admins.details.currentUsersUsed": "مصرف فعلی کاربران",
+	"admins.details.totalAccountedConsumed": "کل مصرف ثبت‌شده (فعلی + حذف + ریست)",
 	"admins.details.disabledUsersUsage": "مصرف کاربران غیرفعال",
 	"admins.details.disabledUsersDataLimit": "حجم ساخته‌شده کاربران غیرفعال",
 	"admins.details.deletedUsersCount": "تعداد کاربران حذف‌شده",
