@@ -1,6 +1,28 @@
 import { ALPN_OPTION, UTLS_FINGERPRINT } from "utils/outbound";
 import { sniffingDestinationsFor, supportsSniffing } from "./inboundCapabilities";
 import { generateWireguardKeypair } from "./wireguard";
+import { pruneNulls } from "./xrayRawFields";
+import {
+	finalMaskValidationError,
+	getFinalMaskCapabilities,
+} from "./finalmask";
+import {
+	type AwgVersion,
+	awgExtraFromSettings,
+	awgExtraToSettings,
+	awgHeaderValue,
+	detectAwgVersion,
+	isAwgHeader,
+} from "./awgFields";
+import {
+	buildXhttpDownload,
+	createDefaultXhttpDownload,
+	flattenXhttpExtra,
+	validateXhttpDownload,
+	type XhttpDownloadErrorKey,
+	type XhttpDownloadForm,
+	xhttpDownloadFromRaw,
+} from "./xhttpDownload";
 
 export type Protocol =
 	| "vmess"
@@ -370,6 +392,13 @@ export type InboundFormValues = {
 	xhttpXmuxHMaxRequestTimes: string;
 	xhttpXmuxHMaxReusableSecs: string;
 	xhttpXmuxHKeepAlivePeriod: string;
+	xhttpDownload: XhttpDownloadForm;
+	xhttpRawSettings: Record<string, any>;
+	xhttpH2Params: string;
+	finalmaskRaw: Record<string, any>;
+	streamRaw: Record<string, any>;
+	hysteriaMasqueradeXForwarded: boolean;
+	vlessTestseed: string;
 
 	// vless extras
 	vlessSelectedAuth: string;
@@ -457,6 +486,7 @@ export type InboundFormValues = {
 	wgTproxyEnabled: boolean;
 	wgNatEnabled: boolean;
 	wgAccountingEnabled: boolean;
+	awgVersion: AwgVersion;
 	awgJc: string;
 	awgJmin: string;
 	awgJmax: string;
@@ -466,6 +496,7 @@ export type InboundFormValues = {
 	awgH2: string;
 	awgH3: string;
 	awgH4: string;
+	awgExtra: Record<string, any>;
 
 	greLocalAddress: string;
 	greMTU: string;
@@ -643,6 +674,7 @@ export const streamNetworks: StreamNetwork[] = [
 	"splithttp",
 	"xhttp",
 	"hysteria",
+	"xdrive",
 ];
 export const streamSecurityOptions: StreamSecurity[] = [
 	"none",
@@ -983,13 +1015,36 @@ const validatePacketSizeRange = (value: string): boolean => {
 };
 
 export type InboundFormValidationErrors = Partial<
-	Record<keyof InboundFormValues, string>
+	Record<keyof InboundFormValues | XhttpDownloadErrorKey, string>
 >;
+
+export const inboundFinalMaskCapabilities = (values: InboundFormValues) =>
+	getFinalMaskCapabilities({
+		protocol: values.protocol,
+		network: values.streamNetwork,
+		alpn: (values.tlsAlpn ?? []).join(","),
+		security: values.streamSecurity,
+		flow: values.vlessFlow,
+		proxyNetwork: values.shadowsocksNetwork,
+	});
 
 export const validateInboundFormFields = (
 	values: InboundFormValues,
 ): InboundFormValidationErrors => {
 	const errors: InboundFormValidationErrors = {};
+	if (values.protocol === "vless" && values.vlessTestseed.trim()) {
+		const seed = values.vlessTestseed.split(/[\s,]+/).filter(Boolean);
+		if (seed.length !== 4 || !seed.every((item) => /^\d+$/.test(item))) {
+			errors.vlessTestseed = "testseed needs exactly four whole numbers.";
+		}
+	}
+	if (values.protocol !== "hysteria") {
+		const maskError = finalMaskValidationError(
+			pruneNulls(values.finalmaskRaw ?? {}),
+			inboundFinalMaskCapabilities(values),
+		);
+		if (maskError) errors.finalmaskRaw = maskError;
+	}
 	if (!values.tag?.trim()) {
 		errors.tag = "Inbound tag is required.";
 	}
@@ -1384,6 +1439,16 @@ export const validateInboundFormFields = (
 			errors.xhttpXmuxMaxConnections =
 				"Max connections cannot be combined with max concurrency.";
 		}
+		if (
+			values.xhttpH2Params.trim() &&
+			!parseJsonObject(values.xhttpH2Params)
+		) {
+			errors.xhttpH2Params = "h2Params must be a JSON object.";
+		}
+		Object.assign(
+			errors,
+			validateXhttpDownload(values.xhttpDownload, values.xhttpMode),
+		);
 	}
 	if (values.protocol === "hysteria") {
 		if (values.streamNetwork !== "hysteria") {
@@ -1524,19 +1589,31 @@ export const validateInboundFormFields = (
 		validateWGNumber("wgMTU", "MTU", 576, 1500);
 		validateWGNumber("wgPersistentKeepalive", "Persistent keepalive", 0, 3600);
 		if (values.protocol === "amneziawg") {
+			const isAwg31 = values.awgVersion === "3.1";
 			for (const [key, label, min, max] of [
-				["awgJc", "Jc", 1, 128],
-				["awgJmin", "Jmin", 1, 1280],
-				["awgJmax", "Jmax", 1, 1280],
-				["awgS1", "S1", 0, 65535],
-				["awgS2", "S2", 0, 65535],
-				["awgH1", "H1", 0, 2147483647],
-				["awgH2", "H2", 0, 2147483647],
-				["awgH3", "H3", 0, 2147483647],
-				["awgH4", "H4", 0, 2147483647],
+				["awgJc", "Jc", isAwg31 ? 0 : 1, 128],
+				["awgJmin", "Jmin", isAwg31 ? 0 : 1, isAwg31 ? 65535 : 1280],
+				["awgJmax", "Jmax", isAwg31 ? 0 : 1, isAwg31 ? 65535 : 1280],
+				["awgS1", "S1", 0, isAwg31 ? 1552 : 65535],
+				["awgS2", "S2", 0, isAwg31 ? 1608 : 65535],
 			] as const) {
 				const error = validateIntegerRange(values[key], label, min, max);
 				if (error) errors[key] = error;
+			}
+			for (const key of ["awgH1", "awgH2", "awgH3", "awgH4"] as const) {
+				if (isAwg31) {
+					if (values[key].trim() && !isAwgHeader(values[key])) {
+						errors[key] = "Use a number or a low-high range.";
+					}
+				} else {
+					const error = validateIntegerRange(
+						values[key],
+						key.replace("awg", ""),
+						0,
+						2147483647,
+					);
+					if (error) errors[key] = error;
+				}
 			}
 			if (Number(values.awgJmin) > Number(values.awgJmax)) {
 				errors.awgJmax = "Jmax must be greater than or equal to Jmin.";
@@ -1849,6 +1926,17 @@ const cleanObject = (value: Record<string, any>) => {
 		}
 	});
 	return value;
+};
+
+const parseJsonObject = (text: string) => {
+	try {
+		const parsed = JSON.parse(text);
+		return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+			? parsed
+			: undefined;
+	} catch {
+		return undefined;
+	}
 };
 
 const cleanOptionalObject = (value: Record<string, any>) => {
@@ -2265,6 +2353,13 @@ export const createDefaultInboundForm = (
 	xhttpXmuxHMaxRequestTimes: "",
 	xhttpXmuxHMaxReusableSecs: "",
 	xhttpXmuxHKeepAlivePeriod: "",
+	xhttpDownload: createDefaultXhttpDownload(),
+	xhttpRawSettings: {},
+	xhttpH2Params: "",
+	finalmaskRaw: {},
+	streamRaw: {},
+	hysteriaMasqueradeXForwarded: false,
+	vlessTestseed: "",
 	vlessSelectedAuth: "",
 	sockoptEnabled: false,
 	sockopt: createDefaultSockopt(),
@@ -2333,6 +2428,7 @@ export const createDefaultInboundForm = (
 	wgTproxyEnabled: true,
 	wgNatEnabled: false,
 	wgAccountingEnabled: true,
+	awgVersion: "classic",
 	awgJc: "4",
 	awgJmin: "8",
 	awgJmax: "80",
@@ -2342,6 +2438,7 @@ export const createDefaultInboundForm = (
 	awgH2: "234567891",
 	awgH3: "345678912",
 	awgH4: "456789123",
+	awgExtra: awgExtraFromSettings({}),
 	greLocalAddress: "",
 	greMTU: "1476",
 	greTTL: "64",
@@ -2471,6 +2568,8 @@ const formToFallback = (fallback: FallbackForm) => {
 	return cleanObject(payload);
 };
 
+const PASSTHROUGH_NETWORKS = ["xdrive"];
+
 export const rawInboundToFormValues = (raw: RawInbound): InboundFormValues => {
 	const protocol = protocolOptions.includes(raw.protocol as Protocol)
 		? (raw.protocol as Protocol)
@@ -2484,7 +2583,12 @@ export const rawInboundToFormValues = (raw: RawInbound): InboundFormValues => {
 		protocol === "sstp" ||
 		protocol === "gre";
 	const sniffing = raw.sniffing ?? {};
-	const stream = raw.streamSettings ?? {};
+	const stream = raw.streamSettings?.xhttpSettings
+		? {
+				...raw.streamSettings,
+				xhttpSettings: flattenXhttpExtra(raw.streamSettings.xhttpSettings),
+			}
+		: (raw.streamSettings ?? {});
 	const tlsSettings = stream.tlsSettings ?? {};
 	const tlsSettingsMeta =
 		tlsSettings && typeof tlsSettings.settings === "object"
@@ -3017,6 +3121,23 @@ export const rawInboundToFormValues = (raw: RawInbound): InboundFormValues => {
 		xhttpXmuxHKeepAlivePeriod: toInputValue(
 			stream?.xhttpSettings?.xmux?.hKeepAlivePeriod,
 		),
+		xhttpDownload: xhttpDownloadFromRaw(
+			stream?.xhttpSettings?.downloadSettings,
+		),
+		xhttpRawSettings: stream.xhttpSettings ?? {},
+		finalmaskRaw: JSON.parse(JSON.stringify(stream.finalmask ?? {})),
+		streamRaw: PASSTHROUGH_NETWORKS.includes(stream.network ?? "")
+			? JSON.parse(JSON.stringify(stream))
+			: {},
+		hysteriaMasqueradeXForwarded: Boolean(
+			stream.hysteriaSettings?.masquerade?.xForwarded,
+		),
+		vlessTestseed: Array.isArray(settings.testseed)
+			? settings.testseed.join(", ")
+			: "",
+		xhttpH2Params: stream.xhttpSettings?.h2Params
+			? JSON.stringify(stream.xhttpSettings.h2Params, null, 2)
+			: "",
 		vlessSelectedAuth: settings.selectedAuth ?? base.vlessSelectedAuth,
 		sockoptEnabled: Boolean(stream?.sockopt),
 		sockopt: (() => {
@@ -3278,6 +3399,10 @@ export const rawInboundToFormValues = (raw: RawInbound): InboundFormValues => {
 		wgAccountingEnabled: wireguardLike
 				? Boolean(settings.accounting_enabled ?? base.wgAccountingEnabled)
 				: base.wgAccountingEnabled,
+		awgVersion:
+			protocol === "amneziawg"
+				? detectAwgVersion(settings)
+				: base.awgVersion,
 		awgJc:
 			protocol === "amneziawg" ? toInputValue(settings.jc ?? 4) : base.awgJc,
 		awgJmin:
@@ -3292,21 +3417,24 @@ export const rawInboundToFormValues = (raw: RawInbound): InboundFormValues => {
 			protocol === "amneziawg" ? toInputValue(settings.s1 ?? 77) : base.awgS1,
 		awgS2:
 			protocol === "amneziawg" ? toInputValue(settings.s2 ?? 90) : base.awgS2,
+		awgExtra: awgExtraFromSettings(
+			protocol === "amneziawg" ? settings : {},
+		),
 		awgH1:
 			protocol === "amneziawg"
-				? toInputValue(settings.h1 ?? 123456789)
+				? String(settings.h1 ?? 123456789)
 				: base.awgH1,
 		awgH2:
 			protocol === "amneziawg"
-				? toInputValue(settings.h2 ?? 234567891)
+				? String(settings.h2 ?? 234567891)
 				: base.awgH2,
 		awgH3:
 			protocol === "amneziawg"
-				? toInputValue(settings.h3 ?? 345678912)
+				? String(settings.h3 ?? 345678912)
 				: base.awgH3,
 		awgH4:
 			protocol === "amneziawg"
-				? toInputValue(settings.h4 ?? 456789123)
+				? String(settings.h4 ?? 456789123)
 				: base.awgH4,
 		greLocalAddress:
 			protocol === "gre"
@@ -3765,6 +3893,7 @@ const XHTTP_FORM_KEYS = new Set([
 	"noSSEHeader", "noGRPCHeader", "uplinkHTTPMethod", "uplinkChunkSize", "serverMaxHeaderBytes",
 	"sessionIDPlacement", "sessionIDKey", "sessionIDTable", "sessionIDLength", "sessionPlacement", "sessionKey",
 	"seqPlacement", "seqKey", "uplinkDataPlacement", "uplinkDataKey",
+	"downloadSettings", "h2Params",
 ]);
 
 const HYSTERIA_QUIC_KEYS = new Set([
@@ -3772,8 +3901,6 @@ const HYSTERIA_QUIC_KEYS = new Set([
 	"maxIdleTimeout", "keepAlivePeriod", "disablePathMTUDiscovery", "maxIncomingStreams",
 	"initStreamReceiveWindow", "maxStreamReceiveWindow", "initConnectionReceiveWindow", "maxConnectionReceiveWindow",
 ]);
-
-const PASSTHROUGH_NETWORKS = ["xdrive"];
 
 const mergeFinalmask = (
 	built: Record<string, any> | undefined,
@@ -4052,7 +4179,7 @@ const buildStreamSettings = (
 
 	if (values.streamNetwork === "xhttp") {
 		const mode = values.xhttpMode;
-		const sendsPackets = mode === "packet-up" || mode === "auto";
+		const sendsPackets = ["", "auto", "packet-up"].includes(mode);
 		const headers = headersFromFormSingleValue(values.xhttpHeaders);
 		const xhttpSettings = cleanObject({
 			path: shouldIncludeValue(values.xhttpPath, defaults.xhttpPath, initial, [
@@ -4071,7 +4198,7 @@ const buildStreamSettings = (
 				: undefined,
 			headers: headers || undefined,
 			scMaxBufferedPosts:
-				(sendsPackets || mode === "stream-up") &&
+				mode !== "stream-one" &&
 				shouldIncludeValue(
 					values.xhttpScMaxBufferedPosts,
 					defaults.xhttpScMaxBufferedPosts,
@@ -4125,7 +4252,7 @@ const buildStreamSettings = (
 				? values.xhttpNoSSEHeader || undefined
 				: undefined,
 			noGRPCHeader:
-				["stream-up", "stream-one"].includes(mode) &&
+				mode !== "packet-up" &&
 				shouldIncludeValue(
 					values.xhttpNoGRPCHeader,
 					defaults.xhttpNoGRPCHeader,
@@ -4278,14 +4405,18 @@ const buildStreamSettings = (
 				hKeepAlivePeriod: parseOptionalNumber(values.xhttpXmuxHKeepAlivePeriod),
 			}),
 		});
-		const initialXhttp = initial?.streamSettings?.xhttpSettings;
-		if (initialXhttp && typeof initialXhttp === "object") {
-			for (const [key, value] of Object.entries(initialXhttp)) {
-				if (!XHTTP_FORM_KEYS.has(key) && value !== undefined) {
-					xhttpSettings[key] = value;
-				}
+		for (const [key, value] of Object.entries(values.xhttpRawSettings ?? {})) {
+			if (!XHTTP_FORM_KEYS.has(key) && value !== undefined) {
+				xhttpSettings[key] = value;
 			}
 		}
+		const download = buildXhttpDownload(
+			values.xhttpDownload,
+			values.xhttpPath,
+		);
+		if (download) xhttpSettings.downloadSettings = download;
+		const h2Params = parseJsonObject(values.xhttpH2Params);
+		if (h2Params) xhttpSettings.h2Params = h2Params;
 		if (Object.keys(xhttpSettings).length) {
 			stream.xhttpSettings = xhttpSettings;
 		}
@@ -4302,6 +4433,10 @@ const buildStreamSettings = (
 					url:
 						values.hysteriaMasqueradeType === "proxy"
 							? values.hysteriaMasqueradeUrl.trim() || undefined
+							: undefined,
+					xForwarded:
+						values.hysteriaMasqueradeType === "proxy"
+							? values.hysteriaMasqueradeXForwarded || undefined
 							: undefined,
 					rewriteHost:
 						values.hysteriaMasqueradeType === "proxy"
@@ -4496,7 +4631,7 @@ const buildStreamSettings = (
 
 	const finalmask = mergeFinalmask(
 		stream.finalmask,
-		initial?.streamSettings?.finalmask,
+		pruneNulls(values.finalmaskRaw ?? {}),
 		values.streamNetwork === "hysteria",
 		Boolean(values.hysteriaQuicParams?.enabled),
 	);
@@ -4506,12 +4641,12 @@ const buildStreamSettings = (
 
 	if (PASSTHROUGH_NETWORKS.includes(values.streamNetwork)) {
 		for (const key of [`${values.streamNetwork}Settings`, "address", "port"]) {
-			const original = initial?.streamSettings?.[key];
+			const original = values.streamRaw?.[key];
 			if (original !== undefined && original !== null) stream[key] = original;
 		}
 	}
 
-	return cleanObject(stream);
+	return pruneNulls(cleanObject(stream));
 };
 
 const buildSettings = (values: InboundFormValues): Record<string, any> => {
@@ -4531,6 +4666,12 @@ const buildSettings = (values: InboundFormValues): Record<string, any> => {
 			break;
 		case "vless":
 			base.decryption = values.vlessDecryption || "none";
+			if (values.vlessTestseed.trim()) {
+				base.testseed = values.vlessTestseed
+					.split(/[\s,]+/)
+					.filter(Boolean)
+					.map(Number);
+			}
 			if (values.vlessEncryption) {
 				base.encryption = values.vlessEncryption;
 			}
@@ -4705,10 +4846,18 @@ const buildSettings = (values: InboundFormValues): Record<string, any> => {
 				base.jmax = parseOptionalNumber(values.awgJmax);
 				base.s1 = parseOptionalNumber(values.awgS1);
 				base.s2 = parseOptionalNumber(values.awgS2);
-				base.h1 = parseOptionalNumber(values.awgH1);
-				base.h2 = parseOptionalNumber(values.awgH2);
-				base.h3 = parseOptionalNumber(values.awgH3);
-				base.h4 = parseOptionalNumber(values.awgH4);
+				if (values.awgVersion === "3.1") {
+					base.h1 = awgHeaderValue(values.awgH1);
+					base.h2 = awgHeaderValue(values.awgH2);
+					base.h3 = awgHeaderValue(values.awgH3);
+					base.h4 = awgHeaderValue(values.awgH4);
+					Object.assign(base, awgExtraToSettings(values.awgExtra));
+				} else {
+					base.h1 = parseOptionalNumber(values.awgH1);
+					base.h2 = parseOptionalNumber(values.awgH2);
+					base.h3 = parseOptionalNumber(values.awgH3);
+					base.h4 = parseOptionalNumber(values.awgH4);
+				}
 			}
 			break;
 		case "sstp":
